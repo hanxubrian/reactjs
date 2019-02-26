@@ -76,6 +76,21 @@ class NewFindersFeePage extends React.Component {
 	}
 
 	componentWillMount() {
+		this.setState({
+			CalculationMethodCode: this.props.activeFranchisee.calc_fact,
+			FranchiseeNum: this.props.activeFranchisee.Number || this.props.activeFranchisee.FranchiseeNumber,
+			CustomerNum: this.props.activeFranchisee.cust_no,
+			// AmountPayableOn,
+			// DownPaymentPercent,
+			// DownPaymentAmount,
+			// MonthlyPaymentPercent,
+			// MonthlyPaymentAmount,
+			// NumberOfPayments,
+			// AmountFinanced,
+			FinderFeeTotal: this.props.activeFranchisee.ff_tot,
+			Balance: this.props.activeFranchisee.ff_balance,
+			// MultiTenantOccupancy,
+		})
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -97,59 +112,122 @@ class NewFindersFeePage extends React.Component {
 	}
 
 	componentDidMount() {
+		this.fetchComputedFinderFee()
+	}
+
+	fetchComputedFinderFee = (name, value) => {
 		console.log("this.props.findersFeeParams", this.props.findersFeeParams)
-		const { CalculationMethodCode } = this.state
-		axios.post('https://apifmsplusplus_mongo.jkdev.com/v1/FinderFee/GetComputedFinderFee', {
+		const { CalculationMethodCode,
+			FranchiseeNum,
+			CustomerNum,
+			AmountPayableOn,
+			DownPaymentPercent,
+			DownPaymentAmount,
+			MonthlyPaymentPercent,
+			MonthlyPaymentAmount,
+			NumberOfPayments,
+			AmountFinanced,
+			FinderFeeTotal,
+			Balance,
+			MultiTenantOccupancy,
+		} = this.state
+
+		const param = {
 			...this.props.findersFeeParams,
-			CalculationMethodCode,
 			RegionId: this.props.regionId,
-		})
+			CalculationMethodCode,
+			FranchiseeNum,
+			CustomerNum,
+			AmountPayableOn,
+			DownPaymentPercent,
+			DownPaymentAmount,
+			MonthlyPaymentPercent,
+			MonthlyPaymentAmount,
+			NumberOfPayments,
+			AmountFinanced,
+			FinderFeeTotal,
+			Balance,
+			MultiTenantOccupancy,
+			[name]: value,
+		}
+		console.log("fetchComputedFinderFee param", param)
+		axios.post('https://apifmsplusplus_mongo.jkdev.com/v1/FinderFee/GetComputedFinderFee', param)
 			.then(res => {
 				if (res.data.IsSuccess) {
-					console.log('result1=', res.data.Data);
+					console.log('fetchComputedFinderFee=', res.data.Data);
 					this.setState({ ...res.data.Data });
 					this.setState({ FinderFeePayableOn: res.data.Data.AmountPayableOn - this.state.FindersFeeCreditAmount - this.state.InitialBusinessCredit })
+
+					this.props.updateFindersFeeParams({ ...res.data.Data })
+					this.props.updateFindersFeeParams({ FinderFeePayableOn: res.data.Data.AmountPayableOn - this.state.FindersFeeCreditAmount - this.state.InitialBusinessCredit })
 				}
-			})
-			.catch(error => {
+			}).catch(error => {
 				console.log(error);
 			});
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
+		if (nextProps.activeFranchisee !== this.props.activeFranchisee) {
+			this.setState({
+				CalculationMethodCode: nextProps.activeFranchisee.calc_fact,
+				FranchiseeNum: nextProps.activeFranchisee.Number || nextProps.activeFranchisee.FranchiseeNumber,
+				CustomerNum: nextProps.activeFranchisee.cust_no,
+				// AmountPayableOn,
+				// DownPaymentPercent,
+				// DownPaymentAmount,
+				// MonthlyPaymentPercent,
+				// MonthlyPaymentAmount,
+				// NumberOfPayments,
+				// AmountFinanced,
+				FinderFeeTotal: nextProps.activeFranchisee.ff_tot,
+				Balance: nextProps.activeFranchisee.ff_balance,
+				// MultiTenantOccupancy,
+			})
+		}
 	}
 
 
 	handleChange = name => event => {
-		if (name === "CalculationMethodCode" || name === 'DownPaymentPercent') {
-			this.setState({
-				[name]: event.target.value,
-			});
-			this.props.updateFindersFeeParams({ [name]: event.target.value })
-			return
+		let value
+		switch (name) {
+			case "CalculationMethodCode":
+				value = event.target.value
+				this.setState({ [name]: value });
+				this.fetchComputedFinderFee(name, value)
+				break;
+			default:
+				value = parseFloat(event.target.value)
+				this.setState({ [name]: value });
+				break;
 		}
-		this.setState({
-			[name]: parseFloat(event.target.value),
-		});
-	};
+	}
 
 	handleBlurPayable = (name) => event => {
 		if (name === 'FindersFeeCreditAmount' || name === 'InitialBusinessCredit') {
 			let value = parseFloat(this.state.FindersFeeCreditAmount) + parseFloat(this.state.InitialBusinessCredit);
 			this.setState({ FinderFeePayableOn: this.state.AmountPayableOn - value })
+			this.props.updateFindersFeeParams({
+				FinderFeePayableOn: this.state.AmountPayableOn - value,
+			})
 		}
+		this.props.updateFindersFeeParams({
+			[name]: parseFloat(event.target.value),
+		})
 	};
 
 	handleChangeChecked = name => event => {
 		this.setState({
 			[name]: event.target.checked,
 		});
+		this.props.updateFindersFeeParams({
+			[name]: event.target.checked,
+		})
 	};
 
 	handleChangeParamsOnBlur = name => event => {
-		this.props.updateFindersFeeParams({ [name]: event.target.value });
-		if (name === 'MonthlyPaymentPercent' || name === 'DownPaymentPercent')
-			this.setState({ [name]: event.target.value })
+		this.props.updateFindersFeeParams({ [name]: parseFloat(event.target.value) });
+		// if (name === 'MonthlyPaymentPercent' || name === 'DownPaymentPercent')
+		// this.setState({ [name]: event.target.value })
 	};
 
 	handleGotoDistibutionPage = () => {
@@ -250,7 +328,7 @@ class NewFindersFeePage extends React.Component {
 							inputComponent: NumberFormatCustomNoPrefix,
 						}}
 						value={this.state.DownPaymentPercent || ''}
-						// onChange={this.handleChange("DownPaymentPercent")}
+						onChange={this.handleChange("DownPaymentPercent")}
 						onBlur={this.handleChangeParamsOnBlur('DownPaymentPercent')}
 					/>
 					<TextField margin="dense" id="MonthlyPaymentPercent" label="Monthly Payment Percent"
@@ -261,7 +339,7 @@ class NewFindersFeePage extends React.Component {
 							inputComponent: NumberFormatCustomNoPrefix,
 						}}
 						value={this.state.MonthlyPaymentPercent}
-						// onChange={this.handleChange("MonthlyPaymentPercent")}
+						onChange={this.handleChange("MonthlyPaymentPercent")}
 						onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentPercent')}
 					/>
 

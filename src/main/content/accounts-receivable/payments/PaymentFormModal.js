@@ -767,13 +767,14 @@ class PaymentFormModal extends React.Component {
 				errorMsg: "Payment date not selected",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
 			})
-		} else if (this.state.PaymentAmount <= 0) {
+		} else if (this.props.paymentDlgPayloads.paymentType !== 'Credit' && this.state.PaymentAmount <= 0 ||
+			this.props.paymentDlgPayloads.paymentType === 'Credit' && this.state.PaymentAmount < 0) {
 			this.setState({
 				errorMsg: "Amount is invalid",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
 			})
 
-		} else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
+		} else if (this.props.paymentDlgPayloads.paymentType !== 'Credit' && !this.checkIfAllZeroPaymentsValidation(rows)) {
 			this.setState({ errorMsg: "Neither of payments amount is settled" })
 		} else if (!this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
 			this.setState({ errorMsg: "One or more Payment Amounts is greater than Invoice Balance" })

@@ -230,6 +230,45 @@ const initialState = {
 		open: false,
 	},
 	franchieesesToOffer: [],
+	activeFranchisee: {
+
+	},
+	activeFindersFee: {
+		"_id": "",
+		"RegionId": 0,
+		"Status": "",
+		"company_no": "",
+		"dlr_code": "",
+		"cust_no": "",
+		"ff_seq": "",
+		"ff_desc": "",
+		"ff_amtfin": 0.0,
+		"ff_amtpaid": 0.0,
+		"ff_down": 0.0,
+		"ff_dwnamt": 0.0,
+		"ff_factor": 0.0,
+		"ff_interes": 0.0,
+		"ff_pyamt": 0.0,
+		"ff_pybill": 0,
+		"ff_pytotl": 0,
+		"ff_dwnpd": "",
+		"dwn_take": "",
+		"add_on": "",
+		"calc_fact": "",
+		"ff_start": 0,
+		"ff_year": 0,
+		"ff_tot": 0.0,
+		"ff_adjtot": 0.0,
+		"ffcredit": 0.0,
+		"ffduetot": 0.0,
+		"ffcont": 0.0,
+		"ff_balance": 0.0,
+		"ff_hold": "",
+		"fullbill": 0.0,
+		"ff_holdmon": 0,
+		"ff_holdyr": 0
+	},
+
 	increaseDecreaseContractModalForm: {
 		open: false,
 	},
@@ -244,7 +283,22 @@ const initialState = {
 	serviceAgreementStep: 0,
 	increase_decrease: null,
 	findersFeeComputed: null,
-	findersFeeParams: {},
+	findersFeeParams: {
+		"RegionId": 1,
+		"CalculationMethodCode": "",
+		"FranchiseeNum": "",
+		"CustomerNum": "",
+		"AmountPayableOn": 0.0,
+		"DownPaymentPercent": 0.0,
+		"DownPaymentAmount": 0.0,
+		"MonthlyPaymentPercent": 0.0,
+		"MonthlyPaymentAmount": 0.0,
+		"NumberOfPayments": 0,
+		"AmountFinanced": 0.0,
+		"FinderFeeTotal": 0.0,
+		"Balance": 0.0,
+		"MultiTenantOccupancy": 0.0
+	},
 	findersFeeTypes: null,
 	assignedFranchisees: null,
 	activeCustomerFranchisees: null,
@@ -896,6 +950,16 @@ const customers = function (state = initialState, action) {
 					...state.finderFee,
 					[action.payload._id]: action.payload
 				}
+			};
+		case Actions.SET_ACTIVE_FINDERS_FEE:
+			return {
+				...state,
+				activeFindersFee: action.payload
+			};
+		case Actions.SET_ACTIVE_FRANCHISEE:
+			return {
+				...state,
+				activeFranchisee: action.payload
 			};
 		default:
 			{

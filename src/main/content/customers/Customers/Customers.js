@@ -460,13 +460,20 @@ class Customers extends Component {
 		}
 
 
+		let param = {
+			...this.props.activeCustomer.Data,
+			AssignedFranchisees: [
+				...this.props.franchieesesToOffer,
+			]
+		}
+
 
 		switch (this.props.customerForm.type) {
 			case "new":
-				this.props.createCustomer(this.props.regionId, this.props.activeCustomer.Data)
+				this.props.createCustomer(this.props.regionId, param)
 				break;
 			case "edit":
-				this.props.updateCustomer(this.props.regionId, this.props.activeCustomer.Data)
+				this.props.updateCustomer(this.props.regionId, param)
 				break;
 		}
 	}
@@ -1044,6 +1051,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		filters: customers.filters,
 		activeCustomer: customers.activeCustomer,
 		bFindersFeesStart: customers.bFindersFeesStart,
+
+		franchieesesToOffer: customers.franchieesesToOffer,
 	}
 }
 

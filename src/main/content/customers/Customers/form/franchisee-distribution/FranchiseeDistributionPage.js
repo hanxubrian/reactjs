@@ -1014,11 +1014,14 @@ class FranchiseeDistributionPage extends React.Component {
 		this.props.updateActiveCustomerAssignedFranchisees(this.state.franchieesesToOffer);
 	};
 
-	gotoFindersFee = async (FranchiseeNum, AmountPayableOn) => {
-		await this.props.updateFindersFeeParams({ FranchiseeNum, AmountPayableOn: parseFloat(AmountPayableOn) });
+	gotoFindersFee = async (Franchisee, AmountPayableOn) => {
+		await this.props.updateFindersFeeParams({
+			FranchiseeNum: Franchisee.Number || Franchisee.FranchiseeNumber,
+			AmountPayableOn: parseFloat(AmountPayableOn)
+		});
+		this.props.setActiveFranchisee(Franchisee)
 		// this.props.updateCustomersParameter('activeStep', this.props.customerForm.type === "edit" ? 7 : 3);
 		this.handleStep(1)
-
 	};
 
 	removeFranchiseeMonthly = async (fId, mId) => {
@@ -1286,12 +1289,12 @@ class FranchiseeDistributionPage extends React.Component {
 								<Typography variant='body2' style={{ width: '15%' }}><strong>Finders Fee:</strong></Typography>
 								<div style={{ width: (100 - 15 - franHeaders[8].width - franHeaders[7].width) + '%' }}>
 									{
-										this.props.finderFee[x.FinderFeeId] && <>
-											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].calc_fact}</span>
-											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_desc}</span>
-											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_pybill}</span>
-											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_tot}</span>
-											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_balance}</span>
+										x.FinderFee && <>
+											<span className='pr-12'>Fact: {x.FinderFee.calc_fact}</span>
+											<span className='pr-12'>Desc: {x.FinderFee.ff_desc}</span>
+											<span className='pr-12'>PayBill: {x.FinderFee.ff_pybill}</span>
+											<span className='pr-12'>Total: {x.FinderFee.ff_tot}</span>
+											<span className='pr-12'>Balance: {x.FinderFee.ff_balance}</span>
 										</>
 									}
 								</div>
@@ -1310,7 +1313,7 @@ class FranchiseeDistributionPage extends React.Component {
 									value={this.getMonthlyBillingTotal(x)}
 								/>
 								<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
-									<Button variant="contained" onClick={() => this.gotoFindersFee(x.Number, this.getMonthlyBillingTotal(x))}
+									<Button variant="contained" onClick={() => this.gotoFindersFee(x, this.getMonthlyBillingTotal(x))}
 										color="primary" className={classNames('')}>
 										<Icon fontSize="small">arrow_forward</Icon>
 									</Button>
@@ -1374,7 +1377,25 @@ class FranchiseeDistributionPage extends React.Component {
 	}
 
 	handleSaveFindersFee = () => {
-		console.log('saved');
+		const { activeFranchisee } = this.props
+		const { franchieesesToOffer } = this.state
+
+		let newFranchieesesToOffer = [...franchieesesToOffer]
+		newFranchieesesToOffer[franchieesesToOffer.indexOf(activeFranchisee)] = activeFranchisee
+		activeFranchisee.FinderFee = {
+			...activeFranchisee.FinderFee,
+			...this.props.findersFeeParams,
+			calc_fact: this.props.findersFeeParams.CalculationMethodCode,
+			ff_desc: '',
+			ff_pybill: '',
+			ff_tot: this.props.findersFeeParams.FinderFeeTotal,
+			ff_balance: this.props.findersFeeParams.Balance,
+		}
+
+
+		this.setState({ franchieesesToOffer: newFranchieesesToOffer })
+
+		this.handleStep(0)
 	};
 
 	getFindersFeesForm() {
@@ -1391,190 +1412,6 @@ class FranchiseeDistributionPage extends React.Component {
 
 				<NewFindersFeePage />
 
-			</>
-		)
-	}
-	getFindersFeesForm_old() {
-		const { classes } = this.props
-		return (
-			<>
-				<div className={classNames("flex mt-12 justify-between")}>
-
-					<TextField select margin="dense" id="CalculationMethod" label="Calculation Method"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField)}
-						value={this.state.CalculationMethod || ''}
-						onChange={this.handleChange('CalculationMethod')}
-						style={{ minWidth: 250 }}
-						InputProps={{ readOnly: false }}
-					>
-						{[
-							"---",
-							"***",
-							"+++",
-						].map((x, index) => (
-							<MenuItem key={index} value={x}>{x}</MenuItem>
-						))}
-					</TextField>
-
-					<TextField margin="dense" id="CalculationMethodNameDescription" label="Name / Description"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "ml-12")}
-						value={this.state.NewAmount || ''}
-						onChange={this.handleChange("NewAmount")}
-						fullWidth
-					/>
-
-					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={this.handleStepFranchiseeDistribution} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Done</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-					</div>
-
-				</div>
-
-				<div className={classNames("flex mt-12")}>
-					<TextField margin="dense" id="MonthlyBillingAmount" label="Monthly Billing Amount"
-						InputLabelProps={{ shrink: true }}
-						sm={4}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.NewAmount || ''}
-						onChange={this.handleChange("MonthlyBillingAmount")}
-					/>
-				</div>
-				<div className={classNames("flex mt-12")}>
-					<TextField margin="dense" id="FindersFeeCreditAmount" label="Finders Fee Credit Amount"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.NewAmount || ''}
-						onChange={this.handleChange("FindersFeeCreditAmount")}
-						sm={4}
-					/>
-				</div>
-				<div className={classNames("flex mt-12")}>
-					<TextField margin="dense" id="InitialBusinessCredit" label="Initial Business Credit"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.NewAmount || ''}
-						onChange={this.handleChange("InitialBusinessCredit")}
-						sm={4}
-					/>
-				</div>
-
-				<div className={classNames("flex mt-12 justify-between items-center")}>
-					<TextField margin="dense" id="MonthlyPayment" label="Monthly Payment"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.MonthlyPayment || ''}
-						onChange={this.handleChange("MonthlyPayment")}
-						sm={2}
-					/>
-
-					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>x</strong></Typography>
-
-					<TextField margin="dense" id="NumberOfPayments" label="# Of Payments"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						value={this.state.NumberOfPayments || ''}
-						onChange={this.handleChange("NumberOfPayments")}
-						sm={2}
-					/>
-
-					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
-
-					<TextField margin="dense" id="AmountFinanced" label="Amount Financed"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.AmountFinanced || ''}
-						onChange={this.handleChange("AmountFinanced")}
-						sm={2}
-					/>
-
-					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>+</strong></Typography>
-
-					<TextField margin="dense" id="DownPayment" label="DownPayment"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.DownPayment || ''}
-						onChange={this.handleChange("DownPayment")}
-						sm={2}
-					/>
-
-					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
-
-					<TextField margin="dense" id="ResultAmountFinanced" label="Amount Financed"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.ResultAmountFinanced || ''}
-						onChange={this.handleChange("ResultAmountFinanced")}
-						sm={2}
-					/>
-				</div>
-
-				<div className={classNames("flex mt-12")}>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={this.state.DownPaymentPaid}
-								onChange={this.handleChange('DownPaymentPaid')}
-								value="DownPaymentPaid"
-							/>
-						}
-						label="Down Payment Paid?"
-					/>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={this.state.IncludeDpWith1stPayment}
-								onChange={this.handleChange('IncludeDpWith1stPayment')}
-								value="IncludeDpWith1stPayment"
-							/>
-						}
-						label="Include DP With 1st Payment?"
-					/>
-				</div>
-
-				<div className={classNames("flex mt-12 flex-end")}>
-					{/* <Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>Multi-Tenant 100% Occuaoncy Input</Button> */}
-
-					<TextField margin="dense" id="MultiTenant100OccuaoncyInput" label="Multi-Tenant 100% Occuaoncy Input"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						value={this.state.MultiTenant100OccuaoncyInput || ''}
-						onChange={this.handleChange("MultiTenant100OccuaoncyInput")}
-						fullWidth
-						style={{ maxWidth: 300 }}
-					/>
-
-				</div>
 			</>
 		)
 	}
@@ -1640,6 +1477,8 @@ function mapDispatchToProps(dispatch) {
 		getComputedFinderFee: Actions.getComputedFinderFee,
 		getFinderFee: Actions.getFinderFee,
 
+		setActiveFranchisee: Actions.setActiveFranchisee,
+
 	}, dispatch);
 }
 
@@ -1677,6 +1516,9 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		computedFinderFee: customers.computedFinderFee,
 		finderFee: customers.finderFee,
 		activeStep: customers.activeStep,
+
+		activeFranchisee: customers.activeFranchisee,
+		findersFeeParams: customers.findersFeeParams,
 
 	}
 }

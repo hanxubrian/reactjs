@@ -96,6 +96,9 @@ export const STOP_FINDERS_FEES_START = "[CUSTOMERS APP] STOP_FINDERS_FEES_START"
 export const GET_COMPUTED_FINDER_FEE = "[CUSTOMERS APP] GET_COMPUTED_FINDER_FEE";
 export const GET_FINDER_FEE = "[CUSTOMERS APP] GET_FINDER_FEE";
 
+export const SET_ACTIVE_FINDERS_FEE = "[CUSTOMERS APP] SET_ACTIVE_FINDERS_FEE";
+export const SET_ACTIVE_FRANCHISEE = "[CUSTOMERS APP] SET_ACTIVE_FRANCHISEE";
+
 export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
 export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
 
@@ -705,6 +708,18 @@ export function getFinderFee(RegionId, Id) {
 				payload: res.Data
 			});
 		})();
+	}
+}
+export function setActiveFindersFee(activeFindersFee) {
+	return {
+		type: SET_ACTIVE_FINDERS_FEE,
+		payload: activeFindersFee
+	}
+}
+export function setActiveFranchisee(activeFranchisee) {
+	return {
+		type: SET_ACTIVE_FRANCHISEE,
+		payload: activeFranchisee
 	}
 }
 
