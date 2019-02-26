@@ -735,7 +735,7 @@ class FranchieesSubmitOfferPage extends Component {
 
 		return (
 			<Fragment>
-				<div className={classNames("mb-12 w-full")}>
+				{/* <div className={classNames("mb-12 w-full")}>
 					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 							<IconButton onClick={this.backToFranchiseeList}>
@@ -751,6 +751,20 @@ class FranchieesSubmitOfferPage extends Component {
 								this.backToAccountOfferingHome();
 							}}
 						> Send </Button>
+					</div>
+				</div> */}
+
+				<div className={classNames("flex w-full justify-between items-center mb-12")}>
+					<Typography variant="h6">Submit Offering</Typography>
+					<div>
+						<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
+
+						<Button
+							variant="contained"
+							color="primary"
+							className={classNames(classes.button, "pr-24 pl-24")}
+							onClick={this.backToAccountOfferingHome}
+						> <Icon fontSize="small">send</Icon>Send </Button>
 					</div>
 				</div>
 

@@ -1052,7 +1052,7 @@ class FranchiseeDistributionPage extends React.Component {
 					<Typography variant="h6">Franchisee Distribution</Typography>
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Back</Button>
+						{this.props.activeStep === 1 && <Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>}
 						<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button>
 					</div>
 				</div>
@@ -1582,6 +1582,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		assignedFranchisees: customers.assignedFranchisees,
 		computedFinderFee: customers.computedFinderFee,
 		finderFee: customers.finderFee,
+		activeStep: customers.activeStep,
 
 	}
 }

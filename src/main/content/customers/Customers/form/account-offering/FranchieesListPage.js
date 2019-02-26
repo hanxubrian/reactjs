@@ -734,7 +734,7 @@ class FranchieesListPage extends Component {
 								</IconButton>
 							</Tooltip>
 
-							<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Back</Button>
+							<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 
 							<Button
 								variant="contained"
