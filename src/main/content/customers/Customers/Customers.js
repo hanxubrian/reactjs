@@ -472,6 +472,7 @@ class Customers extends Component {
 		switch (this.props.customerForm.type) {
 			case "new":
 				this.props.createCustomer(this.props.regionId, param)
+				this.closeComposeForm()
 				break;
 			case "edit":
 				this.props.updateCustomer(this.props.regionId, param)

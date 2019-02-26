@@ -775,7 +775,7 @@ class PaymentFormModal extends React.Component {
 
 		} else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
 			this.setState({ errorMsg: "Neither of payments amount is settled" })
-		} else if (!this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
+		} else if (this.props.paymentDlgPayloads.paymentType !== 'Credit' && !this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
 			this.setState({ errorMsg: "One or more Payment Amounts is greater than Invoice Balance" })
 		} else if (!this.checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount)) {
 			this.setState({ errorMsg: "Sum of payments is greater than applied one." })
