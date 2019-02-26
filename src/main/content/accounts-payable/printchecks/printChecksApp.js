@@ -261,8 +261,8 @@ class PrintChecksLayout extends Component {
     constructor(props) {
         super(props);
         if(props.printChecksDB===null) {
-            const {regionId, paymentDate, checkDate, checktypeId, entityTypeId, year, month} = props;
-            props.getCheckDetailByType(regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
+            const {paymentDate, checkDate, checktypeId, entityTypeId, year, month} = props.filters;
+            props.getCheckDetailByType(this.props.regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
         }
     }
 
@@ -274,8 +274,8 @@ class PrintChecksLayout extends Component {
         this.props.entityTypeId!==prevProps.entityTypeId ||
         this.props.year!==prevProps.year ||
         this.props.month!==prevProps.month){
-            const {regionId, paymentDate, checkDate, checktypeId, entityTypeId, year, month} = this.props;
-            this.props.getCheckDetailByType(regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
+            const {paymentDate, checkDate, checktypeId, entityTypeId, year, month} = this.props.filters;
+            this.props.getCheckDetailByType(this.props.regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
         }
     }
 
@@ -615,6 +615,7 @@ function mapStateToProps({auth, printChecks, fuse}) {
         selections: printChecks.selections,
         navigation: fuse.navigation,
         all_regions: auth.login.all_regions,
+        filters: printChecks.filters,
     }
 }
 

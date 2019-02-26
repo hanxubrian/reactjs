@@ -13,14 +13,16 @@ const initialState = {
     bStartFetchDetail_pc: false,
     bStartFetchList_pc: false,
     bSettingPanel: false,
-    checkDate: moment().format('MM/DD/YYYY'),
-    paymentDate: moment().format('MM/DD/YYYY'),
-    checktypeId: '5c72be751475600f94de5b33',
     entityTypeId: '',
-    year: moment().year(),
-    month: moment().month()+1,
     selections: [],
-    checksObj: null
+    checksObj: null,
+    filters: {
+        checkDate: moment().format('MM/DD/YYYY'),
+        paymentDate: moment().format('MM/DD/YYYY'),
+        checktypeId: '5c72be751475600f94de5b33',
+        year: moment().year(),
+        month: moment().month()+1,
+    }
 };
 
 const printChecks = function(state = initialState, action) {
