@@ -893,7 +893,7 @@ class Customers extends Component {
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
 								>
-									<DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
+									<DialogTitle id="alert-dialog-title">Warning</DialogTitle>
 									<DialogContent>
 										<DialogContentText id="alert-dialog-description">There are no franchisees assigned to this customer.
 If you save the customer now, you need to return and
