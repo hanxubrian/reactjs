@@ -421,7 +421,8 @@ class Customers extends Component {
 
 	}
 	tryClose = () => {
-		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0) {
+		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0 ||
+			this.props.franchieesesToOffer && this.props.franchieesesToOffer.length > 0) {
 			this.closeComposeForm()
 		} else {
 			this.setState({
