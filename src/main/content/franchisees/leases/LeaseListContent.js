@@ -1416,7 +1416,6 @@ class LeaseListContent extends Component {
 									/>
 									<IntegratedGrouping />
 									<VirtualTable
-										height="530"
 										tableComponent={TableComponent}
 										headComponent = {TableHeadComponent}
 										columnExtensions={tableColumnExtensions}
