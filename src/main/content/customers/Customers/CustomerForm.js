@@ -32,7 +32,7 @@ import CustomersDocumentUploadTable from "./documentUploadTable";
 import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
 import FinderFeePage from './form/finders-fees/NewFindersFeePage'
 import ServiceAgreementPage from './form/service-agreement/ServiceAgreementPage'
-import FranchiseeDistributionPage from './form/service-agreement/FranchiseeDistributionPage'
+import FranchiseeDistributionPage from './form/franchisee-distribution/FranchiseeDistributionPage'
 
 import green from "@material-ui/core/colors/green";
 import amber from "@material-ui/core/colors/amber";
@@ -315,7 +315,7 @@ class CustomerForm extends Component {
 	getSteps() {
 		// return ['Service Agreement', 'Franchisee Distribution', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
 		if (this.props.customerForm.type === "new") {
-			return ['Service Agreement', 'Account Offering'];
+			return ['Service Agreement', 'Account Offering', 'Franchisee Distribution'];
 		}
 		return ['Service Agreement', 'Franchisee Distribution', "Walk-Thru", "Account Offering", "Account History"];
 	}
