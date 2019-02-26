@@ -895,12 +895,14 @@ class Customers extends Component {
 								>
 									<DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
 									<DialogContent>
-										<DialogContentText id="alert-dialog-description">Nothing offered. Are you sure to move on anyway?</DialogContentText>
+										<DialogContentText id="alert-dialog-description">There are no franchisees assigned to this customer.
+If you save the customer now, you need to return and
+assign at least one franchisee.</DialogContentText>
 									</DialogContent>
 									<DialogActions className='flex justify-between'>
 										<Button onClick={this.handleStayForOffering} color="primary" autoFocus>Stay for Offering</Button>
 										<div className='flex'>
-											<Button onClick={this.processConfirming} color="primary">Yes</Button>
+											<Button onClick={this.processConfirming} color="primary">Move On</Button>
 											<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
 										</div>
 									</DialogActions>

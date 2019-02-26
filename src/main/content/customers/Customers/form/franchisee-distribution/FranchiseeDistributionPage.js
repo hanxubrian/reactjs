@@ -481,16 +481,23 @@ class FranchiseeDistributionPage extends React.Component {
 	}
 
 	initCustomerInfo = (activeCustomer = this.props.activeCustomer, franchieesesToOffer = this.props.franchieesesToOffer) => {
+		let tmpFranchieesesToOffer = []
+		if (Array.isArray(franchieesesToOffer)) {
+			tmpFranchieesesToOffer = [...tmpFranchieesesToOffer, ...franchieesesToOffer]
+		}
+		if (Array.isArray(activeCustomer.Data.AssignedFranchisees)) {
+			tmpFranchieesesToOffer = [...tmpFranchieesesToOffer, ...activeCustomer.Data.AssignedFranchisees]
+		}
 		this.setState({
 			SA_Amount: activeCustomer.Data.cont_bill,
-			franchieesesToOffer: [...franchieesesToOffer, ...activeCustomer.Data.AssignedFranchisees],
+			franchieesesToOffer: tmpFranchieesesToOffer,
 		});
-		this.props.updateFindersFeeParams({
-			FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
-			CustomerNum: activeCustomer.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
-		});
+		// this.props.updateFindersFeeParams({
+		// 	FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
+		// 	CustomerNum: activeCustomer.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
+		// });
 
-		activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
+		activeCustomer.Data.AssignedFranchisees && activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
 			if (x.FinderFeeId) {
 				this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
 			}
