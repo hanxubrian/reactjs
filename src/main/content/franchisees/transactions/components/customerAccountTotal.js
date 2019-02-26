@@ -48,9 +48,9 @@ const styles = theme => ({
         '& tr th:nth-child(3)': {
             width: '100%'
         },
-        // '& tr th:nth-child(2) span': {
-        //     display: 'none'
-        // },
+        '& tr th:nth-child(1) span': {
+            display: 'none'
+        },
     },
     imageIcon: {
         width: 24

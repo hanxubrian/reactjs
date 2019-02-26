@@ -73,6 +73,9 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
+        '& tbody tr td:first-child': {
+            paddingLeft: '0!important'
+        },
         '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
@@ -141,7 +144,7 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
             </Table.Cell>
         );
     }
-    else if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
+    else if(restProps.column.name==='Amount' || restProps.column.name==='Tax'|| restProps.column.name==='Total'){
         return (
             <Table.Cell
                 {...restProps}
@@ -229,7 +232,7 @@ class CustomerTransactions extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CustomerNumber', width: 70, },
+            { columnName: 'CustomerNumber', width: 100, },
             { columnName: 'CustomerName', width: 220, },
             { columnName: 'Description', width: -1, },
             { columnName: 'InvoiceNo', width: 100},
