@@ -286,11 +286,19 @@ class FranchiseesMaintenanceTable extends React.Component {
     }
     componentWillMount() {
 
-        if(this.props.franchiseeFees !== null){
-            const feeList = this.props.franchiseeFees;
-            const dialogForm = this.state.dialogForm;
+        if(this.props.insertPayload.Fees .length > 0){
+            const feeList = this.props.insertPayload.Fees;
             const insertPayload = this.props.insertPayload;
-            console.log(feeList);
+            //console.log("insertPayload",feeList);
+            this.setState({
+                dialogForm: feeList,
+                insertPayload: this.props.insertPayload,
+            });
+
+        }else{
+            const feeList = this.props.franchiseeFees;
+            const insertPayload = this.props.insertPayload;
+            const dialogForm = this.state.dialogForm;
 
             feeList.map(x=>{
                 dialogForm.push({
@@ -300,13 +308,12 @@ class FranchiseesMaintenanceTable extends React.Component {
                 })
             });
 
-            let tempDialogForm = insertPayload.Fees.concat(dialogForm);
+            this.props.insertPayload.Fees = dialogForm;
 
             this.setState({
-                dialogForm: tempDialogForm,
+                dialogForm: dialogForm,
                 insertPayload: this.props.insertPayload,
             });
-
         }
     }
 
