@@ -416,7 +416,8 @@ const customers = function (state = initialState, action) {
 						data: null
 					},
 					activeCustomer: CUSTOMER_CREATION_PAYLOAD,
-					activeStep: 0
+					activeStep: 0,
+					franchieesesToOffer: [],
 				};
 			}
 		case Actions.CLOSE_NEW_CUSTOMER_FORM:
@@ -451,6 +452,7 @@ const customers = function (state = initialState, action) {
 					},
 					activeCustomer: action.payload.customer,
 					findersFees: action.payload.findersFees,
+					franchieesesToOffer: [],
 				};
 			}
 		case Actions.STOP_FINDERS_FEES:
