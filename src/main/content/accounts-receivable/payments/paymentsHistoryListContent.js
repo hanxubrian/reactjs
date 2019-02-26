@@ -486,7 +486,7 @@ class paymentsHistoryListContent extends Component {
 
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.commitChanges = this.commitChanges.bind(this);
-		this.changeSearchValue = value => this.setState({ searchValue: value });
+		// this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
 
 		this.changeExpandedDetails = expandedRowIds => this.setState({ expandedRowIds });
@@ -501,7 +501,9 @@ class paymentsHistoryListContent extends Component {
 			);
 		}
 	}
-
+	changeSearchValue = value => {
+		this.setState({ searchValue: value })
+	};
 	changeSelection = (selection) => {
 		if (selection.length > 1) selection = [selection[selection.length - 1]]
 		this.setState({ selection })
@@ -624,7 +626,8 @@ class paymentsHistoryListContent extends Component {
 
 		if (nextProps.searchText !== this.props.searchText) {
 			console.log("------search text changed-------", nextProps.searchText)
-			this.search(nextProps.searchText);
+			// this.search(nextProps.searchText);
+			this.changeSearchValue(nextProps.searchText)
 		}
 
 		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
