@@ -777,7 +777,7 @@ class AccountOfferingPage extends Component {
 		return (
 			<div className={classNames("flex flex-col")}>
 
-				<Stepper activeStep={step} style={{ padding: 0, background: 'unset' }}>
+				<Stepper activeStep={step} style={{ padding: 0, background: 'unset' }} className='mb-12'>
 					{['Offered Franchisees', 'Assign Franchisees', 'Offering Account', 'Franchisee Distribution', 'Finders Fees'].map((label, index) => {
 						const props = {};
 						const labelProps = {};
