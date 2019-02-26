@@ -269,28 +269,31 @@ class CustomerAccountTotals extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerAccountTotals===null)
             return (<div/>);
 
         let data = [];
 
-        franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.forEach(type=>{
-            let billing = this.props.billingLists.filter(b=>b._id===type.Billing);
+        franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerAccountTotals.forEach(type=>{
             let line = {};
-            if(billing.length>0)
-                line.type = billing[0].Name;
+            let billing;
+            if(this.props.billingLists!==null && this.props.billingLists.length>0) {
+                billing = this.props.billingLists.filter(b => b._id === type.Billing);
+                if (billing !== null && billing.length > 0)
+                    line.type = billing[0].Name;
+            }
             line.CUS_NO = '';
             line.CUS_NAME = '';
             line.CUS_TAX = 0;
             line.SUB = 0;//sub section
             data.push(line);
-            if(type.Customers !==null && type.Customers.length){
-                type.Customers.forEach(c=>{
+            if(type.Customer_Account_Totals_Detail !==null && type.Customer_Account_Totals_Detail.length){
+                type.Customer_Account_Totals_Detail.forEach(c=>{
                     let line_c = {};
                     line_c.type = '';
-                    line_c.CUS_NO = c.CUST_NO;
-                    line_c.CUS_NAME = c.CUS_NAME;
-                    line_c.CUS_TAX = c.TRX_AMT;
+                    line_c.CUS_NO = c.CustomerNumber;
+                    line_c.CUS_NAME = c.CustomerName;
+                    line_c.CUS_TAX = c.dtltrx_amt;
                     line_c.SUB = 1;//item
 
                     data.push(line_c);

@@ -145,14 +145,19 @@ class TransactionsApp extends Component {
     constructor(props){
         super(props);
 
-        if(!props.bLoadedTransactions) {
-            props.getFranchiseeTransactionTypeLists(props.regionId);
-            props.getTransactions(props.regionId);
-        }
+        (async () => {
+            if(props.billingLists===null)
+                await props.getBillingLists(props.regionId);
 
-        if (!props.bLoadedFranchisees) {
-            props.getFranchisees(props.regionId, props.fstatusId, props.fLocation, props.fLongitude, props.fLatitude, props.fSearchText);
-        }
+            if(!props.bLoadedTransactions) {
+                await props.getFranchiseeTransactionTypeLists(props.regionId);
+                await props.getTransactions(props.regionId);
+            }
+
+            if (!props.bLoadedFranchisees) {
+                await props.getFranchisees(props.regionId, props.fstatusId, props.fLocation, props.fLongitude, props.fLatitude, props.fSearchText);
+            }
+        })();
     }
 
     search = (val)=> {
@@ -488,10 +493,11 @@ function mapDispatchToProps(dispatch)
         closeEditTransactionForm: Actions.closeEditTransactionForm,
         closeNewTransactionForm : Actions.closeNewTransactionForm,
         getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
+        getBillingLists: Actions.getBillingLists,
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth, franchisees, fuse})
+function mapStateToProps({transactions, auth, franchisees, fuse, invoices})
 {
     return {
         transactions: transactions,
@@ -513,7 +519,8 @@ function mapStateToProps({transactions, auth, franchisees, fuse})
         fLatitude: franchisees.Latitude,
         fSearchText: franchisees.SearchText,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
-        navigation: fuse.navigation
+        navigation: fuse.navigation,
+        billingLists: invoices.billingLists,
     }
 }
 
