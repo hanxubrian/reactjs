@@ -865,7 +865,7 @@ class PaymentFormModal extends React.Component {
 										onChange={this.handleChange('PaymentType')}
 										fullWidth
 										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentType === "Credit"
+											readOnly: ["Credit", "Credit from Overpayment"].indexOf(this.props.paymentDlgPayloads.paymentType) > -1
 										}}
 									>
 										{

@@ -1063,7 +1063,7 @@ class PaymentsListContent extends Component {
 
 	onClickGroupCellApplyOverpayment = (ev, groupTitle, overpayment) => {
 		ev.stopPropagation();
-		this.showPaymentFormModal(true, "CreditFromOverpayment", overpayment)
+		this.showPaymentFormModal(true, "Credit from Overpayment", overpayment)
 	}
 	onClickGroupCellApplyCredit = (ev, groupTitle) => {
 		ev.stopPropagation();
