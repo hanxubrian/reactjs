@@ -9,6 +9,7 @@ export const UPDATE_CHECK_SELECTIONS = "[PRINT CHECKS] UPDATE CHECK SELECTIONS";
 export const TOGGLE_FILTER_PANEL_CHECK_PRINTING = "[PRINT CHECKS] TOGGLE FILTER PANEL";
 export const NULLIFY_CHECKS_OBJ = "[PRINT CHECKS] NULLIFY CHECKS OBJ";
 export const SET_CHECKS_OBJ = "[PRINT CHECKS] SET_CHECKS_OBJ";
+export const UPDATE_CHECKS_FILTER_PARAMETER = "[PRINT CHECKS] UPDATE CHECKS FILTER PARAMETER";
 
 
 export function getCheckDetailByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate) {
@@ -21,7 +22,6 @@ export function getCheckDetailByType(regionId, ChecktypeId, EntityTypeId, Month,
 
             let res = await printChecksService.getCheckByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate);
             if (res.IsSuccess) {
-                console.log('qqqq=', res.Data);
                 dispatch({
                     type: GET_ALL_PRINT_CHECKS_LIST,
                     payload: res.Data
@@ -65,6 +65,15 @@ export function setCheckObj(obj) {
         dispatch({
             type: SET_CHECKS_OBJ,
             payload: obj
+        });
+    }
+}
+
+export function updateFilterParams(param) {
+    return (dispatch) => {
+        dispatch({
+            type: UPDATE_CHECKS_FILTER_PARAMETER,
+            payload: param
         });
     }
 }

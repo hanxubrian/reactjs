@@ -284,7 +284,10 @@ class PrintChecksLayout extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-
+        if(JSON.stringify(nextProps.filters) !== JSON.stringify(this.props.filters)){
+            const {paymentDate, checkDate, checktypeId, entityTypeId, year, month} = nextProps.filters;
+            this.props.getCheckDetailByType(this.props.regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
+        }
     }
 
 
@@ -604,13 +607,8 @@ function mapStateToProps({auth, printChecks, fuse}) {
     return {
         regionId: auth.login.defaultRegionId,
         bStartFetchList_pc: printChecks.bStartFetchList_pc,
-        checkDate: printChecks.checkDate,
-        paymentDate: printChecks.paymentDate,
-        checktypeId: printChecks.checktypeId,
         entityTypeId: printChecks.entityTypeId,
         printChecksDB: printChecks.printChecksDB,
-        year: printChecks.year,
-        month: printChecks.month,
         bSettingPanel: printChecks.bSettingPanel,
         selections: printChecks.selections,
         navigation: fuse.navigation,

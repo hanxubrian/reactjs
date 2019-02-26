@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
 import moment from 'moment'
-
+import _ from "lodash"
 
 const initialState = {
     printChecksDB: null,
@@ -60,6 +60,13 @@ const printChecks = function(state = initialState, action) {
         case Actions.SET_CHECKS_OBJ: {
             return {
                 ...state, checksObj: action.payload
+            };
+        }
+        case Actions.UPDATE_CHECKS_FILTER_PARAMETER: {
+            let data = _.cloneDeep(state.filters);
+            data[action.payload.name] = action.payload.value;
+            return {
+                ...state, filters: data
             };
         }
         case UserActions.USER_LOGGED_OUT:{
