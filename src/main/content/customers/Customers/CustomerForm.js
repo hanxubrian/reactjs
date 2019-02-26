@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom';
 // core components
 import {
 	TextField, Button, MenuItem, Divider, FormControlLabel,
-	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment, SnackbarContent, Snackbar, IconButton, Icon
+	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment, SnackbarContent, Snackbar, IconButton, Icon,
+	Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
 } from '@material-ui/core';
 
 // theme components
@@ -945,6 +946,23 @@ class CustomerForm extends Component {
 
 					{this.getStepContent(activeStep)}
 				</div>
+
+				<Dialog
+					open={this.state.tryingToClose || this.state.tryingToSubmit}
+					onClose={this.handleCloseConfirmDialog}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">Nothing offered. Are you sure to move on anyway?</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={this.stayForOffering} color="primary" autoFocus>Stay for Offering</Button>
+						<Button onClick={this.processConfirming} color="primary">Yes</Button>
+						<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
+					</DialogActions>
+				</Dialog>
 
 			</Fragment>
 		);

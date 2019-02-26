@@ -370,6 +370,9 @@ class Customers extends Component {
 			// loading: false,
 			isSubmittingForApproval: false,
 
+			tryingToCloseWithoutOffering: false,
+			tryingToSubmitWithoutOffering: false,
+
 			openSnack: false,
 			snackIcon: 'success',
 			snackMessage: 'Updated Franchisee Revenue Distributions',
@@ -407,9 +410,14 @@ class Customers extends Component {
 
 	trySubmitForApproval = () => {
 		this.setState({
-			isSubmittingForApproval: true
+			tryingToSubmitWithoutOffering: true
 		})
 
+	}
+	tryClose = () => {
+		this.setState({
+			tryingToCloseWithoutOffering: true
+		})
 	}
 
 	validation() {
@@ -638,7 +646,9 @@ class Customers extends Component {
 	}
 	handleCloseConfirmDialog = () => {
 		this.setState({
-			isSubmittingForApproval: false
+			isSubmittingForApproval: false,
+			tryingToSubmitWithoutOffering: false,
+			tryingToCloseWithoutOffering: false,
 		})
 	}
 	forceFetch = () => {
@@ -659,6 +669,21 @@ class Customers extends Component {
 
 		this.setState({ openSnack: false });
 	};
+	/////////// confirm submit & close /////////////
+	stayForOffering() {
+		this.handleCloseConfirmDialog()
+	}
+	processConfirming = () => {
+		if (this.state.tryingToSubmitWithoutOffering === true) {
+			this.submitForApproval()
+		}
+		if (this.state.tryingToCloseWithoutOffering === true) {
+			this.setState({
+				tryingToCloseWithoutOffering: false,
+			})
+			this.closeComposeForm()
+		}
+	}
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -804,7 +829,7 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
-											<Button variant="contained" color="primary" onClick={this.submitForApproval}
+											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}
 												className="mr-12"
 											>
 												{customerForm.type === "edit" ? 'Update' : 'Save'}
@@ -822,7 +847,7 @@ class Customers extends Component {
 												</IconButton>
 											</Tooltip> */}
 											<Tooltip title="Close">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.tryClose}>
 													<Icon>close</Icon>
 												</IconButton>
 											</Tooltip>
@@ -841,18 +866,19 @@ class Customers extends Component {
 							Confirm Dialog for submitting
 							 */}
 								<Dialog
-									open={this.state.isSubmittingForApproval}
+									open={this.state.tryingToCloseWithoutOffering || this.state.tryingToSubmitWithoutOffering}
 									onClose={this.handleCloseConfirmDialog}
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
 								>
 									<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
 									<DialogContent>
-										<DialogContentText id="alert-dialog-description">There are still some incompleted items. Are you sure to sumit anyway?</DialogContentText>
+										<DialogContentText id="alert-dialog-description">Nothing offered. Are you sure to move on anyway?</DialogContentText>
 									</DialogContent>
 									<DialogActions>
-										<Button onClick={this.handleCloseConfirmDialog} color="primary">No</Button>
-										<Button onClick={this.submitForApproval} color="primary" autoFocus>Yes</Button>
+										<Button onClick={this.handleCloseConfirmDialog} color="primary" autoFocus>Stay for Offering</Button>
+										<Button onClick={this.processConfirming} color="primary">Yes</Button>
+										<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
 									</DialogActions>
 								</Dialog>
 
