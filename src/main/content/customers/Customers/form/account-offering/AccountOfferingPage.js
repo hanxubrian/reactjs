@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 
-import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography } from '@material-ui/core';
+import {
+	Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography,
+	Step, Stepper, StepLabel
+} from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -74,6 +77,7 @@ import FranchieesListPage from './FranchieesListPage';
 import FranchieesOfferedListPage from './FranchieesOfferedListPage';
 import FranchieesAssignModal from './FranchieesAssignModal';
 
+import FranchiseeDistributionPage from '../franchisee-distribution/FranchiseeDistributionPage'
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -772,9 +776,34 @@ class AccountOfferingPage extends Component {
 
 		return (
 			<div className={classNames("flex flex-col")}>
+
+				<Stepper activeStep={step} style={{ padding: 0, background: 'unset' }}>
+					{['Offered Franchisees', 'Assign Franchisees', 'Offering Account', 'Franchisee Distribution', 'Finders Fees'].map((label, index) => {
+						const props = {};
+						const labelProps = {};
+
+						if (index === 2) labelProps.optional = <Typography variant="caption">Optional</Typography>;
+						// if (this.isStepOptional(index)) {
+						// 	labelProps.optional = <Typography variant="caption">Optional</Typography>;
+						// }
+						// if (this.isStepSkipped(index)) {
+						// 	props.completed = false;
+						// }
+						props.completed = false;
+						return (
+							<Step key={label} {...props}>
+								<StepLabel {...labelProps}>{label}</StepLabel>
+							</Step>
+						);
+					})}
+				</Stepper>
+
+
 				{step === 0 && <FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
 				{step === 1 && <FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
 				{step === 2 && <FranchieesSubmitOfferPage setStep={this.setStep} setActiveRow={this.setActiveRow} activeRow={activeRow} />}
+
+				{step === 3 && <FranchiseeDistributionPage setStep={this.setStep} />}
 
 				<FranchieesAssignModal />
 			</div>

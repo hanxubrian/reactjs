@@ -687,7 +687,8 @@ class FranchieesListPage extends Component {
 	}
 
 	onClickAssign = () => {
-		this.props.showFranchieesAssignModalForm(true)
+		// this.props.showFranchieesAssignModalForm(true)
+		this.props.setStep(3)
 	}
 
 	render() {
@@ -717,39 +718,30 @@ class FranchieesListPage extends Component {
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+					<div className={classNames("flex w-full justify-between items-center mb-12")}>
+						<Typography variant="h6">Franchisees List</Typography>
+						<div>
+							<Tooltip title="Location Filter">
+								<IconButton onClick={this.toggleSideBar}><Icon>menu</Icon></IconButton>
+							</Tooltip>
 
-					<div className={classNames("mb-12 w-full")}>
-						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-							<div>
-								<IconButton onClick={this.backToAccountOfferingHome}>
-									<Icon>arrow_back</Icon>
+							<Tooltip title={showMapView ? "Grid View" : "Map view"}>
+								<IconButton className={classNames(classes.button, "mr-12")}
+									onClick={this.toggleMapView}
+								>
+									{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
+									<Icon>location_on</Icon>
 								</IconButton>
-								Back
-								</div>
-							<div>
-								<Tooltip title="Location Filter">
-									<IconButton onClick={this.toggleSideBar}>
-										<Icon>menu</Icon>
-									</IconButton>
-								</Tooltip>
-								<Tooltip title={showMapView ? "Grid View" : "Map view"}>
-									<IconButton
-										// className={classNames(classes.summaryPanelButton, "mr-12")}
-										className={classNames(classes.button, "mr-12")}
-										// aria-label="Add an alarm"
-										onClick={this.toggleMapView}
-									>
-										{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
-										<Icon>location_on</Icon>
-									</IconButton>
-								</Tooltip>
-								<Button
-									variant="contained"
-									color="primary"
-									className={classNames(classes.button, "pr-24 pl-24 mb-6")}
-									onClick={this.onClickAssign}
-								> Assign </Button>
-							</div>
+							</Tooltip>
+
+							<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Back</Button>
+
+							<Button
+								variant="contained"
+								color="primary"
+								className={classNames(classes.button, "pr-24 pl-24")}
+								onClick={this.onClickAssign}
+							> <Icon fontSize="small">check</Icon>Assign </Button>
 						</div>
 					</div>
 
@@ -919,7 +911,6 @@ class FranchieesListPage extends Component {
 							</Paper>
 						</GridItem>
 					</GridContainer>
-
 				</div>
 			</Fragment>
 		)

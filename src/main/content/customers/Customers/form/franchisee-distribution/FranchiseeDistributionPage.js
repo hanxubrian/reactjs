@@ -1020,7 +1020,9 @@ class FranchiseeDistributionPage extends React.Component {
 			franchieesesToOffer: newFranchieesesToOffer
 		})
 	};
-
+	backToFranchiseeList = () => {
+		this.props.setStep(1)
+	}
 	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
 
@@ -1046,6 +1048,16 @@ class FranchiseeDistributionPage extends React.Component {
 
 		return (
 			<>
+				<div className={classNames("flex mt-12 justify-between")}>
+					<Typography variant="h6">Franchisee Distribution</Typography>
+
+					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+						<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Back</Button>
+						<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button>
+					</div>
+				</div>
+
+
 				<div className={classNames("flex mt-12 justify-between ")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
@@ -1182,7 +1194,8 @@ class FranchiseeDistributionPage extends React.Component {
 
 										<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
 											{
-												m.MonthlyBilling > 0 && <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
+												// m.MonthlyBilling > 0 &&
+												<Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
 													<Fab aria-label="remove"
 														onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
 														<Icon>arrow_forward</Icon>
@@ -1277,7 +1290,7 @@ class FranchiseeDistributionPage extends React.Component {
 					<Typography variant="h6">Finders Fees</Typography>
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={() => this.handleStep(0)} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
+						<Button variant="contained" onClick={() => this.handleStep(0)} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 						<Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Select This Plan'}</Button>
 					</div>
 				</div>
@@ -1485,10 +1498,10 @@ class FranchiseeDistributionPage extends React.Component {
 						{/*{step === 2 && this.getFindersFeesForm()}*/}
 					</div>
 
-					<div className={classNames("flex flex-col")}>
+					{/* <div className={classNames("flex flex-col")}>
 						<Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
 						{this.getFranchiseesList()}
-					</div>
+					</div> */}
 
 					<Snackbar
 						anchorOrigin={{
