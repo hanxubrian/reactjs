@@ -76,21 +76,34 @@ class NewFindersFeePage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.setState({
-			CalculationMethodCode: this.props.activeFranchisee.calc_fact,
-			FranchiseeNum: this.props.activeFranchisee.Number || this.props.activeFranchisee.FranchiseeNumber,
-			CustomerNum: this.props.activeFranchisee.cust_no,
-			// AmountPayableOn,
-			// DownPaymentPercent,
-			// DownPaymentAmount,
-			// MonthlyPaymentPercent,
-			// MonthlyPaymentAmount,
-			// NumberOfPayments,
-			// AmountFinanced,
-			FinderFeeTotal: this.props.activeFranchisee.ff_tot,
-			Balance: this.props.activeFranchisee.ff_balance,
-			// MultiTenantOccupancy,
-		})
+		if (this.props.activeFranchisee.FinderFee) {
+			const { calc_fact, dlr_code, cust_no, ffcont, ffcredit, ff_adjtot, ffduetot, ff_down, ff_pyamt, ff_pytotl, ff_amtfin, ff_dwnamt, ff_tot, dwn_take, fullbill, ff_balance }
+				= this.props.activeFranchisee.FinderFee
+
+			this.setState({
+				...this.props.findersFeeParams,
+				CalculationMethodCode: calc_fact,
+				FranchiseeNum: dlr_code,
+				CustomerNum: cust_no,
+				// AmountPayableOn: ffcont,
+				FindersFeeCreditAmount: ffcredit,
+				InitialBusinessCredit: ff_adjtot,
+				FinderFeePayableOn: ffduetot,
+				DownPaymentPercent: ff_down,
+				MonthlyPaymentAmount: ff_pyamt,
+				NumberOfPayments: ff_pytotl,
+				AmountFinanced: ff_amtfin,
+				DownPaymentAmount: ff_dwnamt,
+				FinderFeeTotal: ff_tot, // --
+
+				DownPaymentPaid: dwn_take === 'Y',
+				// IncludeDpWith1stPayment: ff_pyamt === 'Y', // --
+
+				MultiTenantOccupancy: fullbill,
+				// MonthlyPaymentPercent,
+				Balance: ff_balance,
+			})
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -167,22 +180,38 @@ class NewFindersFeePage extends React.Component {
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
+		if (nextProps.findersFeeParams !== this.props.findersFeeParams) {
+			this.setState({ ...nextProps.findersFeeParams })
+		}
 		if (nextProps.activeFranchisee !== this.props.activeFranchisee) {
-			this.setState({
-				CalculationMethodCode: nextProps.activeFranchisee.calc_fact,
-				FranchiseeNum: nextProps.activeFranchisee.Number || nextProps.activeFranchisee.FranchiseeNumber,
-				CustomerNum: nextProps.activeFranchisee.cust_no,
-				// AmountPayableOn,
-				// DownPaymentPercent,
-				// DownPaymentAmount,
-				// MonthlyPaymentPercent,
-				// MonthlyPaymentAmount,
-				// NumberOfPayments,
-				// AmountFinanced,
-				FinderFeeTotal: nextProps.activeFranchisee.ff_tot,
-				Balance: nextProps.activeFranchisee.ff_balance,
-				// MultiTenantOccupancy,
-			})
+			if (nextProps.activeFranchisee.FinderFee) {
+				const { calc_fact, dlr_code, cust_no, ffcont, ffcredit, ff_adjtot, ffduetot, ff_down, ff_pyamt, ff_pytotl, ff_amtfin, ff_dwnamt, ff_tot, dwn_take, fullbill, ff_balance }
+					= nextProps.activeFranchisee.FinderFee
+
+				this.setState({
+					...this.props.findersFeeParams,
+					CalculationMethodCode: calc_fact,
+					FranchiseeNum: dlr_code,
+					CustomerNum: cust_no,
+					// AmountPayableOn: ffcont,
+					FindersFeeCreditAmount: ffcredit,
+					InitialBusinessCredit: ff_adjtot,
+					FinderFeePayableOn: ffduetot,
+					DownPaymentPercent: ff_down,
+					MonthlyPaymentAmount: ff_pyamt,
+					NumberOfPayments: ff_pytotl,
+					AmountFinanced: ff_amtfin,
+					DownPaymentAmount: ff_dwnamt,
+					FinderFeeTotal: ff_tot, // --
+
+					DownPaymentPaid: dwn_take === 'Y',
+					// IncludeDpWith1stPayment: ff_pyamt === 'Y', // --
+
+					MultiTenantOccupancy: fullbill,
+					// MonthlyPaymentPercent,
+					Balance: ff_balance,
+				})
+			}
 		}
 	}
 
@@ -475,6 +504,7 @@ function mapStateToProps({ customers, auth }) {
 		findersFeeParams: customers.findersFeeParams,
 		findersFeeTypes: customers.findersFeeTypes,
 		customerForm: customers.customerForm,
+		activeFranchisee: customers.activeFranchisee,
 	}
 }
 

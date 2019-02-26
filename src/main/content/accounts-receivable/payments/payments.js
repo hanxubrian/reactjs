@@ -482,7 +482,7 @@ class Payments extends Component {
 				title: "Warning",
 				message: "Too many rows selected. Please try to reduce them.",
 			})
-		} else if (invoiceBalances.indexOf(0) > -1) {
+		} else if (paymentType !== 'Credit' && invoiceBalances.indexOf(0) > -1) {
 			this.props.showErrorDialog({
 				show: true,
 				title: "Warning",
