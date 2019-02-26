@@ -98,6 +98,7 @@ export function createAccountReceivablePayment(
 	PaymentNote,
 	overpayment,
 	PaymentAmount,
+	PaymentAmountApplied,
 
 	PayItems,
 
@@ -128,6 +129,7 @@ export function createAccountReceivablePayment(
 				PaymentNote,
 				overpayment,
 				PaymentAmount,
+				PaymentAmountApplied,
 
 				PayItems,
 			);

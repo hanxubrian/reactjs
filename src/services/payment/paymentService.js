@@ -42,7 +42,7 @@ class PaymentListService {
 		});
 	};
 
-	createAccountReceivablePayment = (RegionId, customerNumber, PaymentType, ReferenceNo, PaymentDate, PaymentNote, overpayment, PaymentAmount, PayItems, ) => {
+	createAccountReceivablePayment = (RegionId, customerNumber, PaymentType, ReferenceNo, PaymentDate, PaymentNote, overpayment, PaymentAmount, PaymentAmountApplied, PayItems, ) => {
 		const data = {
 			"RegionId": RegionId,
 			"CustomerNo": customerNumber,
@@ -53,7 +53,7 @@ class PaymentListService {
 				"Note": PaymentNote,
 				"OverPayment": overpayment,
 				"Amount": PaymentAmount,
-				"AmountApplied": PaymentAmount,
+				"AmountApplied": PaymentAmountApplied,
 				"PayHistoryItems": PayItems
 			}
 		}

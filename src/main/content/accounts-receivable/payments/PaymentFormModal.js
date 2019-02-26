@@ -513,6 +513,7 @@ class PaymentFormModal extends React.Component {
 				this.state.PaymentNote,
 				this.getOverpaymentAmount(this.state.rows),
 				this.state.PaymentAmount,
+				this.getTotalPaymentApplied(this.state.rows),
 
 				PayItems,
 
@@ -739,7 +740,15 @@ class PaymentFormModal extends React.Component {
 		rows.forEach(x => {
 			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
 		})
-		return paymentAmount - totalPaymentAmount
+		return totalPaymentAmount - paymentAmount
+	}
+
+	getTotalPaymentApplied(rows = this.state.rows) {
+		let totalPaymentAmount = 0
+		rows.forEach(x => {
+			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+		})
+		return totalPaymentAmount
 	}
 
 	checkValidations(rows = this.state.rows, paymentAmount = this.state.paymentAmount) {
