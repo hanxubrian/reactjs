@@ -398,8 +398,8 @@ class FranchieesOfferedListPage extends Component {
 				},
 				{
 					title: "Franchisees Name",
-					name: "Name",
-					columnName: "Name",
+					name: "FranchiseeName",
+					columnName: "FranchiseeName",
 					width: 220,
 				},
 				{

@@ -409,15 +409,24 @@ class Customers extends Component {
 	};
 
 	trySubmitForApproval = () => {
-		this.setState({
-			tryingToSubmitWithoutOffering: true
-		})
+
+		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0) {
+			this.submitForApproval()
+		} else {
+			this.setState({
+				tryingToSubmitWithoutOffering: true
+			})
+		}
 
 	}
 	tryClose = () => {
-		this.setState({
-			tryingToCloseWithoutOffering: true
-		})
+		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0) {
+			this.closeComposeForm()
+		} else {
+			this.setState({
+				tryingToCloseWithoutOffering: true
+			})
+		}
 	}
 
 	validation() {
