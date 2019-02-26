@@ -1091,16 +1091,16 @@ class FranchiseeDistributionPage extends React.Component {
 							if (findex === 4) return false;
 							return (
 								<Typography key={findex} style={{ width: f.width + '%', textAlign: f.align }}
-									variant="caption">{f.title}</Typography>
+									variant="subtitle2">{f.title}</Typography>
 							)
 						})}
 					</div>
 
-					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
+					<Divider variant="middle" className='mb-12 w-full' style={{ alignSelf: 'center' }} />
 
 					{franchieesesListToOffer && franchieesesListToOffer.map((x, index) => (
 						// <React.Fragment key={index}>
-						<div key={index} className={classNames("flex flex-col w-full mb-12")} style={{ alignItems: 'bottom' }}>
+						<div key={index} className={classNames("flex flex-col w-full")} style={{ alignItems: 'bottom' }}>
 							<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.Number}</Typography>
 								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
@@ -1245,9 +1245,8 @@ class FranchiseeDistributionPage extends React.Component {
 								))
 							}
 
-							< div className='flex mb-6' >
+							< div className='flex mt-12' >
 								<Typography variant='body2'><strong>Finders Fee:</strong></Typography>
-
 								{
 									this.props.finderFee[x.FinderFeeId] && <>
 										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].calc_fact}</span>
@@ -1258,6 +1257,7 @@ class FranchiseeDistributionPage extends React.Component {
 									</>
 								}
 							</div>
+							<Divider variant="middle" className='mt-12 mb-12 w-full' style={{ alignSelf: 'center' }} />
 							{/* </React.Fragment> */}
 						</div>
 
