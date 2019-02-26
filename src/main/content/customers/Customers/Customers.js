@@ -453,6 +453,8 @@ class Customers extends Component {
 				openSnack: true,
 				snackMessage: valid,
 				snackIcon: 'error',
+
+				tryingToSubmitWithoutOffering: false,
 			})
 			return
 		}
@@ -885,10 +887,12 @@ class Customers extends Component {
 									<DialogContent>
 										<DialogContentText id="alert-dialog-description">Nothing offered. Are you sure to move on anyway?</DialogContentText>
 									</DialogContent>
-									<DialogActions>
+									<DialogActions className='flex justify-between'>
 										<Button onClick={this.handleStayForOffering} color="primary" autoFocus>Stay for Offering</Button>
-										<Button onClick={this.processConfirming} color="primary">Yes</Button>
-										<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
+										<div className='flex'>
+											<Button onClick={this.processConfirming} color="primary">Yes</Button>
+											<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
+										</div>
 									</DialogActions>
 								</Dialog>
 
