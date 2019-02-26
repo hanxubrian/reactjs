@@ -990,11 +990,21 @@ class FranchiseeDistributionPage extends React.Component {
 	}
 
 	handleMonthlyBilling = (fId, mId, name) => event => {
-		const value = name === 'EscrowBilling' ? event.target.checked : event.target.value
-
-		let newFranchieesesToOffer = _.clone(this.state.franchieesesToOffer)
+		let value;
+		switch (name) {
+			case "EscrowBilling":
+				value = event.target.checked
+				break;
+			case "MonthlyBilling":
+				value = parseFloat('0' + event.target.value)
+				break;
+			default:
+				value = event.target.value
+				break;
+		}
+		let newFranchieesesToOffer = _.cloneDeep(this.state.franchieesesToOffer)
 		newFranchieesesToOffer[fId].MonthlyBilling[mId][name] = value
-
+		console.log('handleMonthlyBilling', fId, mId, value, newFranchieesesToOffer)
 		this.setState({
 			franchieesesToOffer: newFranchieesesToOffer
 		})
@@ -1039,12 +1049,12 @@ class FranchiseeDistributionPage extends React.Component {
 		const { franchieesesToOffer } = this.state
 		let newMonthlyBilling = {
 			"EscrowBilling": true,
-			"Status": "sample string 2",
-			"BillingFrequency": "sample string 3",
-			"BillingTypeServiceId": "sample string 4",
-			"BillingTypeId": "sample string 5",
-			"Description": "sample string 6",
-			"MonthlyBilling": 7.1
+			"Status": "Status",
+			"BillingFrequency": "R",
+			"BillingTypeServiceId": "0",
+			"BillingTypeId": "0",
+			"Description": "Description",
+			"MonthlyBilling": 0
 		}
 
 		let newFranchieesesToOffer = [...franchieesesToOffer]
@@ -1059,6 +1069,9 @@ class FranchiseeDistributionPage extends React.Component {
 			franchieesesToOffer: newFranchieesesToOffer
 		})
 
+	}
+	getMonthlyBillingTotal(franchisee) {
+		return franchisee.MonthlyBilling && franchisee.MonthlyBilling.length > 0 && franchisee.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0
 	}
 	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
@@ -1093,7 +1106,6 @@ class FranchiseeDistributionPage extends React.Component {
 						<Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button>
 					</div>
 				</div>
-
 
 				<div className={classNames("flex mt-12 justify-between ")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
@@ -1134,7 +1146,6 @@ class FranchiseeDistributionPage extends React.Component {
 					<Divider variant="middle" className='mb-12 w-full' style={{ alignSelf: 'center' }} />
 
 					{franchieesesToOffer && franchieesesToOffer.map((x, index) => (
-						// <React.Fragment key={index}>
 						<div key={index} className={classNames("flex flex-col w-full")} style={{ alignItems: 'bottom' }}>
 							<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.Number || x.FranchiseeNumber}</Typography>
@@ -1148,15 +1159,6 @@ class FranchiseeDistributionPage extends React.Component {
 								<div style={{ width: franHeaders[7].width + '%', alignSelf: 'center' }} />
 
 								<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
-									{
-										// m.MonthlyBilling > 0 &&
-										// <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
-										// 	<Fab aria-label="remove"
-										// 		onClick={() => this.gotoFindersFee(x.Number, 123)} color="primary" className={classNames(classes.ffBtn, "mr-6")}>
-										// 		<Icon>arrow_forward</Icon>
-										// 	</Fab>
-										// </Tooltip>
-									}
 									<Tooltip title="Add monthly billing" aria-label="Add monthly billing">
 										<Fab aria-label="add"
 											color="primary" className={classNames(classes.ffBtn, "mr-6")}
@@ -1268,13 +1270,7 @@ class FranchiseeDistributionPage extends React.Component {
 											onChange={this.handleMonthlyBilling(index, mIndex, 'MonthlyBilling')}
 										/>
 
-										<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
-											{/* <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
-												<Fab aria-label="remove"
-													onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
-													<Icon>arrow_forward</Icon>
-												</Fab>
-											</Tooltip> */}
+										<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
 											<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
 												<Fab aria-label="remove"
 													onClick={() => this.removeFranchiseeMonthly(index, mIndex)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
@@ -1311,21 +1307,17 @@ class FranchiseeDistributionPage extends React.Component {
 									}}
 									margin="dense"
 									className="pl-6"
-									value={x.MonthlyBilling && x.MonthlyBilling.length > 0 && x.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0}
-								// onChange={this.handleMonthlyBilling(index, mIndex, 'MonthlyBilling')}
+									value={this.getMonthlyBillingTotal(x)}
 								/>
-								<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
-									<Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
-										<Fab aria-label="remove"
-											onClick={() => this.gotoFindersFee(x.Number, x.MonthlyBilling && x.MonthlyBilling.length > 0 && x.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0)} color="primary" className={classNames(classes.ffBtn, "")}>
-											<Icon>arrow_forward</Icon>
-										</Fab>
-									</Tooltip>
+								<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
+									<Button variant="contained" onClick={() => this.gotoFindersFee(x.Number, this.getMonthlyBillingTotal(x))}
+										color="primary" className={classNames('')}>
+										<Icon fontSize="small">arrow_forward</Icon>
+									</Button>
 								</div>
 
 							</div>
 							<Divider variant="middle" className='mt-12 mb-12 w-full' style={{ alignSelf: 'center' }} />
-							{/* </React.Fragment> */}
 						</div>
 
 					))}
