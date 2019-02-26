@@ -687,7 +687,7 @@ class CustomerListContent extends Component {
 				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 			],
 			sorting: [
-				{ columnName: 'CustomerNo', direction: 'asc' }
+				{ columnName: 'CustomerNo', direction: 'desc' }
 			],
 			editingColumnExtensions: [
 				// {
