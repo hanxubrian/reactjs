@@ -315,7 +315,7 @@ class CustomerForm extends Component {
 	getSteps() {
 		// return ['Service Agreement', 'Franchisee Distribution', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
 		if (this.props.customerForm.type === "new") {
-			return ['Service Agreement', 'Account Offering', 'Franchisee Distribution'];
+			return ['Service Agreement', 'Account Offering'];
 		}
 		return ['Service Agreement', 'Franchisee Distribution', "Walk-Thru", "Account Offering", "Account History"];
 	}

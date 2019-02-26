@@ -1034,6 +1034,8 @@ class FranchiseeDistributionPage extends React.Component {
 			step,
 		} = this.state;
 
+		const franchieesesListToOffer = this.props.activeStep === 1 ? this.props.franchieesesToOffer : this.state.franchieesesToOffer
+		console.log('franchieesesListToOffer', this.props.franchieesesToOffer, this.state.franchieesesToOffer, franchieesesListToOffer)
 		const franHeaders = [
 			{ width: 7, title: 'Number', align: '', field: 'Number' },
 			{ width: 18, title: 'Name', align: '', field: 'Name' },
@@ -1096,10 +1098,40 @@ class FranchiseeDistributionPage extends React.Component {
 
 					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 
-					{franchieesesToOffer && franchieesesToOffer.map((x, index) => (
-						<React.Fragment key={index}>
+					{franchieesesListToOffer && franchieesesListToOffer.map((x, index) => (
+						// <React.Fragment key={index}>
+						<div key={index} className={classNames("flex flex-col w-full mb-12")} style={{ alignItems: 'bottom' }}>
+							<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
+								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.Number}</Typography>
+								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
+
+								<div style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }} />
+								<div style={{ width: franHeaders[3].width + '%', alignSelf: 'center' }} />
+								<div style={{ width: franHeaders[4].width + '%', alignSelf: 'center' }} />
+								<div style={{ width: franHeaders[5].width + '%', alignSelf: 'center' }} />
+								<div style={{ width: franHeaders[6].width + '%', alignSelf: 'center' }} />
+								<div style={{ width: franHeaders[7].width + '%', alignSelf: 'center' }} />
+
+								<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
+									{
+										// m.MonthlyBilling > 0 &&
+										<Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
+											<Fab aria-label="remove"
+												onClick={() => this.gotoFindersFee(x.Number, 123)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
+												<Icon>arrow_forward</Icon>
+											</Fab>
+										</Tooltip>
+									}
+									<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
+										<Fab aria-label="remove"
+											color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
+											<Icon>close</Icon>
+										</Fab>
+									</Tooltip>
+								</div>
+							</div>
 							{
-								x.MonthlyBilling.map((m, mIndex) => (
+								x.MonthlyBilling && x.MonthlyBilling.map((m, mIndex) => (
 									<div key={mIndex} className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 
 										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{mIndex === 0 ? x.FranchiseeNumber : '---'}</Typography>
@@ -1213,18 +1245,21 @@ class FranchiseeDistributionPage extends React.Component {
 								))
 							}
 
-							<div className='flex'>
+							< div className='flex mb-6' >
 								<Typography variant='body2'><strong>Finders Fee:</strong></Typography>
 
-								{this.props.finderFee[x.FinderFeeId] && <>
-									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].calc_fact}</span>
-									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_desc}</span>
-									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_pybill}</span>
-									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_tot}</span>
-									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_balance}</span>
-								</>}
+								{
+									this.props.finderFee[x.FinderFeeId] && <>
+										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].calc_fact}</span>
+										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_desc}</span>
+										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_pybill}</span>
+										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_tot}</span>
+										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_balance}</span>
+									</>
+								}
 							</div>
-						</React.Fragment>
+							{/* </React.Fragment> */}
+						</div>
 
 					))}
 				</div>
