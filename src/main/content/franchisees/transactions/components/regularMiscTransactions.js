@@ -198,7 +198,7 @@ class RegularMiscTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc.length===0))
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc===null))
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc.map(d=>{

@@ -198,7 +198,7 @@ class SpecialMiscTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SpecMisc.length===0))
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SpecMisc===null))
             return (<div />);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SpecMisc.map(d=>{
