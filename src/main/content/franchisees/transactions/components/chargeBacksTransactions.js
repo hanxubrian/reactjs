@@ -194,10 +194,10 @@ class ChargeBacksTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CHARGEBACKS===null))
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].ChargeBacks.length===0))
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CHARGEBACKS.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].ChargeBacks.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.TRX_AMT = parseFloat(d.TRX_AMT);

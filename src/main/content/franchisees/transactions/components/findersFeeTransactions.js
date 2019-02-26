@@ -201,10 +201,10 @@ class FindersFeeTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.length===0)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].FinderFeePayments.length===0)
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].FinderFeePayments.map(d=>{
             d.DESCRIPTION = FuseUtils.capital_letter(d.DESCRIPTION);
             d.PYMNT_TOT = parseFloat(d.PYMNT_TOT);
             return d;

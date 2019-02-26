@@ -88,11 +88,11 @@ class TransactionsSummary extends Component {
                 {/*<SummaryTransactons />*/}
                 <CustomerTransactions />
                 <CustomerAccountTotals />
-                {/*<SupplyTransactons />*/}
-                {/*<FindersFeeTransactions />*/}
-                {/*<RegularMiscTransactons />*/}
-                {/*<SpecialMiscTransactions />*/}
-                {/*<ChargeBacksTransactions />*/}
+                <SupplyTransactons />
+                <FindersFeeTransactions />
+                <RegularMiscTransactons />
+                <SpecialMiscTransactions />
+                <ChargeBacksTransactions />
                 {(franchiseeReport===null && this.props.transactionForm.franchisee!==null)  && (
                     <div className={classNames(classes.overlay)}>
                         <CircularProgress className={classes.progress} color="secondary"  />
