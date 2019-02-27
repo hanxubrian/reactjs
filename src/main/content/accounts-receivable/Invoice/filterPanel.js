@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Paper, withStyles} from '@material-ui/core';
+import {Grid, OutlinedInput, Paper, TextField, withStyles} from '@material-ui/core';
 
 //Material UI core
 import Switch from '@material-ui/core/Switch';
@@ -92,6 +92,9 @@ class FilterPanel extends Component {
         ToDate: undefined,
         invoiceDateOption: CUSTOM_DATE,
         invoiceDatePeriod: moment(),
+        year: moment().year(),
+        month: moment().month(),
+        labelWidth: 0,
     };
 
     componentDidMount()
@@ -128,11 +131,13 @@ class FilterPanel extends Component {
 
 
     handleChange = (index, name) => event => {
-        const iStatus = this.state.invoiceStatus;
-        iStatus[index]['checked'+name] = event.target.checked;
+        if(this.state.invoiceStatus.length) {
+            const iStatus = this.state.invoiceStatus;
+            iStatus[index]['checked' + name] = event.target.checked;
 
-        this.setState({invoiceStatus: iStatus });
-        this.props.updateInvoiceStatus(iStatus)
+            this.setState({invoiceStatus: iStatus});
+            this.props.updateInvoiceStatus(iStatus)
+        }
     };
 
     handleChange1 = event => {
@@ -224,10 +229,11 @@ class FilterPanel extends Component {
         this.props.updateDate(UPDATE_TO_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
     };
 
-    handlePeriodChange = date => {
-        this.setState({ invoiceDatePeriod: date });
-        let year = moment(date).year();
-        let month = moment(date).month();
+    handlePeriodChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+        let year = event.target.name==='year' ? event.target.value : this.state.year;
+        let month = event.target.name==='month' ? event.target.value : this.state.month;
+
         let startDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
         let endDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
 
@@ -235,9 +241,12 @@ class FilterPanel extends Component {
         this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
     };
 
+
     render()
     {
         const {classes} = this.props;
+        let years = _.range(2000, moment().year()+10);
+        const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
@@ -304,31 +313,51 @@ class FilterPanel extends Component {
                             </MuiPickersUtilsProvider>
                         )}
                         { this.state.invoiceDateOption===PERIOD && (
-                            <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <div className="flex flex-col mt-20">
-                                    <h3 className="mb-20">Choose a Period</h3>
-                                    <DatePicker
-                                        margin="none"
-                                        label="Period"
-                                        name="invoiceDatePeriod"
-                                        variant="outlined"
-                                        format="MM/YYYY"
-                                        value={this.state.invoiceDatePeriod}
-                                        onChange={this.handlePeriodChange}
-                                        fullWidth
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        openToYearSelection={true}
-                                    />
-                                </div>
-                            </MuiPickersUtilsProvider>
+                            <div className="flex flex-col mt-20">
+                                <h3 className="mb-20">Choose a Period</h3>
+                                <TextField
+                                    margin={"normal"}
+                                    name="month"
+                                    label="Month"
+                                    variant="outlined"
+                                    select
+                                    value={this.state.month}
+                                    onChange={this.handlePeriodChange}
+                                    input={
+                                        <OutlinedInput
+                                            labelWidth={this.state.labelWidth}
+                                            name="month"
+                                            id="month"
+                                        />
+                                    }
+                                    fullWidth
+                                >
+                                    {mL.map((month, index)=>{
+                                        return (<MenuItem key={index} value={index}>{month}</MenuItem>)
+                                    })}
+                                </TextField>
+                                <TextField
+                                    margin={"normal"}
+                                    name="year"
+                                    label="Year"
+                                    variant="outlined"
+                                    select
+                                    value={this.state.year}
+                                    onChange={this.handlePeriodChange}
+                                    input={
+                                        <OutlinedInput
+                                            labelWidth={this.state.labelWidth}
+                                            name="year"
+                                            id="year"
+                                        />
+                                    }
+                                    fullWidth
+                                >
+                                    {years.map((year, index)=>{
+                                        return (<MenuItem  key={index} value={year}>{year}</MenuItem>)
+                                    })}
+                                </TextField>
+                            </div>
                         )}
 
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
