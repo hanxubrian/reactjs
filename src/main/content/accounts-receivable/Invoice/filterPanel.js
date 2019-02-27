@@ -245,7 +245,7 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
-        let years = _.range(2000, moment().year()+10);
+        let years = _.range(moment().year()-2, moment().year()+2);
         const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return (
             <div className={classNames(classes.root)}>
