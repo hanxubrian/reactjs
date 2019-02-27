@@ -11,7 +11,7 @@ import * as UserActions from "../../auth/store/actions";
 
 const initialState = {
     paymentlockboxDB        : null,
-    data                    : null,
+    data                    : [],
     getallstatus            : false,
 };
 

@@ -11,8 +11,8 @@ const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 class PaymentLockBoxService {
     getallpaymentlockbox = (RegionId) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/v1/lists/GetInvoiceStatusList`,
-                { params: {RegionId: RegionId}}
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload?regionId=${RegionId}`
+                // { params: {RegionId: RegionId}}
             )
                 .then( res => {
                     if(res.status===200) {

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 // core components
 import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
 
-import { withStyles } from "@material-ui/core";
+import { withStyles ,CircularProgress} from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
 
@@ -179,7 +179,7 @@ const styles = theme => ({
         width: '100%',
         height: '100vh',
         backgroundColor: 'rgba(0,0,0, .9)',
-        zIndex: 1000,
+        zIndex: 999000,
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
@@ -376,8 +376,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "LockBox Date",
-                    name: "CheckNo",
-                    columnName: 'CheckNo',
+                    name: "lboxdate",
+                    columnName: 'lboxdate',
                     width: 180,
                     align: 'center',
                     sortingEnabled: true,
@@ -386,8 +386,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "LockBox Time",
-                    name: "InvoiceNo",
-                    columnName: "InvoiceNo",
+                    name: "lboxtime",
+                    columnName: "lboxtime",
                     width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -395,8 +395,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "LockBox Number",
-                    name: "InvoiceAmount",
-                    columnName: "InvoiceAmount",
+                    name: "lboxnum",
+                    columnName: "lboxnum",
                     width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -404,8 +404,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "Credit Date",
-                    name: "InvoiceBalance",
-                    columnName: "InvoiceBalance",
+                    name: "creditdate",
+                    columnName: "creditdate",
                     width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -413,8 +413,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "Invoice Number",
-                    name: "InvoiceBalanceOR",
-                    columnName: 'InvoiceBalanceOR',
+                    name: "invno",
+                    columnName: 'invno',
                     width: 150,
                     align: 'center',
                     sortingEnabled: true,
@@ -423,8 +423,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "Check Number",
-                    name: "PaymentAmount",
-                    columnName: 'PaymentAmount',
+                    name: "checkno",
+                    columnName: 'checkno',
                     width: 140,
                     align: 'right',
                     wordWrapEnabled: true,
@@ -435,8 +435,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "Check Amount",
-                    name: "CheckAmount0",
-                    columnName: 'CheckAmount0',
+                    name: "amount",
+                    columnName: 'amount',
                     width: 140,
                     align: 'right',
                     wordWrapEnabled: true,
@@ -447,8 +447,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "Post Result",
-                    name: "CheckAmount1",
-                    columnName: 'CheckAmount1',
+                    name: "postresult",
+                    columnName: 'postresult',
                     width: 140,
                     align: 'right',
                     wordWrapEnabled: true,
@@ -459,8 +459,8 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "Post Amount",
-                    name: "CheckAmount2",
-                    columnName: 'CheckAmount2',
+                    name: "postamt",
+                    columnName: 'postamt',
                     width: 140,
                     align: 'right',
                     wordWrapEnabled: true,
@@ -471,11 +471,11 @@ class PaymentLockBoxContentList extends Component {
                 }
             ],
             sorting: [
-                { columnName: 'CustomerNo', direction: 'asc' },
+                { columnName: 'checkno', direction: 'asc' },
             ],
             editingColumnExtensions: [],
             currencyColumns: [
-                'Amount'
+                'amount'
             ],
             phoneNumberColumns: [
                 'Phone'
@@ -590,11 +590,7 @@ class PaymentLockBoxContentList extends Component {
                 this.setState({selection: [...nextProps.activePaymentRows]})
             }
         }
-        // if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
-        // 	this.setState({ locationFilterValue: nextProps.locationFilterValue })
-        // 	console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.customers)
-        // 	this.initRowsFromRawJson(this.props.customers, nextProps.locationFilterValue);
-        // }
+
 
         if (nextProps.searchText !== this.props.searchText) {
             // console.log("------search text changed-------", nextProps.searchText)
@@ -603,6 +599,10 @@ class PaymentLockBoxContentList extends Component {
     } // deprecate
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        if(JSON.stringify(this.props.data ) !== JSON.stringify(prevProps.data)){
+            this.setState({rows:this.props.data});
+        }
+
         // console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
     }
     getRowData(payments) {
@@ -640,7 +640,7 @@ class PaymentLockBoxContentList extends Component {
     componentWillMount() {
         this.setState({
             "paymentsParam": this.props.getPaymentsParam,
-            "rows": this.getRowData(this.props.payments),
+            "rows": this.props.data,
             expandedGroups: [...new Set(this.getRowData(this.props.payments).map(x => x.CustomerNameNo))],
         });
         // this.props.getAccountReceivablePaymentsList(
@@ -730,7 +730,7 @@ class PaymentLockBoxContentList extends Component {
         const { classes } = this.props;
 
         const {
-            rows,
+
             selection,
             tableColumnExtensions,
             sorting,
@@ -744,10 +744,20 @@ class PaymentLockBoxContentList extends Component {
             groupingColumns,
             expandedGroups,
         } = this.state;
-        // console.log('payments------------', rows);
+        let rows =[];
+        if(this.state.rows && this.state.rows!== null){
+            rows = this.state.rows;
+        }
+        console.log('payments------------', rows);
+        console.log('paymentlockbox------------', this.props.paymentlockbox);
         return (
             <Fragment>
                 <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+                    {this.props.paymentlockbox.getallstatus && (
+                        <div className={classes.overlay}>
+                            <CircularProgress className={classes.progress} color="secondary"/>
+                        </div>
+                    )}
 
                     <div className={classNames("flex flex-col")}
                     >
@@ -866,7 +876,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({ accountReceivablePayments, auth }) {
+function mapStateToProps({ accountReceivablePayments, auth,paymentlockbox }) {
     return {
         bLoadedPayments: accountReceivablePayments.bLoadedPayments,
         payments: accountReceivablePayments.ACC_payments,
@@ -875,6 +885,8 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 
         searchText: accountReceivablePayments.searchText,
         activePaymentRows: accountReceivablePayments.activePaymentRows,
+        data                : paymentlockbox.data,
+        paymentlockbox      : paymentlockbox,
     }
 }
 

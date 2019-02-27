@@ -228,6 +228,9 @@ class PaymentLockBoxReport extends Component {
             this.setState({completed: Math.min(completed + diff, 100)});
         }
     };
+    processlockbox=()=>{
+        this.props.paymentlockboxgetalldata();
+    }
     fileuploadstart=()=>{
         if(this.state.selectedFile && this.state.selectedFile !== null ){
             const formData = new FormData();
@@ -338,7 +341,7 @@ class PaymentLockBoxReport extends Component {
                                                     onChange={this.handleselectedFile}
                                                     type="file"
                                                 />
-                                                <label htmlFor="raised-button-file">
+                                                <label htmlFor="raised-button-file" style={{display:'none'}}>
                                                     <Button variant="contained" color="primary" component="span" style={{marginRight:20}}
                                                     >
                                                         <Icon className="text-24" color="action">attach_file</Icon>
@@ -348,11 +351,11 @@ class PaymentLockBoxReport extends Component {
                                                         {/*<Icon className="text-24" color="action">attach_file</Icon>*/}
                                                     {/*</IconButton>*/}
                                                 </label>
-                                                {this.state.fileload !==null && this.state.fileload>0 && (
-                                                    this.state.fileload +"%"
-                                                )}
-                                                <Button variant="contained" color="primary" disabled={!this.state.fileuploadstatus} onClick={() => {this.fileuploadstart()}}>
-                                                    <CloudUploadIcon  className={classes.rightIcon}/>
+                                                {/*{this.state.fileload !==null && this.state.fileload>0 && (*/}
+                                                    {/*this.state.fileload +"%"*/}
+                                                {/*)}*/}
+                                                <Button variant="contained" color="primary"  onClick={() => {this.processlockbox()}}>
+                                                    <Icon className={classes.rightIcon}>done_all</Icon>
                                                     Process Lockbox
                                                 </Button>
                                                 {/*<IconButton  variant="raised" disabled={!this.state.fileuploadstatus} aria-label="add" onClick={() => {this.fileuploadstart()}}>*/}
@@ -521,19 +524,20 @@ class PaymentLockBoxReport extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        getBillruns             : Actions.getBillruns,
-        fileupload              : Actions.paymentlockboxfileupload,
-        showMessage             : Actions.showMessage,
-        hideMessage             : Actions.hideMessage,
+        paymentlockboxgetalldata                : Actions.paymentlockboxgetalldata,
+        fileupload                              : Actions.paymentlockboxfileupload,
+        showMessage                             : Actions.showMessage,
+        hideMessage                             : Actions.hideMessage,
     }, dispatch);
 }
 
-function mapStateToProps({billruns, auth})
+function mapStateToProps({paymentlockbox, auth})
 {
     return {
 
         regionId            : auth.login.defaultRegionId,
         auth                : auth.login,
+        data                : paymentlockbox.data,
     }
 }
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentLockBoxReport)));
