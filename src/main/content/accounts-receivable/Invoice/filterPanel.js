@@ -93,7 +93,7 @@ class FilterPanel extends Component {
         invoiceDateOption: CUSTOM_DATE,
         invoiceDatePeriod: moment(),
         year: moment().year(),
-        month: moment().month(),
+        month: moment().month()-1,
         labelWidth: 0,
     };
 

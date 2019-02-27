@@ -157,7 +157,7 @@ const newInvoiceState = {
     "RegionId": "",
     "RegionName": "",
     "InvoiceId": "",
-    "InvoiceDate": moment().format('YYYY-MM-DD'),
+    "InvoiceDate": moment().subtract(1,'month').format('YYYY-MM-DD'),
     "DueDate": moment().format('YYYY-MM-DD'),
     // "InvoiceDate": new Date(),
     // "DueDate": new Date(),
@@ -573,8 +573,8 @@ class InvoiceForm extends Component {
 
         let year = moment().year();
         let month = moment().month();
-        let invoiceDate = moment();
-        let dueDate = moment().year(year).month(month).endOf('month');
+        let invoiceDate = moment().subtract(1, 'month');
+        let dueDate = moment().year(year).month(month).subtract(1,'month').endOf('month');
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
         this.setState({ bShowInvoiceCloseBox: false });
@@ -616,6 +616,33 @@ class InvoiceForm extends Component {
     handleChange = (event) => {
         this.setState({ bShowInvoiceCloseBox: true });
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+
+        if(event.target.name==='period'){
+            let period = event.target.value.split('/');
+            let year = parseInt(period[1]);
+            let month = parseInt(period[0])-1;
+            let invoiceDate = moment().year(year).month(month);
+            let dueDate = moment().year(year).month(month).endOf('month');
+            this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
+            this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
+        }
+        else if(event.target.name==='InvoiceDate'){
+            console.log('invoice date= ', event.target.value);
+            let idate = event.target.value.split('-');
+            let period = this.state.period.split('/');
+            let year = parseInt(period[1]);
+            let month = parseInt(period[0])-1;
+            let invoiceDate = moment().year(year).month(month).date(parseInt(idate[2]));
+            this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
+        }
+        else if(event.target.name==='DueDate'){
+            let idate = event.target.value.split('-');
+            let period = this.state.period.split('/');
+            let year = parseInt(period[1]);
+            let month = parseInt(period[0])-1;
+            let dueDate = moment().year(year).month(month).date(parseInt(idate[2]));
+            this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
+        }
     };
 
     addNewInvoice = () => {
@@ -982,14 +1009,6 @@ class InvoiceForm extends Component {
                                         onChange={this.handleChange}
                                         variant={"outlined"}
                                         className={classes.textField}
-                                        input={
-                                            <OutlinedInput
-                                                labelWidth={this.state.labelWidth}
-                                                name="period"
-                                                id="period"
-
-                                            />
-                                        }
                                         InputProps={{
                                             readOnly: this.props.invoiceForm.type==='edit',
                                             classes: {

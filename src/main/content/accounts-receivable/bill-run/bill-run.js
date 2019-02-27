@@ -53,7 +53,8 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-noData': {
             top: '250px',
-            border: '1px solid coral'
+            border: '1px solid coral',
+            display: 'none'
         },
         '& .ReactTable .rt-thead.-headerGroups': {
             paddingLeft: '0!important',
