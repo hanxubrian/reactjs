@@ -502,7 +502,7 @@ class PaymentLockBoxContentList extends Component {
         this.commitChanges = this.commitChanges.bind(this);
         this.changeSearchValue = value => this.setState({ searchValue: value });
         this.changeGrouping = grouping => this.setState({ grouping });
-        console.log("constructor");
+
 
         if (this.props.bLoadedPayments === false && this.props.getPaymentsParam && this.props.getPaymentsParam !== null) {
             this.props.getAccountReceivablePaymentsList(

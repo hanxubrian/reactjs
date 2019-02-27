@@ -133,8 +133,8 @@ const styles = theme => ({
         bottom: 85,
         paddingLeft:10,
         zIndex:9999,
-        // color: 'gray',
-        color: 'red',
+        color: 'gray',
+        // color: 'red',
     }
 });
 
@@ -282,7 +282,14 @@ class Chat extends Component {
 
                 </FuseScrollbars>
                 {this.props.starttyping &&  selectedContactId && (
-                    <div className={classes.typing}>{_.find(this.props.contacts,{id:selectedContactId}).name} is typing...</div>
+                    <div className={classes.typing}>
+                        {_.find(this.props.contacts,{id:selectedContactId}).name} is typing...
+                        <img src={'/assets/images/backgrounds/loading.gif'} style={{
+                        position: 'absolute',
+                        bottom: -13,
+                        width: 40,
+                    }}/>
+                    </div>
                 )}
                 {chat && (
 
