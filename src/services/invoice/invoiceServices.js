@@ -36,6 +36,7 @@ class invoiceService {
 			"Month": moment().month(),
 			"Year": moment().year()
 		};
+		console.log('data=', JSON.stringify(data));
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`, data)
 				.then(res => {
@@ -73,12 +74,10 @@ class invoiceService {
 
 	getInvoiceDetailList = (id, regionId) => {
 		return new Promise((resolve, reject) => {
-			// axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/Invoice/${InvoiceId}`,{
 			axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/${id}`, {
 				params: { regionId: regionId }
 			})
 				.then(res => {
-					console.log('res=', res);
 
 					if (res.status === 200) {
 						resolve({ data: res.data, success: true });
@@ -101,6 +100,7 @@ class invoiceService {
      * @param Quantity
      * @param TaxTypeId = 1, for now
      * @param Markup
+     * @param Commission
      * @returns {Promise<any>}
      */
 	getCustomerTaxAmount = (RegionId, CustomerId, Amount, Quantity, Markup, Commission, TaxTypeId) => {

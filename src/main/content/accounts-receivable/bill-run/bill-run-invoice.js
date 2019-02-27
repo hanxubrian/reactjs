@@ -50,7 +50,9 @@ const hexToRgb = (hex) =>{
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
-}
+};
+
+
 const styles = theme => ({
     layoutRoot: {
         flexDirection: 'row',
@@ -152,6 +154,8 @@ const styles = theme => ({
         minWidth: 120,
     },
 });
+
+
 class BillRunInvoiceDetail extends Component {
 
     state = {
@@ -160,27 +164,33 @@ class BillRunInvoiceDetail extends Component {
         BillRunNo           : null,
         open                : false,
     };
+
     constructor(props){
         super(props);
         this.fetchData = this.fetchData.bind(this);
     }
+
     fetchData(state, instance) {
         this.setState({
             pageSize: state.pageSize,
             page: state.page,
         });
     }
+
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.invoices !== prevProps.invoices && this.props.invoices !== null){
             this.setState({invoices:this.props.invoices});
         }
     }
+
     componentDidMount(){
         this.props.onRef(this);
     }
+
     componentWillUnmount(){
         this.props.onRef(undefined);
     }
+
     getInfofromParent=(row)=>{
         console.log("row",row);
         if(row && row !== null){
@@ -194,19 +204,22 @@ class BillRunInvoiceDetail extends Component {
                 this.getInvoiceDetailList(row.RegionId,row.BillRunNo);
             }
         }
-    }
+    };
+
     getInvoiceDetailList=(RegionId,BillRunNo)=>{
         if(RegionId && RegionId != null && BillRunNo && BillRunNo != null){
             this.props.getinvoicedetailfrombillrun(RegionId,BillRunNo);
         }
-    }
+    };
+
     closeDialog=()=>{
         // if(this.state.flag){
         //     this.setState({open: !this.state.open});
         //     this.setState({flag: !this.state.flag});
         // }
         this.props.Closedetail();
-    }
+    };
+
     render()
     {
         const { classes,loading ,open,billruninvoiceDetailStatus} = this.props;

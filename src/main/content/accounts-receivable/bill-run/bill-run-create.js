@@ -5,21 +5,21 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
-import {withStyles} from "@material-ui/core";
+import {MenuItem, OutlinedInput, withStyles} from "@material-ui/core";
 
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import  {CircularProgress,IconButton,Button,Dialog} from '@material-ui/core';
-import PropTypes from 'prop-types';
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 
-import 'date-fns';
-import TextField from '@material-ui/core/TextField';
+import  {CircularProgress,IconButton,Button,Dialog, TextField, Typography, Grid,
+} from '@material-ui/core';
+
+//3rd party
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 import moment from "moment/moment";
+
 
 const DialogTitle = withStyles(theme => ({
     root: {
@@ -132,7 +132,6 @@ const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Aug
 class BillRunDialog extends Component {
     state = {
         open                    : false,
-        selectedDate            : moment(),
         message                 : "",
         description             : "",
         userId                  : null,
@@ -147,6 +146,7 @@ class BillRunDialog extends Component {
         month                   : moment().month(),
         desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+` `+moment().year(),
         isMounted               : false,
+        labelWidth: 0,
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -181,29 +181,15 @@ class BillRunDialog extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
-    handleDateChange = date => {
-        let defMSG = `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment(date).month()].toUpperCase()+` `+moment(date).year();
-        this.setState({ selectedDate: date });
-        this.setState({
-            year:  moment(date).year(),
-            month: moment(date).month(),
-            desMSG: defMSG
-        });
 
-    };
-    onchangeDate=(event)=>{
-        this.setState({selectedDate:event.target.value})
 
-    }
-    handleBillrunDateChange = date => {
-        this.setState({selectedDate:date});
-    };
-    onchangeMessage=(e)=>{
+    onChangeMessage=(e)=>{
         this.setState({message:e.target.value})
-    }
-    onchangedescription=(e)=>{
+    };
+
+    onChangeDescription=(e)=>{
         this.setState({description:e.target.value})
-    }
+    };
 
     successmesssage=()=>{
 
@@ -216,8 +202,9 @@ class BillRunDialog extends Component {
             },
             variant: 'success'//success error info warning null
         });
-    }
-    createbillrunmesssage=()=>{
+    };
+
+    createBillrunMesssage=()=>{
         this.props.showMessage({
             message     : `Bill Run Process has started.You will be notified when completed.\n You can continue using the system as usual`,//text or html
             autoHideDuration: 3000,//ms
@@ -227,7 +214,8 @@ class BillRunDialog extends Component {
             },
             variant: 'success'//success error info warning null
         });
-    }
+    };
+
     errormessage=()=>{
         this.props.showMessage({
             message     : "Error!!!We can't create New Bill Run",//text or html
@@ -238,7 +226,8 @@ class BillRunDialog extends Component {
             },
             variant: 'error'//success error info warning null
         });
-    }
+    };
+
     duplicatederrormessage=()=>{
         this.props.showMessage({
             message     : "Error!!!That will prevent it from running",//text or html
@@ -249,20 +238,21 @@ class BillRunDialog extends Component {
             },
             variant: 'error'//success error info warning null
         });
-    }
+    };
+
     billrun=(e)=>{
 
         e.stopPropagation();
 
         if(this.props.auth && this.props.auth !==null){
-            let date = this.state.selectedDate;
-            let year = moment(date).year();
-            let month = moment(date).month()+1;
+            let year = parseInt(this.setState.year);
+            let month = parseInt(this.state.month)+1;
             let user = this.props.auth.firstName+"     "+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
             let billrunDB = this.props.billrunsDB;
             let checkflag = true;
+
             if(billrunDB && billrunDB !== null){
                 billrunDB.map((item)=>{
                     if(item.Month === month && item.Year === year && item.Status !== "Deleted"){
@@ -270,10 +260,11 @@ class BillRunDialog extends Component {
                     }
                 });
             }
-            if(checkflag && this.state.isMounted && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
-                this.props.createbillrun(this.props.regionId, year, month, user, userid, this.state.message, this.state.description);
 
-                this.createbillrunmesssage();
+            if(checkflag && this.state.isMounted && userid != null && regionid && year && month ){
+                this.props.createBillrun(this.props.regionId, year, month, user, userid, this.state.message, this.state.description);
+
+                this.createBillrunMesssage();
                 let buggyObject = setTimeout(
                     function() {
                         this.setState({statusMSG:200});
@@ -292,7 +283,8 @@ class BillRunDialog extends Component {
         }
 
 
-    }
+    };
+
     progress = () => {
         const {completed} = this.state;
         if ( completed === 100 )
@@ -305,12 +297,27 @@ class BillRunDialog extends Component {
             this.setState({completed: Math.min(completed + diff, 100)});
         }
     };
+
     test=()=>{
-    }
+    };
+
+    handleChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+        let year = event.target.name==='year' ? event.target.value : this.state.year;
+        let month = event.target.name==='month' ? event.target.value : this.state.month;
+
+        let defMSG = `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[month].toUpperCase()+` `+year;
+        this.setState({
+            desMSG: defMSG
+        });
+    };
+
+
     render() {
 
         const { classes,loading } = this.props;
-        const { selectedDate ,showP} = this.state;
+        const { showP} = this.state;
+        let years = _.range(moment().year(), moment().year()+10);
 
         return (
             <div style={{
@@ -337,32 +344,55 @@ class BillRunDialog extends Component {
                         <div style={{color:'white'}}>Create New Bill Run</div>
                     </DialogTitle>
                     <DialogContent>
-                        <div>
-                            <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <div className="flex flex-col mt-20">
-                                    <DatePicker
-                                        margin="none"
-                                        label="Period"
-                                        name="selectedDate"
-                                        variant="outlined"
-                                        format="MM/YYYY"
-                                        value={selectedDate}
-                                        onChange={this.handleDateChange}
-
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        openToYearSelection={true}
-                                    />
-                                </div>
-                            </MuiPickersUtilsProvider>
-                        </div>
+                        <Grid container>
+                            <Grid item sm={6}  className="pr-12">
+                                <TextField
+                                    margin={"normal"}
+                                    name="month"
+                                    label="Month"
+                                    variant="outlined"
+                                    select
+                                    value={this.state.month}
+                                    onChange={this.handleChange}
+                                    input={
+                                        <OutlinedInput
+                                            labelWidth={this.state.labelWidth}
+                                            name="month"
+                                            id="month"
+                                        />
+                                    }
+                                    fullWidth
+                                >
+                                    {mL.map((month, index)=>{
+                                        return (<MenuItem disabled={this.state.year===moment().year() && index<moment().month()} key={index} value={index}>{month}</MenuItem>)
+                                    })}
+                                </TextField>
+                            </Grid>
+                            <Grid item sm={6} className="pl-12">
+                                <TextField
+                                    margin={"normal"}
+                                    name="year"
+                                    label="Year"
+                                    variant="outlined"
+                                    select
+                                    value={this.state.year}
+                                    onChange={this.handleChange}
+                                    input={
+                                        <OutlinedInput
+                                            labelWidth={this.state.labelWidth}
+                                            name="year"
+                                            id="year"
+                                        />
+                                    }
+                                    fullWidth
+                                >
+                                    {years.map((year, index)=>{
+                                        return (<MenuItem  key={index} value={year}>{year}</MenuItem>)
+                                    })}
+                                </TextField>
+                            </Grid>
+                        </Grid>
+                        <br/>
                         <div>
                             <TextField
                                 id="outlined-multiline-static"
@@ -373,7 +403,7 @@ class BillRunDialog extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 style={{width: "100%"}}
-                                onChange={this.onchangedescription}
+                                onChange={this.onChangeDescription}
                             />
                         </div>
                         <div>
@@ -388,7 +418,7 @@ class BillRunDialog extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 style={{width: "100%"}}
-                                onChange={this.onchangeMessage}
+                                onChange={this.onChangeMessage}
                             />
                         </div>
                     </DialogContent>
@@ -414,7 +444,7 @@ BillRunDialog.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createbillrun: Actions.createbillrun,
+        createBillrun: Actions.createbillrun,
         showMessage: Actions.showMessage,
         hideMessage: Actions.hideMessage,
     }, dispatch);
