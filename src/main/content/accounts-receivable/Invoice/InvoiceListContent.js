@@ -216,9 +216,6 @@ class InvoiceListContent extends Component {
             this.setState({
                 invoiceDetail: this.props.invoiceDetail,
             });
-            console.log("this.props.invoiceDetail",this.props.invoiceDetail);
-            console.log("this.props.open",this.state.isOpen);
-            console.log("this.props.allRegion",this.props.allRegion);
         }
     }
 
@@ -474,7 +471,7 @@ class InvoiceListContent extends Component {
                     ]}
                     defaultSorted={[
                         {
-                            id: "InvoiceDate",
+                            id: "InvoiceNo",
                             desc: true
                         }
                     ]}
