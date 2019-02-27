@@ -624,9 +624,7 @@ class SystemNotificationContentList extends Component {
                                         // height="530"
                                         headComponent = {TableHeadComponent}
                                     />
-                                    {/*<Table*/}
-                                        {/*columnExtensions={tableColumnExtensions}*/}
-                                    {/*/>*/}
+
                                     <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
                                     <TableHeaderRow showSortingControls />
                                     {/* <TableRowDetail
