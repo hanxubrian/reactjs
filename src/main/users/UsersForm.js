@@ -14,7 +14,6 @@ import UsersPermission from "./UsersPermission";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';

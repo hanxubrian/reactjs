@@ -233,17 +233,6 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 required
                             />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={franchiseeForm.state.Print1099} />
-                                }
-                                onChange={franchiseeForm.handleCheckboxChange('Print1099')}
-                                className={classes.textField}
-                                value={franchiseeForm.state.Print1099 === true ? "N" : "Y" }
-                                label="Print 1099"
-                                margin="dense"
-                                style={{marginLeft:'1%',marginRight: '1%'}}
-                            />
                             <TextField
                                 id="outlined-phone"
                                 label="1099 Name"
@@ -258,6 +247,17 @@ function getStepContent(franchiseeForm, step) {
                                 className={classes.textField}
                                 margin="dense"
                                 style={{marginLeft:'1%'}}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={franchiseeForm.state.Print1099} />
+                                }
+                                onChange={franchiseeForm.handleCheckboxChange('Print1099')}
+                                className={classes.textField}
+                                value={franchiseeForm.state.Print1099 === true ? "N" : "Y" }
+                                label="Print 1099"
+                                margin="dense"
+                                style={{marginLeft:'1%',marginRight: '1%'}}
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
