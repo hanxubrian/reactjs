@@ -900,7 +900,7 @@ If you save the customer now, you need to return and
 assign at least one franchisee.</DialogContentText>
 									</DialogContent>
 									<DialogActions className='flex justify-between'>
-										<Button onClick={this.handleStayForOffering} color="primary" autoFocus>Stay for Offering</Button>
+										<Button onClick={this.handleStayForOffering} color="primary" autoFocus>Stay &amp; Assign a Franchisee</Button>
 										<div className='flex'>
 											<Button onClick={this.processConfirming} color="primary">Move On</Button>
 											<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
