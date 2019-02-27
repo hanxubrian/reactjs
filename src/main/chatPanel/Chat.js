@@ -140,7 +140,8 @@ const styles = theme => ({
 
 class Chat extends Component {
     state = {
-        messageText: ''
+        messageText: '',
+
     };
     constructor(props) {
         super(props);
@@ -280,8 +281,8 @@ class Chat extends Component {
 
 
                 </FuseScrollbars>
-                {1 && (
-                <div className={classes.typing}>test....</div>
+                {this.props.starttyping &&  selectedContactId && (
+                    <div className={classes.typing}>{_.find(this.props.contacts,{id:selectedContactId}).name} is typing...</div>
                 )}
                 {chat && (
 

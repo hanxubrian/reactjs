@@ -236,13 +236,14 @@ class PaymentLockBoxReport extends Component {
                 this.state.selectedFile,
                 this.state.selectedFile.name
             );
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload`, this.state.selectedFile, {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload?regionId=${this.props.regionId}`, this.state.selectedFile, {
                 onUploadProgress: progressEvent => {
                     this.setState({fileload:Math.round(progressEvent.loaded / progressEvent.total*10000)/100});
                     console.log(progressEvent.loaded / progressEvent.total)
                 }
             })
             .then(res => {
+                console.log("ress=====",res);
                 if(this.state.fileload === 100 && res.statusText ===""){
                         this.setState({fileload: 0});
                         this.setState({selectedFile:null});
@@ -324,6 +325,10 @@ class PaymentLockBoxReport extends Component {
                                         <div className="flex flex-shrink items-center" style={{marginRight:"5%"}}>
 
                                             <div>
+                                                {/*<Button variant="contained" color="primary">*/}
+                                                    {/*<Icon className={classes.rightIcon}>done_all</Icon>*/}
+                                                    {/*Process Lockbox*/}
+                                                {/*</Button>*/}
                                                 <input
 													// accept="image/*,video/*,pdf/*, txt/*"
 													accept="txt/*"
@@ -334,19 +339,25 @@ class PaymentLockBoxReport extends Component {
                                                     type="file"
                                                 />
                                                 <label htmlFor="raised-button-file">
-                                                    <IconButton variant="raised"  component="span" className={classes.filebutton}>
+                                                    <Button variant="contained" color="primary" component="span" style={{marginRight:20}}
+                                                    >
                                                         <Icon className="text-24" color="action">attach_file</Icon>
-                                                    </IconButton>
+                                                        File
+                                                    </Button>
+                                                    {/*<IconButton variant="raised"  component="span" className={classes.filebutton}>*/}
+                                                        {/*<Icon className="text-24" color="action">attach_file</Icon>*/}
+                                                    {/*</IconButton>*/}
                                                 </label>
                                                 {this.state.fileload !==null && this.state.fileload>0 && (
                                                     this.state.fileload +"%"
                                                 )}
-                                                <IconButton  variant="raised" disabled={!this.state.fileuploadstatus} aria-label="add" onClick={() => {this.fileuploadstart()}}>
-
-                                                     <CloudUploadIcon  className={classes.rightIcon}/>
-
-
-                                                </IconButton>
+                                                <Button variant="contained" color="primary" disabled={!this.state.fileuploadstatus} onClick={() => {this.fileuploadstart()}}>
+                                                    <CloudUploadIcon  className={classes.rightIcon}/>
+                                                    Process Lockbox
+                                                </Button>
+                                                {/*<IconButton  variant="raised" disabled={!this.state.fileuploadstatus} aria-label="add" onClick={() => {this.fileuploadstart()}}>*/}
+                                                     {/*<CloudUploadIcon  className={classes.rightIcon}/>*/}
+                                                {/*</IconButton>*/}
                                             </div>
 
                                         </div>

@@ -28,13 +28,13 @@ class PaymentLockBoxService {
         });
     };
     //fileupload
-    fileupload = (file) => {
+    fileupload = (file,region) => {
         if(file  && file !== null){
             const data = new FormData();
             data.append('file', file, file.name);
             return new Promise((resolve, reject) => {
                 axios_instance
-                    .post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload`, file, {
+                    .post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload?regionId=${region}`, file, {
                         onUploadProgress: ProgressEvent => {
                             // this.setState({
                             //     loaded: (ProgressEvent.loaded / ProgressEvent.total*100),

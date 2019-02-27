@@ -144,7 +144,11 @@ export function updateStarttyping(user) {
         let midtypingstatus=[];
         let check = false;
         let flag = false;
-        midtypingstatus = typingstatus;
+        if(typingstatus && typingstatus.length){
+            midtypingstatus = typingstatus;
+        }
+
+        console.log("get typing status",typingstatus);
         if(currentroom && currentroom !== null){
             let ids = currentroom.userIds;
             // console.log("ids",ids);
@@ -159,27 +163,12 @@ export function updateStarttyping(user) {
                 });
             }
 
-            typingstatus.map((item)=>{
-                if(item.id ===user.id){
-                    item.typing = check;
-                    flag = true ;
-                    return ;
-                }
-            });
-            midtypingstatus = typingstatus;
-            if(!flag && check){
-                let miditem = {};
-                miditem.id = user.id;
-                miditem.typing = true;
-                midtypingstatus.push(miditem);
-            }
-            console.log("++++add typing status" , midtypingstatus);
         }
-        console.log("check typing ",check);
+
         dispatch({
             type: CHANGE_TYPING_STATUS,
             payload: check,
-            typing:midtypingstatus,
+
         });
         console.log('stop typing start user',user);
     }

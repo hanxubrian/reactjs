@@ -32,13 +32,14 @@ export function paymentlockboxgetalldata(invoiceId, regionId) {
     };
 }
 export function paymentlockboxfileupload(file) {
-    return (dispatch) => {
+    return (dispatch,getState) => {
         dispatch({
             type: PAYMENT_LOCKBOX_FILE_UPLOAD_START,
             payload: true
         });
         (async () => {
-            let res = await paymentlockboxservice.fileupload(file);
+            let regionid=getState().auth.login.defaultRegionId;
+            let res = await paymentlockboxservice.fileupload(file,regionid);
             if(res.uploadingnow && res.progress>0){
                 console.log("res.progress",res.progress);
             }

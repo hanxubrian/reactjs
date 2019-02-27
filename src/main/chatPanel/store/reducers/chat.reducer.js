@@ -109,7 +109,7 @@ const chat = function (state = initialState, action) {
             return {
                 ...state,
                 starttyping:action.payload,
-                usertypingstatus:action.typing,
+
             }
         }
         // case Actions.OPEN_CHAT_PANEL:
