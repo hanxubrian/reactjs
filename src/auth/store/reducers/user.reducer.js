@@ -6,7 +6,7 @@ const initialState = {
     role: 'guest',
     data: {
         'displayName': 'John Doe',
-        'photoURL'   : 'assets/images/avatars/Velazquez.jpg',
+        'photoURL'   : 'assets/images/avatars/1Velazquez.jpg',
         'email'      : 'johndoe@withinpixels.com',
         shortcuts    : [
             'calendar',

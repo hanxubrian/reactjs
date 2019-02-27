@@ -8,7 +8,9 @@ import classNames from 'classnames';
 import {FuseAnimate, FuseSelectedTheme} from '@fuse';
 
 const styles = theme => ({
-    root: {}
+    root: {
+        // height:65
+    }
 });
 
 class ContactsHeader extends Component {
@@ -17,7 +19,7 @@ class ContactsHeader extends Component {
     {
         const {classes, setSearchText, searchText, pageLayout} = this.props;
         return (
-            <div className={classNames(classes.root, "flex flex-1 items-center justify-between p-8 sm:p-24")}>
+            <div className={classNames(classes.root, "flex flex-1 items-center justify-between p-8 ")}>
 
                 <div className="flex flex-shrink items-center sm:w-224">
                     <Hidden lgUp>

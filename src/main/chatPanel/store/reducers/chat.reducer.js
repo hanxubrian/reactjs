@@ -2,6 +2,7 @@ import * as Actions from '../actions';
 
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {CHANGE_TYPING_STATUS} from "../actions/chat.actions";
 
 const initialState = {
     loading: true,
@@ -10,7 +11,10 @@ const initialState = {
     messages:[],
     rooms:[],
     dialog:[],
+    typing:false,
+    starttyping: false,
     ChatpanelStatu: false,
+    usertypingstatus: {},
 };
 
 const chat = function (state = initialState, action) {
@@ -94,6 +98,18 @@ const chat = function (state = initialState, action) {
                 ]
 
             };
+        }
+        case Actions.SET_TYPING_STATUS:{
+            return{
+                ...state,
+                typing:true,
+            }
+        }
+        case Actions.CHANGE_TYPING_STATUS:{
+            return {
+                ...state,
+                starttyping:action.payload,
+            }
         }
         // case Actions.OPEN_CHAT_PANEL:
         // {

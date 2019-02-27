@@ -2,6 +2,7 @@ import {setselectedContactId} from './contacts.actions';
 import {closeMobileChatsSidebar} from 'main/content/apps/chat/store/actions/sidebars.actions';
 import Chatkit from '@pusher/chatkit-client'
 import {chatService} from "services";
+import _ from 'lodash';
 import {updateContactsPresense} from './contacts.actions';
 import {initContactsPresense} from  './contacts.actions';
 import {addUnread} from  './contacts.actions';
@@ -20,6 +21,8 @@ export const ADD_MESSAGE        = '[CHAT PANEL] ADD MESSAGE';
 export const READ_MESSAGE       = '[CHAT PANEL] READ MESSAGE';
 export const GET_ROOMS          = '[CHAT PANEL] GET ROOMS';
 
+export const SET_TYPING_STATUS  = '[CHAT PANEL] SET TYPING STATUS';
+export const CHANGE_TYPING_STATUS  = '[CHAT PANEL] CHANGE TYPING STATUS';
 
 
 export function initChat()
@@ -79,6 +82,15 @@ export function assignRooms(currentUser)
                                 return dispatch(addMessage(chat.chatId, newmsg))
 
                          },
+                        onUserStartedTyping:user=>{
+                            // console.log("onUserStartedTyping user",user);
+                            return dispatch(updateStarttyping(user));
+
+                        },
+                        onUserStoppedTyping:user=>{
+                            console.log("onUserStoppedTyping user",user);
+                            return dispatch(reupdateStarttyping(user));
+                        },
                          onPresenceChanged: (state, user) => {
                             return dispatch(updateContactsPresense(user, state));
                          }
@@ -97,7 +109,74 @@ export function assignRooms(currentUser)
 
     };
 }
+export function reupdateStarttyping(user) {
 
+    return(dispatch,getState)=>{
+
+        let currentroom = getState().chatPanel.chat.currentRoom;
+        let check = true;
+        if(currentroom && currentroom !== null){
+            let ids = currentroom.userIds;
+            console.log("ids",ids);
+            console.log("user",user);
+
+            if(ids &&  ids.length){
+                ids.map((item)=>{
+                    if(item===user.id){
+                        check = false;
+                    }
+                });
+            }
+        }
+        dispatch({
+            type: CHANGE_TYPING_STATUS,
+            payload: false,
+        });
+        console.log("check untyping ",check);
+        console.log('typing start user',check);
+    }
+}
+export function updateStarttyping(user) {
+    console.log('stop typing start user',user);
+    return(dispatch,getState)=>{
+        let currentroom = getState().chatPanel.chat.currentRoom;
+        let typingstatus = getState().chatPanel.chat.usertypingstatus;
+        let check = false;
+        let flag = false;
+        if(currentroom && currentroom !== null){
+            let ids = currentroom.userIds;
+            // console.log("ids",ids);
+            // console.log("user",user);
+            // console.log("currentroom",currentroom);
+
+            if(ids &&  ids.length){
+                ids.map((item)=>{
+                    if(item===user.id){
+                        check = true;
+                    }
+                });
+            }
+
+            typingstatus.map((item)=>{
+                if(item.id ===user.id){
+                    item.typing = check;
+                    flag = true ;
+                    return ;
+                }
+            });
+            if(!flag && check){
+
+            }
+
+        }
+        console.log("check typing ",check);
+        dispatch({
+            type: CHANGE_TYPING_STATUS,
+            payload: check,
+        });
+        console.log('stop typing start user',user);
+    }
+}
 export function checkChat()
 {
     return  (dispatch) => {
@@ -182,12 +261,11 @@ export function appendNewRoom(room)
 
         let loading = contacts.length - 1 !== rooms.length;
 
-        dispatch( {
+        dispatch({
             type: GET_ROOMS,
             data: room,
             loading : loading,
         })
-
     }
 
 
@@ -331,4 +409,27 @@ export function sendMsg(messageText, currentroom)
         });
     }
 
+}
+
+export function chatstarting() {
+    return (dispatch,getState)=>{
+        let currentuser = getState().chatPanel.chat.currentUser;
+        let currentroom = getState().chatPanel.chat.currentRoom;
+        let roomid ='';
+        if(currentroom && currentroom !== null){
+            roomid = currentroom.id;
+        }
+        if(currentuser && roomid){
+            currentuser.isTypingIn({ roomId: roomid })
+                .then(() => {
+                    console.log('typing Success!')
+                })
+                .catch(err => {
+                    console.log(`Error sending typing indicator: ${err}`)
+                });
+            dispatch({
+                type:SET_TYPING_STATUS,
+            })
+        }
+    }
 }

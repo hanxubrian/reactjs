@@ -16,6 +16,10 @@ import IndividualChat from '../../../chatPanel/individualChat';
 import "../../../chatPanel/individualChat.css";
 
 const styles = theme => ({
+    // react-bootstrap-table:{
+    //     height: '500px',
+    //     overflow: 'auto',
+    // },
     mailList: {
         padding: 0
     },
@@ -93,7 +97,7 @@ class ContactsList extends Component {
         }
         if(this.props.chatUser.chatList !== prevProps.chatUser.chatList && this.state.currentSeletedchatId && this.state.currentSeletedchatId!=null){
             this.props.chatUser.chatList.map((item)=>{
-                if(item['contactId']==this.state.currentSeletedchatId){
+                if(item['contactId']===this.state.currentSeletedchatId){
                     this.setState({
                         chatId : item['chatId'],
                     });
@@ -112,8 +116,9 @@ class ContactsList extends Component {
         }
         // console.log("==1==rooms",this.state.chatDetail.rooms);
         // console.log("==1==chatID",this.state.chatId);
+        // console.log("==1==isOpen",this.state.isOpen);
         // console.log("==1==currentRoom",this.state.currentRoom);
-        if(this.state.currentRoom == null || this.state.chatId != prevState.chatId){
+        if(this.state.currentRoom === null || this.state.chatId !== prevState.chatId){
                 this.state.chatDetail.rooms.map((item, index)=>{
                    if(item.id === this.state.chatId){
                        if(this.state.currentRoom !==item){
@@ -188,8 +193,7 @@ class ContactsList extends Component {
     {
         const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
-        console.log("contacts=============",contacts);
-        console.log("searchText===========",searchText);
+        // console.log("searchText===========",searchText);
         const {selectedContactsMenu} = this.state;
         // console.log("chatDetal====",this.state.chatDetail);
         if ( !data && data.length === 0 )
@@ -204,7 +208,7 @@ class ContactsList extends Component {
         }
 
         return (
-            <div>
+            <div >
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
                 <ReactTable
                     className={classNames(classes.root, "-striped -highlight border-0")}
@@ -318,14 +322,14 @@ class ContactsList extends Component {
                         {
                             Header    : "First Name",
                             accessor  : "firstName",
-                            filterable: true,
+
                             className : "font-bold",
                             width    : 200,
                         },
                         {
                             Header    : "Last Name",
                             accessor  : "lastName",
-                            filterable: true,
+                            // filterable: true,
                             className : "font-bold",
                             width    : 150,
                         },
@@ -342,13 +346,13 @@ class ContactsList extends Component {
                         {
                             Header    : "Email",
                             accessor  : "email",
-                            filterable: true,
+                            // filterable: true,
                             width    : 300,
                         },
                         {
                             Header    : "Phone",
                             accessor  : "phone",
-                            filterable: true
+                            // filterable: true
                         },
                         {
                             Header: "",

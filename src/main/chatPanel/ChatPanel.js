@@ -251,6 +251,7 @@ function mapStateToProps({chatPanel,contactsApp})
         selectedContactIds          : contactsApp.contacts.selectedContactIds,
         searchText                  : contactsApp.contacts.searchText,
         user                        : contactsApp.user,
+        contactuserList             : contactsApp.contacts.entities,
         individualcurrentRoom       : chatPanel.IndividualChat.individualChatcurrentRoom,
 
     }

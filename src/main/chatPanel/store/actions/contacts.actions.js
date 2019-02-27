@@ -8,6 +8,7 @@ export function getContacts()
 {
     return  (dispatch, getState) => {
         const userId = getState().auth.login.Username;
+
         const regionId = getState().auth.login.defaultRegionId;
         const data = {
             regionId: regionId,

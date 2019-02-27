@@ -699,33 +699,6 @@ class MainToolbar extends Component {
                                 <div className={classes.chatheader} style={{display:"none"}}>
                                     <Button className={classes.mainnotificationbtns} onClick={()=>{this.shownotification()}}>Close</Button>
                                 </div>
-                                {/*<Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>*/}
-                                {/*<Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0})}}><Icon>chat</Icon></Button>*/}
-                                {/*<Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:1});this.systemreadmake();}}><Icon>mail</Icon></Button>*/}
-
-                                    {/*<div style={{display: "contents"}} >*/}
-                                        {/*<div className={classes.unreadchatBadge}>*/}
-                                            {/*{this.state.chatunread}*/}
-                                        {/*</div>*/}
-                                    {/*</div>*/}
-                                    {/*<div style={{display: "contents"}} >*/}
-                                        {/*<div className={classes.unreadsystemBadge}>*/}
-                                        {/*{this.state.systeunread}*/}
-                                        {/*</div>*/}
-                                    {/*</div>*/}
-
-
-
-                                    {/*<div style={{display: "contents"}} >*/}
-                                        {/*<div className={classes.unreademailBadge}>*/}
-                                           {/*0*/}
-                                        {/*</div>*/}
-                                    {/*</div>*/}
-
-
-                                {/*<Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>*/}
-
-
                             </div>
                             <Paper style={{maxHeight: 350, overflow: 'auto'}}>
 

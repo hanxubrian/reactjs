@@ -153,8 +153,10 @@ class IndividualChat extends Component {
             isOpen      : false,
             flage       : false,
         }
+        this.myRef = React.createRef()
     }
     componentDidUpdate(prevProps, prevState, snapshot){
+        this.scrollToBottom();
         if(this.props !=prevProps){
             let msg = this.props.message;
             if(this.props.message && this.props.message !==null){
@@ -239,7 +241,7 @@ class IndividualChat extends Component {
             if(!this.state.isOpen){
                 this.setState({isOpen: !this.state.isOpen});
             }
-            this.scrollToBottom();
+            // this.scrollToBottom();
         }else{
             if(this.state.isOpen){
                 this.setState({isOpen: !this.state.isOpen});
@@ -296,15 +298,21 @@ class IndividualChat extends Component {
             });
     };
     scrollToBottom = () => {
-        if(this.chatScroll && this.chatScroll !==null && this.chatScroll.scrollTop && this.chatScroll.scrollTop !=null && this.chatScroll.scrollHeight && this.chatScroll.scrollHeight != null){
-            this.chatScroll.scrollTop = this.chatScroll.scrollHeight;
+
+        // this.chatScroll.scrollIntoView({ behavior: "smooth" });
+        if(this.childscroll && this.childscroll !==null ){//&& this.childscroll.scrollTop && this.childscroll.scrollTop !==null && this.childscroll.scrollHeight && this.childscroll.scrollHeight !== null
+            console.log("this.childscroll",this.childscroll.scrollTop);
+            console.log("this.childscroll.scrollHeight",this.childscroll.scrollHeight);
+            this.childscroll.scrollTop = -200 ;
+            //this.childscroll.scrollHeight
         }
 
     };
+    scrollToMyRef = () => window.scrollTo(0, -200)
     render() {
         const {classes, chat, contacts, className} = this.props;
         const {sendMSG,user} = this.state;
-
+        console.log("individual chat ",this.state.isOpen);
         if(this.state.isOpen ){
             return (
             <div className="individual-chat-item">
@@ -331,12 +339,15 @@ class IndividualChat extends Component {
                     </div>
                 </div>
                 <FuseScrollbars
-                    containerRef={(ref) => {
-                        this.chatScroll = ref
-                    }}
+                    // containerRef={(ref) => {
+                    //     this.childscroll = ref
+                    // }}
+                    ref = {
+                        this.myRef
+                    }
                     className="flex flex-1 flex-col overflow-y-auto"
                 >
-                <div className="chat-content">
+                <div className="chat-content" >
                     { this.state.messages !=null &&
                         this.state.messages.map((item,i) =>{
                                 // const contact = item.who === user.id ? user : contacts.find(_contact => _contact.id === item.who);

@@ -432,8 +432,8 @@ class SystemNotificationContentList extends Component {
             columns                             : [
                 // { name: 'process', title: 'Process' },
                 { name: 'process', title: 'Notification' },
-                { name: 'InvoiceDescription', title: 'Description' },
-                { name: 'From', title: 'From' },
+                { name: 'description', title: 'Description' },
+                // { name: 'From', title: 'From' },
                 { name: 'cuscreatedate', title: 'Date' },
                 // { name: 'detail', title: 'Detail' },
 
@@ -442,8 +442,8 @@ class SystemNotificationContentList extends Component {
             tableColumnExtensions               : [
                 // { columnName: 'process', width: 100 },
                 { columnName: 'process', width: 500 },
-                { columnName: 'InvoiceDescription', width: 500 },
-                { columnName: 'From', width: 100 },
+                { columnName: 'description', width: 500 },
+                // { columnName: 'From', width: 100 },
                 { columnName: 'cuscreatedate', width: 100 },
                 { columnName: 'detail', width: 100 },
 
@@ -517,10 +517,10 @@ class SystemNotificationContentList extends Component {
             sysnotification.map((item)=>{
 
                 let addprocess =[];
-                addprocess =JSON.parse(item.ProcessResponsePayload);
-                addprocess.process=item.Process;
-                addprocess.description=item.Description;
-                addprocess.cuscreatedate =moment(item.CreateDate).format("MM/DD/YYYY");
+                addprocess =JSON.parse(item.payload);
+                addprocess.process=item.process;
+                addprocess.description=item.description;
+                addprocess.cuscreatedate =moment(item.created_at).format("MM/DD/YYYY");
                 addprocess.cusinvoicedate = moment(item.InvoiceDate).format("MM/DD/YYYY");
                 addprocess._id = item._id;
                 if(this.state.id && this.state.id !== null && item._id===this.state.id && this.state.ExpandedRowIds === null && sum>=0){
@@ -621,7 +621,7 @@ class SystemNotificationContentList extends Component {
                                         columnExtensions={tableColumnExtensions}
                                         // cellComponent={this.getCell}
                                         rowComponent={this.TableRow}
-                                        height="530"
+                                        // height="530"
                                         headComponent = {TableHeadComponent}
                                     />
                                     {/*<Table*/}

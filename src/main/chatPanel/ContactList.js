@@ -92,7 +92,7 @@ class ContactList extends Component {
     }
     componentDidMount(){
         this.props.initChat();
-
+        this.props.getContacts();
         setInterval(this.tick, 5000);
     }
     componentDidUpdate(prevProps){
@@ -105,7 +105,7 @@ class ContactList extends Component {
                             this.messagenotification();
                         }
                             .bind(this),
-                        800
+                        1000
                     );
 
                 }
@@ -121,8 +121,7 @@ class ContactList extends Component {
     };
 
     handleContactClick = (chatId, contactId) => {
-        console.log ("chatId",chatId);
-        console.log ("contactId",contactId);
+
         this.props.openChatPanel();
         this.props.getChat(chatId, contactId);
         this.scrollToTop();
@@ -134,8 +133,24 @@ class ContactList extends Component {
 
     render()
     {
-        const {classes, chat, contacts, user, selectedContactId} = this.props;
-        console.log("user.contacts",contacts);
+        const {classes, chat, contacts, user, selectedContactId,contactuserList} = this.props;
+        // console.log("user.contacts",contacts);
+        // console.log("user.contacts.length",contacts.length);
+        // console.log("user.contactuserList",contactuserList);
+        let midcontacts = [];//avatar: "assets/images/avatars/1Velazquez.jpg"
+        if(contacts && contacts !== null && contacts.length && contactuserList && contactuserList !== null && contactuserList.length>0){
+            contacts.map((item)=>{
+                let miditem = item;
+
+                if(item.avatar ==="assets/images/avatars/1Velazquez.jpg"){
+                    let mcontact = contactuserList.find((_item) => _item.name === item.id);
+                    miditem.avatar =mcontact.avatar;
+                }
+                midcontacts.push(miditem);
+            });
+        }
+
+
         const ContactButton = ({chat, contact}) => {
             return (
                 <Tooltip title={contact.name} placement="left">
@@ -208,17 +223,19 @@ function mapDispatchToProps(dispatch)
         initChat        : Actions.initChat,
         checkChatUserData       : Actions.checkChatUserData,
         getChat         : Actions.getChat,
-        openChatPanel   : Actions.openChatPanel
+        openChatPanel   : Actions.openChatPanel,
+        getContacts                     : Actions.getContacts,
     }, dispatch);
 }
 
-function mapStateToProps({chatPanel})
+function mapStateToProps({chatPanel,contactsApp})
 {
     return {
-        chat            : chatPanel.chat,
+        chat             : chatPanel.chat,
         contacts         : chatPanel.contacts.entities,
         selectedContactId: chatPanel.contacts.selectedContactId,
-        user             : chatPanel.user
+        user             : chatPanel.user,
+        contactuserList             : contactsApp.contacts.entities,
     }
 }
 

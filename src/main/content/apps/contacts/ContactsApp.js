@@ -17,7 +17,8 @@ const styles = theme => ({
         position: 'fixed',
         left   : 453,
         bottom  : 90,
-        zIndex  : 99
+        zIndex  : 99,
+        display : 'none',
     }
 });
 
@@ -34,6 +35,7 @@ class ContactsApp extends Component {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
             this.props.getContacts(this.props.match.params);
+
         }
     }
 
@@ -47,7 +49,7 @@ class ContactsApp extends Component {
                     classes={{
                         contentCardWrapper: "p-16 sm:p-24 pb-80",
                         leftSidebar       : "w-256",
-                        header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
+                        header            : "min-h-60 h-60 "
                     }}
                     header={
                         <ContactsHeader pageLayout={() => this.pageLayout}/>

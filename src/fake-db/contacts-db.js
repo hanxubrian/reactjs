@@ -345,7 +345,7 @@ const contactsDB = {
             'id'      : '5725a6809413bf8a0a5272b1',
             'name'    : 'Velazquez',
             'lastName': 'Smethley',
-            'avatar'  : 'assets/images/avatars/Velazquez.jpg',
+            'avatar'  : 'assets/images/avatars/1Velazquez.jpg',
             'nickname': 'Strifedream',
             'company' : 'ranex',
             'jobTitle': 'Publications Editor',

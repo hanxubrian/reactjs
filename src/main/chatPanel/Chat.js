@@ -127,6 +127,14 @@ const styles = theme => ({
     },
     inputWrapper: {
         borderRadius: 24
+    },
+    typing:{
+        position: 'absolute',
+        bottom: 85,
+        paddingLeft:10,
+        zIndex:9999,
+        // color: 'gray',
+        color: 'red',
     }
 });
 
@@ -146,6 +154,7 @@ class Chat extends Component {
     }
     componentDidUpdate(prevProps)
     {
+        console.log("starttyping",this.props.starttyping);
         if(this.props.chatstatus !== prevProps.chatstatus && this.props.chatstatus){
             // this.focus();
 
@@ -176,6 +185,7 @@ class Chat extends Component {
     };
 
     onInputChange = (ev) => {
+        this.props.chatstarting();
         this.setState({messageText: ev.target.value});
     };
 
@@ -226,7 +236,7 @@ class Chat extends Component {
                         ) :
                         selectedContactId !==null && chat.dialog && chat.dialog.length > 0 ?
                             (
-
+                                <div>
                                 <div className="flex flex-col pt-16 pl-40 pb-40">
                                     {chat.dialog.map((item, i) => {
                                         const contact = item.who === user.id ? user : contacts.find(_contact => _contact.id === item.who);
@@ -252,6 +262,9 @@ class Chat extends Component {
                                             </div>
                                         )
                                     })}
+
+                                </div>
+
                                 </div>
                             ) : (
                                 <div className="flex flex-col flex-1">
@@ -264,9 +277,16 @@ class Chat extends Component {
                                 </div>
                             )
                     }
+
+
                 </FuseScrollbars>
+                {!1 && (
+                <div className={classes.typing}>test....</div>
+                )}
                 {chat && (
+
                     <form onSubmit={this.onMessageSubmit} className={classNames(classes.bottom, "py-16 px-8")}>
+
                         <Paper className={classNames(classes.inputWrapper, "flex items-center relative")}>
                             {/*<input*/}
                                 {/*accept="image/*"*/}
@@ -281,6 +301,7 @@ class Chat extends Component {
                                     {/*<Icon className="text-24" color="action">attach_file</Icon>*/}
                                 {/*</IconButton>*/}
                             {/*</label>*/}
+
                             <TextField
                                 autoFocus={false}
                                 id="message-input"
@@ -316,7 +337,8 @@ class Chat extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        sendMessage: Actions.sendMessage
+        sendMessage: Actions.sendMessage,
+        chatstarting: Actions.chatstarting,
     }, dispatch);
 }
 
@@ -328,6 +350,9 @@ function mapStateToProps({chatPanel})
         chat             : chatPanel.chat,
         user             : chatPanel.user,
         chatstatus       : chatPanel.state,
+        starttyping      : chatPanel.chat.starttyping,
+
+
     }
 }
 

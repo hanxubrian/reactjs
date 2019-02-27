@@ -444,8 +444,6 @@ class BillRun extends Component {
         const {classes} = this.props;
         const { selection } = this.state;
         return (
-
-
             <FusePageCustom
                 classes={{
                     root: classes.layoutRoot,
