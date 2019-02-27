@@ -371,11 +371,20 @@ class paymentsHistoryListContent extends Component {
 					title: "C.Name",
 					name: "CustomerNameNo",
 					columnName: "CustomerNameNo",
-					width: 150,
+					width: 350,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
+				},
+				{
+					title: "Invoice #",
+					name: "InvoiceNo",
+					columnName: "InvoiceNo",
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
 				},
 				{
 					title: "Payment Type",
@@ -397,16 +406,6 @@ class paymentsHistoryListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
-					title: "Payment Date",
-					name: "PaymentDate",
-					columnName: "PaymentDate",
-					align: 'right',
-					width: 150,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
-				{
 					title: "Note",
 					name: "Note",
 					columnName: "Note",
@@ -417,16 +416,26 @@ class paymentsHistoryListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
-					title: "OverPayment",
-					name: "OverPayment",
-					columnName: 'OverPayment',
-					width: 250,
-					align: 'center',
-					wordWrapEnabled: true,
+					title: "Payment Date",
+					name: "PaymentDate",
+					columnName: "PaymentDate",
+					align: 'right',
+					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
+				// {
+				// 	title: "OverPayment",
+				// 	name: "OverPayment",
+				// 	columnName: 'OverPayment',
+				// 	width: 250,
+				// 	align: 'center',
+				// 	wordWrapEnabled: true,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
 				{
 					title: "Amount",
 					name: "Amount",
@@ -970,9 +979,9 @@ class paymentsHistoryListContent extends Component {
 
 							<TableHeaderRow showSortingControls />
 
-							<TableRowDetail
+							{isCustomerNameNoGrouping && <TableRowDetail
 								contentComponent={this.RowDetail}
-							/>
+							/>}
 
 							<Template
 								name="tableRow"
