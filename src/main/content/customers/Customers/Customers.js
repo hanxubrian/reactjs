@@ -428,6 +428,7 @@ class Customers extends Component {
 			this.setState({
 				tryingToCloseWithoutOffering: true
 			})
+			this.processConfirming();
 		}
 	}
 
@@ -888,7 +889,7 @@ class Customers extends Component {
 							Confirm Dialog for submitting
 							 */}
 								<Dialog
-									open={this.state.tryingToCloseWithoutOffering || this.state.tryingToSubmitWithoutOffering}
+									open={!1 && (this.state.tryingToCloseWithoutOffering || this.state.tryingToSubmitWithoutOffering) }
 									onClose={this.handleCloseConfirmDialog}
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
