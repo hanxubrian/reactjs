@@ -720,6 +720,9 @@ class FranchiseesCreateForm extends Component {
     constructor (props){
         super(props);
         props.getFranchiseeFormPlanType(props.regionId);
+        if(props.franchiseesForm.type === 'edit'){
+            props.getFinderfeesByFranchiseeNo(props.regionId,props.insertPayload.dlr_code);
+        }
     }
 
     onChange = (event, { newValue, method }) => {
@@ -803,7 +806,11 @@ class FranchiseesCreateForm extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-
+        if( (nextProps.findersFees !== this.props.findersFees) && nextProps.findersFees.length > 0 ){
+            this.setState({
+                findersFees: nextProps.findersFees
+            });
+        }
   
     }
 

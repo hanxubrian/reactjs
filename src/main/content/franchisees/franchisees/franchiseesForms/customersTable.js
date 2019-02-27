@@ -75,6 +75,7 @@ class CustomersTableHead extends React.Component {
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
                                 sortDirection={orderBy === row.id ? order : false}
+                                style={{textAlign: "center"}}
                             >
                                 <Tooltip
                                     title="Sort"
@@ -359,11 +360,11 @@ class CustomersTable extends React.Component {
                                                     <TableCell >
                                                         {n.cus_city}
                                                     </TableCell>
-                                                    <TableCell style={{width: 280}}>
+                                                    <TableCell style={{width: 280,textAlign: "center"}}>
                                                         {n.cus_zip}
                                                     </TableCell>
-                                                    <TableCell style={{width: 280}}>
-                                                        {n.cont_bill}
+                                                    <TableCell style={{width: 280,textAlign:"right"}}>
+                                                        ${n.cont_bill}
                                                     </TableCell>                                               
                                                     <TableCell>
                                                         <IconButton

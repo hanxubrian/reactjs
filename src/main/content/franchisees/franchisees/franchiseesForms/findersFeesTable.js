@@ -239,19 +239,11 @@ class FindersFeesTable extends React.Component {
         page: 0,
         rowsPerPage: 10,
         labelWidth: 0,
-        documentsList: [],
-        documentName: [],
-        uploadDateTime: [],
-        fileSize: [],
-        view: [],
-        findersFees: []
+        view: []
     };
     
     constructor (props){
         super(props);
-        if(props.franchiseesForm.type === 'edit'){
-            props.getFinderfeesByFranchiseeNo(props.regionId,props.insertPayload.dlr_code);
-        }
     }
 
     handleRequestSort = (event, property) => {
@@ -275,11 +267,7 @@ class FindersFeesTable extends React.Component {
        
     }
     componentWillReceiveProps(nextProps){
-        if( (nextProps.findersFees !== this.props.findersFees) && nextProps.findersFees.length > 0 ){
-            this.setState({
-                findersFees: nextProps.findersFees
-            });
-        }
+
   
     }
 
@@ -293,8 +281,8 @@ class FindersFeesTable extends React.Component {
     };
 
     render() {
-        const { classes } = this.props;
-        const { findersFees,order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { classes,findersFees } = this.props;
+        const { order, orderBy, selected, rowsPerPage, page } = this.state;
 
         const headers = [
             {
