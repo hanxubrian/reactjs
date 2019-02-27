@@ -280,7 +280,7 @@ class Chat extends Component {
 
 
                 </FuseScrollbars>
-                {!1 && (
+                {1 && (
                 <div className={classes.typing}>test....</div>
                 )}
                 {chat && (

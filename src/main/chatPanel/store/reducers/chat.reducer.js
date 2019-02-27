@@ -14,7 +14,7 @@ const initialState = {
     typing:false,
     starttyping: false,
     ChatpanelStatu: false,
-    usertypingstatus: {},
+    usertypingstatus: [],
 };
 
 const chat = function (state = initialState, action) {
@@ -109,6 +109,7 @@ const chat = function (state = initialState, action) {
             return {
                 ...state,
                 starttyping:action.payload,
+                usertypingstatus:action.typing,
             }
         }
         // case Actions.OPEN_CHAT_PANEL:

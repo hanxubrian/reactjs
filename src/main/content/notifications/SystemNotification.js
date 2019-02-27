@@ -298,8 +298,8 @@ class SystemNotification extends Component {
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
                                             <Icon className="text-32 mr-12">notifications_active</Icon>
-                                            <Typography variant="h6" className="hidden sm:flex">Notification |
-                                                System</Typography>
+                                            <Typography variant="h6" className="hidden sm:flex">Process
+                                                Notifications</Typography>
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
