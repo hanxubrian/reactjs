@@ -669,7 +669,7 @@ class FilterPanel extends Component {
 
 			case "BillingAmountFrom":
 			case "BillingAmountTo":
-				value = parseFloat("0" + value).toLocaleString(undefined, { maximumFractionDigits: 0 })
+				// value = parseFloat("0" + value).toLocaleString(undefined, { maximumFractionDigits: 0 })
 				console.log("value", value)
 				break;
 
