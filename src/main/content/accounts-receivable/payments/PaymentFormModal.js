@@ -869,7 +869,7 @@ class PaymentFormModal extends React.Component {
 										}}
 									>
 										{
-											this.props.paymentTypes.map((x, index) =>
+											this.props.paymentTypes && this.props.paymentTypes.map((x, index) =>
 												<MenuItem key={index} value={x.type_name}>{x.type_name}</MenuItem>
 											)
 										}

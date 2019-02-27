@@ -775,10 +775,10 @@ class AccountOfferingPage extends Component {
 		} = this.state;
 
 		return (
-			<div className={classNames("flex flex-col")}>
+			<div className={classNames("flex flex-col flex-1")}>
 
 				<Stepper activeStep={step} style={{ padding: 0, background: 'unset' }} className='mb-12'>
-					{['Offered Franchisees', 'Assign Franchisees', 'Offering Account', 'Franchisee Distribution', 'Finders Fees'].map((label, index) => {
+					{['Offered Franchisees', 'Assign Franchisees', 'Offering Account', 'Revenue Distribution', 'Finders Fees'].map((label, index) => {
 						const props = {};
 						const labelProps = {};
 

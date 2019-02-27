@@ -1228,103 +1228,80 @@ class CustomerListContent extends Component {
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-					{/* Mapview */}
-					{mapViewState && (<div className={classNames("w-full h-full p-1")} style={{ borderColor: 'lightgray', borderWidth: '1px' }}>
-						{/* <div className="w-full h-full"> */}
-						{/* <GoogleMap
-								bootstrapURLKeys={{
-									key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-								}}
-								defaultZoom={12}
-								defaultCenter={[this.state.current_lat, this.state.current_long]}
-							>
-								{
-									this.props.pins.map((x, index) => (
-										<Marker
-											key={index}
-											text={x.text}
-											lat={x.lat}
-											lng={x.lng}
-										/>
-									))
-								}
-							</GoogleMap> */}
+					{mapViewState && <div className={classNames("w-full h-full p-1")} style={{ borderColor: 'lightgray', borderWidth: '1px' }}>
 
-						{gmapVisible && (<MapWithAMarkerClusterer
+						{gmapVisible && <MapWithAMarkerClusterer
 							markers={pins}
 							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-						/>)}
+						/>}
 
-						{!gmapVisible && (<MapWithAMarkerClusterer2
+						{!gmapVisible && <MapWithAMarkerClusterer2
 							markers={pins2}
 							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-						/>)}
+						/>}
 
-						{/* </div> */}
-					</div>)}
+					</div>}
 
-					{/* Girdview */}
 					{!mapViewState &&
-						(
-							<div className={classNames("flex flex-col")}
-							// style={{ height: "calc(100% - 110px)" }}
-							// style={{ overflowY: 'scroll' }}
+						<div className={classNames("flex flex-col")}
+						// style={{ height: "calc(100% - 110px)" }}
+						// style={{ overflowY: 'scroll' }}
+						>
+							<Grid
+								// rootComponent={GridRootComponent}
+								rows={rows}
+								columns={tableColumnExtensions}
 							>
-								<Grid
-									// rootComponent={GridRootComponent}
-									rows={rows}
-									columns={tableColumnExtensions}
-								>
-									<DragDropProvider />
-									<PagingState
-										defaultCurrentPage={0}
-										// currentPage={currentPage}
-										// onCurrentPageChange={this.changeCurrentPage}
-										// pageSize={pageSize}
-										// onPageSizeChange={this.changePageSize}
-										defaultPageSize={20}
-									/>
+								<DragDropProvider />
+								<PagingState
+									defaultCurrentPage={0}
+									// currentPage={currentPage}
+									// onCurrentPageChange={this.changeCurrentPage}
+									// pageSize={pageSize}
+									// onPageSizeChange={this.changePageSize}
+									defaultPageSize={20}
+								/>
 
-									<PagingPanel pageSizes={pageSizes} />
+								<PagingPanel pageSizes={pageSizes} />
 
-									<SelectionState
-										selection={selection}
-										onSelectionChange={this.changeSelection}
-									/>
-									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
-									<IntegratedSelection />
+								<SelectionState
+									selection={selection}
+									onSelectionChange={this.changeSelection}
+								/>
+								{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+								<IntegratedSelection />
 
-									<SortingState
-										sorting={sorting}
-										onSortingChange={this.changeSorting}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedSorting />
+								<SortingState
+									sorting={sorting}
+									onSortingChange={this.changeSorting}
+									columnExtensions={tableColumnExtensions}
+								/>
+								<IntegratedSorting />
 
 
 
-									<SearchState
-										// defaultValue="Paris"
-										value={searchValue}
-										onValueChange={this.changeSearchValue}
-									/>
+								<SearchState
+									// defaultValue="Paris"
+									value={searchValue}
+									onValueChange={this.changeSearchValue}
+								/>
 
-									<FilteringState
-										defaultFilters={[]}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedFiltering />
+								<FilteringState
+									defaultFilters={[]}
+									columnExtensions={tableColumnExtensions}
+								/>
+								<IntegratedFiltering />
 
-									<IntegratedPaging />
+								<IntegratedPaging />
 
-									<EditingState
-										columnExtensions={editingColumnExtensions}
-										onCommitChanges={this.commitChanges}
-									/>
+								<EditingState
+									columnExtensions={editingColumnExtensions}
+									onCommitChanges={this.commitChanges}
+								/>
 
 
 
-									{/* <GroupingState
+								{/* <GroupingState
 										grouping={grouping}
 										onGroupingChange={this.changeGrouping}
 									// defaultGrouping={[]}
@@ -1332,53 +1309,53 @@ class CustomerListContent extends Component {
 									/>
 									<IntegratedGrouping /> */}
 
-									{/* <BooleanTypeProvider
+								{/* <BooleanTypeProvider
 									for={booleanColumns}
 								/> */}
 
-									<CurrencyTypeProvider
-										for={currencyColumns}
-									// availableFilterOperations={amountFilterOperations}
-									// editorComponent={AmountEditor}
-									/>
+								<CurrencyTypeProvider
+									for={currencyColumns}
+								// availableFilterOperations={amountFilterOperations}
+								// editorComponent={AmountEditor}
+								/>
 
-									<AtRiskProvider
-										for={atRiskColumns}
-									// availableFilterOperations={amountFilterOperations}
-									// editorComponent={AmountEditor}
-									/>
+								<AtRiskProvider
+									for={atRiskColumns}
+								// availableFilterOperations={amountFilterOperations}
+								// editorComponent={AmountEditor}
+								/>
 
-									<PhoneNumberTypeProvider
-										for={phoneNumberColumns}
-									// availableFilterOperations={amountFilterOperations}
-									// editorComponent={AmountEditor}
-									/>
-									{/* <DateTypeProvider
+								<PhoneNumberTypeProvider
+									for={phoneNumberColumns}
+								// availableFilterOperations={amountFilterOperations}
+								// editorComponent={AmountEditor}
+								/>
+								{/* <DateTypeProvider
 									for={dateColumns}
 								/> */}
 
-									<VirtualTable height="auto" rowComponent={this.TableRow} />
+								<VirtualTable height="auto" rowComponent={this.TableRow} />
 
-									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
-									{/* <Table rowComponent={this.TableRow} /> */}
+								{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
+								{/* <Table rowComponent={this.TableRow} /> */}
 
-									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+								<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
-									{/* showGroupingControls */}
+								{/* showGroupingControls */}
 
 
-									{/* <TableFixedColumns
+								{/* <TableFixedColumns
 									leftColumns={leftColumns}
 									rightColumns={rightColumns}
 								/> */}
 
-									{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
-									<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+								{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
+								<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
-									<TableHeaderRow showSortingControls />
+								<TableHeaderRow showSortingControls />
 
-									{/* <TableEditRow /> */}
-									{/* <TableEditColumn
+								{/* <TableEditRow /> */}
+								{/* <TableEditColumn
 										// showAddCommand
 										showEditCommand
 										showDeleteCommand
@@ -1397,21 +1374,21 @@ class CustomerListContent extends Component {
 										}
 									/> */}
 
-									{/* <TableColumnReordering
+								{/* <TableColumnReordering
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
 									/> */}
-									{/* Column Visibility */}
-									{/* Disable Column Visibility Toggling */}
-									{/* <TableColumnVisibility
+								{/* Column Visibility */}
+								{/* Disable Column Visibility Toggling */}
+								{/* <TableColumnVisibility
 										defaultHiddenColumnNames={[]}
 										columnExtensions={tableColumnExtensions}
 									/> */}
-									{/* <Toolbar /> */}
-									{/* <SearchPanel /> */}
-									{/* Column Visibility */}
-									{/* <ColumnChooser /> */}
+								{/* <Toolbar /> */}
+								{/* <SearchPanel /> */}
+								{/* Column Visibility */}
+								{/* <ColumnChooser /> */}
 
-									{/* {filterState && (
+								{/* {filterState && (
 										<TableFilterRow
 											showFilterSelector
 											iconComponent={FilterIcon}
@@ -1419,10 +1396,10 @@ class CustomerListContent extends Component {
 										/>
 									)} */}
 
-									{/* <TableGroupRow /> */}
-									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
+								{/* <TableGroupRow /> */}
+								{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 
-									{/* <div
+								{/* <div
 									className={classNames(classes.layoutTable, "flex flex-row")}
 									style={{ justifyContent: "space-between" }}
 								>
@@ -1435,29 +1412,27 @@ class CustomerListContent extends Component {
 									</span>
 								</div> */}
 
-									<Template
-										name="tableRow"
-										predicate={({ tableRow }) => tableRow.type === 'data'}
-									>
-										{params => (
-											<TemplateConnector>
-												{({ selection }, { toggleSelection }) => (
-													<this.TableRow
-														{...params}
-														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-														onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
-													/>
-												)}
-											</TemplateConnector>
-										)}
-									</Template>
+								<Template
+									name="tableRow"
+									predicate={({ tableRow }) => tableRow.type === 'data'}
+								>
+									{params => (
+										<TemplateConnector>
+											{({ selection }, { toggleSelection }) => (
+												<this.TableRow
+													{...params}
+													selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+													onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+												/>
+											)}
+										</TemplateConnector>
+									)}
+								</Template>
 
-									<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+								<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 
-								</Grid>
-							</div>
-
-						)
+							</Grid>
+						</div>
 					}
 				</div>
 			</Fragment>

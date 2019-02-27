@@ -716,203 +716,346 @@ class FranchieesListPage extends Component {
 		} = this.state;
 
 		return (
-			<Fragment>
-				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-					<div className={classNames("flex w-full justify-between items-center mb-12")}>
-						<Typography variant="h6">Franchisees List</Typography>
-						<div>
-							<Tooltip title="Location Filter">
-								<IconButton onClick={this.toggleSideBar}><Icon>menu</Icon></IconButton>
-							</Tooltip>
+			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+				<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
+					<Typography variant="h6">Active Franchisees</Typography>
+					<div>
+						<Tooltip title="Location Filter">
+							<IconButton onClick={this.toggleSideBar}><Icon>menu</Icon></IconButton>
+						</Tooltip>
 
-							<Tooltip title={showMapView ? "Grid View" : "Map view"}>
-								<IconButton className={classNames(classes.button, "mr-12")}
-									onClick={this.toggleMapView}
-								>
-									{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
-									<Icon>location_on</Icon>
-								</IconButton>
-							</Tooltip>
+						<Tooltip title={showMapView ? "Grid View" : "Map view"}>
+							<IconButton className={classNames(classes.button, "mr-12")}
+								onClick={this.toggleMapView}
+							>
+								{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
+								<Icon>location_on</Icon>
+							</IconButton>
+						</Tooltip>
 
-							<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
+						<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 
-							<Button
-								variant="contained"
-								color="primary"
-								className={classNames(classes.button, "pr-24 pl-24")}
-								onClick={this.onClickAssign}
-							> <Icon fontSize="small">check</Icon>Assign </Button>
-						</div>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classNames(classes.button, "pr-24 pl-24")}
+							onClick={this.onClickAssign}
+						> <Icon fontSize="small">check</Icon>Assign </Button>
 					</div>
-
-					<GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col", showMapView ? "h-full" : "")} style={{ backgroundColor: "" }}>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
-							{this.state.openSideBar && (
-								<Paper className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
-									<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-										<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-											<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
-											<RadioGroup
-												aria-label="Location"
-												name="Location"
-												className={classes.group}
-												// value={this.props.locationFilterValue && this.props.locationFilterValue.id || ""}
-												value={this.state.Location || ""}
-											>
-												<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
-												<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
-												{this.state.Location === "locationNearResidingCustomer" && (
-													<TextField
-														select
-
-														id="locationNearResidingCustomerRadius"
-														label="Radius"
-														className={classes.textField}
-														InputLabelProps={{
-															shrink: true
-														}}
-														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-														onChange={this.handleChange('locationNearResidingCustomerRadius')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													>
-														{
-															Array.from({ length: 15 })
-																.map((val, index) => (
-																	<MenuItem key={index} value={(index + 1) * 5}>
-																		{(index + 1) * 5} Miles
-													</MenuItem>
-																))
-														}
-													</TextField>)}
-
-												<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
-												{this.state.Location === "locationNearCleaningCustomer" && (
-													<TextField
-														select
-
-														id="locationNearCleaningCustomerRadius"
-														label="Radius"
-														className={classes.textField}
-														InputLabelProps={{
-															shrink: true
-														}}
-														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-														onChange={this.handleChange('locationNearCleaningCustomerRadius')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													>
-														{
-															Array.from({ length: 15 })
-																.map((val, index) => (
-																	<MenuItem key={index} value={(index + 1) * 5}>
-																		{(index + 1) * 5} Miles
-													</MenuItem>
-																))
-														}
-													</TextField>)}
-
-												<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-												{this.state.Location === "locationNearSpecificAddress" && (
-													<Fragment>
-														<TextField
-															id="SpecificAddress"
-															label="Address"
-															className={classes.textField}
-															onChange={this.handleChange('SpecificAddress')}
-															margin="dense"
-															variant="outlined"
-															fullWidth
-														/>
-														<TextField
-															select
-
-															id="AddressZipcodeRadius"
-															label="Radius"
-															className={classes.textField}
-															InputLabelProps={{
-																shrink: true
-															}}
-															value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-															onChange={this.handleChange('AddressZipcodeRadius')}
-															margin="dense"
-															variant="outlined"
-															fullWidth
-														>
-															{
-																Array.from({ length: 15 })
-																	.map((val, index) => (
-																		<MenuItem key={index} value={(index + 1) * 5}>
-																			{(index + 1) * 5} Miles
-																</MenuItem>
-																	))
-															}
-														</TextField>
-													</Fragment>
-												)}
-											</RadioGroup>
-										</GridItem>
-									</GridContainer>
-								</Paper>
-							)}
-							<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
-
-								{showMapView ?
-									(<div className="w-full h-full">
-										{/* map area */}
-										{gmapVisible && (<MapWithAMarkerClusterer
-											markers={pins}
-											center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-										/>)}
-
-										{!gmapVisible && (<MapWithAMarkerClusterer2
-											markers={pins2}
-											center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-										/>)}
-									</div>
-									) :
-									(<div className="w-full h-full">
-										{/* grid area */}
-										<Grid rows={rows} columns={columns}>
-											<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
-											<IntegratedFiltering />
-											<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
-											<PagingState defaultCurrentPage={0} defaultPageSize={10} />
-											<PagingPanel pageSizes={pageSizes} />
-											<IntegratedSelection />
-											<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
-											<IntegratedSorting />
-											<IntegratedPaging />
-											<EditingState
-												// columnExtensions={editingColumnExtensions}
-												onCommitChanges={this.commitChanges} />
-											<Table />
-											{/* <VirtualTable height="auto" /> */}
-
-											<TableColumnResizing defaultColumnWidths={columns} />
-
-											<TableSelection showSelectAll selectByRowClick highlightRow />
-											<TableHeaderRow showSortingControls />
-											{/* <TableEditRow /> */}
-											<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
-											// showAddCommand
-											// showEditCommand
-											// showDeleteCommand
-											// commandComponent={Command}
-											/>
-											<Toolbar rootComponent={this.ToolbarRoot} />
-											<SearchPanel />
-											<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
-										</Grid>
-									</div>
-									)}
-							</Paper>
-						</GridItem>
-					</GridContainer>
 				</div>
-			</Fragment>
+
+				{/* <div className="flex flex-col"> */}
+
+
+				<Paper className={classNames("flex p-6 w-full h-full")}>
+					{this.state.openSideBar && <div className="flex flex-col p-12" style={{ minWidth: 200 }}>
+
+						<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
+						<RadioGroup
+							aria-label="Location"
+							name="Location"
+							className={classes.group}
+							value={this.state.Location || ""}
+						>
+							<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
+							<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
+							{this.state.Location === "locationNearResidingCustomer" && (
+								<TextField
+									select
+
+									id="locationNearResidingCustomerRadius"
+									label="Radius"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+									onChange={this.handleChange('locationNearResidingCustomerRadius')}
+									margin="dense"
+									variant="outlined"
+									fullWidth
+								>
+									{
+										Array.from({ length: 15 })
+											.map((val, index) => (
+												<MenuItem key={index} value={(index + 1) * 5}>
+													{(index + 1) * 5} Miles
+													</MenuItem>
+											))
+									}
+								</TextField>)}
+
+							<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
+							{this.state.Location === "locationNearCleaningCustomer" && (
+								<TextField
+									select
+
+									id="locationNearCleaningCustomerRadius"
+									label="Radius"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+									onChange={this.handleChange('locationNearCleaningCustomerRadius')}
+									margin="dense"
+									variant="outlined"
+									fullWidth
+								>
+									{
+										Array.from({ length: 15 })
+											.map((val, index) => (
+												<MenuItem key={index} value={(index + 1) * 5}>
+													{(index + 1) * 5} Miles
+													</MenuItem>
+											))
+									}
+								</TextField>)}
+
+							<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
+							{this.state.Location === "locationNearSpecificAddress" && (
+								<Fragment>
+									<TextField
+										id="SpecificAddress"
+										label="Address"
+										className={classes.textField}
+										onChange={this.handleChange('SpecificAddress')}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+									/>
+									<TextField
+										select
+
+										id="AddressZipcodeRadius"
+										label="Radius"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+										onChange={this.handleChange('AddressZipcodeRadius')}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+									>
+										{
+											Array.from({ length: 15 })
+												.map((val, index) => (
+													<MenuItem key={index} value={(index + 1) * 5}>
+														{(index + 1) * 5} Miles
+																</MenuItem>
+												))
+										}
+									</TextField>
+								</Fragment>
+							)}
+						</RadioGroup>
+
+					</div>
+					}
+					<div className="flex flex-col" style={{ overflowX: 'scroll' }}>
+						{showMapView &&
+							<div className="flex flex-col w-full flex-1 h-full">
+								{gmapVisible && (<MapWithAMarkerClusterer
+									markers={pins}
+									center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+								/>)}
+
+								{!gmapVisible && (<MapWithAMarkerClusterer2
+									markers={pins2}
+									center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+								/>)}
+							</div>
+						}
+						{!showMapView &&
+							<Grid rows={rows} columns={columns}>
+								<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
+								<IntegratedFiltering />
+								<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
+								<PagingState defaultCurrentPage={0} defaultPageSize={20} />
+								<PagingPanel pageSizes={pageSizes} />
+								<IntegratedSelection />
+								<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
+								<IntegratedSorting />
+								<IntegratedPaging />
+								<EditingState onCommitChanges={this.commitChanges} />
+								<VirtualTable height="auto" />
+
+								<TableColumnResizing defaultColumnWidths={columns} />
+
+								<TableSelection showSelectAll selectByRowClick highlightRow />
+								<TableHeaderRow showSortingControls />
+								<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent} />
+								<Toolbar rootComponent={this.ToolbarRoot} />
+								<SearchPanel />
+								<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+							</Grid>
+						}
+					</div>
+				</Paper>
+
+				{/* </div> */}
+
+
+
+				{/* <GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col", showMapView ? "h-full" : "")} style={{ backgroundColor: "" }}>
+					<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
+						{this.state.openSideBar && (
+							<Paper className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
+								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+										<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
+										<RadioGroup
+											aria-label="Location"
+											name="Location"
+											className={classes.group}
+											value={this.state.Location || ""}
+										>
+											<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
+											<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
+											{this.state.Location === "locationNearResidingCustomer" && (
+												<TextField
+													select
+
+													id="locationNearResidingCustomerRadius"
+													label="Radius"
+													className={classes.textField}
+													InputLabelProps={{
+														shrink: true
+													}}
+													value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+													onChange={this.handleChange('locationNearResidingCustomerRadius')}
+													margin="dense"
+													variant="outlined"
+													fullWidth
+												>
+													{
+														Array.from({ length: 15 })
+															.map((val, index) => (
+																<MenuItem key={index} value={(index + 1) * 5}>
+																	{(index + 1) * 5} Miles
+													</MenuItem>
+															))
+													}
+												</TextField>)}
+
+											<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
+											{this.state.Location === "locationNearCleaningCustomer" && (
+												<TextField
+													select
+
+													id="locationNearCleaningCustomerRadius"
+													label="Radius"
+													className={classes.textField}
+													InputLabelProps={{
+														shrink: true
+													}}
+													value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+													onChange={this.handleChange('locationNearCleaningCustomerRadius')}
+													margin="dense"
+													variant="outlined"
+													fullWidth
+												>
+													{
+														Array.from({ length: 15 })
+															.map((val, index) => (
+																<MenuItem key={index} value={(index + 1) * 5}>
+																	{(index + 1) * 5} Miles
+													</MenuItem>
+															))
+													}
+												</TextField>)}
+
+											<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
+											{this.state.Location === "locationNearSpecificAddress" && (
+												<Fragment>
+													<TextField
+														id="SpecificAddress"
+														label="Address"
+														className={classes.textField}
+														onChange={this.handleChange('SpecificAddress')}
+														margin="dense"
+														variant="outlined"
+														fullWidth
+													/>
+													<TextField
+														select
+
+														id="AddressZipcodeRadius"
+														label="Radius"
+														className={classes.textField}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+														onChange={this.handleChange('AddressZipcodeRadius')}
+														margin="dense"
+														variant="outlined"
+														fullWidth
+													>
+														{
+															Array.from({ length: 15 })
+																.map((val, index) => (
+																	<MenuItem key={index} value={(index + 1) * 5}>
+																		{(index + 1) * 5} Miles
+																</MenuItem>
+																))
+														}
+													</TextField>
+												</Fragment>
+											)}
+										</RadioGroup>
+									</GridItem>
+								</GridContainer>
+							</Paper>
+						)}
+						<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
+
+							{showMapView ?
+								(<div className="w-full h-full">
+									{gmapVisible && (<MapWithAMarkerClusterer
+										markers={pins}
+										center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+									/>)}
+
+									{!gmapVisible && (<MapWithAMarkerClusterer2
+										markers={pins2}
+										center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+									/>)}
+								</div>
+								) :
+								(<div className="flex flex-col">
+									<Grid rows={rows} columns={columns}>
+										<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
+										<IntegratedFiltering />
+										<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
+										<PagingState defaultCurrentPage={0} defaultPageSize={20} />
+										<PagingPanel pageSizes={pageSizes} />
+										<IntegratedSelection />
+										<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
+										<IntegratedSorting />
+										<IntegratedPaging />
+										<EditingState
+											onCommitChanges={this.commitChanges} />
+										<VirtualTable height="auto" />
+
+										<TableColumnResizing defaultColumnWidths={columns} />
+
+										<TableSelection showSelectAll selectByRowClick highlightRow />
+										<TableHeaderRow showSortingControls />
+										<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
+										/>
+										<Toolbar rootComponent={this.ToolbarRoot} />
+										<SearchPanel />
+										<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+									</Grid>
+								</div>
+								)}
+						</Paper>
+					</GridItem>
+				</GridContainer> */}
+			</div>
 		)
 
 	}

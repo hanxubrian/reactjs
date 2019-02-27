@@ -485,24 +485,25 @@ class FranchiseeDistributionPage extends React.Component {
 		if (Array.isArray(franchieesesToOffer)) {
 			tmpFranchieesesToOffer = [...tmpFranchieesesToOffer, ...franchieesesToOffer]
 		}
-		if (Array.isArray(activeCustomer.Data.AssignedFranchisees)) {
-			tmpFranchieesesToOffer = [...tmpFranchieesesToOffer, ...activeCustomer.Data.AssignedFranchisees]
-		}
-		this.setState({
-			SA_Amount: activeCustomer.Data.cont_bill,
-			franchieesesToOffer: tmpFranchieesesToOffer,
-		});
-		// this.props.updateFindersFeeParams({
-		// 	FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
-		// 	CustomerNum: activeCustomer.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
-		// });
-
-		activeCustomer.Data.AssignedFranchisees && activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
-			if (x.FinderFeeId) {
-				this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
+		if (activeCustomer.Data) {
+			if (Array.isArray(activeCustomer.Data.AssignedFranchisees)) {
+				tmpFranchieesesToOffer = [...tmpFranchieesesToOffer, ...activeCustomer.Data.AssignedFranchisees]
 			}
-		})
+			this.setState({
+				SA_Amount: activeCustomer.Data.cont_bill,
+				franchieesesToOffer: tmpFranchieesesToOffer,
+			});
+			// this.props.updateFindersFeeParams({
+			// 	FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
+			// 	CustomerNum: activeCustomer.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
+			// });
 
+			activeCustomer.Data.AssignedFranchisees && activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
+				if (x.FinderFeeId) {
+					this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
+				}
+			})
+		}
 	};
 
 	handleClose = () => {
@@ -1113,7 +1114,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						{this.props.activeStep === 1 && <Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>}
-						<Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button>
+						{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
 					</div>
 				</div>
 
