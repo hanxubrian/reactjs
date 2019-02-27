@@ -192,12 +192,14 @@ const styles = theme => ({
             fontSize: 13,
             height: 40,
             padding: "4px 12px",
-            width: 'auto'
+            width: 'auto',
+            whiteSpace: 'nowrap'
         },
         '& tbody tr td': {
             padding: "2px 12px",
             width: 'auto',
-            fontSize: 12
+            fontSize: 12,
+            whiteSpace: 'nowrap'
         },
         documentuploadHeadRoot: {
             backgroundColor: 'lightgray',

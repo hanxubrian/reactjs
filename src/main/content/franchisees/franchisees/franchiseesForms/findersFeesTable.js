@@ -74,7 +74,6 @@ class FindersFeesTableHead extends React.Component {
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
                                 sortDirection={orderBy === row.id ? order : false}
-                                style={{textAlign: "center"}}
                             >
                                 <Tooltip
                                     title="Sort"
@@ -182,21 +181,23 @@ const styles = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit * 3,
+        overflow: 'auto',
         head: {
             color: 'black',
         },
         '& thead tr th': {
             color: 'black!important',
             fontWeight: 700,
-            fontSize: 13,
+            fontSize: 14,
             height: 40,
             padding: "4px 12px",
-            width: 'auto'
+            width: 'auto',
+            whiteSpace: 'nowrap'
         },
         '& tbody tr td': {
             padding: "2px 12px",
-            width: 'auto',
-            fontSize: 12
+            fontSize: 12,
+            whiteSpace: 'nowrap'
         },
         documentuploadHeadRoot: {
             backgroundColor: 'lightgray',
@@ -307,19 +308,13 @@ class FindersFeesTable extends React.Component {
                 id: 'ff_tot',
                 numeric: false,
                 disablePadding: false,
-                label: 'Total'
+                label: 'Monthly Payment'
             },
             {
                 id: 'ff_pytotl',
                 numeric: false,
                 disablePadding: false,
-                label: 'Payment Total'
-            },
-            {
-                id: 'Status',
-                numeric: false,
-                disablePadding: false,
-                label: 'Status'
+                label: 'Payment'
             },
             {
                 id: 'action',
@@ -360,12 +355,9 @@ class FindersFeesTable extends React.Component {
                                                     <TableCell style={{width: 150,textAlign:"right"}}>
                                                         ${n.ff_tot}
                                                     </TableCell>
-                                                    <TableCell style={{width: 250,textAlign:"right"}}>
-                                                        ${n.ff_pytotl}
+                                                    <TableCell style={{width: 250}}>
+                                                        ${n.ff_pytotl*1+n.ff_pybill*1}
                                                     </TableCell>
-                                                    <TableCell style={{width: 280}}>
-                                                        {n.Status}
-                                                    </TableCell>                                               
                                                     <TableCell>
                                                         <Button
                                                             size="small"
