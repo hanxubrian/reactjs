@@ -27,8 +27,10 @@ const initialState = {
         data : null,
         customer: null
     },
-    FromDate:moment().subtract(5, 'months').startOf('month').format("MM/DD/YYYY"),
-    ToDate: moment().add(1,'months').endOf('month').format("MM/DD/YYYY"),
+    // FromDate:moment().subtract(5, 'months').startOf('month').format("MM/DD/YYYY"),
+    // ToDate: moment().add(1,'months').endOf('month').format("MM/DD/YYYY"),
+    FromDate:moment().startOf('month').format("MM/DD/YYYY"),
+    ToDate: moment().endOf('month').format("MM/DD/YYYY"),
     StatusId: [],
     PeriodId: [220],
     InvoiceTypeId: 1,
@@ -37,7 +39,7 @@ const initialState = {
     invoiceStatus: [],
     bInvoiceStart: false,
     customerTaxAmountLine: [],
-    invoiceDateOption: 13,
+    invoiceDateOption: 14,//PERIOD
     newInvoice: null,
 
     customersDB: null,
