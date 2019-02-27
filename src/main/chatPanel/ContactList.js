@@ -121,10 +121,7 @@ class ContactList extends Component {
     };
 
     handleContactClick = (chatId, contactId) => {
-<<<<<<< HEAD
 
-=======
->>>>>>> a0916bb8a9e91ee1ae3d0ee2d3da8e85d341c3f5
         this.props.openChatPanel();
         this.props.getChat(chatId, contactId);
         this.scrollToTop();
@@ -136,7 +133,7 @@ class ContactList extends Component {
 
     render()
     {
-<<<<<<< HEAD
+
         const {classes, chat, contacts, user, selectedContactId,contactuserList} = this.props;
         // console.log("user.contacts",contacts);
         // console.log("user.contacts.length",contacts.length);
@@ -155,9 +152,9 @@ class ContactList extends Component {
         }
 
 
-=======
-        const {classes, chat, contacts, user, selectedContactId} = this.props;
->>>>>>> a0916bb8a9e91ee1ae3d0ee2d3da8e85d341c3f5
+
+
+
         const ContactButton = ({chat, contact}) => {
             return (
                 <Tooltip title={contact.name} placement="left">

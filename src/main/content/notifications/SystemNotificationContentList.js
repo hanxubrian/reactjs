@@ -614,14 +614,12 @@ class SystemNotificationContentList extends Component {
                                         defaultSorting={[{ columnName: 'process', direction: 'asc' }]}
                                     />
                                     <IntegratedSorting />
-                                        {/* <RowDetailState
-                                            defaultExpandedRowIds={[expandedId]}
-                                        /> */}
+
                                     <VirtualTable
                                         columnExtensions={tableColumnExtensions}
                                         // cellComponent={this.getCell}
                                         rowComponent={this.TableRow}
-                                        // height="530"
+
                                         headComponent = {TableHeadComponent}
                                     />
 
