@@ -986,7 +986,9 @@ class InvoiceForm extends Component {
                                                 labelWidth={this.state.labelWidth}
                                                 name="period"
                                                 id="period"
+                                                readOnly={this.props.invoiceForm.type==='edit'}
                                             />
+
                                         }
                                         className={classes.textField}
                                         MenuProps = {{
