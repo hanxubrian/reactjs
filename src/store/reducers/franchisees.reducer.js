@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import moment from "moment";
 import _ from "lodash";
+import {OPEN_CLOSE_STOP_REASON_DIALOG} from "../actions/";
 
 const initialState = {
     franchiseesDB: null,
@@ -32,6 +33,7 @@ const initialState = {
     InActive: true,
     docSendModal: false,
     docViewModal: false,
+    stopReasonModal: false,
     createFranchisees: {
         type : 'new',
         props: {
@@ -439,6 +441,12 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 findersFees: action.payload
+            }
+        }
+        case Actions. OPEN_CLOSE_STOP_REASON_DIALOG: {
+            return{
+                ...state,
+                stopReasonModal: action.payload
             }
         }
         default:

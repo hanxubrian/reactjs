@@ -36,6 +36,7 @@ export const NULLIFY_FRANCHISEE_NEW_REPORT = '[FINDERSFEES APP] NULLIFY FRANCHIS
 export const OPEN_CLOSE_DOC_SEND_ACTION_DIALOG = '[FRANCHISEES] OPEN CLOSE DOC SEND ACTION DIALOG ';
 export const OPEN_CLOSE_DOC_VIEW_ACTION_DIALOG = '[FRANCHISEES] OPEN CLOSE DOC VIEW ACTION DIALOG ';
 export const GET_FINDERS_FEES_BY_FRANCHISEENO = '[FRANCHISEES] GET_FINDERS_FEES_BY_FRANCHISEENO ';
+export const OPEN_CLOSE_STOP_REASON_DIALOG = '[FRANCHISEES] OPEN CLOSE STOP REASON DIALOG ';
 
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
@@ -331,6 +332,13 @@ export function openCloseDocSendActionDialog (flag){
 export function openCloseDocViewActionDialog (flag){
     return{
         type: OPEN_CLOSE_DOC_VIEW_ACTION_DIALOG,
+        payload: flag
+    }
+}
+
+export function openCloseStopReasonDialog (flag){
+    return{
+        type: OPEN_CLOSE_STOP_REASON_DIALOG,
         payload: flag
     }
 }

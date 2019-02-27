@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Icon,Button, IconButton, Tooltip,TablePagination} from '@material-ui/core'
+    Toolbar, Typography, Paper, Button, IconButton, Tooltip,TablePagination} from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -18,6 +18,7 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 
+import FindersFeesStopModal from './findersFeesStopModal';
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -240,7 +241,8 @@ class FindersFeesTable extends React.Component {
         page: 0,
         rowsPerPage: 10,
         labelWidth: 0,
-        view: []
+        view: [],
+        stopReasonModal: false
     };
     
     constructor (props){
@@ -265,11 +267,12 @@ class FindersFeesTable extends React.Component {
         
     }
     componentWillMount() {
-       
+        this.setState({stopReasonModal:this.props.stopReasonModal});
     }
     componentWillReceiveProps(nextProps){
-
-  
+        if(nextProps.stopReasonModal !== this.props.stopReasonModal){
+            this.setState({stopReasonModal:nextProps.stopReasonModal});
+        }
     }
 
 
@@ -364,6 +367,7 @@ class FindersFeesTable extends React.Component {
                                                             variant="outlined"
                                                             color="primary"
                                                             className={classNames(classes.button, "mr-12")}
+                                                            onClick={()=> this.props.openCloseStopReasonDialog(true)}
                                                         >
                                                             Stop
                                                         </Button>
@@ -389,14 +393,16 @@ class FindersFeesTable extends React.Component {
                     }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
+                />]
+                <FindersFeesStopModal />
             </Paper>
         );
     }
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo
+        getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo,
+        openCloseStopReasonDialog: Actions.openCloseStopReasonDialog
     }, dispatch);
 }
 
@@ -406,6 +412,7 @@ function mapStateToProps({ franchisees, auth }) {
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         insertPayload: franchisees.insertPayload,
+        stopReasonModal: franchisees.stopReason
     }
 }
 
