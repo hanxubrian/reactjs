@@ -1095,6 +1095,12 @@ class FranchiseeDistributionPage extends React.Component {
 			step,
 		} = this.state;
 
+		franchieesesToOffer.forEach((x, index) => {
+			if (!x.MonthlyBilling || x.MonthlyBilling.length === 0) {
+				this.addMonthlyBilling(index)
+			}
+		})
+
 		const franHeaders = [
 			{ width: 7, title: 'Number', align: '', field: 'Number' },
 			{ width: 18, title: 'Name', align: '', field: 'Name' },
@@ -1323,7 +1329,7 @@ class FranchiseeDistributionPage extends React.Component {
 								<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
 									<Button variant="contained" onClick={() => this.gotoFindersFee(x, this.getMonthlyBillingTotal(x))}
 										color="primary" className={classNames('')}>
-										<Icon fontSize="small">arrow_forward</Icon>
+										<Icon fontSize="small">queue</Icon>
 									</Button>
 								</div>
 
