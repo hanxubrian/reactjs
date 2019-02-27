@@ -161,6 +161,13 @@ class BillRunDialog extends Component {
     componentDidMount() {
         this.setState({isMounted:true});
         this.props.onRef(this);
+        let all_regions = this.props.all_regions;
+        let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+        let period = region[0].OpenPeriods.current;
+        let month = period.month-1;
+
+        this.setState({month: month});
     }
 
     componentWillUnmount() {
