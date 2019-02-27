@@ -183,17 +183,6 @@ class RegularMiscTransactons extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
     }
 
-    componentDidMount() {
-    }
-
-    componentWillMount() {
-    }
-
-    componentWillUnmount() {
-
-    }
-
-
     changeSorting = sorting => this.setState({ sorting });
 
     render() {
@@ -202,19 +191,19 @@ class RegularMiscTransactons extends Component {
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc.map(d=>{
-            let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
+            let type = this.props.transactionTypeList.filter(t=>t._id===d.Type);
 
-            d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.TRX_AMT = parseFloat(d.TRX_AMT);
-            d.TRX_TAX = parseFloat(d.TRX_TAX);
-            d.TRX_TOT = parseFloat(d.TRX_TOT);
+            d.DESCR = FuseUtils.capital_letter(d.Description);
+            d.TRX_AMT = parseFloat(d.TrxAmt);
+            d.TRX_TAX = parseFloat(d.TrxTax);
+            d.TRX_TOT = parseFloat(d.TrxTot);
             if(type.length>0)
                 d.TYPE = type[0].Name;
             return d;
         });
 
         const columns = [
-            {name: "TYPE", title: "Type"},
+            {name: "Type", title: "Type"},
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "Amount"},
             {name: "TRX_TAX", title: "Tax"},
@@ -223,7 +212,7 @@ class RegularMiscTransactons extends Component {
 
         let  tableColumnExtensions = [
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'TYPE', width: 180},
+            { columnName: 'Type', width: 180},
             { columnName: 'TRX_AMT', width: 90,  align: 'right'},
             { columnName: 'TRX_TAX', width: 90,  align: 'right'},
             { columnName: 'TRX_TOT', width: 90,  align: 'right'},
