@@ -291,6 +291,13 @@ class SystemNotificationViewById extends Component {
 
     constructor(props) {
         super(props);
+        console.log("props==================",props);
+        let midCustomersQualifiedForCPI = {};
+
+        if(JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI && JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI.length){
+            midCustomersQualifiedForCPI = JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI[0];
+        }
+        console.log("midCustomersQualifiedForCPI==================",midCustomersQualifiedForCPI);
         this.state = {
             id                      : this.props.match.params.id,
             MsgData                 : this.props.Data,
@@ -303,7 +310,7 @@ class SystemNotificationViewById extends Component {
                 {
                     title: "Name",
                     name: "CustomerName",
-                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CustomerName,
+                    columnName: midCustomersQualifiedForCPI.CustomerName,
                     width: 80,
                     align: 'left',
                     sortingEnabled: true,
@@ -313,7 +320,7 @@ class SystemNotificationViewById extends Component {
                 {
                     title: "No",
                     name: "CustomerNo",
-                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CustomerNo,
+                    columnName: midCustomersQualifiedForCPI.CustomerNo,
                     width: 200,
                     align: 'right',
                     wordWrapEnabled: true,
@@ -325,7 +332,7 @@ class SystemNotificationViewById extends Component {
                 {
                     title: "Contract Billing",
                     name: "ContractBilling",
-                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].ContractBilling,
+                    columnName: midCustomersQualifiedForCPI.ContractBilling,
                     width: 200,
                     align: 'right',
                     wordWrapEnabled: true,
@@ -336,7 +343,7 @@ class SystemNotificationViewById extends Component {
                 {
                     title: "CPI Percent",
                     name: "CPIPercent",
-                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CPIPercent,
+                    columnName: midCustomersQualifiedForCPI.CPIPercent,
                     width: 200,
                     align: 'right',
                     wordWrapEnabled: true,
@@ -361,7 +368,7 @@ class SystemNotificationViewById extends Component {
     componentDidUpdate(prevProps, prevState){
         if(this.props.Data && this.props.Data !== null && JSON.stringify(this.props.Data) !== JSON.stringify(prevProps.Data)){
             this.setState({MsgData:this.props.Data});
-            let payload = JSON.parse(this.props.Data.ProcessResponsePayload);
+            let payload = JSON.parse(this.props.Data.payload);
             let KEYS    = [];
             let mapvalue  = [];
             let midmultikey =[];
@@ -410,7 +417,7 @@ class SystemNotificationViewById extends Component {
 			tableColumnExtensions,
 		} = this.state;
         console.log(row)
-        if(1){
+        if(rows){
             if(this.props.loadingstatus){
                 return(
                     <div className={classes.overlay}>
@@ -498,7 +505,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[1].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{row[1]&&row[1].length?row[1].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -509,7 +516,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[3].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[3]&&row[3].Value)?row[3].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -520,7 +527,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[4].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[4]&&row[4].Value)?row[4].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -533,7 +540,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[6].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[6] && row[6].Value)?row[6].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -544,7 +551,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[5].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[5]&&row[5].Value)?row[5].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -564,7 +571,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[11].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[11] && row[11].Value)?row[11].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -575,7 +582,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[13].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[13]&& row[13].Value)?row[13].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -627,7 +634,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[6].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[6]&&row[6].Value)?row[6].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -638,7 +645,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[5].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[5] && row[5].Value)?row[5].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -658,7 +665,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[11].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[11]&&row[11].Value)?row[11].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -669,7 +676,7 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{row[13].Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{(row[13]&& row[11].Value)?row[13].Value:''}</Typography>
                                                             </div>
                                                             </div>
 
@@ -783,7 +790,7 @@ class SystemNotificationViewById extends Component {
                                                     columns={tableColumnExtensions}
                                                 >
                                                 <VirtualTable
-                                                    height="550"
+                                                    // height="550"
                                                     tableComponent={TableComponent}
                                                     headComponent = {TableHeadComponent}
                                                     columnExtensions={tableColumnExtensions}
