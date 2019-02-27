@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 // core components
 import {
-    TextField, Button, Typography, Divider, FormControlLabel, IconButton, Icon
-} from '@material-ui/core';
+    TextField, Button, Typography, Divider, FormControlLabel} from '@material-ui/core';
 // theme components
 import { FuseAnimate} from '@fuse';
 import { withStyles } from "@material-ui/core";

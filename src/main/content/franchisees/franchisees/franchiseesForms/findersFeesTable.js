@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Icon, IconButton, Tooltip,TablePagination} from '@material-ui/core'
+    Toolbar, Typography, Paper, Icon,Button, IconButton, Tooltip,TablePagination} from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -379,12 +379,14 @@ class FindersFeesTable extends React.Component {
                                                         {n.Status}
                                                     </TableCell>                                               
                                                     <TableCell>
-                                                        <IconButton
-                                                            className={classNames(classes.summaryPanelButton, "mr-12")}
-                                                            aria-label="view-icon"
-                                                            >
-                                                            <Icon>stop</Icon>
-                                                        </IconButton>
+                                                        <Button
+                                                            size="small"
+                                                            variant="outlined"
+                                                            color="primary"
+                                                            className={classNames(classes.button, "mr-12")}
+                                                        >
+                                                            Stop
+                                                        </Button>
                                                     </TableCell>
                                                 </TableRow>
                                             )
