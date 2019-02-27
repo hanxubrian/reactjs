@@ -1003,44 +1003,44 @@ class FranchiseesCreateForm extends Component {
                         )}
                     </Fragment>
                 </div>
-                <div className="flex flex-1 flex-row justify-between items-center">
-                    <div className="flex flex-row justify-start pl-24">
-                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>
-                        </FuseAnimate>
-                    </div>
-                    <div className="flex flex-row flex-1 justify-end pr-24">
-                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classNames(classes.button, "mr-12")}
-                                onClick={() => {this.closeComposeForm();}}
-                                disabled={!this.canBeSubmitted()}
-                            > Discard </Button>
-                        </FuseAnimate>
-                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classNames(classes.button, "mr-12")}
-                                onClick={() => {this.createFranchiseeForm();}}
-                                disabled={!this.canBeSubmitted()}
-                            > Save </Button>
-                        </FuseAnimate>
-                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.button}
-                                onClick={() => {
-                                    this.closeComposeForm();
-                                }}
-                                disabled={!this.canBeSubmitted()}
-                            > Close </Button>
-                        </FuseAnimate>
-                    </div>
-                </div>
+                {/*<div className="flex flex-1 flex-row justify-between items-center">*/}
+                    {/*<div className="flex flex-row justify-start pl-24">*/}
+                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
+                            {/*<span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>*/}
+                        {/*</FuseAnimate>*/}
+                    {/*</div>*/}
+                    {/*<div className="flex flex-row flex-1 justify-end pr-24">*/}
+                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
+                            {/*<Button*/}
+                                {/*variant="contained"*/}
+                                {/*color="primary"*/}
+                                {/*className={classNames(classes.button, "mr-12")}*/}
+                                {/*onClick={() => {this.closeComposeForm();}}*/}
+                                {/*disabled={!this.canBeSubmitted()}*/}
+                            {/*> Discard </Button>*/}
+                        {/*</FuseAnimate>*/}
+                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
+                            {/*<Button*/}
+                                {/*variant="contained"*/}
+                                {/*color="primary"*/}
+                                {/*className={classNames(classes.button, "mr-12")}*/}
+                                {/*onClick={() => {this.createFranchiseeForm();}}*/}
+                                {/*disabled={!this.canBeSubmitted()}*/}
+                            {/*> Save </Button>*/}
+                        {/*</FuseAnimate>*/}
+                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
+                            {/*<Button*/}
+                                {/*variant="contained"*/}
+                                {/*color="primary"*/}
+                                {/*className={classes.button}*/}
+                                {/*onClick={() => {*/}
+                                    {/*this.closeComposeForm();*/}
+                                {/*}}*/}
+                                {/*disabled={!this.canBeSubmitted()}*/}
+                            {/*> Close </Button>*/}
+                        {/*</FuseAnimate>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
             </Fragment>
         );
     }

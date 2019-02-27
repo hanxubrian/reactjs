@@ -744,6 +744,19 @@ class Franchisees extends Component {
         return null
     }
 
+    createFranchiseeForm = async() => {
+        if(this.props.franchiseesForm.type ==="new"){
+            await this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
+            await this.props.getFranchisees(this.props.regionId);
+            await this.initCloseState();
+        }
+        if(this.props.franchiseesForm.type ==="edit"){
+            await this.props.updateFranchisees(this.props.insertPayload._id , this.props.regionId, this.props.insertPayload);
+            await this.props.getFranchisees(this.props.regionId);
+            await this.initCloseState();
+        }
+    };
+
     render()
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
@@ -777,13 +790,6 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                            {/* <Fab
-                                                color="secondary"
-                                                aria-label="add"
-                                                className={classNames(classes.sideButton, "mr-12")}
-                                                onClick={showCreteFranchisees}>
-                                                <Icon>add</Icon>
-                                            </Fab> */}
                                             <Button variant="contained" color="primary"
                                                 className={classNames(classes.button, classes.btntop) }
                                                 onClick={showCreteFranchisees}>
@@ -798,15 +804,7 @@ class Franchisees extends Component {
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
-                                        
-                                    </div>
-                                    <div className="flex flex-shrink items-center">
-                                        {/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>
-                                            <Icon>close</Icon>
-                                        </IconButton> */}
-
                                         <IconButton
-                                            // className={classNames(classes.button, classes.validationMenu)}
                                             className={classNames(classes.button, classes.invalidationMenu)}
                                             aria-label="Add an alarm"
                                             aria-owns={anchorEl ? 'validation-menu' : undefined}
@@ -830,6 +828,37 @@ class Franchisees extends Component {
                                             <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Service Location Info" /></MenuItem>
                                             <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Verified &amp; Approved" /></MenuItem>
                                         </Menu>
+                                    </div>
+                                    <div className="flex flex-shrink items-center">
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                className={classNames(classes.button, "mr-12")}
+                                                onClick={() => {this.closeComposeForm();}}
+                                                disabled={!this.canBeSubmitted()}
+                                            > Discard </Button>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                className={classNames(classes.button, "mr-12")}
+                                                onClick={() => {this.createFranchiseeForm();}}
+                                                disabled={!this.canBeSubmitted()}
+                                            > Save </Button>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.button}
+                                                onClick={() => {
+                                                    this.closeComposeForm();
+                                                }}
+                                                disabled={!this.canBeSubmitted()}
+                                            > Close </Button>
+                                        </FuseAnimate>
                                     </div>
                                 </div>
                             </div>
