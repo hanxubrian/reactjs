@@ -1,6 +1,7 @@
 import _authService from './auth/authService';
 import _menuService from './menu/menuService';
 import _franchiseesService from './franchisees/franchiseesService';
+import _negativeDueService from './franchisees/negativeDueService';
 import _leaseService from './franchisees/leaseService';
 import _chargebackService from './franchisees/chargebackService';
 import _findersFeesService from './franchisees/findersFeesService';
@@ -13,7 +14,6 @@ import _paymentService from './payment/paymentService';
 import _dashboardService from './dashboard/dashboardService';
 import _verificationService from './activity/verificationService';
 import _printChecksService from './printchecks/printChecksService';
-// import _invoicePaymentService from './invoice/paymentsService'
 import _homepageService from './home/HomepageService';
 import _billrunService from './billrun/BillrunService';
 import _paymentlockboxservice from './paymentlockbox/paymentlockboxService';
@@ -31,7 +31,6 @@ export const chargebackService = _chargebackService;
 export const findersFeesService = _findersFeesService;
 export const initialService = _initialService;
 export const invoiceService = _invoiceService;
-// export const invoicePaymentsService = _invoicePaymentService;
 export const customersService = _customersService;
 export const chatService = _chatService;
 export const contactService = _contactService;
@@ -47,3 +46,4 @@ export const userService = _userService;
 export const adminImportNotificationService = _adminImportNotificationService;
 export const verificationService = _verificationService;
 export const printChecksService = _printChecksService;
+export const negativeDueService = _negativeDueService;

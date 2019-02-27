@@ -25,6 +25,7 @@ import SummaryPanel from './SummaryPanel';
 import FilterPanel from './FilterPanel';
 import NegativeDueHeader from './NegativeDueHeader';
 import NegativeDueSearchBar from './NegativeDueSearchBar';
+import NegativeDueAppList from './NegativeDueAppList';
 
 const hexToRgb = (hex) => {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -195,7 +196,7 @@ const styles = theme => ({
 class NegativeDueApp extends Component {
     constructor(props) {
         super(props);
-
+        props.getNegativeDueList(props.regionId,[1,2],"");
         this.state = {
         };
     }
@@ -210,7 +211,9 @@ class NegativeDueApp extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-
+        if(nextProps.negativeDueDB !== this.props.negativeDueDB){
+            console.log("*********************---",nextProps.negativeDueDB);
+        }
     }
 
 
@@ -249,6 +252,7 @@ class NegativeDueApp extends Component {
                            
                             <Fragment>
                               <NegativeDueSearchBar/>
+                              <NegativeDueAppList/>
                             </Fragment>
 
                         </div>
@@ -292,13 +296,15 @@ class NegativeDueApp extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleVerificationFilterPanel,
-        toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,        
+        toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
+        getNegativeDueList: Actions.getNegativeDueList        
     }, dispatch);
 }
 
-function mapStateToProps({verifications, auth, fuse, transactions}) {
+function mapStateToProps({negativeDue, auth}) {
     return {
-       
+        negativeDueDB: negativeDue.negativeDueDB,
+        regionId: auth.login.defaultRegionId       
     }
 }
 

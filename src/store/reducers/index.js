@@ -29,6 +29,7 @@ import paymentLog from './payment.log.reducer';
 import notification from './notification.reducer';
 import territories from './regions.territories.reducer';
 import franchiseeReportDatalist from './franchiseeReport.reducer';
+import negativeDue from './negativeDue.reducer';
 import admin from './admin.reducer';
 
 
@@ -73,6 +74,7 @@ const createReducer =
 				territories,
                 printChecks,
 				franchiseeReportDatalist,
+				negativeDue,
 				admin,
 				...asyncReducers
 			})
