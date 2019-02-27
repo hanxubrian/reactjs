@@ -974,31 +974,35 @@ class InvoiceForm extends Component {
                             </Grid>
                             <Grid item xs={12} sm={4} md={4} className="flex flex-row pl-16 pr-4">
                                 {this.state.periods!==null && (
-                                    <Select
-                                        classes={{
-                                            selectMenu: classNames(classes.inputMenu1),
-                                        }}
+                                    <TextField
+                                        select
+                                        label="Period"
                                         name="period"
                                         value={this.state.period}
                                         onChange={this.handleChange}
+                                        variant={"outlined"}
+                                        className={classes.textField}
                                         input={
                                             <OutlinedInput
                                                 labelWidth={this.state.labelWidth}
                                                 name="period"
                                                 id="period"
-                                                readOnly={this.props.invoiceForm.type==='edit'}
-                                            />
 
+                                            />
                                         }
-                                        className={classes.textField}
-                                        MenuProps = {{
-                                            classes:{paper: classes.dropdownMenu},
+                                        InputProps={{
+                                            readOnly: this.props.invoiceForm.type==='edit',
+                                            classes: {
+                                                input: classes.input1,
+                                            },
                                         }}
+                                        fullWidth
+                                        required
                                     >
                                         {this.state.periods.map((p, index)=>{
                                             return (<MenuItem key={index} value={p}>{p}</MenuItem>)
                                         })}
-                                    </Select>
+                                    </TextField>
                                 )}
                                 <TextField
                                     margin="none"
