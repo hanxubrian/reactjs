@@ -319,6 +319,13 @@ class BillRunDialog extends Component {
         const { showP} = this.state;
         let years = _.range(moment().year(), moment().year()+10);
 
+        let all_regions = this.props.all_regions;
+        let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+        let period = region[0].OpenPeriods.current;
+        let year = period.year;
+        let month = period.month-1;
+
         return (
             <div style={{
 
@@ -363,8 +370,8 @@ class BillRunDialog extends Component {
                                     }
                                     fullWidth
                                 >
-                                    {mL.map((month, index)=>{
-                                        return (<MenuItem disabled={this.state.year===moment().year() && index<moment().month()} key={index} value={index}>{month}</MenuItem>)
+                                    {mL.map((m, index)=>{
+                                        return (<MenuItem disabled={this.state.year===year && index<month} key={index} value={index}>{m}</MenuItem>)
                                     })}
                                 </TextField>
                             </Grid>
@@ -460,6 +467,7 @@ function mapStateToProps({invoices, auth,billruns})
         auth            : auth.login,
         billstatus      : billruns.billrunstatus,
         regionId: auth.login.defaultRegionId,
+        all_regions: auth.login.all_regions,
     }
 }
 
