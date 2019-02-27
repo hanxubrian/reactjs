@@ -709,7 +709,7 @@ class LeaseForm extends Component {
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <GridContainer className={classNames(classes.formControl)}>
-                                <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                                <GridItem xs={4} sm={4} md={4} className="flex flex-row">
                                     <Autosuggest
                                         {...autosuggestProps}
                                         inputProps={{
@@ -730,6 +730,33 @@ class LeaseForm extends Component {
                                             </Paper>
                                         )}
                                         ref={this.storeInputReference}
+                                    />
+                                </GridItem>
+                                <GridItem xs={2} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                    <TextField
+                                        margin="none"
+                                        label="Lease #"
+                                        placeholder="Lease #"
+                                        className={classes.textField}
+                                        InputProps={{
+                                            readOnly: bReadonly,
+                                            classes: {
+                                                input: bReadonly? classes.inputOrange: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        name="LeaseNo"
+                                        variant="outlined"
+                                        value={this.state.LeaseNo}
+                                        onChange={this.handleChange}
+                                        required
+                                        fullWidth
+                                        style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                            fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                        }}
                                     />
                                 </GridItem>
                                 <GridItem xs={12} sm={6} md={6} className="flex flex-row">
@@ -805,7 +832,7 @@ class LeaseForm extends Component {
                             </GridItem>
                             </div>
                             <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                {/* <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                     <TextField
                                         margin="none"
                                         label="Lease #"
@@ -831,8 +858,8 @@ class LeaseForm extends Component {
                                             fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
                                         }}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24 mt-6">
+                                </GridItem> */}
+                                <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col xs:mb-24 mt-6">
                                     <TextField
                                         margin="none"
                                         label="Date Signed"
@@ -855,8 +882,6 @@ class LeaseForm extends Component {
                                             classes: {outlined: classes.label}
                                         }}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                     <TextField
                                         margin="none"
                                         label="Payment Starts"
@@ -940,7 +965,7 @@ class LeaseForm extends Component {
                                     id="serialNo"
                                     name="serialNo"
                                     label="Serial No"
-                                    type="number"
+                                    // type="number"
                                     placeholder="Serial No"
                                     className={classes.textField}
                                     value={this.state.serialNo}
@@ -955,7 +980,7 @@ class LeaseForm extends Component {
                                         classes: {
                                             input: classes.input,
                                         },
-                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
                                     }}
                                     InputLabelProps = {{
                                         shrink: true,
@@ -1084,21 +1109,19 @@ class LeaseForm extends Component {
                                     <span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>
                                 </FuseAnimate>
                             </div>
-                            <div className="flex flex-1 flex-row justify-start pl-280">
+                            <div className="flex flex-1 flex-row justify-start pl-300">
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Button
                                         variant="contained"
                                         color="primary"
                                         className={classNames(classes.button, "mr-12")}
-                                        onClick={() => {
-                                            this.onSaveAndAddMore();
-                                        }}
+                                        onClick={()=>this.addNewLease()}
                                     >
                                         { this.props.leaseForm.type === 'new' && (
-                                            <span>Save & Add more</span>
+                                            <span>Save</span>
                                         )}
                                         { this.props.leaseForm.type === 'edit' && (
-                                            <span>Update & Add more</span>
+                                            <span>Update</span>
                                         )}
                                     </Button>
                                 </FuseAnimate>
@@ -1275,13 +1298,13 @@ class LeaseForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
-                    <Dialog
+                    {/* <Dialog
                         open={this.state.bAlertNewLease}
                         onClose={()=>this.handleCloseNewLease()}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
+                    > */}
+                        {/* <DialogTitle id="alert-dialog-title">
                             {this.props.leaseForm.type === 'new' && (
                                 <span>Create New Lease</span>
                             )}
@@ -1289,8 +1312,8 @@ class LeaseForm extends Component {
                                 <span>Update The Lease</span>
                             )}
 
-                        </DialogTitle>
-                        <DialogContent>
+                        </DialogTitle> */}
+                        {/* <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 {this.props.leaseForm.type === 'new' && (
                                     <span>Do you really want to insert the new lease?</span>
@@ -1299,8 +1322,9 @@ class LeaseForm extends Component {
                                     <span>Do you really want to update the lease?</span>
                                 )}
                             </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
+                        </DialogContent> */}
+
+                        {/* <DialogActions>
                             <Button onClick={()=>this.handleCloseNewLease()} color="primary">
                                 Close
                             </Button>
@@ -1308,8 +1332,8 @@ class LeaseForm extends Component {
                                 {this.props.leaseForm.type === 'new' && (<span>Create</span>)}
                                 {this.props.leaseForm.type === 'edit' && (<span>Update</span>)}
                             </Button>
-                        </DialogActions>
-                    </Dialog>
+                        </DialogActions> */}
+                    {/* </Dialog> */}
                     <Dialog
                         open={this.state.bFranchiseeNotFound}
                         onClose={()=>this.handleCloseNewFranchisee()}

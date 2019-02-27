@@ -85,7 +85,7 @@ class TransactionsSummary extends Component {
         const {classes, franchiseeReport} = this.props;
         return (
             <div className={classNames(classes.root,'p-16 flex flex-col flex-1 items-center')}>
-                <SummaryTransactons />
+                {/*<SummaryTransactons />*/}
                 <CustomerTransactions />
                 <CustomerAccountTotals />
                 <SupplyTransactons />

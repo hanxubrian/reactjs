@@ -6,7 +6,7 @@ import * as Actions from 'store/actions';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab, MenuItem, FormControlLabel
+    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, MenuItem, FormControlLabel
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -28,7 +28,6 @@ import GridContainer from "../../../../../Commons/Grid/GridContainer";
 import GridItem from "../../../../../Commons/Grid/GridItem";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-import _ from "lodash";
 
 
 function desc(a, b, orderBy) {
@@ -263,10 +262,7 @@ class FranchiseesMaintenanceTable extends React.Component {
           Deduct: true
         }
     };
-    constructor(props)
-    {
-        super(props);        
-    }
+    
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -290,26 +286,34 @@ class FranchiseesMaintenanceTable extends React.Component {
     }
     componentWillMount() {
 
-        if(this.props.franchiseeFees != null){
-            const feeList = this.props.franchiseeFees.FranchiseeFees;
-            const dialogForm = this.state.dialogForm;
+        if(this.props.insertPayload.Fees .length > 0){
+            const feeList = this.props.insertPayload.Fees;
             const insertPayload = this.props.insertPayload;
-
-            feeList.map(x=>{
-                dialogForm.push({
-                    FeeName: x.FranchiseeFeeList.Name,
-                    Amount: x.FranchiseeFeeList.Amount,
-                    Deduct:x.FranchiseeFeeList.IsActive
-                })
-            });
-
-            let tempDialogForm = insertPayload.Fees.concat(dialogForm);
-
+            //console.log("insertPayload",feeList);
             this.setState({
-                dialogForm: tempDialogForm,
+                dialogForm: feeList,
                 insertPayload: this.props.insertPayload,
             });
 
+        }else{
+            const feeList = this.props.franchiseeFees;
+            const insertPayload = this.props.insertPayload;
+            const dialogForm = this.state.dialogForm;
+
+            feeList.map(x=>{
+                dialogForm.push({
+                    FeeName: x.Name,
+                    Amount: x.Amount,
+                    Deduct:x.IsActive
+                })
+            });
+
+            this.props.insertPayload.Fees = dialogForm;
+
+            this.setState({
+                dialogForm: dialogForm,
+                insertPayload: this.props.insertPayload,
+            });
         }
     }
 

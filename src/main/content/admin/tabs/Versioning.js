@@ -91,9 +91,6 @@ class VersioningTab extends Component {
             this.props.adminversionupgradetrigger(data);
             // localStorage.clear();
         }
-
-
-
     }
     RegionHeader(){
         let region_name = '';

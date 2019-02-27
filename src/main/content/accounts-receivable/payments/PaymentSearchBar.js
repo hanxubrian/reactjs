@@ -8,7 +8,7 @@ import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
-import * as Actions from 'store/actions';
+import * as Actions from 'store/actions/account_receivable.payments.actions';
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

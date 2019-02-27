@@ -241,11 +241,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
         fileSize: [],
         view: []
     };
-    constructor(props)
-    {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-    }
+    
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -275,41 +271,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
 
     }
 
-    handleChange(selectorFiles,id)
-    {
-        let today = new Date();
-        let month = "";
-        let day = "";
-        if((today.getMonth()+1)<10){
-            month = '0'+(today.getMonth()+1)
-        }else{
-            month = (today.getMonth()+1)
-        }
-        if(today.getDate()<10){
-            day = '0'+(today.getDate())
-        }else{
-            day = (today.getDate())
-        }
-        let date = today.getFullYear()+'-'+month+'-'+day;
-        const list = this.props.documentsList;
-        list.map(x=>{
-            if(id === x.FileTypeListId){
-                x.UploadDocuments=selectorFiles;
-                x["documentDateTime"] = date;
-                x["documentFileSize"] = selectorFiles[0].size+" bytes";
-                return x;
-            }
-        });
-
-        const tempInsertPayload = this.props.insertPayload;
-        tempInsertPayload.Documents = list;
-        this.props.franchiseeUpdateInsertPayload(tempInsertPayload);
-        this.setState({
-            documentsList: null
-        });
-    }
-
-
+    
     render() {
         const { classes } = this.props;
         const { documentsList, order, orderBy, selected, rowsPerPage, page } = this.state;
@@ -328,16 +290,22 @@ class FranchiseesDocumentUploadTable extends React.Component {
                 label: 'Type'
             },
             {
+                id: 'signDate',
+                numeric: false,
+                disablePadding: false,
+                label: 'Sign Date'
+            },
+            {
+                id: 'sentVia',
+                numeric: false,
+                disablePadding: false,
+                label: 'Sent Via'
+            },
+            {
                 id: 'status',
                 numeric: false,
                 disablePadding: false,
                 label: 'Status'
-            },
-            {
-                id: 'browse',
-                numeric: false,
-                disablePadding: false,
-                label: 'Browse'
             },
             {
                 id: 'action',
@@ -365,29 +333,23 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((n,index) => {
                                             return (
-                                                <TableRow hover key={n.FileTypeListId} >
-                                                    <TableCell component="td" scope="row" >
-                                                        {n.Name}
+                                                <TableRow hover key={n.document_id} >
+                                                    <TableCell component="td" scope="row" style={{width:300}} >
+                                                        {n.name}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["Type"]}
+                                                        {n.type}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["Status"]}
+                                                        02/21/2019
                                                     </TableCell>
                                                     <TableCell>
-                                                        <TextField
-                                                            id={"value" + n.FileTypeListId}
-                                                            type="file"
-                                                            multiple
-                                                            onChange={ (e) => this.handleChange(e.target.files,n.FileTypeListId)}
-                                                            margin="dense"
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
+                                                        DocuSign
                                                     </TableCell>
                                                     <TableCell>
+                                                        {n.status}
+                                                    </TableCell>                                                    
+                                                    <TableCell style={{width: 250}}>
                                                         <IconButton
                                                             className={classNames(classes.summaryPanelButton, "mr-12")}
                                                             aria-label="view-icon"

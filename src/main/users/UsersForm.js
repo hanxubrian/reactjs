@@ -16,6 +16,13 @@ import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import MaskedInput from "react-text-mask";
+import * as PropTypes from "prop-types";
+
 // Auto Suggest
 import Autosuggest from 'react-autosuggest';
 import Paper from "@material-ui/core/Paper/Paper";
@@ -56,28 +63,54 @@ const styles = theme => ({
         left: 0,
         right: 0,
         maxHeight: 200,
+        width: '100%',
         height: 200,
-        width: 300,
         overflowY: 'scroll'
     },
     suggestion: {
         display: 'block',
+        width: '100%'
     },
     suggestionsList: {
         margin: 0,
         padding: 0,
         listStyleType: 'none',
+        width: '100%'
     },
     divider: {
         height: theme.spacing.unit * 2,
     },
+    autoSuggest: {
+        position: 'absolute',
+        zIndex: 20,
+    }
 
 });
 
-// Define suggestion Array()
-const suggestions = [];
-const franchiseeSuggestions = [];
 
+const TextMaskCustom = (props) => {
+    const { inputRef, ...other } = props;
+
+    return (
+        <MaskedInput
+            {...other}
+            ref={inputRef}
+            mask={['+',/[1-9]/,'(',/\d/,/\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+            placeholderChar={'\u2000'}
+            showMask
+        />
+    );
+};
+
+TextMaskCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+};
+
+// Define suggestion Array()
+let franchiseeSuggestions = [];
+let customerSuggestions = [];
+let suggestions = [];
+  
 
 // Define render input component function
 function renderInputComponent(inputProps) {
@@ -86,7 +119,6 @@ function renderInputComponent(inputProps) {
     return (
         <TextField
             fullWidth
-            variant="outlined"
             className={classes.textField}
             margin="dense"
             InputProps={{
@@ -106,106 +138,52 @@ function renderInputComponent(inputProps) {
     );
 }
 
-
-
-// renderSuggestion functions
-
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.customerName, query);
-    const parts = parse(suggestion.customerName, matches);
-
+    const matches = match(suggestion.label, query);
+    const parts = parse(suggestion.label, matches);
+  
     return (
-        <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) =>
-                        part.highlight ? (
-                            <span key={String(index)} style={{ fontWeight: 500 }}>
-              {part.text}
-            </span>
-                        ) : (
-                            <strong key={String(index)} style={{ fontWeight: 300 }}>
-                                {part.text}
-                            </strong>
-                        ),
-                )}
-            </div>
-        </MenuItem>
+      <MenuItem selected={isHighlighted} component="div">
+        <div>
+          {parts.map((part, index) =>
+            part.highlight ? (
+              <span key={String(index)} style={{ fontWeight: 500 }}>
+                {part.text}
+              </span>
+            ) : (
+              <strong key={String(index)} style={{ fontWeight: 300 }}>
+                {part.text}
+              </strong>
+            ),
+          )}
+        </div>
+      </MenuItem>
     );
-}
+  }
 
-function renderFranchiseeSuggestion(franchiseeSuggestions, { query, isHighlighted }) {
-    const matches = match(franchiseeSuggestions.franchiseeName, query);
-    const parts = parse(franchiseeSuggestions.franchiseeName, matches);
-
-    return (
-        <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) =>
-                        part.highlight ? (
-                            <span key={String(index)} style={{ fontWeight: 500 }}>
-              {part.text}
-            </span>
-                        ) : (
-                            <strong key={String(index)} style={{ fontWeight: 300 }}>
-                                {part.text}
-                            </strong>
-                        ),
-                )}
-            </div>
-        </MenuItem>
-    );
-}
-
-// getSuggestions
-
-function getSuggestions(value) {
+  function getSuggestions(value) {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
-
+  
     return inputLength === 0
-        ? []
-        : suggestions.filter(suggestion => {
-            const keep =
-                count < 5 && suggestion.customerName.slice(0, inputLength).toLowerCase() === inputValue;
-
-            if (keep) {
-                count += 1;
-            }
-
-            return keep;
+      ? []
+      : suggestions.filter(suggestion => {
+          const keep =
+            count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+  
+          if (keep) {
+            count += 1;
+          }
+  
+          return keep;
         });
-}
+  }
 
-function getFranchiseeSuggestions(value) {
-    const inputValue = deburr(value.trim()).toLowerCase();
-    const inputLength = inputValue.length;
-    let count = 0;
-
-    return inputLength === 0
-        ? []
-        : suggestions.filter(suggestion => {
-            const keep =
-                count < 5 && suggestion.franchiseeName.slice(0, inputLength).toLowerCase() === inputValue;
-
-            if (keep) {
-                count += 1;
-            }
-
-            return keep;
-        });
-}
-
-
-// getSuggestionValue
-
-function getSuggestionValue(suggestion) {
-    return suggestion.customerName;
-}
-
-function getFranchiseeSuggestionValue(franchiseeSuggestion) {
-    return franchiseeSuggestion.franchiseeName;
-}
+  function getSuggestionValue(suggestion) {
+    return suggestion.label;
+  }
+  
 
 let GroupList = [];
 let RoleList = [];
@@ -224,7 +202,7 @@ const MenuProps = {
 class UsersForm extends React.Component {
 
     constructor(props) {
-        super(props);
+        super(props);       
     }
 
     state = {
@@ -233,7 +211,7 @@ class UsersForm extends React.Component {
         Title : '',
         Email : '',
         DepartmentId: 'Department 1',
-        Phone : '',
+        Phone : '+1(  )    -    ',
         Address1: '',
         Address2: '',
         State: 'Alabama',
@@ -256,6 +234,7 @@ class UsersForm extends React.Component {
         StateList: [],
         UserPermission: [],
         DepartmentList: [],
+        showPassword: false,
         payload:{
             PasswordHash: "",
             IsFirstTimeLogin: "",
@@ -268,7 +247,7 @@ class UsersForm extends React.Component {
             FirstName: "",
             LastName: "",
             Email: "",
-            Phone: "",
+            Phone: "+1(  )    -    ",
             Address1: "",
             Address2: "",
             City: "",
@@ -300,12 +279,22 @@ class UsersForm extends React.Component {
         this.props.getUserFormUserTypeList();
         this.props.getUserStateList();
         this.props.getUserDepartmentList(this.props.regionId);
-        this.props.getFranchisees(this.props.regionId);
-        this.setState({
-            payload: this.props.payload
-        });
+        this.props.getFranchisees(this.props.regionId);        
         if(this.props.payload.UserId !== this.props.userId){
             this.updateUserFormPayload("UserId", this.props.userId);
+        }
+
+        if(this.props.bNewForm){
+            this.setState({ payload: this.props.payload} );
+        }
+
+        if(!this.props.bNewForm && this.props.userDetail.details !== null){
+            this.setState({ 
+                payload: {
+                  ...this.state.payload,
+                  ...this.props.userDetail.details
+                }
+            });
         }
     }
 
@@ -328,6 +317,20 @@ class UsersForm extends React.Component {
             });
 
             this.setState({Regions: regions});
+        }
+
+        if(!this.props.bNewForm && this.props.userGroupList.length>0 && (this.props.userGroupList!==prevProps.userGroupList) && (this.props.userDetail!==null && this.props.userDetail.details)){
+            GroupList = [];
+            this.props.userDetail.details.Groups.map(x=>{
+                this.props.userGroupList.map(y=>{
+                    if(y.group_id === x ){
+                        GroupList.push(y.name);
+                    }
+                });
+            });
+            this.setState({
+                Groups: GroupList
+            });
         }
     }
 
@@ -410,7 +413,7 @@ class UsersForm extends React.Component {
             if(nextProps.customers !== null){
                 nextProps.customers.Data.Regions.map(x=>{
                     x.CustomerList.map(y=>{
-                        suggestions.push({customerName: y.CustomerName});
+                        customerSuggestions.push({label: y.CustomerName});
                     });
                 });
             }
@@ -419,7 +422,7 @@ class UsersForm extends React.Component {
             if(nextProps.franchisees !== null){
                 nextProps.franchisees.Data.Region.map(x=>{
                     x.Franchisees.map(y=>{
-                        franchiseeSuggestions.push({franchiseeName: y.Name});
+                        franchiseeSuggestions.push({label: y.Name});
                     });
                 });
             }
@@ -435,7 +438,7 @@ class UsersForm extends React.Component {
 
         this.setState({[name]: event.target.value});
 
-        if(name === "Groups" || name === "Regions" || name ==="Roles"){
+        if(name === "Groups" || name === "Regions" || name ==="Roles" || name === "UserType"){
             if(name === "Groups"){
                 let changedGroups = [];
                 event.target.value.map(x=>{
@@ -480,6 +483,19 @@ class UsersForm extends React.Component {
                 })
                 this.updateUserFormPayload(name,changedRoles);
             }
+            if(name === "UserType") {
+                suggestions = [];
+                this.setState({
+                    UserTypeValue: ''
+                })
+                if(event.target.value === 'Franchisee'){
+                    suggestions = franchiseeSuggestions;
+                }
+                if(event.target.value === 'Customer'){
+                    suggestions = customerSuggestions;
+                }
+                this.updateUserFormPayload(name,event.target.value);
+            }
         }else{
             this.updateUserFormPayload(name,event.target.value);
         }
@@ -502,19 +518,21 @@ class UsersForm extends React.Component {
         this.setState({
             [name]: newValue,
         });
-        setTimeout(function() {
-            this.updateUserFormPayload(name,newValue);
-        }, 1500);
+        this.updateUserFormPayload(name,newValue);
     };
 
 
     updateUserFormPayload = (name,value) => {
 
-        let insertPayload = this.state.payload
+        let insertPayload = this.state.payload;
+        console.log("InsertPayload", insertPayload);
         insertPayload[name] = value;
         this.props.updateUserFormPayload(insertPayload);
     };
 
+    handleClickShowPassword = () => {
+        this.setState(state => ({ showPassword: !state.showPassword }));
+    };
 
     render()
     {
@@ -550,7 +568,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="firstName"
                                         label="First Name"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.FirstName}
                                         onChange={this.handleChange("FirstName")}
@@ -562,7 +579,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="lastName"
                                         label="Last Name"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.LastName}
                                         onChange={this.handleChange("LastName")}
@@ -574,7 +590,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="title"
                                         label="Title"
-                                        variant="outlined"
                                         value={this.state.Title}
                                         onChange={this.handleChange("Title")}
                                         className={classes.textField}
@@ -588,10 +603,12 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="phone"
                                         label="Phone"
-                                        variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.Phone}
-                                        onChange={this.handleChange("Phone")}
+                                        InputProps={{
+                                            inputComponent: TextMaskCustom,
+                                            value:this.state.Phone,
+                                            onChange:this.handleChange("Phone")
+                                        }}
                                         style={{marginRight:'1%'}}
                                         margin="dense"
                                         fullWidth
@@ -600,7 +617,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="email"
                                         label="E Mail"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.Email}
                                         onChange={this.handleChange("Email")}
@@ -613,7 +629,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="department"
                                         select
-                                        variant={"outlined"}
                                         className={classes.textField}
                                         style={{marginLeft:'1%'}}
                                         value={this.state.DepartmentId}
@@ -642,7 +657,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="address1"
                                         label="Address 1"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.Address1}
                                         onChange={this.handleChange("Address1")}
@@ -654,7 +668,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="address2"
                                         label="Address 2"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.Address2}
                                         onChange={this.handleChange("Address2")}
@@ -674,7 +687,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="city"
                                 label="City"
-                                variant="outlined"
                                 className={classes.textField}
                                 value={this.state.City}
                                 onChange={this.handleChange("City")}
@@ -686,7 +698,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="state"
                                 select
-                                variant={"outlined"}
                                 label={"State"}
                                 className={classes.textField}
                                 style={{marginRight:'1%', marginLeft: '1%'}}
@@ -711,7 +722,6 @@ class UsersForm extends React.Component {
                                 label="Zip"
                                 onChange={this.handleChange("Zipcode")}
                                 value={this.state.Zipcode}
-                                variant="outlined"
                                 inputProps={{
                                     maxLength:60
                                 }}
@@ -731,7 +741,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="userName"
                                 label="User Name"
-                                variant="outlined"
                                 className={classes.textField}
                                 value={this.state.UserName}
                                 onChange={this.handleChange("UserName")}
@@ -743,10 +752,22 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="PasswordHash"
                                 label="Password"
-                                variant="outlined"
+                                type={this.state.showPassword ? 'text' : 'password'}
                                 className={classes.textField}
                                 value={this.state.PasswordHash}
                                 onChange={this.handleChange("PasswordHash")}
+                                InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="Toggle password visibility"
+                                          onClick={this.handleClickShowPassword}
+                                        >
+                                          {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                }}
                                 style={{marginLeft: '1%'}}
                                 margin="dense"
                                 fullWidth
@@ -766,7 +787,6 @@ class UsersForm extends React.Component {
                                     value={this.state.Groups}
                                     className={classes.textField}
                                     onChange={this.handleChange('Groups')}
-                                    input={<OutlinedInput id="select-Groups" labelWidth={80}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -784,7 +804,6 @@ class UsersForm extends React.Component {
                                     value={this.state.Regions}
                                     className={classes.textField}
                                     onChange={this.handleChange('Regions')}
-                                    input={<OutlinedInput id="select-Regions" labelWidth={100}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -799,7 +818,6 @@ class UsersForm extends React.Component {
                                 id="DefaultRegionId"
                                 label={"Default Region"}
                                 select
-                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.DefaultRegionId}
                                 style={{marginLeft: "1%"}}
@@ -832,7 +850,6 @@ class UsersForm extends React.Component {
                                     value={this.state.Roles}
                                     className={classes.textField}
                                     onChange={this.handleChange('Roles')}
-                                    input={<OutlinedInput id="select-roles" labelWidth={80}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -849,12 +866,11 @@ class UsersForm extends React.Component {
                 <div className={classNames(classes.userFormSection,"w-full relative")}>
                     <h4>User Type</h4>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                        <GridItem xs={6} sm={6} md={6} >
                             <TextField
                                 id="UserType"
                                 label={"User Type"}
                                 select
-                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.UserType}
                                 style={{marginRight: "1%"}}
@@ -873,21 +889,88 @@ class UsersForm extends React.Component {
                                     </MenuItem>
                                 ))}
                             </TextField>
+                        </GridItem>
+                        <GridItem xs={6} sm={6} md={6}>
+                        {this.state.UserType === 'Franchisee' &&(
+                            <Autosuggest
+                                {...autosuggestProps}
+                                style={{marginLeft: "1%"}}
+                                inputProps={{
+                                    classes,
+                                    label: 'Franchisee Name',
+                                    placeholder: 'Franchisee Name',                                    
+                                    value: this.state.UserTypeValue,
+                                    onChange: this.handleAutoChange('UserTypeValue'),
+                                    inputRef: node => {
+                                      this.popperNode = node;
+                                    },
+                                    InputLabelProps: {
+                                       shrink: true,
+                                    },
+                                }}
+                                theme={{
+                                    suggestionsList: classes.suggestionsList,
+                                    suggestion: classes.suggestion,
+                                }}
+                                renderSuggestionsContainer={options => (                                   
+                                    <Paper
+                                        square
+                                        {...options.containerProps}
+                                        style={{ width: this.popperNode ? this.popperNode.clientWidth : null }}
+                                        className={classes.autoSuggest}
+                                    >
+                                        {options.children}
+                                    </Paper>                                   
+                                )}
+                            />
+                        )}
+                        {this.state.UserType === 'Customer' &&(
+                            <Autosuggest
+                                {...autosuggestProps}
+                                style={{marginLeft: "1%"}}
+                                inputProps={{
+                                    classes,
+                                    label: 'Customer Name',
+                                    placeholder: 'Customer Name',                                    
+                                    value: this.state.UserTypeValue,
+                                    onChange: this.handleAutoChange('UserTypeValue'),
+                                    inputRef: node => {
+                                      this.popperNode = node;
+                                    },
+                                    InputLabelProps: {
+                                       shrink: true,
+                                    },
+                                }}
+                                theme={{
+                                    suggestionsList: classes.suggestionsList,
+                                    suggestion: classes.suggestion,
+                                }}
+                                renderSuggestionsContainer={options => (                                   
+                                    <Paper
+                                        square
+                                        {...options.containerProps}
+                                        style={{ width: this.popperNode ? this.popperNode.clientWidth : null }}
+                                        className={classes.autoSuggest}
+                                    >
+                                        {options.children}
+                                    </Paper>                                   
+                                )}
+                            />
+                        )}
+                        {this.state.UserType !== 'Franchisee' && this.state.UserType !== 'Customer'&& (
                             <TextField
-                                id="UserTypeValue"
-                                label="Name"
-                                variant="outlined"
+                                id="UserName"
+                                label={"Name"}
                                 className={classes.textField}
                                 value={this.state.UserTypeValue}
-                                onChange={this.handleChange("UserTypeValue")}
-                                style={{marginLeft:'1%'}}
+                                style={{marginLeft: "1%"}}
+                                onChange={this.handleChange('UserTypeValue')}
                                 margin="dense"
                                 fullWidth
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-
+                            >
+                            </TextField>
+                        )}
+                            
                         </GridItem>
                     </GridContainer>
                 </div>

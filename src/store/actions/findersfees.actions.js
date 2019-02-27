@@ -38,7 +38,7 @@ const axios_instance = axios.create({
 });
 
 
-export function getFindersFees(year, month) {
+export function getFindersFees(RegionId, StatusId, SearchText) {
     return (dispatch) => {
 
         dispatch({
@@ -47,7 +47,7 @@ export function getFindersFees(year, month) {
         });
 
         (async () => {
-            let findersFeesList = await findersFeesService.getFindersFeeList(year, month);
+            let findersFeesList = await findersFeesService.getFindersFeeList(RegionId, StatusId, SearchText);
             dispatch({
                 type: GET_ALL_FINDERSFEES,
                 payload: findersFeesList

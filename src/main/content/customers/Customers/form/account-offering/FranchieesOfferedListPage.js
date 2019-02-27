@@ -398,8 +398,8 @@ class FranchieesOfferedListPage extends Component {
 				},
 				{
 					title: "Franchisees Name",
-					name: "Name",
-					columnName: "Name",
+					name: "FranchiseeName",
+					columnName: "FranchiseeName",
 					width: 220,
 				},
 				{
@@ -524,13 +524,13 @@ class FranchieesOfferedListPage extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.setRowsByRaw(nextProps.activeCustomer.Data)
+			this.setRowsByRaw(nextProps.activeCustomer)
 		}
 	}
 
-	setRowsByRaw = (raw = this.props.activeCustomer.Data) => {
+	setRowsByRaw = (activeCustomer = this.props.activeCustomer) => {
 		this.setState({
-			rows: this.props.activeCustomer.Data.AccountOfferings
+			rows: activeCustomer && activeCustomer.Data ? activeCustomer.Data.AccountOfferings : []
 		})
 	}
 

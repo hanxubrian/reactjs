@@ -399,6 +399,26 @@ class PaymentsListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
+					title: "Invoice Tax",
+					name: "InvoiceTax",
+					columnName: "InvoiceTax",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Invoice Total",
+					name: "InvoiceTotal",
+					columnName: "InvoiceTotal",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
 					title: "Invoice Balance",
 					name: "InvoiceBalance",
 					columnName: "InvoiceBalance",
@@ -408,16 +428,6 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				// {
-				// 	title: "OverPayment",
-				// 	name: "OverPayment",
-				// 	columnName: "OverPayment",
-				// 	align: 'right',
-				// 	width: 150,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
 				{
 					title: "Invoice Date",
 					name: "InvoiceDate",
@@ -503,6 +513,26 @@ class PaymentsListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
+					title: "Invoice Tax",
+					name: "InvoiceTax",
+					columnName: "InvoiceTax",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Invoice Total",
+					name: "InvoiceTotal",
+					columnName: "InvoiceTotal",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
 					title: "Invoice Balance",
 					name: "InvoiceBalance",
 					columnName: "InvoiceBalance",
@@ -512,16 +542,6 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				// {
-				// 	title: "OverPayment",
-				// 	name: "OverPayment",
-				// 	columnName: "OverPayment",
-				// 	align: 'right',
-				// 	width: 150,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
 				{
 					title: "Invoice Date",
 					name: "InvoiceDate",
@@ -566,7 +586,9 @@ class PaymentsListContent extends Component {
 			],
 			currencyColumns: [
 				'InvoiceAmount',
+				'InvoiceTax',
 				'InvoiceBalance',
+				'InvoiceTotal',
 				// 'OverPayment',
 			],
 			phoneNumberColumns: [
@@ -670,6 +692,8 @@ class PaymentsListContent extends Component {
 
 			invoiceDetail: this.props.invoiceDetail,
 		});
+
+		this.changeSearchValue(this.props.searchText)
 
 		this.timer = null;
 	}
@@ -949,7 +973,7 @@ class PaymentsListContent extends Component {
 				title: "Warning",
 				message: "Too many rows selected. Please try to reduce them.",
 			})
-		} else if (invoiceBalances.indexOf(0) > -1) {
+		} else if (paymentType !== 'Credit' && invoiceBalances.indexOf(0) > -1) {
 			this.props.showErrorDialog({
 				show: true,
 				title: "Warning",
@@ -1041,7 +1065,7 @@ class PaymentsListContent extends Component {
 
 	onClickGroupCellApplyOverpayment = (ev, groupTitle, overpayment) => {
 		ev.stopPropagation();
-		this.showPaymentFormModal(true, "CreditFromOverpayment", overpayment)
+		this.showPaymentFormModal(true, "Credit from Overpayment", overpayment)
 	}
 	onClickGroupCellApplyCredit = (ev, groupTitle) => {
 		ev.stopPropagation();
@@ -1177,7 +1201,7 @@ class PaymentsListContent extends Component {
 								<IntegratedGrouping />
 							}
 
-							<IntegratedPaging />
+
 
 							<SearchState
 								value={searchValue}
@@ -1189,7 +1213,7 @@ class PaymentsListContent extends Component {
 								columnExtensions={tableColumnExtensions}
 							/>
 							<IntegratedFiltering />
-
+							<IntegratedPaging />
 							<EditingState
 								columnExtensions={editingColumnExtensions}
 								onCommitChanges={this.commitChanges}

@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button, Snackbar, SnackbarContent, } from '@material-ui/core';
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
 
@@ -44,6 +43,15 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import CustomerSearchBar from './CustomerSearchBar';
+
+import green from "@material-ui/core/colors/green";
+import amber from "@material-ui/core/colors/amber";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
+import PropTypes from 'prop-types';
 
 const headerHeight = 80;
 
@@ -243,7 +251,79 @@ const styles = theme => ({
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
 // };
+//Snackbar
+const variantIcon = {
+	success: CheckCircleIcon,
+	warning: WarningIcon,
+	error: ErrorIcon,
+	info: InfoIcon,
+};
 
+const stylesSnackbar = theme => ({
+	success: {
+		backgroundColor: green[600],
+	},
+	error: {
+		backgroundColor: theme.palette.error.dark,
+	},
+	info: {
+		backgroundColor: theme.palette.primary.dark,
+	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	icon: {
+		fontSize: 20,
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing.unit,
+	},
+	message: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+});
+
+function MySnackbarContent(props) {
+	const { classes, className, message, onClose, variant, ...other } = props;
+	const Icon = variantIcon[variant];
+
+	return (
+		<SnackbarContent
+			className={classNames(classes[variant], className)}
+			aria-describedby="client-snackbar"
+			message={
+				<span id="client-snackbar" className={classes.message}>
+					<Icon className={classNames(classes.icon, classes.iconVariant)} />
+					{message}
+				</span>
+			}
+			action={[
+				<IconButton
+					key="close"
+					aria-label="Close"
+					color="inherit"
+					className={classes.close}
+					onClick={onClose}
+				>
+					<CloseIcon className={classes.icon} />
+				</IconButton>,
+			]}
+			{...other}
+		/>
+	);
+}
+
+MySnackbarContent.propTypes = {
+	classes: PropTypes.object.isRequired,
+	className: PropTypes.string,
+	message: PropTypes.node,
+	onClose: PropTypes.func,
+	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(stylesSnackbar)(MySnackbarContent);
 
 class Customers extends Component {
 	// state = {
@@ -269,7 +349,6 @@ class Customers extends Component {
 
 		this.state = {
 			s: '',
-			temp: [],
 			data: [],
 			// checkedPaid: true,
 			// checkedPP: true,
@@ -290,6 +369,13 @@ class Customers extends Component {
 			searchText: this.props.searchText,
 			// loading: false,
 			isSubmittingForApproval: false,
+
+			tryingToCloseWithoutOffering: false,
+			tryingToSubmitWithoutOffering: false,
+
+			openSnack: false,
+			snackIcon: 'success',
+			snackMessage: 'Updated Franchisee Revenue Distributions',
 		};
 		console.log("constructor, Customer.js")
 
@@ -306,7 +392,7 @@ class Customers extends Component {
 		}
 
 		this.props.getAccountTypeList();
-		this.props.getAccountExecutiveList();
+		this.props.getAccountExecutiveList(this.props.regionId);
 		this.props.getCustomerStatusList();
 		this.props.getAccountTypesGroups();
 	}
@@ -323,38 +409,74 @@ class Customers extends Component {
 	};
 
 	trySubmitForApproval = () => {
-		this.setState({
-			isSubmittingForApproval: true
-		})
+
+		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0 ||
+			this.props.franchieesesToOffer && this.props.franchieesesToOffer.length > 0) {
+			this.submitForApproval()
+		} else {
+			this.setState({
+				tryingToSubmitWithoutOffering: true
+			})
+		}
 
 	}
+	tryClose = () => {
+		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0 ||
+			this.props.franchieesesToOffer && this.props.franchieesesToOffer.length > 0) {
+			this.closeComposeForm()
+		} else {
+			this.setState({
+				tryingToCloseWithoutOffering: true
+			})
+		}
+	}
 
+	validation() {
+		if (!this.props.activeCustomer.Data.cus_name) {
+			return "Customer name is invalid"
+		}
+		if (!this.props.activeCustomer.Data.cus_addr) {
+			return "Customer address is invalid"
+		}
+		if (this.props.activeCustomer.Data.contract_lenght === 1 && this.props.activeCustomer.Data.cont_bill <= 0) {
+			return "Monthly contract amount is invalid"
+		}
+
+		return ""
+	}
 	submitForApproval = () => {
 		this.setState({
 			isSubmittingForApproval: false
 		})
 
-		let payload = {
-			CustomerId: "vaaa4v5432v34b235", agreeused: "sample string 5", arstatdate: "sample string 6", arstatus: "sample string 7", atrisk: "sample string 8", bill_addr: "sample string 9", bill_addr2: "sample string 10", bill_city: "sample string 11", bill_ext: "sample string 12", bill_fax: "sample string 13", bill_name: "sample string 14", bill_name2: "sample string 15", bill_phone: "sample string 16", bill_state: "sample string 17", bill_zip: "sample string 18", business: "sample string 19", callbdate: "sample string 20", canc_date: "sample string 21", candescr: "sample string 22", canentdat: "sample string 23", canreason: "sample string 24", claimstat: "sample string 25", class_type: "sample string 26", coll_rep: "sample string 27", company_no: "sample string 28", cleantimes: "sample string 29", cleanper: "sample string 30", cont_1: "sample string 31", cont_2: "sample string 32", cont_bill: "sample string 33", cont_tax: "sample string 34", cpiadj: "sample string 35", crteinv: "sample string 36", cs_rep: "sample string 37", cscallbdat: "sample string 38", cus_addr: "sample string 39", cus_addr2: "sample string 40", cus_city: "sample string 41", cus_county: "sample string 42", cus_ext: "sample string 43", cus_fax: "sample string 44", cus_name: "sample string 45", cus_name2: "sample string 46", cus_phone: "sample string 47", cus_state: "sample string 48", cus_zip: "sample string 49", CustomerNo: "sample string 50", date_offer: "sample string 51", date_sign: "2019-01-18T03:12:26.1440384-06:00", date_start: "2019-01-18T03:12:26.1440384-06:00", dlr_code: "sample string 54", Ebilling: "sample string 55", email1: "sample string 56", email2: "sample string 57", exp_date: "2019-01-18T03:12:26.1450367-06:00", firstdate: "2019-01-18T03:12:26.1450367-06:00", firstfran: "sample string 60", flag: "sample string 61", fri: "sample string 62", inv_msg: "sample string 63", masteracct: "sample string 64", misc_info: "sample string 65", misc_info2: "sample string 66", mon: "sample string 67", natacct: "sample string 68", notes: "sample string 69", ops_mgr: "sample string 70", parent: "sample string 71", po_1: "sample string 72", prntinv: "sample string 73", prntpd: "sample string 74", resume_d: "sample string 75", royalty: "sample string 76", sales_tax: "sample string 77", sat: "sample string 78", seconddate: "sample string 79", secondfran: "sample string 80", slsmn_no: "sample string 81", SquareFootage: "sample string 82", sun: "sample string 83", sys_cust: "sample string 84", tax_exempt: "sample string 85", tech_pct: "sample string 86", thu: "sample string 87", tue: "sample string 88", wed: "sample string 89", xregionid: "sample string 90", xsys_cust: "sample string 91",
-			Addresses: [
-				{ Type: "sample string 1", AttentionTo: "sample string 2", AddressLine1: "sample string 3", AddressLine2: "sample string 4", City: "sample string 5", State: "sample string 6", Zip: "sample string 7", Country: "sample string 8", Latitude: 9.1, Longitude: 10.1, IsServiceLocation: 11 },
-				{ Type: "sample string 1", AttentionTo: "sample string 2", AddressLine1: "sample string 3", AddressLine2: "sample string 4", City: "sample string 5", State: "sample string 6", Zip: "sample string 7", Country: "sample string 8", Latitude: 9.1, Longitude: 10.1, IsServiceLocation: 11 }
-			],
-			Contacts: [
-				{ FirstName: "sample string 1", LastName: "sample string 2", Phone: "sample string 3", MobilePhone: "sample string 4", Email: "sample string 5" },
-				{ FirstName: "sample string 1", LastName: "sample string 2", Phone: "sample string 3", MobilePhone: "sample string 4", Email: "sample string 5" }
-			],
-			Agreement: [
-				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" },
-				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" }
+		const valid = this.validation()
+		if (valid) {
+			this.setState({
+				openSnack: true,
+				snackMessage: valid,
+				snackIcon: 'error',
+
+				tryingToSubmitWithoutOffering: false,
+			})
+			return
+		}
+
+
+		let param = {
+			...this.props.activeCustomer.Data,
+			AssignedFranchisees: [
+				...this.props.franchieesesToOffer,
 			]
 		}
+
+
 		switch (this.props.customerForm.type) {
 			case "new":
-				this.props.createCustomer(this.props.regionId, payload)
+				this.props.createCustomer(this.props.regionId, param)
+				this.closeComposeForm()
 				break;
 			case "edit":
-				this.props.createCustomer(this.props.regionId, payload)
+				this.props.updateCustomer(this.props.regionId, param)
 				break;
 		}
 	}
@@ -401,7 +523,7 @@ class Customers extends Component {
 			this.props.getAccountTypeList();
 		}
 		if (this.props.accountExecutiveList === null) {
-			this.props.getAccountExecutiveList();
+			this.props.getAccountExecutiveList(this.props.regionId);
 		}
 		if (this.props.customerStatusList === null) {
 			this.props.getCustomerStatusList();
@@ -420,6 +542,33 @@ class Customers extends Component {
 		// 	this.getCustomersFromStatus(nextProps.customers);
 		// }
 		if (!_.isEqual(nextProps.filters, this.props.filters)) {
+			this.props.getCustomers(
+				nextProps.regionId,
+				nextProps.statusId,
+				nextProps.filters.StatusNames,
+				nextProps.filters.AccountTypeListName,
+				nextProps.location,
+				nextProps.latitude,
+				nextProps.longitude,
+				nextProps.searchText);
+		}
+
+		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false) {
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
+		}
+
+		if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
+			this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.flag &&
+			nextProps.activeCustomer.Data.flag !== this.props.activeCustomer.Data.flag) {
+			console.log('componentWillReceiveProps', nextProps.activeCustomer, this.props.activeCustomer.Data)
 			this.props.getCustomers(
 				nextProps.regionId,
 				nextProps.statusId,
@@ -518,7 +667,9 @@ class Customers extends Component {
 	}
 	handleCloseConfirmDialog = () => {
 		this.setState({
-			isSubmittingForApproval: false
+			isSubmittingForApproval: false,
+			tryingToSubmitWithoutOffering: false,
+			tryingToCloseWithoutOffering: false,
 		})
 	}
 	forceFetch = () => {
@@ -532,6 +683,29 @@ class Customers extends Component {
 			this.props.longitude,
 			this.props.searchText);
 	}
+	handleCloseSnackBar = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		this.setState({ openSnack: false });
+	};
+	/////////// confirm submit & close /////////////
+	handleStayForOffering = () => {
+		this.handleCloseConfirmDialog()
+		this.props.updateCustomersParameter('activeStep', 1);
+	}
+	processConfirming = () => {
+		if (this.state.tryingToSubmitWithoutOffering === true) {
+			this.submitForApproval()
+		}
+		if (this.state.tryingToCloseWithoutOffering === true) {
+			this.setState({
+				tryingToCloseWithoutOffering: false,
+			})
+			this.closeComposeForm()
+		}
+	}
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -539,7 +713,6 @@ class Customers extends Component {
 
 		const { selection, anchorEl, anchorContactMenu } = this.state;
 
-		console.log('render temp =', this.state.temp);
 		console.log('customerForm.props.open =', customerForm.props.open);
 
 		return (
@@ -555,7 +728,7 @@ class Customers extends Component {
 					}}
 					header={
 						<div className="flex w-full items-center">
-							{(this.state.temp && !customerForm.props.open) && (
+							{(!customerForm.props.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
@@ -569,12 +742,17 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<Tooltip title="Refresh">
-												<IconButton variant="contained" onClick={this.forceFetch}>
-													<Icon>refresh</Icon>
-												</IconButton>
-											</Tooltip>
-											<Tooltip title="Add new customer">
+											<Button variant="contained" color="primary" onClick={this.forceFetch}>
+												Refresh
+												<Icon className={classes.rightIcon}>refresh</Icon>
+											</Button>
+
+											<Button variant="contained" color="primary" onClick={openNewCustomerForm} className="ml-6">
+												New
+												<Icon className={classes.rightIcon}>add</Icon>
+											</Button>
+
+											{/* <Tooltip title="Add new customer">
 												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
 												</IconButton>
@@ -584,22 +762,22 @@ class Customers extends Component {
 											</IconButton>
 											<IconButton className={classes.button} aria-label="print" onClick={() => alert('ok')}>
 												<Icon>print</Icon>
-											</IconButton>
+											</IconButton> */}
 										</div>
 									</div>
 
 								</div>
 							)}
-							{(this.state.temp && customerForm.props.open) && (
+							{customerForm.props.open && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-									<div className="flex flex-row flex-1 justify-between">
+									<div className="flex flex-row flex-1 justify-between items-center">
 										{/* <div className="flex flex-shrink items-center">
 											<div className="flex items-center">
 
 											</div>
 										</div> */}
 										{/* <div className="flex flex-shrink" style={{ justifyContent: "space-between" }}> */}
-										<div className="flex">
+										<div className="flex items-center">
 											<IconButton
 												// className={classNames(classes.button, classes.validationMenu)}
 												className={classNames(classes.button, classes.invalidationMenu)}
@@ -626,7 +804,7 @@ class Customers extends Component {
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Service Location Info" /></MenuItem>
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Verified &amp; Approved" /></MenuItem>
 											</Menu>
-											<Tooltip title="Save">
+											{/* <Tooltip title="Save">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>save</Icon>
 												</IconButton>
@@ -635,10 +813,23 @@ class Customers extends Component {
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.trySubmitForApproval}>
 													<Icon>cloud_upload</Icon>
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 										</div>
-										<div className="flex">
-											<Tooltip title="Contact">
+										<div className="flex items-center">
+											{
+												customerForm.type === "edit" && <Button variant="contained" color="primary"
+													aria-label="Add an alarm"
+													aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
+													aria-haspopup="true"
+													onClick={this.showContactMenu}
+													className="mr-12"
+												>
+													Contact
+												<Icon className={classNames(classes.rightIcon, 'ml-6')}>sms</Icon>
+												</Button>
+											}
+
+											{/* <Tooltip title="Contact">
 												<IconButton
 													className={classNames(classes.button)}
 													aria-label="Add an alarm"
@@ -648,7 +839,7 @@ class Customers extends Component {
 												>
 													<Icon>sms</Icon>
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 											<Menu
 												id="title-bar-contact-menu"
 												anchorEl={anchorContactMenu}
@@ -660,13 +851,25 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
-											<Tooltip title="Discard">
+											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}
+												className="mr-12"
+											>
+												{customerForm.type === "edit" ? 'Update' : 'Save'}
+												<Icon className={classNames(classes.rightIcon, 'ml-6')}>save</Icon>
+											</Button>
+											<Button variant="contained" color="primary" onClick={this.closeComposeForm}
+												className="mr-12"
+											>
+												Discard
+												<Icon className={classNames(classes.rightIcon, 'ml-6')}>delete</Icon>
+											</Button>
+											{/* <Tooltip title="Discard">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>delete</Icon>
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 											<Tooltip title="Close">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.tryClose}>
 													<Icon>close</Icon>
 												</IconButton>
 											</Tooltip>
@@ -685,30 +888,50 @@ class Customers extends Component {
 							Confirm Dialog for submitting
 							 */}
 								<Dialog
-									open={this.state.isSubmittingForApproval}
+									open={this.state.tryingToCloseWithoutOffering || this.state.tryingToSubmitWithoutOffering}
 									onClose={this.handleCloseConfirmDialog}
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
 								>
-									<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
+									<DialogTitle id="alert-dialog-title">Warning</DialogTitle>
 									<DialogContent>
-										<DialogContentText id="alert-dialog-description">There are still some incompleted items. Are you sure to sumit anyway?</DialogContentText>
+										<DialogContentText id="alert-dialog-description">There are no franchisees assigned to this customer.
+If you save the customer now, you need to return and
+assign at least one franchisee.</DialogContentText>
 									</DialogContent>
-									<DialogActions>
-										<Button onClick={this.handleCloseConfirmDialog} color="primary">No</Button>
-										<Button onClick={this.submitForApproval} color="primary" autoFocus>Yes</Button>
+									<DialogActions className='flex justify-between'>
+										<Button onClick={this.handleStayForOffering} color="primary" autoFocus>Stay &amp; Assign a Franchisee</Button>
+										<div className='flex'>
+											<Button onClick={this.processConfirming} color="primary">Ignore</Button>
+											<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
+										</div>
 									</DialogActions>
 								</Dialog>
 
+								{customerForm.props.open && <CustomerForm />}
+								{!customerForm.props.open &&
+									<>
+										<CustomerSearchBar />
+										<CustomerListContent />
+									</>
+								}
 
+								<Snackbar
+									anchorOrigin={{
+										vertical: 'bottom',
+										horizontal: 'center',
+									}}
+									open={this.state.openSnack}
+									autoHideDuration={3000}
+									onClose={this.handleCloseSnackBar}
+								>
+									<MySnackbarContentWrapper
+										onClose={this.handleCloseSnackBar}
+										variant={this.state.snackIcon}
+										message={this.state.snackMessage}
+									/>
+								</Snackbar>
 
-								{this.state.temp && (
-									<Fragment>
-										{customerForm.props.open && <CustomerForm />}
-										{!customerForm.props.open && <CustomerSearchBar />}
-										{!customerForm.props.open && <CustomerListContent />}
-									</Fragment>
-								)}
 							</div>
 						</div>
 					}
@@ -766,6 +989,12 @@ class Customers extends Component {
 						<Typography variant="body2" color="primary">Fetching the customer data...</Typography>
 					</div>
 				)}
+				{(this.props.bFindersFeesStart) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Updating Finders Fee...</Typography>
+					</div>
+				)}
 				{/* {(this.props.isStartedFindersFeesFetching) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
@@ -798,6 +1027,8 @@ function mapDispatchToProps(dispatch) {
 		openEmailToCustomerDialog: Actions.openEmailToCustomerDialog,
 
 		createCustomer: Actions.createCustomer,
+		updateCustomer: Actions.updateCustomer,
+		updateCustomersParameter: Actions.updateCustomersParameter,
 	}, dispatch);
 }
 
@@ -819,19 +1050,14 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		location: customers.location,
 		searchText: customers.searchText,
 		bCustomerFetchStart: customers.bCustomerFetchStart,
-
-		// accountTypeList: customers.accountTypeList,
-		// accountExecutiveList: customers.accountExecutiveList,
-		// customerStatusList: customers.customerStatusList,
-
-		bCreateCustomerStart: customers.bCreateCustomerStart,
 		createCustomerResponse: customers.createCustomerResponse,
 		bCreateCustomerStart: customers.bCreateCustomerStart,
-
 		bGetCustomerStart: customers.bGetCustomerStart,
-
 		filters: customers.filters,
-		// isStartedFindersFeesFetching: customers.isStartedFindersFeesFetching,
+		activeCustomer: customers.activeCustomer,
+		bFindersFeesStart: customers.bFindersFeesStart,
+
+		franchieesesToOffer: customers.franchieesesToOffer,
 	}
 }
 

@@ -252,6 +252,8 @@ class Payments extends Component {
 		}
 		this.escFunction = this.escFunction.bind(this);
 		this.listenScrollEvent = this.listenScrollEvent.bind(this);
+
+		this.props.getPaymentTypes()
 	}
 
 
@@ -469,7 +471,7 @@ class Payments extends Component {
 		);
 	}
 
-	showPaymentFormModal = () => {
+	showPaymentFormModal = (paymentType = 'Check') => {
 		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
 		const payments = this.getRowData(this.props.payments)
 		const invoiceBalances = this.props.activePaymentRows.map(x => payments[x].InvoiceBalance)
@@ -480,7 +482,7 @@ class Payments extends Component {
 				title: "Warning",
 				message: "Too many rows selected. Please try to reduce them.",
 			})
-		} else if (invoiceBalances.indexOf(0) > -1) {
+		} else if (paymentType !== 'Credit' && invoiceBalances.indexOf(0) > -1) {
 			this.props.showErrorDialog({
 				show: true,
 				title: "Warning",
@@ -501,49 +503,49 @@ class Payments extends Component {
 		} else {
 			this.props.openPaymentDialog({
 				open: true,
-				paymentType: "Check",
+				paymentType: paymentType,
 				paymentAmount: 0,
 			})
 		}
 	}
 
-	showPaymentFormModalCredit = () => {
-		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
-		const payments = this.getRowData(this.props.payments)
-		const invoiceBalances = this.props.activePaymentRows.map(x => payments[x].InvoiceBalance)
+	// showPaymentFormModalCredit = () => {
+	// 	console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
+	// 	const payments = this.getRowData(this.props.payments)
+	// 	const invoiceBalances = this.props.activePaymentRows.map(x => payments[x].InvoiceBalance)
 
-		if (this.props.activePaymentRows.length > 100) {
-			this.props.showErrorDialog({
-				show: true,
-				title: "Warning",
-				message: "Too many rows selected. Please try to reduce them.",
-			})
-		} else if (invoiceBalances.indexOf(0) > -1) {
-			this.props.showErrorDialog({
-				show: true,
-				title: "Warning",
-				message: "A payment can't be applied to an invoice with 0 balance.",
-			})
-		} else if (this.props.activePaymentRows.length < 1) {
-			this.props.showErrorDialog({
-				show: true,
-				title: "Warning",
-				message: "Nothing selected for invoices. Please choose one at least.",
-			})
-		} else if (this.props.viewMode !== "Invoice") {
-			this.props.showErrorDialog({
-				show: true,
-				title: "Warning",
-				message: "Please try it in Invoice view mode..",
-			})
-		} else {
-			this.props.openPaymentDialog({
-				open: "Credit",
-				paymentType: "Credit",
-				paymentAmount: 0,
-			})
-		}
-	}
+	// 	if (this.props.activePaymentRows.length > 100) {
+	// 		this.props.showErrorDialog({
+	// 			show: true,
+	// 			title: "Warning",
+	// 			message: "Too many rows selected. Please try to reduce them.",
+	// 		})
+	// 	} else if (invoiceBalances.indexOf(0) > -1) {
+	// 		this.props.showErrorDialog({
+	// 			show: true,
+	// 			title: "Warning",
+	// 			message: "A payment can't be applied to an invoice with 0 balance.",
+	// 		})
+	// 	} else if (this.props.activePaymentRows.length < 1) {
+	// 		this.props.showErrorDialog({
+	// 			show: true,
+	// 			title: "Warning",
+	// 			message: "Nothing selected for invoices. Please choose one at least.",
+	// 		})
+	// 	} else if (this.props.viewMode !== "Invoice") {
+	// 		this.props.showErrorDialog({
+	// 			show: true,
+	// 			title: "Warning",
+	// 			message: "Please try it in Invoice view mode..",
+	// 		})
+	// 	} else {
+	// 		this.props.openPaymentDialog({
+	// 			open: "Credit",
+	// 			paymentType: "Credit",
+	// 			paymentAmount: 0,
+	// 		})
+	// 	}
+	// }
 	getRowData(payments) {
 		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
 			return [];
@@ -597,11 +599,11 @@ class Payments extends Component {
 													<Icon>refresh</Icon>
 												</IconButton>
 											</Tooltip>
-											<Button variant="contained" color="primary" onClick={this.showPaymentFormModal}>
+											<Button variant="contained" color="primary" onClick={() => this.showPaymentFormModal('Check')}>
 												Add Payment
 												<Icon className={classes.rightIcon}>attach_money</Icon>
 											</Button>
-											<Button variant="contained" color="primary" onClick={this.showPaymentFormModalCredit} className="ml-6">
+											<Button variant="contained" color="primary" onClick={() => this.showPaymentFormModal('Credit')} className="ml-6">
 												Add Credit
 												<Icon className={classes.rightIcon}>autorenew</Icon>
 											</Button>
@@ -706,7 +708,7 @@ class Payments extends Component {
 								</Dialog>
 
 								<PaymentFormModal />
-								<PaymentFormModalCredit />
+								{/* <PaymentFormModalCredit /> */}
 
 								<PaymentSearchBar />
 
@@ -794,6 +796,8 @@ function mapDispatchToProps(dispatch) {
 
 		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
 		getPaymentHistory: Actions.getPaymentHistory,
+
+		getPaymentTypes: Actions.getPaymentTypes,
 
 	}, dispatch);
 }

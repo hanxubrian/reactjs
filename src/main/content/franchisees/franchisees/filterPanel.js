@@ -151,10 +151,10 @@ class FilterPanel extends Component {
     constructor(props){
         super(props);
         if(!props.bLoadedFilterList) {
-            props.getStatusFilterList(this.props.regionId);
+           // props.getStatusFilterList(this.props.regionId);
             if(props.stateList.length === 0){
-                props.getFranchiseeStateList(this.props.regionId);
-            }            
+                props.getFranchiseeStateList();
+            }
         }
     }
     componentDidMount()
@@ -162,11 +162,12 @@ class FilterPanel extends Component {
     }
 
     componentWillMount(){
+        console.log('this.props.insertPayload=', this.props.insertPayload);
         this.setState({
            franchiseeStatus: this.props.franchiseeStatus,
            stateList: this.props.stateList,
-           AddressLine1: this.props.insertPayload.AddressLine1,
-           AddressLine2: this.props.insertPayload.AddressLine2,
+           AddressLine1: this.props.insertPayload.AddressLine1===null ? '': this.props.insertPayload.AddressLine1,
+           AddressLine2: this.props.insertPayload.AddressLine2===null ? '': this.props.insertPayload.AddressLine2,
            Name: this.props.insertPayload.Name,
            Phone1: this.props.insertPayload.Phone1,
            Phone2: this.props.insertPayload.Phone2,
@@ -177,8 +178,8 @@ class FilterPanel extends Component {
            Email: this.props.insertPayload.Email,
            Active: this.props.Active,
            InActive: this.props.InActive,
-        });      
-        
+        });
+
     }
 
     componentDidUpdate(prevProps, prevState, snapshot)
@@ -196,7 +197,7 @@ class FilterPanel extends Component {
         }
     }
 
-    
+
     componentWillReceiveProps(nextProps){
        if(nextProps.franchiseesForm.props.open === false){
            this.initialCloseState();
@@ -243,11 +244,11 @@ class FilterPanel extends Component {
     };
 
     handleFormChange = (name) => event => {
-        
+
         this.setState({
                 [name]: event.target.value,
         });
-       
+
         const iStatus = this.props.insertPayload;
         console.log('insertPayload = ',iStatus);
         iStatus[name] = event.target.value;
@@ -494,10 +495,10 @@ class FilterPanel extends Component {
                                                     id="lf_address2"
                                                     label="Address2"
                                                     className={classes.textField}
-                                                    value = {this.state.AddressLine2}
                                                     onChange={this.handleFormChange('AddressLine2')}
                                                     inputProps={{
-                                                        maxLength:100
+                                                        maxLength:100,
+                                                        value: this.state.AddressLine2 === null ? " " : this.state.AddressLine2
                                                     }}
                                                     margin="dense"
                                                     InputLabelProps={{
@@ -525,26 +526,28 @@ class FilterPanel extends Component {
                                                 />
                                             </GridItem>
                                             <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                                <TextField
-                                                    id="lf_state"
-                                                    label="State"
-                                                    select
-                                                    className={classes.textField}
-                                                    value={this.state.State}
-                                                    onChange={this.handleFormChange('State')}
-                                                    margin="dense"
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    required
-                                                    fullWidth
-                                                >
-                                                    {this.props.stateList.map(option => (
-                                                        <MenuItem key={option.Value} value={option.Value}>
-                                                            {option.Text}
-                                                        </MenuItem>
-                                                    ))}
-                                                </TextField>
+                                                {this.props.stateList!==undefined && this.props.stateList.length>0 && (
+                                                    <TextField
+                                                        id="lf_state"
+                                                        label="State"
+                                                        select
+                                                        className={classes.textField}
+                                                        value={this.state.State}
+                                                        onChange={this.handleFormChange('State')}
+                                                        margin="dense"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        required
+                                                        fullWidth
+                                                    >
+                                                        {this.props.stateList.map(option => (
+                                                            <MenuItem key={option.abbreviation} value={option.abbreviation}>
+                                                                {option.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </TextField>
+                                                )}
                                             </GridItem>
                                             <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
@@ -798,7 +801,7 @@ class FilterPanel extends Component {
                                         label="Non Renewed"
                                     />
                                 </FormControl>
-                               
+
                             </div>
                         )}
                     </div>
@@ -833,7 +836,7 @@ function mapStateToProps({franchisees, auth})
         franchiseeStatus: franchisees.franchiseeStatus,
         locationFilterValue: franchisees.locationFilterValue,
         insertPayload: franchisees.insertPayload,
-        stateList: franchisees.StateList,
+        stateList: franchisees.stateList,
     }
 }
 

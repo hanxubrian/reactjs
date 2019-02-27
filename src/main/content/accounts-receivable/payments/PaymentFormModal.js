@@ -400,6 +400,15 @@ class PaymentFormModal extends React.Component {
 				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
 				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
 			],
+			columnsForReactDataGridCredit: [
+				{ key: "InvoiceNo", name: "Invoice No", editable: false },
+				{ key: "DueDate", name: "Due Date", editable: false, formatter: DateFormatter },
+				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceTax", name: "Invoice Tax", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceTotal", name: "Invoice Total", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
+				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
+			],
 			rows: [],
 			currencyColumns: [
 				'InvoiceAmount', 'InvoiceBalance', 'PaymentAmount'
@@ -427,14 +436,16 @@ class PaymentFormModal extends React.Component {
 	componentWillMount() {
 		console.log("componentWillMount")
 		this.setRowData(this.props.payments)
-	}
-	componentDidMount() {
+
 		this.setState({
 			paymentDlgPayloads: this.props.paymentDlgPayloads,
 			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
-			PaymentType: this.props.paymentDlgPayloads.paymentType
+			PaymentType: this.props.paymentDlgPayloads.paymentType,
+
 		})
 
+	}
+	componentDidMount() {
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
@@ -497,11 +508,12 @@ class PaymentFormModal extends React.Component {
 				this.state.customerNumber,
 
 				this.state.PaymentType,
-				this.state.ReferenceNo,
+				this.props.paymentDlgPayloads.paymentType !== "Credit" ? this.state.ReferenceNo : 'REF_NO',
 				this.state.PaymentDate,
 				this.state.PaymentNote,
 				this.getOverpaymentAmount(this.state.rows),
 				this.state.PaymentAmount,
+				this.getTotalPaymentApplied(this.state.rows),
 
 				PayItems,
 
@@ -682,7 +694,7 @@ class PaymentFormModal extends React.Component {
 
 		if (name === "PaymentType" && !value || name !== "PaymentType" && !this.state.PaymentType) {
 			this.setState({ errorMsg: "Payment type not selected" })
-		} else if (name === "ReferenceNo" && value <= 0 || name !== "ReferenceNo" && this.state.ReferenceNo <= 0) {
+		} else if (name === "ReferenceNo" && !value || name !== "ReferenceNo" && !this.state.ReferenceNo.toString().trim()) {
 			this.setState({ errorMsg: "ReferenceNo is invalid" })
 		} else if (name === "PaymentDate" && !value || name !== "PaymentDate" && !this.state.PaymentDate) {
 			this.setState({ errorMsg: "Payment date not selected" })
@@ -728,7 +740,15 @@ class PaymentFormModal extends React.Component {
 		rows.forEach(x => {
 			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
 		})
-		return paymentAmount - totalPaymentAmount
+		return totalPaymentAmount - paymentAmount
+	}
+
+	getTotalPaymentApplied(rows = this.state.rows) {
+		let totalPaymentAmount = 0
+		rows.forEach(x => {
+			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+		})
+		return totalPaymentAmount
 	}
 
 	checkValidations(rows = this.state.rows, paymentAmount = this.state.paymentAmount) {
@@ -737,7 +757,7 @@ class PaymentFormModal extends React.Component {
 				errorMsg: "Payment type not selected",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
 			})
-		} else if (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim()) {
+		} else if (this.props.paymentDlgPayloads.paymentType !== 'Credit' && (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim())) {
 			this.setState({
 				errorMsg: "ReferenceNo is invalid",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
@@ -755,7 +775,7 @@ class PaymentFormModal extends React.Component {
 
 		} else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
 			this.setState({ errorMsg: "Neither of payments amount is settled" })
-		} else if (!this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
+		} else if (this.props.paymentDlgPayloads.paymentType !== 'Credit' && !this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
 			this.setState({ errorMsg: "One or more Payment Amounts is greater than Invoice Balance" })
 		} else if (!this.checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount)) {
 			this.setState({ errorMsg: "Sum of payments is greater than applied one." })
@@ -792,7 +812,7 @@ class PaymentFormModal extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid } = this.state;
+		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid, columnsForReactDataGridCredit } = this.state;
 		console.log("activeRows", rows)
 		return (
 			<div>
@@ -809,7 +829,7 @@ class PaymentFormModal extends React.Component {
 					<BlueDialogTitle id="form-dialog-title" onClose={this.handleClose}>
 						<h2 style={{ display: "flex", alignItems: "center", color: "white" }}>
 							<Icon>attach_money</Icon>
-							Payment
+							Payment ({this.props.paymentDlgPayloads.paymentType})
                             </h2>
 					</BlueDialogTitle>
 					<DialogContent>
@@ -841,46 +861,57 @@ class PaymentFormModal extends React.Component {
 									<TextField sm={3} select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
 										// style={{ width: "30%" }}
 										className={classNames(classes.textField, "pr-6")}
-										value={this.state.PaymentType}
+										value={this.state.PaymentType || ''}
 										onChange={this.handleChange('PaymentType')}
 										fullWidth
 										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0 && this.props.paymentDlgPayloads.paymentType === "CreditFromOverpayment"
+											readOnly: ["Credit", "Credit from Overpayment"].indexOf(this.props.paymentDlgPayloads.paymentType) > -1
 										}}
 									>
-										<MenuItem value={"Check"}>Check</MenuItem>
+										{
+											this.props.paymentTypes.map((x, index) =>
+												<MenuItem key={index} value={x.type_name}>{x.type_name}</MenuItem>
+											)
+										}
+										{/* <MenuItem value={"Check"}>Check</MenuItem>
 										<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
 										<MenuItem value={"EFT"}>EFT</MenuItem>
 										<MenuItem value={"Lockbox"}>Lockbox</MenuItem>
 										<MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
-										<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem>
+										<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem> */}
 
 									</TextField>
 
-									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
-										autoFocus
-										onChange={this.handleChange('ReferenceNo')}
-										value={this.state.ReferenceNo}
-										className={classNames(classes.textField, "pr-6")}
-										fullWidth
-									/>
+									{this.props.paymentDlgPayloads.paymentType !== "Credit" &&
+										<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+											autoFocus
+											onChange={this.handleChange('ReferenceNo')}
+											value={this.state.ReferenceNo || ''}
+											InputProps={{
+												readOnly: this.props.paymentDlgPayloads.paymentType === "Credit"
+											}}
+											className={classNames(classes.textField, "pr-6")}
+											fullWidth
+										/>
+									}
 
-									<TextField sm={1}
-										type="date"
-										id="PaymentDate"
-										label="Payment Date"
-										className={classNames(classes.textField, "pr-6")}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.PaymentDate}
-										onChange={this.handleChange('PaymentDate')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									// style={{ width: "20%", minWidth: "180px" }}
-									/>
-
+									{this.props.paymentDlgPayloads.paymentType !== "Credit" &&
+										<TextField sm={1}
+											type="date"
+											id="PaymentDate"
+											label="Payment Date"
+											className={classNames(classes.textField, "pr-6")}
+											InputLabelProps={{
+												shrink: true
+											}}
+											value={this.state.PaymentDate}
+											onChange={this.handleChange('PaymentDate')}
+											margin="dense"
+											variant="outlined"
+											fullWidth
+										// style={{ width: "20%", minWidth: "180px" }}
+										/>
+									}
 									<TextField
 										type="number"
 										InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
@@ -961,7 +992,7 @@ class PaymentFormModal extends React.Component {
 									</Grid> */}
 
 									<ReactDataGrid
-										columns={columnsForReactDataGrid}
+										columns={this.props.paymentDlgPayloads.paymentType === 'Credit' ? columnsForReactDataGridCredit : columnsForReactDataGrid}
 										rowGetter={i => rows[i]}
 										rowsCount={rows.length}
 										onGridRowsUpdated={this.onGridRowsUpdated}
@@ -969,7 +1000,7 @@ class PaymentFormModal extends React.Component {
 									/>
 
 								</Paper>
-								{this.state.overpayment > 0 &&
+								{(this.state.overpayment > 0 || this.state.overpayment < 0) &&
 									<span className="p-12" style={{ background: '#efad49', color: 'black', textAlign: 'right' }}><Icon fontSize={"small"} className="mr-4" style={{ verticalAlign: 'text-bottom' }}>error_outline</Icon><strong>Over Payment: $ {this.state.overpayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
 								}
 								{this.state.errorMsg &&
@@ -1007,6 +1038,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		searchText: accountReceivablePayments.searchText,
 
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		paymentTypes: accountReceivablePayments.paymentTypes,
 	}
 }
 

@@ -4,25 +4,22 @@ import { withStyles } from '@material-ui/core/styles';
 
 // third party
 
-import TextField from "@material-ui/core/TextField/TextField";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 import GridContainer from "../../../../../Commons/Grid/GridContainer";
-import GridItem from "../../../../../Commons/Grid/GridItem";
 import AssignmentTurnedIn from '@material-ui/icons/AssignmentTurnedIn'; 
 
 
-import Button from '@material-ui/core/Button';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
+import Button from '@material-ui/core/Button';
 import PDF from '../../../../../styles/document.pdf';
 
 const styles = theme => ({
@@ -87,9 +84,6 @@ class DocumentView extends React.Component {
         openDialog: false,
         file : PDF
     };
-    constructor (props){
-        super(props);
-    }
 
 
     componentDidMount() {
@@ -127,7 +121,6 @@ class DocumentView extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { pageNumber, numPages, file } = this.state;
 
         return (
             <div className={classes.root}>
@@ -150,6 +143,12 @@ class DocumentView extends React.Component {
                             <embed src={PDF} width="100%" height="800px" />
                             </GridContainer>
                         </DialogContent>
+                        <DialogActions style={{padding:"2%"}}>
+                            <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
+                                <SendIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                Send
+                            </Button>
+                        </DialogActions>
                 </Dialog>
             </div>
         );

@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import { bindActionCreators } from "redux";
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar} from '@material-ui/core';
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress} from '@material-ui/core';
 
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
@@ -215,7 +215,20 @@ const styles = theme => ({
 		'&:hover': {
 			backgroundColor: theme.palette.primary.dark,
 		}
-	}
+	},
+	overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
+	},
 });
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -223,13 +236,12 @@ const styles = theme => ({
 class FindersFees extends Component {
 	constructor(props) {
 		super(props);
-
-		if (!props.bLoadedFindersFees) {
-			props.getFindersFees(this.props.year, this.props.month);
-		}
+		// props.getFindersFees([this.props.regionId],[],"");
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
-
+		if (!props.bLoadedFindersFees) {
+			props.getFindersFees([this.props.regionId],[],"");
+		}
 		this.state = {
 			s: '',
 			temp: [],
@@ -241,7 +253,6 @@ class FindersFees extends Component {
 			selection: [],
 			selectAll: false,
             regionId: 0,
-
             year: 2018,
             month: 12,
 			current_lat: 0,
@@ -359,9 +370,9 @@ class FindersFees extends Component {
 		if (bChanged)
 			this.getFindersFeesFromStatus();
 
-		if (prevProps.findersFees === null && this.props.findersFees !== null) {
-			this.getFindersFeesFromStatus();
-		}
+		// if (prevProps.findersFees === null && this.props.findersFees !== null) {
+		// 	this.getFindersFeesFromStatus();
+		// }
 
 		if (prevState.s !== this.state.s) {
 			this.search(this.state.s);
@@ -374,9 +385,13 @@ class FindersFees extends Component {
 		this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
 		this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
 
-		this.getFindersFeesFromStatus()
+		// this.getFindersFeesFromStatus();
+		this.props.getFindersFees([this.props.regionId],[],"");
 
-
+		if(this.props.findersFees===null) {
+			this.props.getFindersFees([this.props.regionId],[],"");
+            // this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
+        }
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -388,22 +403,21 @@ class FindersFees extends Component {
 
 
 	getFindersFeesFromStatus = (rawData = this.props.findersFees) => {
-		// let temp = [];
         let all_temp = [];
-        let filteredValues = [];
-		// let temp1 = [];
-		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-		if (rawData === null) return;
-		let regions = rawData.Data.filter(x => x);
-        filteredValues = regions.filter(x => x.FF_TOT && x.FF_DWNAMT && x.FF_BALANCE && x.FF_PYAMT !== null)
-		all_temp = [...all_temp, ...filteredValues]
 
-		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Customers];
-		// 	return;
-		// });
+		if(rawData.Data.length > 0 && rawData !== null){
+		   rawData.Data.map(x=>{
 
+			  if(x.FinderFeeList !== null){
+				x.FinderFeeList.map(y=>{
+					all_temp.push(y);
+				})
+			  }
+		   });
+		}else{
+			return;
+		}
+		console.log("all_temp",all_temp);
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
 	};
@@ -413,6 +427,7 @@ class FindersFees extends Component {
 		this.getLocation();
 	}
 
+	
 	componentWillUnmount() {
 		document.removeEventListener("keydown", this.escFunction, false);
 	}
@@ -499,7 +514,6 @@ class FindersFees extends Component {
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
         const { selection } = this.state;
-
 
         console.log('props=', this.props);
         return (
@@ -651,9 +665,9 @@ class FindersFees extends Component {
 								</div>
 							</div>)}
 							{(this.state.temp && !findersFeesForm.props.open) && (!mapViewState) && (<FindersFeesListContent data={this.state.temp} />)}
-							{(this.state.temp && !findersFeesForm.props.open) && (
+							{/* {(this.state.temp && !findersFeesForm.props.open) && (
 								<FindersFeesForm findersFees={this.state.findersFees} selectedLease={this.state.selectedLease} />
-							)}
+							)} */}
 						</div>
 					}
 					leftSidebarHeader={
@@ -709,7 +723,12 @@ class FindersFees extends Component {
 					}}
 				>
 				</FusePageCustomSidebarScroll>
-				{/* <CustomerDialog customers={this.state.customers}/> */}
+				{(this.props.bFindersFeesFetchStart) && (
+                    <div className={classNames(classes.overlay, "flex-col")}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+						<Typography variant="body2" color="primary">Fetching finders fees info...</Typography>
+                    </div>
+                )}
 			</React.Fragment >
         );
     }
@@ -734,6 +753,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ findersFees, auth }) {
 	return {
 		findersFees: findersFees.findersFeesDB,
+		bFindersFeesFetchStart: findersFees.bFindersFeesFetchStart,
 		bLoadedFindersFees: findersFees.bLoadedFindersFees,
 		transactionStatus: findersFees.transactionStatus,
 		filterState: findersFees.bOpenedFilterPanel,

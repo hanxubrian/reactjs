@@ -8,6 +8,7 @@ import {Avatar, Button, Tab, Tabs, Typography} from '@material-ui/core';
 import TimelineTab from 'main/content/profile/tabs/TimelineTab';
 import PhotosVideosTab from 'main/content/profile/tabs/PhotosVideosTab';
 import AboutTab from 'main/content/profile/tabs/AboutTab';
+import FranchiseeAboutTab from 'main/content/profile/tabs/FranchiseeAboutTab';
 import SettingsPanel from "main/content/profile/tabs/SettingsPanel";
 
 
@@ -72,10 +73,10 @@ class FranchiseeProfilePage extends Component {
                             </FuseAnimate>
                         </div>
 
-                        <div className="flex items-center justify-end">
+                        {/* <div className="flex items-center justify-end">
                             <Button className="mr-8 mb-24 normal-case" variant="contained" color="secondary" aria-label="Follow">Follow</Button>
                             <Button className="mb-24 normal-case" variant="contained" color="primary" aria-label="Send Message">Send Message</Button>
-                        </div>
+                        </div> */}
                     </div>
                 }
                 contentToolbar={
@@ -94,7 +95,7 @@ class FranchiseeProfilePage extends Component {
                             classes={{
                                 root: classes.tabRoot
                             }} label="About"/>
-                        <Tab
+                        {/* <Tab
                             classes={{
                                 root: classes.tabRoot
                             }}
@@ -106,13 +107,13 @@ class FranchiseeProfilePage extends Component {
                         <Tab
                             classes={{
                                 root: classes.tabRoot
-                            }} label="Settings Panel"/>
+                            }} label="Settings Panel"/> */}
                     </Tabs>
                 }
                 content={
                     <div className="p-16 sm:p-24">
                         {value === 0 && (
-                            <AboutTab/>
+                            <FranchiseeAboutTab/>
                         )}
                         {value === 1 &&
                         (

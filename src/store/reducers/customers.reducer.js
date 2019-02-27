@@ -2,7 +2,124 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import _ from 'lodash'
 
+const CUSTOMER_CREATION_PAYLOAD = {
+	Data: {
+		"Latitude": 0.0,
+		"Longitude": 0.0,
+		"CPIBillingAppliedDate": "",
+		"lastModified": "",
+		"cleaning_start_time": "",
+		"cleaning_instructions": "",
+		"overpayment": 0.0,
+		"billing_term": 0,
+		"contract_lenght": 0,
+		"needs_distribution_update": false,
+		"last_action": "",
+		"ebill_email": "",
+		"billing_frequency": "",
+		"accounttype_groupid": "",
+		"account_typeid": "",
+		"website": "",
+		"susp_date": "",
+		"wkndTF": "",
+		"AssignedFranchisees": [],
+		"AccountOfferings": [],
+		"pmt_history": [],
+		"sys_cust": 0,
+		"company_no": "",
+		"dlr_code": "",
+		"cust_no": "",
+		"cus_name": "",
+		"cus_addr": "",
+		"cus_city": "",
+		"cus_county": "",
+		"cus_state": "",
+		"cus_zip": "",
+		"cus_phone": "",
+		"bill_name": "",
+		"bill_addr": "",
+		"bill_city": "",
+		"bill_state": "",
+		"bill_zip": "",
+		"bill_name2": "",
+		"bill_addr2": "",
+		"bill_phone": "",
+		"cus_name2": "",
+		"cus_addr2": "",
+		"class_type": "",
+		"royalty": 0.0,
+		"sales_tax": 0.0,
+		"cont_1": "",
+		"cont_2": "",
+		"cont_bill": 0.0,
+		"date_sign": "",
+		"flag": "A",
+		"misc_info": "",
+		"misc_info2": "",
+		"po_1": "",
+		"slsmn_no": "",
+		"add_on": "",
+		"cont_tax": "",
+		"exp_date": "",
+		"cleantimes": 0,
+		"cleanper": "",
+		"firstfran": "",
+		"firstdate": "",
+		"secondfran": "",
+		"seconddate": "",
+		"crteinv": "",
+		"prntpd": "",
+		"tax_exempt": "",
+		"canc_date": "",
+		"canreason": "",
+		"candescr": "",
+		"callbdate": "",
+		"cscallbdat": "",
+		"ops_mgr": "",
+		"cus_fax": "",
+		"bill_fax": "",
+		"cs_rep": "",
+		"date_start": "",
+		"date_offer": "",
+		"mon": "",
+		"tue": "",
+		"wed": "",
+		"thu": "",
+		"fri": "",
+		"sat": "",
+		"sun": "",
+		"email1": "",
+		"email2": "",
+		"ebill": "",
+		"prntinv": "",
+		"atrisk": "",
+		"canentdat": "",
+		"coll_rep": "",
+		"inv_msg": "",
+		"masteracct": "",
+		"parent": 0,
+		"xregionid": 0,
+		"xsys_cust": 0,
+		"cpiadj": "",
+		"resume_d": "",
+		"natacct": "",
+		"cus_ext": "",
+		"bill_ext": "",
+		"sqr_ft": 0,
+		"agreeused": "",
+		"arstatus": "Normal",
+		"arstatdate": "",
+		"notes": "4",
+		"claimstat": "",
+		"business": 0.0,
+		"add_pct": 0.0,
+		"ad_cur": 0.0,
+		"tech_pct": 0.0
+	}
+
+}
 const initialState = {
 	customersDB: null,
 	customersDocuments: null,
@@ -35,7 +152,7 @@ const initialState = {
 	accountTypeList: [],
 	accountExecutiveList: [],
 	customerStatusList: [],
-	accountTypesGroups: [],
+	accountTypesGroups: null,
 
 	bOpenEmailToCustomerDialog: false,
 
@@ -53,7 +170,7 @@ const initialState = {
 	customerFormFindersFeesDialogPayload: {
 		open: false,
 	},
-	// findersFees: [],
+	findersFees: [],
 	// isStartedFindersFeesFetching : false,
 
 	finderFeesConfigs: [],
@@ -66,6 +183,10 @@ const initialState = {
 	},
 
 	customerServiceForm: {
+		isOpenFilterPanel: false,
+		isOpenSummaryPanel: false,
+		open: false,
+
 		serviceList: {
 			data: [],
 			isFetching: false,
@@ -99,6 +220,7 @@ const initialState = {
 		franchiseeServiceTypes: [],
 	},
 	activeCustomer: {
+		Data: {}
 	},
 	flags: {
 		isCustomerServiceCreate: false,
@@ -108,9 +230,89 @@ const initialState = {
 		open: false,
 	},
 	franchieesesToOffer: [],
+	activeFranchisee: {
+
+	},
+	activeFindersFee: {
+		"_id": "",
+		"RegionId": 0,
+		"Status": "",
+		"company_no": "",
+		"dlr_code": "",
+		"cust_no": "",
+		"ff_seq": "",
+		"ff_desc": "",
+		"ff_amtfin": 0.0,
+		"ff_amtpaid": 0.0,
+		"ff_down": 0.0,
+		"ff_dwnamt": 0.0,
+		"ff_factor": 0.0,
+		"ff_interes": 0.0,
+		"ff_pyamt": 0.0,
+		"ff_pybill": 0,
+		"ff_pytotl": 0,
+		"ff_dwnpd": "",
+		"dwn_take": "",
+		"add_on": "",
+		"calc_fact": "",
+		"ff_start": 0,
+		"ff_year": 0,
+		"ff_tot": 0.0,
+		"ff_adjtot": 0.0,
+		"ffcredit": 0.0,
+		"ffduetot": 0.0,
+		"ffcont": 0.0,
+		"ff_balance": 0.0,
+		"ff_hold": "",
+		"fullbill": 0.0,
+		"ff_holdmon": 0,
+		"ff_holdyr": 0
+	},
+
 	increaseDecreaseContractModalForm: {
 		open: false,
 	},
+	cancelContractPage: {
+		open: false,
+	},
+	suspendContractPage: {
+		open: false,
+	},
+	NewAmount: '',
+	activeStep: 0,
+	serviceAgreementStep: 0,
+	increase_decrease: null,
+	findersFeeComputed: null,
+	findersFeeParams: {
+		"RegionId": 1,
+		"CalculationMethodCode": "",
+		"FranchiseeNum": "",
+		"CustomerNum": "",
+		"AmountPayableOn": 0.0,
+		"DownPaymentPercent": 0.0,
+		"DownPaymentAmount": 0.0,
+		"MonthlyPaymentPercent": 0.0,
+		"MonthlyPaymentAmount": 0.0,
+		"NumberOfPayments": 0,
+		"AmountFinanced": 0.0,
+		"FinderFeeTotal": 0.0,
+		"Balance": 0.0,
+		"MultiTenantOccupancy": 0.0
+	},
+	findersFeeTypes: null,
+	assignedFranchisees: null,
+	activeCustomerFranchisees: null,
+
+	loading: {
+		count: 0,
+		msg: ""
+	},
+
+	cancelReasons: [],
+	suspendReasons: [],
+
+	computedFinderFee: {},
+	finderFee: {},
 };
 
 
@@ -120,7 +322,9 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					customersDB: action.payload,
+					customersDB: action.payload.allCustomers,
+					cancelReasons: action.payload.cancelReasons,
+					suspendReasons: action.payload.suspendReasons,
 					bLoadedCustomers: true,
 					bCustomerFetchStart: false
 				};
@@ -130,6 +334,13 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					accountTypeList: action.payload
+				}
+			}
+		case Actions.UPDATE_CUSTOMERS_PARAMETERS:
+			{
+				return {
+					...state,
+					[action.payload.name]: action.payload.value
 				}
 			}
 		case Actions.GET_CUSTOMER_STATUS_LIST:
@@ -174,21 +385,6 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bCreateCustomerStart: true,
-				}
-			}
-		case Actions.GET_CUSTOMER:
-			{
-				return {
-					...state,
-					getCustomerResponse: action.payload,
-					bGetCustomerStart: false,
-				}
-			}
-		case Actions.GET_CUSTOMER_START:
-			{
-				return {
-					...state,
-					bGetCustomerStart: true,
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:
@@ -273,7 +469,9 @@ const customers = function (state = initialState, action) {
 						},
 						data: null
 					},
-					activeCustomerInfo: null,
+					activeCustomer: CUSTOMER_CREATION_PAYLOAD,
+					activeStep: 0,
+					franchieesesToOffer: [],
 				};
 			}
 		case Actions.CLOSE_NEW_CUSTOMER_FORM:
@@ -286,7 +484,8 @@ const customers = function (state = initialState, action) {
 							open: false
 						},
 						data: null
-					}
+					},
+					activeCustomer: null,
 				};
 			}
 		case Actions.OPEN_EDIT_CUSTOMER_FORM:
@@ -306,6 +505,75 @@ const customers = function (state = initialState, action) {
 						findersFeesConfig: action.payload.findersFeesConfig,
 					},
 					activeCustomer: action.payload.customer,
+					findersFees: action.payload.findersFees,
+					franchieesesToOffer: [],
+				};
+			}
+		case Actions.STOP_FINDERS_FEES:
+			{
+				return {
+					...state,
+					findersFees: action.payload,
+					bFindersFeesStart: false,
+				};
+			}
+		case Actions.STOP_FINDERS_FEES_START:
+			{
+				return {
+					...state,
+					bFindersFeesStart: true,
+				};
+			}
+		case Actions.UPDATE_CUSTOMER:
+			{
+				return {
+					...state,
+					activeCustomer: action.payload,
+				};
+			}
+		case Actions.OPEN_EDIT_CUSTOMER_SERVICE_FORM:
+			return {
+				...state,
+				customerServiceForm: {
+					...state.customerServiceForm,
+					open: true,
+					isOpenFilterPanel: true,
+					isOpenSummaryPanel: false,
+					activeCustomer: action.payload.customer,
+				},
+				bGetCustomerStart: false,
+			};
+		case Actions.CLOSE_CUSTOMER_SERVICE_FORM:
+			{
+				return {
+					...state,
+					customerServiceForm: {
+						...state.customerServiceForm,
+						open: false,
+						activeCustomer: null,
+					},
+				};
+			}
+		case Actions.GET_CUSTOMER_START:
+			{
+				return {
+					...state,
+					bGetCustomerStart: true,
+				}
+			}
+
+		case Actions.GET_CUSTOMER:
+			{
+				return {
+					...state,
+					bOpenedFilterPanel: true,
+					bOpenedSummaryPanel: false,
+					bGetCustomerStart: false,
+					customerForm: {
+						...state.customerForm,
+						data: action.payload,
+					},
+					activeCustomer: action.payload,
 				};
 			}
 		case Actions.CLOSE_EDIT_CUSTOMER_FORM:
@@ -318,7 +586,8 @@ const customers = function (state = initialState, action) {
 							open: false
 						},
 						data: null
-					}
+					},
+					activeCustomer: null,
 				};
 			}
 		case Actions.SET_FILTER_CUSTOMER_STATUSES:
@@ -595,6 +864,103 @@ const customers = function (state = initialState, action) {
 					open: action.payload,
 				}
 			};
+		case Actions.SHOW_CANCEL_CONTRACT_PAGE:
+			return {
+				...state,
+				cancelContractPage: {
+					...state.cancelContractPage,
+					open: action.payload,
+				}
+			};
+		case Actions.SHOW_SUSPEND_CONTRACT_PAGE:
+			return {
+				...state,
+				suspendContractPage: {
+					...state.suspendContractPage,
+					open: action.payload,
+				}
+			};
+		case Actions.GET_INCREASE_DECREASE:
+			return {
+				...state,
+				increase_decrease: action.payload
+			};
+		case Actions.GET_COMPUTED_FINDERS_FEE:
+			return {
+				...state,
+				findersFeeComputed: action.payload
+			};
+		case Actions.UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED:
+			return {
+				...state,
+				findersFeeParams: { ...state.findersFeeParams, ...action.payload }
+			};
+		case Actions.GET_FINDERS_FEE_TYPES:
+			return {
+				...state,
+				findersFeeTypes: action.payload
+			};
+		case Actions.UPDATE_ASSIGNED_FRANCHISEE:
+			return {
+				...state,
+				assignedFranchisees: action.payload
+			};
+		case Actions.UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES:
+			let data = _.cloneDeep(state.activeCustomer);
+			data.Data.AssignedFranchisees = action.payload;
+			return {
+				...state,
+				activeCustomer: data
+			};
+		case Actions.UPDATE_NEW_CUSTOMER_PARAM:
+			return {
+				...state,
+				activeCustomer: {
+					...state.activeCustomer,
+					Data: {
+						...state.activeCustomer.Data,
+						[action.payload.name]: action.payload.value
+					}
+				}
+			};
+		case Actions.SAVE_CANCEL_CONTRACT:
+			return {
+				...state,
+				activeCustomer: action.payload,
+				bGetCustomerStart: false,
+			};
+		case Actions.SAVE_SUSPEND_CONTRACT:
+			return {
+				...state,
+				activeCustomer: action.payload,
+				bGetCustomerStart: false,
+			};
+		case Actions.GET_COMPUTED_FINDER_FEE:
+			return {
+				...state,
+				computedFinderFee: {
+					...state.computedFinderFee,
+					[action.payload.FranchiseeNum]: action.payload
+				}
+			};
+		case Actions.GET_FINDER_FEE:
+			return {
+				...state,
+				finderFee: {
+					...state.finderFee,
+					[action.payload._id]: action.payload
+				}
+			};
+		case Actions.SET_ACTIVE_FINDERS_FEE:
+			return {
+				...state,
+				activeFindersFee: action.payload
+			};
+		case Actions.SET_ACTIVE_FRANCHISEE:
+			return {
+				...state,
+				activeFranchisee: action.payload
+			};
 		default:
 			{
 				return state;
@@ -605,6 +971,6 @@ const customers = function (state = initialState, action) {
 const persistConfig = {
 	key: 'customers',
 	storage: storage,
-	blacklist: ['customersDB']
+	blacklist: ['customersDB, activeCustomer']
 };
 export default persistReducer(persistConfig, customers);

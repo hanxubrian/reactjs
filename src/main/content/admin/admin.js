@@ -31,6 +31,8 @@ import VersionUpgrade from './VersionUpgrade';
 
 //tabs
 import VersioningTab from './tabs/Versioning';
+import VersioningGrid from './tabs/VersioningGrid';
+
 import VersionUpgradeDialog from './AdminDialog/VersionUpgradeDialog';
 
 // import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../../store/actions";
@@ -222,7 +224,7 @@ class Admin extends Component {
                                         <Icon className="text-32 mr-12">supervisor_account</Icon>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="h6" className="hidden sm:flex">Admin | {TabName[value]}</Typography>
+                                        <Typography variant="h6" className="hidden sm:flex">Admin</Typography>
                                     </FuseAnimate>
                                 </div>
                             </div>
@@ -265,15 +267,15 @@ class Admin extends Component {
                             classes={{
                                 root: classes.tabRoot
                             }}
-                            label="Account"/>
+                            label="Push Notifications"/>
                         <Tab
                             classes={{
                                 root: classes.tabRoot
-                            }} label="Photos & Videos"/>
+                            }} label="Legacy Data Import"/>
                         <Tab
                             classes={{
                                 root: classes.tabRoot
-                            }} label="Settings Panel"/>
+                            }} label="Regions"/>
                     </Tabs>
                     </div>
                 }
@@ -281,17 +283,17 @@ class Admin extends Component {
 
                     <div className="p-16 sm:p-24">
                         {value === 0 && (
-                            <VersioningTab/>
+                            <VersioningGrid/>
                         )}
                         {value === 1 &&
                         (
-                            <div>test</div>
+                            <div>Push</div>
                         )}
                         {value === 2 && (
-                            <div>Photos & Videos</div>
+                            <div>Legacy Data Import</div>
                         )}
                         {value === 3 && (
-                            <div>Settings Panel</div>
+                            <div>Regions</div>
                         )}
                     </div>
 

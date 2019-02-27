@@ -23,6 +23,7 @@ import classNames from 'classnames';
 //Child Components
 import TransactionListContent from './TransactionListContent';
 import InvoiceListContent from './InvoiceListContent';
+import CustomerListContent from './CustomerListContent';
 import VerifiedDialogForm from "./VerifiedDialogForm";
 import ReviseDialogForm from "./ReviseDialogForms";
 import RejectDialogForm from "./RejectDialogForm";
@@ -330,12 +331,19 @@ class VerificationsApp extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        <Button variant="contained" color="primary" disabled={(this.props.verifyOption==='transaction' && aTransactionSelections.length === 0) || (this.props.verifyOption!=='transaction' && this.props.aInvoiceSelections.length === 0)}
+                                        <Button variant="contained" color="primary"
+                                                disabled={(this.props.verifyOption==='transaction' && aTransactionSelections.length === 0) ||
+                                                (this.props.verifyOption==='invoice' && this.props.aInvoiceSelections.length === 0) ||
+                                                (this.props.verifyOption==='customer' && this.props.aCustomerSelections.length === 0)
+                                                }
                                                 className={classNames(classes.button, classes.btntop) } onClick={this.openVerificationDialog}>
                                             Verify
                                             <Icon className={classes.rightIcon}>verified_user</Icon>
                                         </Button>
-                                        <Button variant="contained" color="primary" disabled={(this.props.verifyOption==='transaction' && aTransactionSelections.length === 0) || (this.props.verifyOption!=='transaction' && this.props.aInvoiceSelections.length === 0)}
+                                        <Button variant="contained" color="primary"
+                                                disabled={(this.props.verifyOption==='transaction' && aTransactionSelections.length === 0) ||
+                                                (this.props.verifyOption==='invoice' && this.props.aInvoiceSelections.length === 0) ||
+                                                (this.props.verifyOption==='customer' && this.props.aCustomerSelections.length === 0)}
                                                 className={classNames(classes.button, classes.btntop)} onClick={this.openReviseDialog}>
                                             Request Changes
                                             <Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>
@@ -355,14 +363,9 @@ class VerificationsApp extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {this.state.temp && (
                                 <Fragment>
-                                    {this.state.verifyOption==='transaction' ? (
-                                            <TransactionListContent/>
-                                        ) :
-                                        (
-                                            <InvoiceListContent/>
-                                        )
-                                    }
-
+                                    {this.state.verifyOption==='transaction' && (<TransactionListContent/>)}
+                                    {this.state.verifyOption==='invoice' && (<InvoiceListContent/>)}
+                                    {this.state.verifyOption==='customer' && (<CustomerListContent/>)}
                                 </Fragment>
                             )}
                             <Fragment>
@@ -435,6 +438,7 @@ function mapStateToProps({verifications, auth, fuse, transactions}) {
         bVerificationFetchStart: verifications.bVerificationFetchStart,
         aTransactionSelections: verifications.aTransactionSelections,
         aInvoiceSelections: verifications.aInvoiceSelections,
+        aCustomerSelections: verifications.aCustomerSelections,
         regionId: auth.login.defaultRegionId,
         nav: fuse.navigation,
         transactionTypeList: transactions.transactionTypeList,

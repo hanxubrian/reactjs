@@ -260,12 +260,23 @@ class UsersApp extends Component {
     };
 
     save =  () => async (ev)=>{
-        if(this.props.newUserAvatar!==null)
-            await this.uploadAvatar();
 
-        await this.props.createUser(this.props.insertPayload);
-        await this.setState({"openUsersFormStatus": false});
-        await this.props.openUsersForm(false);
+        if(this.props.bNewForm){
+            if(this.props.newUserAvatar!==null)
+                await this.uploadAvatar();
+
+            await this.props.createUser(this.props.insertPayload);
+            await this.setState({"openUsersFormStatus": false});
+            await this.props.openUsersForm(false);
+        }else{
+            if(this.props.newUserAvatar!==null)
+                await this.uploadAvatar();
+
+            await this.props.updateUser(this.props.userId,this.props.insertPayload);
+            await this.setState({"openUsersFormStatus": false});
+            await this.props.openUsersForm(false);
+            await this.props.getUsersList(this.props.regionId,[],[],"");
+        }
     };
 
     render() {
@@ -297,8 +308,9 @@ class UsersApp extends Component {
                                                     Users</Typography>
                                             )}
                                             {this.props.openUsersFormStatus && (
-                                                <Typography variant="h6" className="hidden sm:flex">Settings |
-                                                    Add New User</Typography>
+                                                <Typography variant="h6" className="hidden sm:flex">Settings | 
+                                                  {!this.props.bNewForm &&(<span>&nbsp;Edit&nbsp;</span>)}
+                                                  {this.props.bNewForm &&(<span>&nbsp;Add New&nbsp;</span>)} User</Typography>
                                             )}
                                         </div>
                                     </div>
@@ -365,10 +377,12 @@ function mapDispatchToProps(dispatch)
         openUsersForm: Actions.openUsersForm,
         createUser: Actions.createUser,
         setNewUserAvatarURL: Actions.setNewUserAvatarURL,
+        updateUser: Actions.updateUser,
+        getUsersList: Actions.getUsersList
     }, dispatch);
 }
 
-function mapStateToProps({ usersApp,fuse})
+function mapStateToProps({ usersApp,fuse, auth})
 {
     return {
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
@@ -376,6 +390,9 @@ function mapStateToProps({ usersApp,fuse})
         nav: fuse.navigation,
         insertPayload: usersApp.users.payload,
         newUserAvatar: usersApp.users.newUserAvatar,
+        bNewForm: usersApp.users.bNewForm,
+        userId: auth.login.UserId,
+        regionId: auth.login.defaultRegionId
     }
 }
 

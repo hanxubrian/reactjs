@@ -255,7 +255,7 @@ const CurrencyTypeProvider = props => (
 // table cell phone number formatter
 //
 const PhoneNumberFormatter = ({ value }) => {
-	return value.replace(/(\d{3})(\d{3})(\d{4})/, '+1 ($1) $2 - $3')
+	return value ? value.replace(/(\d{3})(\d{3})(\d{4})/, '+1 ($1) $2 - $3') : ''
 };
 const PhoneNumberTypeProvider = props => (
 	<DataTypeProvider
@@ -266,7 +266,9 @@ const PhoneNumberTypeProvider = props => (
 //
 // table cell date formatter
 //
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
+const DateFormatter = ({ value }) => {
+	return value ? value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : ''
+};
 const DateTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={DateFormatter}
@@ -441,8 +443,6 @@ const MapWithAMarkerClusterer = compose(
 	withHandlers({
 		onMarkerClustererClick: () => (markerClusterer) => {
 			const clickedMarkers = markerClusterer.getMarkers()
-			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-			console.log(clickedMarkers)
 		},
 	}),
 	// lifecycle({
@@ -498,8 +498,6 @@ const MapWithAMarkerClusterer2 = compose(
 	withHandlers({
 		onMarkerClustererClick: () => (markerClusterer) => {
 			const clickedMarkers = markerClusterer.getMarkers()
-			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-			console.log(clickedMarkers)
 		},
 	}),
 	// lifecycle({
@@ -689,7 +687,7 @@ class CustomerListContent extends Component {
 				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 			],
 			sorting: [
-				{ columnName: 'CustomerNo', direction: 'asc' }
+				{ columnName: 'CustomerNo', direction: 'desc' }
 			],
 			editingColumnExtensions: [
 				// {
@@ -732,18 +730,13 @@ class CustomerListContent extends Component {
 		this.commitChanges = this.commitChanges.bind(this);
 		// this.changeCurrentPage = currentPage => this.setState({ currentPage });
 		// this.changePageSize = pageSize => this.setState({ pageSize });
-		this.changeSearchValue = value => this.setState({ searchValue: value });
+		// this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
-		console.log("constructor");
-
-
-
 	}
 	//
 	// to edit table cell
 	//
 	commitChanges({ added, changed, deleted }) {
-		console.log("commitChanges");
 		let { rows } = this.state;
 		if (added) {
 			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
@@ -766,8 +759,6 @@ class CustomerListContent extends Component {
 	}
 
 	onChange = (event, { newValue, method }) => {
-		console.log("onChange");
-
 		this.setState({
 			value: newValue.toString()
 		});
@@ -836,8 +827,6 @@ class CustomerListContent extends Component {
 	// };
 
 	shouldComponentUpdate(nextProps, nextState) {
-		console.log("shouldComponentUpdate", this.state !== nextState);
-
 		// return this.state !== nextState
 		// 	|| this.props.mapViewState !== nextProps.mapViewState
 		// 	|| this.props.customers !== nextProps.customers
@@ -849,17 +838,12 @@ class CustomerListContent extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// this.setState({ mapViewState: nextProps.mapViewState });
-		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
-
-
 		if (nextProps.customers !== this.props.customers) {
 			this.initRowsFromRawJson(nextProps.customers);
 		}
 
 		if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
 			this.setState({ locationFilterValue: nextProps.locationFilterValue })
-			console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.customers)
 			this.initRowsFromRawJson(this.props.customers, nextProps.locationFilterValue);
 		}
 
@@ -870,27 +854,20 @@ class CustomerListContent extends Component {
 
 
 		if (nextProps.searchText !== this.props.searchText) {
-			this.search(nextProps.searchText);
+			this.changeSearchValue(nextProps.searchText);
 		}
-	} // deprecate 
+	} // deprecate
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 		if (this.props.data !== prevProps.data) {
-			// this.setState({ data: this.props.data });
-			// this.setState({ rows: this.props.data });
-			// this.setState({ pins: this.props.pins })
-			// this.setState({ pins: this.props.pins })
-			// this.setState({ locationFilterValue: this.props.locationFilterValue })
 		}
-
-		// if (prevState.s !== this.state.s) {
-		// 	this.search(this.state.s);
-		// }
 	}
 
-	search(val) {
-		console.log("---------search---------", val);
+	changeSearchValue = value => {
+		this.setState({ searchValue: value })
+	};
+
+	search_old(val) {
 		val = val.toLowerCase();
 		if (val === '') {
 			this.setState({ rows: [...this.state.data] });
@@ -911,11 +888,9 @@ class CustomerListContent extends Component {
 	}
 
 	componentDidMount() {
-		console.log("componentDidMount");
 	}
 
 	componentWillMount() {
-		console.log("componentWillMount");
 		this.initRowsFromRawJson();
 
 		this.getLocation();
@@ -926,14 +901,10 @@ class CustomerListContent extends Component {
 		this.timer = null;
 	}
 	componentWillUnmount() {
-		console.log("componentWillUnmount");
 	}
 
 
 	handleChange = prop => event => {
-		console.log("handleChange");
-
-
 		this.setState({ [prop]: event.target.value });
 
 		// if (prop === 's') {
@@ -943,7 +914,6 @@ class CustomerListContent extends Component {
 	};
 
 	removeCustomers = () => {
-		console.log("removeCustomers");
 
 		if (this.state.selection.length === 0) {
 			alert("Please choose customer(s) to delete");
@@ -956,8 +926,6 @@ class CustomerListContent extends Component {
 	};
 
 	fetchData(state, instance) {
-		console.log("fetchData");
-
 		this.setState({
 			pageSize: state.pageSize,
 			page: state.page,
@@ -965,12 +933,9 @@ class CustomerListContent extends Component {
 	}
 
 	getLocation() {
-		console.log("getLocation");
-
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
-					console.log(position.coords);
 					this.setState({
 						current_lat: position.coords.latitude,
 						current_long: position.coords.longitude
@@ -1000,16 +965,12 @@ class CustomerListContent extends Component {
 	}
 
 	generateRows() {
-		console.log("generateRows");
-
-		console.log(this.props.data.slice(0, 15));
 		return this.props.data;
 	}
 
 
 
 	initRowsFromRawJson = (rawData = this.props.customers, locationFilterValue = this.props.locationFilterValue) => {
-		console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
 		let all_temp = [];
 		if (rawData === null || rawData === undefined || rawData.Data === undefined) return;
 
@@ -1017,8 +978,6 @@ class CustomerListContent extends Component {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;
 		});
 
-
-		console.log("regions", regions)
 
 		regions.forEach(x => {
 			all_temp = [...all_temp, ...x.CustomerList];
@@ -1048,7 +1007,6 @@ class CustomerListContent extends Component {
 
 	filterPins(pins, locationFilterValue) {
 		// this.setState({ gmapVisible: !this.state.gmapVisible });
-		console.log("-------filterPins---------", pins)
 		let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
 		let b = 12.5 - k / 5
 
@@ -1215,7 +1173,6 @@ class CustomerListContent extends Component {
 			clearTimeout(timer);
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
-			console.log(restProps);
 			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId, tableRow.row.CustomerNo);
 		}
 		return (
@@ -1266,7 +1223,6 @@ class CustomerListContent extends Component {
 			atRiskColumns,
 		} = this.state;
 
-		console.log("-------render-------", locationFilterValue, rows, pins, pins2)
 
 		return (
 			<Fragment>
@@ -1345,7 +1301,7 @@ class CustomerListContent extends Component {
 									/>
 									<IntegratedSorting />
 
-									<IntegratedPaging />
+
 
 									<SearchState
 										// defaultValue="Paris"
@@ -1358,6 +1314,8 @@ class CustomerListContent extends Component {
 										columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedFiltering />
+
+									<IntegratedPaging />
 
 									<EditingState
 										columnExtensions={editingColumnExtensions}

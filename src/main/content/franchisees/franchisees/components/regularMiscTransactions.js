@@ -198,10 +198,10 @@ class RegularMiscTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null))
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc===null))
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
 
             d.DESCR = FuseUtils.capital_letter(d.DESCR);

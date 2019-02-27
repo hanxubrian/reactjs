@@ -30,6 +30,7 @@ export function getallsystemnotification(RegionId) {
 
         (async () => {
             let res = await notificationService.getallsystemnotification(RegionId);
+            console.log("res===",res);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_ALL_SYSTEM_NOTIFICATION_SUCCESS,

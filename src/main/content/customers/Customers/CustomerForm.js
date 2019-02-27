@@ -4,10 +4,11 @@ import ReactDOM from 'react-dom';
 // core components
 import {
 	TextField, Button, MenuItem, Divider, FormControlLabel,
-	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment } from '@material-ui/core';
+	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment, SnackbarContent, Snackbar, IconButton, Icon,
+} from '@material-ui/core';
 
 // theme components
-import { FuseAnimate} from '@fuse';
+import { FuseAnimate } from '@fuse';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -29,9 +30,18 @@ import classNames from 'classnames';
 import CustomersDocumentUploadTable from "./documentUploadTable";
 
 import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
-import FinderFeePage from './form/finders-fees/FinderFeePage'
+import FinderFeePage from './form/finders-fees/NewFindersFeePage'
 import ServiceAgreementPage from './form/service-agreement/ServiceAgreementPage'
-import FranchiseeDistributionPage from './form/service-agreement/FranchiseeDistributionPage'
+import FranchiseeDistributionPage from './form/franchisee-distribution/FranchiseeDistributionPage'
+
+import green from "@material-ui/core/colors/green";
+import amber from "@material-ui/core/colors/amber";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
+import PropTypes from 'prop-types';
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -166,10 +176,6 @@ function escapeRegexCharacters(str) {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function getSteps() {
-	return ['Service Agreement', 'Franchisee Distribution', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
-}
-
 const Upload_Document_headers = [
 	{
 		id: 'documentName',
@@ -190,6 +196,91 @@ const Upload_Document_headers = [
 		label: 'Browse'
 	},
 ];
+
+//Snackbar
+const variantIcon = {
+	success: CheckCircleIcon,
+	warning: WarningIcon,
+	error: ErrorIcon,
+	info: InfoIcon,
+};
+
+const stylesSnackbar = theme => ({
+	success: {
+		backgroundColor: green[600],
+	},
+	error: {
+		backgroundColor: theme.palette.error.dark,
+	},
+	info: {
+		backgroundColor: theme.palette.primary.dark,
+	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	icon: {
+		fontSize: 20,
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing.unit,
+	},
+	message: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+});
+
+function MySnackbarContent(props) {
+	const { classes, className, message, message1, message2, message3, onClose, variant, ...other } = props;
+	const Icon = variantIcon[variant];
+
+	return (
+		<SnackbarContent
+			className={classNames(classes[variant], className)}
+			aria-describedby="client-snackbar"
+			message={
+				<span id="client-snackbar" className={classNames(classes.message)}>
+					<Icon className={classNames(classes.icon, classes.iconVariant)} />
+					<div className='flex flex-col flex-1'>
+						<div id="client-snackbar" className={classNames(classes.message)}>
+							<span><strong>{message}</strong></span>&nbsp;&nbsp;&nbsp;
+							<span><small>{message1}</small></span>
+						</div>
+						{message2 && <div id="client-snackbar" className={classes.message}>
+							{message2}
+						</div>}
+						{message3 && <div id="client-snackbar" className={classes.message}>
+							<small>{message3}</small>
+						</div>}
+					</div>
+				</span>
+			}
+			action={[
+				// <IconButton
+				// 	key="close"
+				// 	aria-label="Close"
+				// 	color="inherit"
+				// 	className={classes.close}
+				// 	onClick={onClose}
+				// >
+				// 	<CloseIcon className={classes.icon} />
+				// </IconButton>,
+			]}
+			{...other}
+		/>
+	);
+}
+
+MySnackbarContent.propTypes = {
+	classes: PropTypes.object.isRequired,
+	className: PropTypes.string,
+	message: PropTypes.node,
+	onClose: PropTypes.func,
+	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(stylesSnackbar)(MySnackbarContent);
 
 // const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class CustomerForm extends Component {
@@ -221,6 +312,13 @@ class CustomerForm extends Component {
 		account_offering_step: 0,
 
 	};
+	getSteps() {
+		// return ['Service Agreement', 'Franchisee Distribution', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
+		if (this.props.customerForm.type === "new") {
+			return ['Service Agreement', 'Account Offering'];
+		}
+		return ['Service Agreement', "Account Offering", 'Franchisee Distribution', "Walk-Thru", "Account History"];
+	}
 
 	//
 	// to edit table cell
@@ -249,8 +347,8 @@ class CustomerForm extends Component {
 	}
 
 	getStepContent(step) {
-		const { classes} = this.props;
-
+		const { classes } = this.props;
+		const steps = this.getSteps();
 		let execTitles = []
 		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
 			execTitles = this.props.accountExecutiveList.Data.filter(x => {
@@ -261,466 +359,16 @@ class CustomerForm extends Component {
 			}).sort();
 		}
 
-		switch (step + 1) {
-			case 1:
+		switch (steps[step]) {
+			case 'Service Agreement':
 				return (
 					<ServiceAgreementPage />
 				);
-				case 2:
+			case 'Franchisee Distribution':
 				return (
 					<FranchiseeDistributionPage />
 				);
-			case 3:
-				return (
-					<Fragment>
-						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
-								<div className="flex flex-col">
-									<TextField
-										type="date"
-										id="EffectiveDate"
-										label="Effective Date"
-										className={classNames(classes.textField)}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.EffectiveDate}
-										onChange={this.handleChange('EffectiveDate')}
-										margin="dense"
-										variant="outlined"
-										style={{ width: "20%", minWidth: "180px" }}
-
-									/>
-
-									<TextField
-										id="PONumer"
-										type="number"
-										label="PO Numer"
-										className={classes.textField}
-										value={this.state.PONumer}
-										onChange={this.handleChange('PONumer')}
-										margin="dense"
-										variant="outlined"
-										style={{ width: "20%", minWidth: "180px" }}
-									/>
-								</div>
-								<div className="flex flex-col justify-between">
-									<FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('weekdays')} />
-										}
-										label="Print Past Due"
-										className="mr-36"
-
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('weekdays')} />
-										}
-										label="Tax Exempt"
-										className="mr-36"
-
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('weekdays')} />
-										}
-										label="Consolidated Invoice"
-										className=""
-
-									/>
-								</div>
-
-							</GridItem>
-
-
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="InvoiceDate"
-									label="Invoice Date"
-									className={classNames(classes.textField, "mr-6")}
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.InvoiceDate === undefined ? "" : this.state.InvoiceDate}
-									onChange={this.handleChange('InvoiceDate')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{[{ value: 0, label: "BOM" },
-									{ value: 1, label: "EOM" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="BillingFrequency"
-									label="Billing Frequency"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
-									onChange={this.handleChange('BillingFrequency')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{[{ value: 0, label: "Monthly" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-							</GridItem>
-
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
-									<FormControlLabel
-										control={
-											<Switch
-												checked={this.state.checkedA}
-												onChange={this.handleChange('checkedA')}
-												value={this.state.checkedA}
-											/>
-										}
-										label="E-Billing"
-									// style={{ width: '40%' }}
-									/>
-
-									<TextField
-										type="email"
-										id="Email"
-										label="Email"
-										className={classes.textField}
-										value={this.state.Email}
-										onChange={this.handleChange('Email')}
-										margin="dense"
-										variant="outlined"
-										style={{ width: '60%' }}
-									/>
-								</div>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Term"
-									label="Term"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.Term === undefined ? "" : this.state.Term}
-									onChange={this.handleChange('Term')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								>
-									{[{ value: 0, label: "Due Upon Receipt" },
-									{ value: 1, label: "EOM" },
-									{ value: 2, label: "Net 30" },
-									{ value: 3, label: "Net 40" },
-									{ value: 4, label: "Net 45" },
-									{ value: 5, label: "Net 60" },].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="ARStatus"
-									label="AR Status"
-									select
-									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.ARStatus === undefined ? "" : this.state.ARStatus}
-									onChange={this.handleChange('ARStatus')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								>
-									{[{ value: 0, label: "Select" },
-									{ value: 1, label: "Bankruptcy" },
-									{ value: 2, label: "In Litigation" },
-									{ value: 3, label: "Normal" },
-									{ value: 4, label: "Referred to Collections" },
-									{ value: 5, label: "Slow Pay" },
-									{ value: 6, label: "Uncollectable" },
-									{ value: 7, label: "National Accoints" },
-									{ value: 8, label: "AutoPay" },
-									{ value: 9, label: "TEST" },].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Notes"
-									label="Notes"
-									multiline
-									rows="2"
-									rowsMax="2"
-									className={classes.textField}
-									value={this.state.Notes}
-									onChange={this.handleChange('Notes')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-							</GridItem>
-						</GridContainer>
-					</Fragment>
-				);
-			case 4:
-				// return 'Step 3: This is the bit I really care about!';
-				return (
-					<Fragment>
-						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="ServiceType"
-									label="Service Type *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classes.textField}
-									value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
-									onChange={this.handleChange('ServiceType')}
-									margin="dense"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-								>
-									{[{ value: 0, label: "Select" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="number"
-									inputProps={{ min: "0", max: "999999", step: "1" }}
-									id="SquareFootage"
-									label="Square Footage"
-									className={classes.textField}
-									value={this.state.SquareFootage}
-									onChange={this.handleChange('SquareFootage')}
-									margin="dense"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-								/>
-
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="time"
-									id="StartTime"
-									label="Start Time *"
-									className={classNames(classes.textField, "mr-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.StartTime}
-									onChange={this.handleChange('StartTime')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-								<TextField
-									type="time"
-									id="EndTime"
-									label="End Time *"
-									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.EndTime}
-									onChange={this.handleChange('EndTime')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="number"
-									id="Amount"
-									label="Amount *"
-									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.Amount}
-									onChange={this.handleChange('Amount')}
-									margin="dense"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-									InputProps={{
-										startAdornment: <InputAdornment position="start">$</InputAdornment>
-									}}
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="number"
-									id="CleanTimes"
-									label="Clean Times *"
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.CleanTimes}
-									onChange={this.handleChange('CleanTimes')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-
-								<TextField
-									select
-
-									id="CleanFrequency"
-									label="Clean Frequency *"
-									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.CleanFrequency === undefined ? "" : this.state.CleanFrequency}
-									onChange={this.handleChange('CleanFrequency')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								>
-									{[{ value: 0, label: "Monthly" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-start">
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Mon"
-									className="mr-36"
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Tue"
-									className="mr-36"
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Wed"
-									className="mr-36"
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Thu"
-									className="mr-36"
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Fri"
-									className="mr-36"
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Sat"
-									className="mr-36"
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Sun"
-									className="mr-36"
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Weekends"
-
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="CPI Increase"
-									style={{ marginRight: "30px" }}
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Separate Invoice"
-									style={{ marginRight: "30px" }}
-
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Description"
-									label="Description"
-									multiline
-									rows="2"
-									rowsMax="2"
-									className={classes.textField}
-									value={this.state.Description}
-									onChange={this.handleChange('Description')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-							</GridItem>
-						</GridContainer>
-
-					</Fragment>
-				);
-			case 5:
+			case 'Walk-Thru':
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -1031,11 +679,11 @@ class CustomerForm extends Component {
 
 					</Fragment>
 				);
-			case 6:
+			case 'Account Offering':
 				const { account_offering_step } = this.state
 
 				return (<AccountOfferingPage step={account_offering_step} />)
-			case 7:
+			case 'Documents':
 				return (
 					<Fragment>
 						<div style={{ marginTop: '30px' }}></div>
@@ -1044,11 +692,11 @@ class CustomerForm extends Component {
 						</div>
 					</Fragment>
 				)
-			case 8:
+			case 'Marketing':
 				return (<Fragment></Fragment>)
-			case 9:
+			case 'Account History':
 				return (<Fragment></Fragment>)
-			case 10:
+			case 'Finders Fees':
 				return (<FinderFeePage />)
 			default:
 				return 'Unknown step';
@@ -1094,14 +742,18 @@ class CustomerForm extends Component {
 	constructor(props) {
 		super(props);
 		if (!props.documents) {
-			props.getDocuments();
+			// props.getDocuments();
 		}
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
+		if (props.findersFeeTypes === null)
+			props.getFinderFeeTypes();
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (this.props.activeStep !== prevProps.activeStep)
+			this.setState({ activeStep: this.props.activeStep });
 	}
 
 	componentWillMount() {
@@ -1110,14 +762,16 @@ class CustomerForm extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer.Data)
+			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 	}
 
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		this.setState({
-			SA_Amount: activeCustomerInfo ? activeCustomerInfo.cont_bill : "",
-		})
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
+		if (activeCustomerInfo && activeCustomerInfo.Data) {
+			this.setState({
+				SA_Amount: activeCustomerInfo.Data.cont_bill,
+			})
+		}
 	};
 
 	componentDidMount() {
@@ -1152,7 +806,7 @@ class CustomerForm extends Component {
 
 	//////////////////////
 	totalSteps = () => {
-		return getSteps().length;
+		return this.getSteps().length;
 	};
 
 	handleNext = () => {
@@ -1161,7 +815,7 @@ class CustomerForm extends Component {
 		if (this.isLastStep() && !this.allStepsCompleted()) {
 			// It's the last step, but not all steps have been completed
 			// find the first step that has been completed
-			const steps = getSteps();
+			const steps = this.getSteps();
 			activeStep = steps.findIndex((step, i) => !this.state.completed.has(i));
 		}
 		else {
@@ -1198,14 +852,49 @@ class CustomerForm extends Component {
 
 	handleTab = (event, activeStep) => {
 		this.setState({ activeStep });
+		this.props.updateCustomersParameter('activeStep', activeStep);
 	};
 	//////////////////////
 	render() {
-		const { classes} = this.props;
-		const steps = getSteps();
-		const { activeStep} = this.state;
+		const { classes } = this.props;
+		const steps = this.getSteps();
+		const { activeStep } = this.state;
+
+		let customerStatusMsg = "", customerStatus = "", customerStatusMsg1 = '', customerStatusMsg2 = '', customerStatusMsg3 = ''
 
 
+		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
+			switch (this.props.activeCustomer.Data.flag) {
+				case "A":
+					customerStatus = "success"
+					customerStatusMsg = "Active Customer"
+					break
+				case "S":
+					customerStatus = "warning"
+					customerStatusMsg = `Suspended: `
+					customerStatusMsg1 = this.props.activeCustomer.Data.susp_date
+
+					const suspend_id = this.props.activeCustomer.Data.susp_reason_id
+					const suspend_reason = this.props.suspendReasons.Data.find(x => x.ReasonNumber === parseInt('0' + suspend_id))
+					customerStatusMsg2 = suspend_reason ? suspend_reason.name : `UNKNOWN (${suspend_id})`
+					break
+				case "C":
+					customerStatus = "error"
+					customerStatusMsg = `Canceled: `
+					customerStatusMsg1 = this.props.activeCustomer.Data.canc_date
+
+					const cancel_id = this.props.activeCustomer.Data.canreason
+					const cancel_reason = this.props.cancelReasons.Data.find(x => x.ReasonNumber === parseInt('0' + cancel_id))
+					customerStatusMsg2 = cancel_reason ? cancel_reason.name : `UNKNOWN (${cancel_id})`
+
+					customerStatusMsg3 = `${this.props.activeCustomer.Data.candescr}`
+					break
+				default:
+					customerStatus = "info"
+					customerStatusMsg = `${this.props.activeCustomer.Data.flag} - Unknown Status`
+					break
+			}
+		}
 
 		return (
 			<Fragment>
@@ -1230,19 +919,32 @@ class CustomerForm extends Component {
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						// height: 'calc(100% - 110px)'
 						height: 'calc(100% - 50px)'
-						// flex: '1 1 auto'
 					}}
 				>
+					<div className="flex w-full justify-between align-items">
+						<h2 style={{ alignSelf: 'center' }} >{activeStep === 1 ? 'Franchisee Revenue Distribution' : steps[activeStep]}</h2>
+						<div className="flex align-items">
 
-					<h2>{steps[activeStep]}</h2>
+							{this.props.customerForm.type === 'edit' && (this.props.activeCustomer && this.props.activeCustomer.Data) &&
+								<MySnackbarContentWrapper
+									variant={customerStatus}
+									className={classes.margin}
+									message={customerStatusMsg}
+									message1={customerStatusMsg1}
+									message2={customerStatusMsg2}
+									message3={customerStatusMsg3}
+								/>
+							}
+						</div>
+					</div>
 
-					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
+
+
+					<Divider variant="middle" style={{ marginTop: 12, marginBottom: 12 }} />
 
 					{this.getStepContent(activeStep)}
 				</div>
-
 			</Fragment>
 		);
 	}
@@ -1256,6 +958,8 @@ function mapDispatchToProps(dispatch) {
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 		getDocuments: Actions.getDocuments,
+		updateCustomersParameter: Actions.updateCustomersParameter,
+		getFinderFeeTypes: Actions.getFinderFeeTypes,
 	}, dispatch);
 }
 
@@ -1275,6 +979,12 @@ function mapStateToProps({ customers, franchisees, auth }) {
 
 		accountExecutiveList: customers.accountExecutiveList,
 		activeCustomer: customers.activeCustomer,
+		activeStep: customers.activeStep,
+		findersFeeTypes: customers.findersFeeTypes,
+
+		cancelReasons: customers.cancelReasons,
+		suspendReasons: customers.suspendReasons,
+
 	}
 }
 

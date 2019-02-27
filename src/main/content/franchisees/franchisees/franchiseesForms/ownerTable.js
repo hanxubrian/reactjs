@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab, MenuItem, FormControlLabel
+    Table, TableBody, TableCell, TableHead, TableRow,
+    Toolbar, Typography,  Icon, IconButton, Tooltip,
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -39,7 +39,6 @@ import * as Actions from 'store/actions';
 
 
 
-let counter = 0;
 
 const TextMaskCustom = (props) => {
     const { inputRef, ...other } = props;
@@ -86,7 +85,7 @@ function getSorting(order, orderBy) {
 
 class CustomerLineTableHead extends React.Component {
 	render() {
-		const { order, orderBy, headers } = this.props;
+		const { headers } = this.props;
 		let rows = headers;
 
 		return (
@@ -257,9 +256,7 @@ class FranchiseesOwnerTable extends React.Component {
 			Title: ""
 		}
 	};
-    constructor (props){
-        super(props);
-    }
+
 
 
 	componentDidMount() {

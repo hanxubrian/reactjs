@@ -73,6 +73,9 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
+        '& tbody tr td:first-child': {
+            paddingLeft: '0!important'
+        },
         '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
@@ -141,7 +144,7 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
             </Table.Cell>
         );
     }
-    else if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
+    else if(restProps.column.name==='Amount' || restProps.column.name==='Tax'|| restProps.column.name==='Total'){
         return (
             <Table.Cell
                 {...restProps}
@@ -205,44 +208,44 @@ class CustomerTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS===null))
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerTrx===null))
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS.map(d=>{
-            d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
-            d.TRX_AMT = parseFloat(d.TRX_AMT);
-            d.TRX_TAX = parseFloat(d.TRX_TAX);
-            d.TRX_TOT = parseFloat(d.TRX_TOT);
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerTrx.map(d=>{
+            d.Description = FuseUtils.capital_letter(d.Description);
+            d.CustomerName = FuseUtils.capital_letter(d.CustomerName);
+            d.Amount = parseFloat(d.Amount);
+            d.Tax = parseFloat(d.Tax);
+            d.Total = parseFloat(d.Total);
             return d;
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Customer",},
-            {name: "CUS_NAME", title: "Cus. Name"},
-            {name: "DESCR", title: "Description"},
-            {name: "INV_NO", title: "Invoice #"},
+            {name: "CustomerNumber", title: "Customer",},
+            {name: "CustomerName", title: "Cus. Name"},
+            {name: "Description", title: "Description"},
+            {name: "InvoiceNo", title: "Invoice #"},
             // {name: "TRX_TYPE", title: "Type"},
             // {name: "TRX_AMT", title: "Amount"},
             // {name: "TRX_TAX", title: "Tax"},
-            {name: "TRX_TOT", title: "Total"},
+            {name: "Total", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 70, },
-            { columnName: 'CUS_NAME', width: 220, },
-            { columnName: 'DESCR', width: -1, },
-            { columnName: 'INV_NO', width: 100},
+            { columnName: 'CustomerNumber', width: 100, },
+            { columnName: 'CustomerName', width: 220, },
+            { columnName: 'Description', width: -1, },
+            { columnName: 'InvoiceNo', width: 100},
             // { columnName: 'TRX_TYPE', width: 50,  align: 'center'},
-            { columnName: 'TRX_AMT', width: 100,  align: 'right'},
-            { columnName: 'TRX_TAX', width: 100,  align: 'right'},
-            { columnName: 'TRX_TOT', width: 100,  align: 'right'},
+            { columnName: 'Amount', width: 100,  align: 'right'},
+            { columnName: 'Tax', width: 100,  align: 'right'},
+            { columnName: 'Total', width: 100,  align: 'right'},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'TRX_AMT',  type: 'sum'},
-            { columnName: 'TRX_TAX',  type: 'sum'},
-            { columnName: 'TRX_TOT',  type: 'sum'},
+            { columnName: 'Amount',  type: 'sum'},
+            { columnName: 'Tax',  type: 'sum'},
+            { columnName: 'Total',  type: 'sum'},
         ];
 
         return (
@@ -256,7 +259,7 @@ class CustomerTransactions extends Component {
                         onPageSizeChange={this.changePageSize}
                     />
                     <CurrencyTypeProvider
-                        for={['TRX_AMT', 'TRX_TAX', 'TRX_TOT']}
+                        for={['Amount', 'Tax', 'Total']}
                     />
 
                     <IntegratedPaging/>

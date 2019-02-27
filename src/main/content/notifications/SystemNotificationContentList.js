@@ -627,9 +627,6 @@ class SystemNotificationContentList extends Component {
 
                                     <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
                                     <TableHeaderRow showSortingControls />
-                                    {/* <TableRowDetail
-                                        contentComponent={RowDetail}
-                                    /> */}
 
                             </Grid>
                         </div>

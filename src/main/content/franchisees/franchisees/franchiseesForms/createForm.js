@@ -33,6 +33,7 @@ import moment from "moment";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
+import CustomersTable from "./customersTable";
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 
@@ -66,12 +67,13 @@ const styles = theme => ({
 
 
 function getSteps() {
-    return ["Company Information", "Plan", "Document"];
+    return ["Company Information", "Plan", "Documents","Customers","Finders Fees"];
 }
 
 function getStepContent(franchiseeForm, step) {
     const { classes} = franchiseeForm.props;
 
+    console.log('state=',franchiseeForm);
     const Owner_headers = [
         {
                 id: 'firstName',
@@ -98,7 +100,7 @@ function getStepContent(franchiseeForm, step) {
                 label: 'Title'
         }
 	];
-	
+
 
     switch (step) {
         case 0:
@@ -107,48 +109,13 @@ function getStepContent(franchiseeForm, step) {
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Financial</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <FormControlLabel
-                                    value="ein"
-                                    checked={franchiseeForm.state.LegalId === 'ein'}
-                                    onChange={franchiseeForm.handleTextChange("LegalId")}
-                                    control={<Radio color="primary" />}
-                                    label="EIN"
-                                    labelPlacement="end"
-                                    margin="dense"
-                                />
-                                <FormControlLabel
-                                    checked={franchiseeForm.state.LegalId === 'ssn'}
-                                    value="ssn"
-                                    onChange={franchiseeForm.handleTextChange("LegalId")}
-                                    control={<Radio color="primary" />}
-                                    label="SSN"
-                                    labelPlacement="end"
-                                    margin="dense"
-                                />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="financeEinSsn"
-                                label="EIN/SSN"
-                                type="number"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={franchiseeForm.state.LegalIdNum}
-                                onChange={franchiseeForm.handleTextChange("LegalIdNum")}
-                                style={{marginRight:'1%'}}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                margin="dense"
-                                required
-                            />
+                        
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">                            
                             <TextField
                                 id="financeName"
                                 label="Name"
                                 onChange={franchiseeForm.handleTextChange("LegalName")}
                                 value={franchiseeForm.state.LegalName}
-                                variant="outlined"
                                 inputProps={{
                                     maxLength:60
                                 }}
@@ -156,7 +123,6 @@ function getStepContent(franchiseeForm, step) {
                                     shrink: true,
                                 }}
                                 className={classes.textField}
-                                style={{marginLeft:'1%'}}
                                 margin="dense"
                                 required
                             />
@@ -166,7 +132,6 @@ function getStepContent(franchiseeForm, step) {
                                 id="financeAddress1"
                                 label="Address 1"
                                 onChange={franchiseeForm.handleTextChange('LegalAddressLine1')}
-                                variant="outlined"
                                 inputProps={{
                                     maxLength:100
                                 }}
@@ -189,7 +154,6 @@ function getStepContent(franchiseeForm, step) {
                                     shrink: true,
                                 }}
                                 onChange={franchiseeForm.handleTextChange('LegalAddressLine2')}
-                                variant="outlined"
                                 value={franchiseeForm.state.LegalAddressLine2}
                                 className={classes.textField}
                                 style={{marginLeft:'1%'}}
@@ -208,7 +172,6 @@ function getStepContent(franchiseeForm, step) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                variant="outlined"
                                 value={franchiseeForm.state.LegalCity}
                                 className={classes.textField}
                                 margin="dense"
@@ -223,7 +186,6 @@ function getStepContent(franchiseeForm, step) {
                                 className={classes.textField}
                                 value={franchiseeForm.state.LegalState}
                                 onChange={franchiseeForm.handleTextChange('LegalState')}
-                                variant="outlined"
                                 margin="dense"
                                 style={{marginRight:'1%',marginLeft:'1%'}}
                                 InputLabelProps={{
@@ -232,15 +194,14 @@ function getStepContent(franchiseeForm, step) {
                                 required
                             >
                                 {franchiseeForm.props.stateList.map(option => (
-                                    <MenuItem key={option.Value} value={option.Value}>
-                                        {option.Text}
+                                    <MenuItem key={option.abbreviation} value={option.abbreviation}>
+                                        {option.name}
                                     </MenuItem>
                                 ))}
                             </TextField>
                             <TextField
                                 id="outlined-zip"
                                 label="Zip"
-                                variant="outlined"
                                 onChange={franchiseeForm.handleTextChange('LegalZip')}
                                 inputProps={{
                                     maxLength:20
@@ -266,7 +227,6 @@ function getStepContent(franchiseeForm, step) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                variant="outlined"
                                 className={classes.textField}
                                 value={franchiseeForm.state.LegalCounty}
                                 style={{marginRight:'1%'}}
@@ -286,7 +246,6 @@ function getStepContent(franchiseeForm, step) {
                             />
                             <TextField
                                 id="outlined-phone"
-                                variant="outlined"
                                 label="1099 Name"
                                 value={franchiseeForm.state.NameOn1099}
                                 onChange={franchiseeForm.handleTextChange('NameOn1099')}
@@ -300,6 +259,42 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 style={{marginLeft:'1%'}}
                             />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <FormControlLabel
+                                    value="ein"
+                                    checked={franchiseeForm.state.LegalId === 'ein'}
+                                    onChange={franchiseeForm.handleTextChange("LegalId")}
+                                    control={<Radio color="primary" />}
+                                    label="EIN"
+                                    labelPlacement="end"
+                                    margin="dense"
+                                />
+                                <FormControlLabel
+                                    checked={franchiseeForm.state.LegalId === 'ssn'}
+                                    value="ssn"
+                                    onChange={franchiseeForm.handleTextChange("LegalId")}
+                                    control={<Radio color="primary" />}
+                                    label="SSN"
+                                    labelPlacement="end"
+                                    margin="dense"
+                                />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <TextField
+                                    id="financeEinSsn"
+                                    label="EIN/SSN"
+                                    type="number"
+                                    className={classes.textField}
+                                    value={franchiseeForm.state.LegalIdNum}
+                                    onChange={franchiseeForm.handleTextChange("LegalIdNum")}
+                                    //style={{marginLeft:'1%'}}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    margin="dense"
+                                    required
+                                />
                         </GridItem>
                     </GridContainer>
                     <div style={{ marginTop: '30px' }}></div>
@@ -318,7 +313,7 @@ function getStepContent(franchiseeForm, step) {
             return (
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
-                    <h3>Contract</h3>
+                    
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -327,7 +322,6 @@ function getStepContent(franchiseeForm, step) {
                                 select
                                 label="Plan Type"
                                 margin="dense"
-                                variant="outlined"
                                 className={classes.textField}
                                 InputLabelProps={{
                                     shrink: true,
@@ -342,7 +336,7 @@ function getStepContent(franchiseeForm, step) {
                             >
                                 {franchiseeForm.props.planType &&(
                                     franchiseeForm.props.planType.Data.map(option => (
-                                        <MenuItem key={option._id} value={option._id}>
+                                        <MenuItem key={option.plantype} value={option.plantype}>
                                             {option.plantype}
                                         </MenuItem>
                                     ))
@@ -350,14 +344,13 @@ function getStepContent(franchiseeForm, step) {
                             </TextField>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            
+
                                 <TextField
                                     id="planAmount"
                                     label="Plan Amount"
                                     value={franchiseeForm.state.planAmount}
                                     type={"number"}
                                     className={classes.textField}
-                                    variant="outlined"
                                     inputProps={{
                                         maxLength:60,
                                         readOnly: true
@@ -372,38 +365,37 @@ function getStepContent(franchiseeForm, step) {
                                     style={{ marginRight: '1%'}}
                                     required
                                 />
-                            
+
                                 <TextField
                                     id="termYrs"
                                     label="Term(Yrs)"
                                     type="number"
                                     margin="dense"
-                                    variant="outlined"
                                     inputProps={{
                                         maxLength:60
                                     }}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                    value={franchiseeForm.state.AgreementTerm }
+                                    value={franchiseeForm.state.AgreementTerm}
                                     onChange={franchiseeForm.handleFormChange('AgreementTerm')}
                                     className={classes.textField}
                                     required
                                     style={{marginLeft: '1%'}}
                                 />
-                           
+
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                        
+
                             <TextField
                                 id="ibAmount"
                                 label="IB Amount"
                                 className={classes.textField}
-                                margin="dense"
-                                value={franchiseeForm.state.ibAmount}
+                                margin="dense"                                
                                 inputProps={{
-                                    maxLength:60,
                                     readOnly: true,
+                                    type: "number",
+                                    value: (franchiseeForm.state.ibAmount === NaN || franchiseeForm.state.ibAmount === null ) ? 0 : franchiseeForm.state.ibAmount 
                                 }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -411,21 +403,15 @@ function getStepContent(franchiseeForm, step) {
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
                                 style={{marginRight: '1%'}}
-                                required
                             />
-                        
-                        
+
+
                             <TextField
                                 id="daysToFullFill"
                                 label="Days To Fullfill"
                                 className={classes.textField}
                                 value={franchiseeForm.state.daysToFullfill}
-                                variant="outlined"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -440,10 +426,10 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 required
                             />
-                        
+
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                        
+
                             <TextField
                                 id="downPayment"
                                 label="Down Payment"
@@ -459,17 +445,15 @@ function getStepContent(franchiseeForm, step) {
                                 InputLabelProps={{
                                     shrink: true
                                 }}
-                                variant="outlined"
                                 margin="dense"
                                 style={{marginRight: '1%'}}
                                 required
                             />
-                        
+
                             <TextField
                                 id="interest"
                                 label="Interest"
                                 className={classes.textField}
-                                variant="outlined"
                                 value={franchiseeForm.state.interest}
                                 inputProps={{
                                     maxLength: 60,
@@ -485,13 +469,12 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 required
                             />
-                        
+
                             <TextField
                                 id="paymentAmount"
                                 label="Payment Amount"
                                 className={classNames(classes.textField)}
                                 value={franchiseeForm.state.paymentAmount}
-                                variant="outlined"
                                 margin="dense"
                                 inputProps={{
                                     maxLength: 60,
@@ -506,17 +489,15 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginLeft: '1%', marginRight: '1%'}}
                                 required
                             />
-                        
+
                             <TextField
                                 id="noOfPayments"
                                 label="No Of Payments"
-                                className={classes.textField}
-                                value={franchiseeForm.state.noOfPayments}
-                                variant="outlined"
+                                className={classes.textField}    
                                 margin="dense"
                                 inputProps={{
-                                    maxLength: 60,
                                     readOnly: true,
+                                    value: franchiseeForm.state.noOfPayments===null ? "" : franchiseeForm.state.noOfPayments
                                 }}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>
@@ -527,7 +508,7 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginLeft: '1%'}}
                                 required
                             />
-                        
+
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -538,7 +519,6 @@ function getStepContent(franchiseeForm, step) {
                                     format="MM/DD/YYYY"
                                     className={classes.textField}
                                     margin="dense"
-                                    variant="outlined"
                                     style={{marginRight: '1%'}}
                                 />
                             </MuiPickersUtilsProvider>
@@ -549,7 +529,6 @@ function getStepContent(franchiseeForm, step) {
                                     onChange={franchiseeForm.handleRenewDateChange}
                                     className={classes.textField}
                                     format="MM/DD/YYYY"
-                                    variant="outlined"
                                     margin="dense"
                                     style={{marginLeft: '1%', marginRight: '1%'}}
                                 />
@@ -561,7 +540,6 @@ function getStepContent(franchiseeForm, step) {
                                     onChange={franchiseeForm.handleExpDateChange}
                                     format="MM/DD/YYYY"
                                     className={classes.textField}
-                                    variant="outlined"
                                     margin="dense"
                                     style={{marginLeft: '1%'}}
                                 />
@@ -614,7 +592,7 @@ function getStepContent(franchiseeForm, step) {
                         )}
                         {franchiseeForm.props.insertPayload.Fees === null && (
                             <p style={{marginTop:20,marginLeft:10}}>Fees Empty!</p>
-                        )}                    
+                        )}
                     </Fragment>
                 </Fragment>
             );
@@ -632,6 +610,16 @@ function getStepContent(franchiseeForm, step) {
                     </div>
                 </Fragment>
             );
+        case 3:
+            return(
+                <Fragment>
+                   <CustomersTable/>
+                </Fragment>
+            );
+        case 4:
+            return(
+                <Fragment></Fragment>
+            ); 
         default:
             return 'Unknown step';
     }
@@ -696,7 +684,7 @@ class FranchiseesCreateForm extends Component {
             accountRebate: false,
             generateReport: false,
             StateValue: '',
-            defaultPlanType: 0,
+            defaultPlanType: "A",
             selectedSignDate: new Date(),
             selectedRenewDate: new Date(),
             selectedExpDate: new Date(),
@@ -729,7 +717,7 @@ class FranchiseesCreateForm extends Component {
 
     constructor (props){
         super(props);
-        props.getFranchiseeFormPlanType(props.regionId);        
+        props.getFranchiseeFormPlanType(props.regionId);
     }
 
     onChange = (event, { newValue, method }) => {
@@ -756,28 +744,28 @@ class FranchiseesCreateForm extends Component {
     };
 
     componentWillMount(){
-        
+
         this.setState({
             documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId),
             LegalId: this.props.insertPayload.LegalId,
-            LegalName: this.props.insertPayload.LegalName,
-            LegalAddressLine1: this.props.insertPayload.LegalAddressLine1,
-            LegalAddressLine2: this.props.insertPayload.LegalAddressLine2,
-            LegalCity: this.props.insertPayload.LegalCity,
-            LegalCounty: this.props.insertPayload.LegalCounty,
-            LegalState: this.props.insertPayload.LegalState,
-            LegalZip: this.props.insertPayload.LegalZip,
-            LegalIdNum: this.props.insertPayload.LegalIdNum, 
+            LegalName: this.props.insertPayload.LegalName===null ? '':this.props.insertPayload.LegalName,
+            LegalAddressLine1: this.props.insertPayload.LegalAddressLine1===null ? '': this.props.insertPayload.LegalAddressLine1,
+            LegalAddressLine2: this.props.insertPayload.LegalAddressLine2===null ? '': this.props.insertPayload.LegalAddressLine2,
+            LegalCity: this.props.insertPayload.LegalCity===null ? '': this.props.insertPayload.LegalCity,
+            LegalCounty: this.props.insertPayload.LegalCounty===null ? '': this.props.insertPayload.LegalCounty,
+            LegalState: this.props.insertPayload.LegalState===null ? '': this.props.insertPayload.LegalState,
+            LegalZip: this.props.insertPayload.LegalZip===null ? '': this.props.insertPayload.LegalZip,
+            LegalIdNum: this.props.insertPayload.LegalIdNum===null ? '':this.props.insertPayload.LegalIdNum,
             NameOn1099: this.props.insertPayload.NameOn1099,
-            defaultPlanType: this.props.insertPayload.AgreementPlanTypeId,
+            defaultPlanType: ((typeof(this.props.insertPayload.AgreementPlanTypeId) !=="string" || this.props.insertPayload.AgreementPlanTypeId ==="" ) ? "A" : this.props.insertPayload.AgreementPlanTypeId),
             planAmount: this.props.insertPayload.AgreementPlanAmount,
             daysToFullfill: this.props.insertPayload.AgreementDaysToFulfill,
-            noOfPayments: this.props.insertPayload.AgreementTotalPayments,
+            noOfPayments: this.props.insertPayload.AgreementTotalPayment,
             interest: this.props.insertPayload.AgreementInterestRate,
             downPayment: this.props.insertPayload.AgreementDownPayment,
             ibAmount: this.props.insertPayload.AgreementInitialBusinessAmount
         });
-        
+
         if(this.props.insertPayload.Print1099 === "Y"){
             this.setState({ Print1099: true });
         }else{
@@ -809,31 +797,34 @@ class FranchiseesCreateForm extends Component {
         }
 
         this.props.getFranchiseeFeeMaintenance(this.props.regionId);
-        this.props.getFranchiseeStateList(this.props.regionId);
+        this.props.getFranchiseeStateList();
     }
 
     componentWillReceiveProps(nextProps){
-       
+  
     }
 
 
 
     handleFormChange = (name) => event => {
 
-        if(name === 'State'){
+
+
+        if(name === 'State' || name === 'AgreementTerm'){
+       
             this.setState({
                 [name]: event.target.value,
-            });
+            }); 
+
         }
         const iStatus = this.props.insertPayload;
-        console.log('insertPayload = ',iStatus);
-        iStatus[name] = event.target.value;
+        iStatus[name] = (name === "AgreementTerm") ? parseInt(event.target.value) : event.target.value;
+        console.log("iStatus",iStatus);
         this.props.franchiseeUpdateInsertPayload(iStatus)
     };
 
     handleInitialUpdate (name , value){
         const iStatus = this.props.insertPayload;
-        console.log('insertPayload = ',iStatus);
         iStatus[name] = value;
         this.props.franchiseeUpdateInsertPayload(iStatus)
     }
@@ -878,7 +869,7 @@ class FranchiseesCreateForm extends Component {
         if(name === 'defaultPlanType'){
             //console.log(this.props.planType.Data);
             this.props.planType.Data.map( (x)=> {
-                    if (val === x._id) {
+                    if (val === x.plantype) {
                         this.setState({
                             planAmount: x.fran_amt*1,
                             daysToFullfill: x.days2fill*1,
@@ -886,16 +877,16 @@ class FranchiseesCreateForm extends Component {
                             interest: x.interest*1,
                             downPayment: x.dwn_pymnt*1,
                             ibAmount: x.inittot*1,
-                            defaultPlanType: x._id
+                            defaultPlanType: x.plantype
                         });
                         this.handleInitialUpdate("AgreementPlanAmount",x.fran_amt*1);
                         this.handleInitialUpdate("AgreementDaysToFulfill",x.days2fill*1);
-                        this.handleInitialUpdate("AgreementTotalPayments",x.pymnt_totl*1);
+                        this.handleInitialUpdate("AgreementTotalPayment",x.pymnt_totl*1);
                         this.handleInitialUpdate("AgreementInterestRate",x.interest*1);
-                        this.handleInitialUpdate("AgreementPlanTypeId",x._id);
+                        this.handleInitialUpdate("AgreementPlanTypeId",x.plantype);
                         this.handleInitialUpdate("AgreementDownPayment",x.dwn_pymnt*1);
                         this.handleInitialUpdate("AgreementInitialBusinessAmount",x.BusinessAmount*1);
-                        this.handleInitialUpdate("AgreementPlanType",x.Name*1);
+                        this.handleInitialUpdate("AgreementPlanType",x.plantype);
                         this.handleInitialUpdate("AgreementMonthlyPayment",x.PaymentAmount*1);
                     }
                 }
@@ -968,7 +959,13 @@ class FranchiseesCreateForm extends Component {
                     >
                         <Tab label="Company Information" />
                         <Tab label="Plan" />
-                        <Tab label="Document" />
+                        <Tab label="Documents" />
+                        {this.props.franchiseesForm.type ==="edit" &&(
+                        <Tab label="Customers" />
+                        )}
+                        {this.props.franchiseesForm.type ==="edit" &&(
+                         <Tab label="Finders Fees" />  
+                        )} 
                     </Tabs>
                 </AppBar>
                 <div
@@ -1065,11 +1062,11 @@ function mapStateToProps({ franchisees, auth }) {
         user: auth.login,
         documentsList: franchisees.documentsList,
         franchiseeFees: franchisees.franchiseeFees,
-        stateList: franchisees.StateList,
+        stateList: franchisees.stateList,
         selectedSignDate: franchisees.selectedSignDate,
         selectedExpDate: franchisees.selectedExpDate,
         selectedRenewDate: franchisees.selectedRenewDate,
-        insertPayload: franchisees.insertPayload
+        insertPayload: franchisees.insertPayload,
     }
 }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { customersService } from "services";
+import { customersService } from "../../services";
 
 export const GET_ALL_CUSTOMERS = "[CUSTOMERS] GETS ALL";
 export const GET_ALL_DOCUMENTS = "[CUSTOMERS] DOCUMENTS GETS ALL";
@@ -15,8 +15,8 @@ export const OPEN_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN NEW CUSTOMER FORM';
 export const CLOSE_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE NEW CUSTOMER FORM';
 export const OPEN_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN EDIT CUSTOMER FORM';
 export const CLOSE_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE EDIT CUSTOMER FORM';
-export const ADD_CUSTOMER = '[CUSTOMERS APP] ADD CUSTOMER';
-export const UPDATE_CUSTOMER = '[CUSTOMERS APP] UPDATE CUSTOMER';
+export const ADD_CUSTOMER_CONTACT = '[CUSTOMERS APP] ADD CUSTOMER_CONTACT';
+export const UPDATE_CUSTOMER_CONTACT = '[CUSTOMERS APP] UPDATE CUSTOMER_CONTACT';
 
 export const SELECT_LOCATION_FILTER = '[CUSTOMERS APP] SELECT LOCATION FILTER';
 export const APPLY_SEARCH_TEXT = '[CUSTOMERS APP] APPLY SEARCH TEXT';
@@ -32,6 +32,8 @@ export const OPEN_EMAIL_TO_CUSTOMER_DIALOG = "[CUSTOMERS APP] OPEN_EMAIL_TO_CUST
 
 export const CREATE_CUSTOMER = "[CUSTOMERS APP] CREATE_CUSTOMER";
 export const CREATE_CUSTOMER_START = "[CUSTOMERS APP] CREATE_CUSTOMER_START";
+export const UPDATE_CUSTOMER = "[CUSTOMERS APP] UPDATE_CUSTOMER";
+export const UPDATE_CUSTOMER_START = "[CUSTOMERS APP] UPDATE_CUSTOMER_START";
 
 export const GET_CUSTOMER = "[CUSTOMERS APP] GET_CUSTOMER";
 export const GET_CUSTOMER_START = "[CUSTOMERS APP] GET_CUSTOMER_START";
@@ -71,21 +73,36 @@ export const SHOW_FRANCHIEES_ASSIGN_MODAL_FORM = "[CUSTOMERS APP] SHOW_FRANCHIEE
 
 export const GET_FRANCHISEE_SERVICE_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_SERVICE_TYPES";
 export const GET_FRANCHISEE_BILLING_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_BILLING_TYPES";
+export const UPDATE_CUSTOMERS_PARAMETERS = "[CUSTOMERS APP] UPDATE PARAMETERS";
+export const GET_INCREASE_DECREASE = "[CUSTOMERS APP] GET INCREASE DECREASE";
 
 export const SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM = "[CUSTOMERS APP] SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM";
+export const SHOW_CANCEL_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_CANCEL_CONTRACT_PAGE";
+export const SHOW_SUSPEND_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_SUSPEND_CONTRACT_PAGE";
+export const GET_COMPUTED_FINDERS_FEE = "[CUSTOMERS APP] GET COMPUTED FINDERS FEE";
+export const UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED = "[CUSTOMERS APP] UPDATE FINDERS FEE PARAMS FOR COMPUTED";
+export const GET_FINDERS_FEE_TYPES = "[CUSTOMERS APP] GET FINDERS FEE TYPES";
+export const UPDATE_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] UPDATE ASSIGNED FRANCHISEE";
+export const UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES = "[CUSTOMERS APP] UPDATE ACTIVE CUSTOMER ASSIGNED FRANCHISEES";
+
+export const UPDATE_NEW_CUSTOMER_PARAM = "[CUSTOMERS APP] UPDATE_NEW_CUSTOMER_PARAM";
+
+export const SAVE_CANCEL_CONTRACT = "[CUSTOMERS APP] SAVE_CANCEL_CONTRACT";
+export const SAVE_SUSPEND_CONTRACT = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT";
+
+export const STOP_FINDERS_FEES = "[CUSTOMERS APP] STOP_FINDERS_FEES";
+export const STOP_FINDERS_FEES_START = "[CUSTOMERS APP] STOP_FINDERS_FEES_START";
+
+export const GET_COMPUTED_FINDER_FEE = "[CUSTOMERS APP] GET_COMPUTED_FINDER_FEE";
+export const GET_FINDER_FEE = "[CUSTOMERS APP] GET_FINDER_FEE";
+
+export const SET_ACTIVE_FINDERS_FEE = "[CUSTOMERS APP] SET_ACTIVE_FINDERS_FEE";
+export const SET_ACTIVE_FRANCHISEE = "[CUSTOMERS APP] SET_ACTIVE_FRANCHISEE";
+
+export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
+export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
-	// return dispatch => {
-	// const request = axios.get("/api/customers/gets");
-
-	// return request.then(response => {
-	//     return dispatch({
-	//         type: GET_ALL_CUSTOMERS,
-	//         payload: response.data
-	//     });
-	// });
-
-	// };
 	return (dispatch) => {
 
 		dispatch({
@@ -97,10 +114,12 @@ export function getCustomers(regionId, statusId, StatusNames, AccountTypeListNam
 			regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
 			statusId = statusId === 0 ? Array.from({ length: 10 }).map((item, index) => (index + 1)) : [statusId]
 			console.log(regionId, statusId)
-			let response = await customersService.getCustomersList(regionId, statusId, StatusNames, AccountTypeListName, location, latitude, longitude, searchText);
+			let allCustomers = await customersService.getCustomersList(regionId, statusId, StatusNames, AccountTypeListName, location, latitude, longitude, searchText);
+			const cancelReasons = await customersService.getCancelReason();
+			const suspendReasons = await customersService.getSuspendReason();
 			dispatch({
 				type: GET_ALL_CUSTOMERS,
-				payload: response
+				payload: { allCustomers, cancelReasons, suspendReasons }
 			});
 		})();
 	}
@@ -133,11 +152,11 @@ export function getAccountTypeList() {
 		})();
 	}
 }
-export function getAccountExecutiveList() {
+export function getAccountExecutiveList(regionId) {
 	return (dispatch) => {
 
 		(async () => {
-			let response = await customersService.getAccountExecutiveList();
+			let response = await customersService.getAccountExecutiveList(regionId);
 			dispatch({
 				type: GET_ACCOUNT_EXCUTIVE_LIST,
 				payload: response
@@ -180,6 +199,22 @@ export function createCustomer(regionId, param) {
 			let response = await customersService.createCustomer(regionId, param);
 			dispatch({
 				type: CREATE_CUSTOMER,
+				payload: response
+			});
+		})();
+	}
+}
+export function updateCustomer(regionId, param) {
+	return (dispatch) => {
+		dispatch({
+			type: UPDATE_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.updateCustomer(regionId, param);
+			dispatch({
+				type: UPDATE_CUSTOMER,
 				payload: response
 			});
 		})();
@@ -328,6 +363,47 @@ export function openEditCustomerForm(regionId, customerId, customerNo) {
 		})();
 	}
 }
+export function stopFindersfees(regionId, customerId, customerNo) {
+	return (dispatch) => {
+		dispatch({
+			type: STOP_FINDERS_FEES_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.stopFindersfees(regionId, customerId);
+			let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
+			dispatch({
+				type: STOP_FINDERS_FEES,
+				payload: findersFees
+			});
+		})();
+	}
+}
+export function openEditCustomerServiceForm(regionId, customerId, customerNo) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let customer = await customersService.getCustomer(regionId, customerId);
+			// let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
+			// let findersFeesConfig = await customersService.findersfeeConfigs();
+			dispatch({
+				type: OPEN_EDIT_CUSTOMER_SERVICE_FORM,
+				// payload: { customer, findersFees, findersFeesConfig }
+				payload: { customer }
+			});
+		})();
+	}
+}
+export function closeCustomerServiceForm() {
+	return {
+		type: CLOSE_CUSTOMER_SERVICE_FORM
+	}
+}
 export function findersfeeConfigs() {
 	return (dispatch) => {
 		dispatch({
@@ -432,7 +508,7 @@ export function setCustomerFormFindersFeesDialogPayload(payload) {
 	}
 }
 
-export function addCustomer(newCustomer) {
+export function addCustomerContact(newCustomer) {
 	return (dispatch, getState) => {
 
 		console.log('state', getState());
@@ -446,14 +522,14 @@ export function addCustomer(newCustomer) {
 		return request.then((response) =>
 			Promise.all([
 				dispatch({
-					type: ADD_CUSTOMER
+					type: ADD_CUSTOMER_CONTACT
 				})
 			]).then(() => dispatch(getCustomers()))
 		);
 	};
 }
 
-export function updateCustomer(customer) {
+export function updateCustomerContact(customer) {
 	return (dispatch, getState) => {
 
 		// const {routeParams} = getState().contactsApp.contacts;
@@ -465,7 +541,7 @@ export function updateCustomer(customer) {
 		return request.then((response) =>
 			Promise.all([
 				dispatch({
-					type: UPDATE_CUSTOMER
+					type: UPDATE_CUSTOMER_CONTACT
 				})
 			]).then(() => dispatch(getCustomers()))
 		);
@@ -533,6 +609,18 @@ export function showIncreaseDecreaseContractModalForm(visible) {
 		payload: visible
 	}
 }
+export function showCancelContractPage(visible) {
+	return {
+		type: SHOW_CANCEL_CONTRACT_PAGE,
+		payload: visible
+	}
+}
+export function showSuspendContractPage(visible) {
+	return {
+		type: SHOW_SUSPEND_CONTRACT_PAGE,
+		payload: visible
+	}
+}
 
 export function getFranchiseeServiceTypes(regionId) {
 	return (dispatch) => {
@@ -552,6 +640,153 @@ export function getFranchiseeBillingTypes(regionId) {
 			dispatch({
 				type: GET_FRANCHISEE_BILLING_TYPES,
 				payload: res.Data
+			});
+		})();
+	}
+}
+
+export function updateCustomersParameter(name, value) {
+	return {
+		type: UPDATE_CUSTOMERS_PARAMETERS,
+		payload: { name, value }
+	}
+}
+
+/**
+ *
+ * @param params, JSON object
+ * @returns {{type: string, payload: *}}
+ */
+export function updateFindersFeeParams(params) {
+	return {
+		type: UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED,
+		payload: params
+	}
+}
+
+
+export function getIncreaseDecrease(regionId, params) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getIncreaseDecrease(regionId, params);
+			dispatch({
+				type: GET_INCREASE_DECREASE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+
+export function getFinderFeeTypes() {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getFinderFeeTypes();
+			dispatch({
+				type: GET_FINDERS_FEE_TYPES,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function getComputedFinderFee(data) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getComputedFinderFee(data);
+			dispatch({
+				type: GET_COMPUTED_FINDER_FEE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function getFinderFee(RegionId, Id) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getFinderFee(RegionId, Id);
+			dispatch({
+				type: GET_FINDER_FEE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function setActiveFindersFee(activeFindersFee) {
+	return {
+		type: SET_ACTIVE_FINDERS_FEE,
+		payload: activeFindersFee
+	}
+}
+export function setActiveFranchisee(activeFranchisee) {
+	return {
+		type: SET_ACTIVE_FRANCHISEE,
+		payload: activeFranchisee
+	}
+}
+
+export function updateAssignedFranchisee(regionId, customerNo, params) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.updateAssignedFranchisee(regionId, customerNo, params);
+			dispatch({
+				type: UPDATE_ASSIGNED_FRANCHISEE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+
+/**
+ *
+ * @param params, JSON object array
+ * @returns {Function}
+ */
+export function updateActiveCustomerAssignedFranchisees(params) {
+	return (dispatch) => {
+		dispatch({
+			type: UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES,
+			payload: params
+		});
+	}
+}
+
+export function updateNewCustomerParam(name, value) {
+	return {
+		type: UPDATE_NEW_CUSTOMER_PARAM,
+		payload: { name, value }
+	}
+}
+
+export function saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee, customerId) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee);
+			const activeCustomer = await customersService.getCustomer(regionId, customerId);
+			dispatch({
+				type: SAVE_CANCEL_CONTRACT,
+				payload: activeCustomer
+			});
+		})();
+	}
+}
+export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date, customerId) {
+	console.log('saveSuspendContract', customerId)
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date);
+			const activeCustomer = await customersService.getCustomer(regionId, customerId);
+			dispatch({
+				type: SAVE_SUSPEND_CONTRACT,
+				payload: activeCustomer
 			});
 		})();
 	}

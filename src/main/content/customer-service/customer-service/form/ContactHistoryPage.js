@@ -568,7 +568,7 @@ class ContactHistoryPage extends Component {
 					title: "Status",
 					name: "stat_otr",
 					columnName: "stat_otr",
-					width: 80,
+					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -579,7 +579,7 @@ class ContactHistoryPage extends Component {
 					title: "Spoke With",
 					name: "spoke_with",
 					columnName: "spoke_with",
-					width: 120,
+					width: 140,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -589,7 +589,7 @@ class ContactHistoryPage extends Component {
 					title: "Area",
 					name: "area",
 					columnName: "area",
-					width: 80,
+					width: 150,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -609,20 +609,20 @@ class ContactHistoryPage extends Component {
 					title: "Action",
 					name: "action_otr",
 					columnName: "action_otr",
-					width: 160,
+					width: 180,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				{
-					title: "Call Back Type",
-					name: "call_back",
-					columnName: "call_back",
-					width: 140,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
+				// {
+				// 	title: "Call Back Type",
+				// 	name: "call_back",
+				// 	columnName: "call_back",
+				// 	width: 140,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
 				// {
 				// 	title: "Comment",
 				// 	name: "Comment",
@@ -681,8 +681,8 @@ class ContactHistoryPage extends Component {
 		console.log("constructor");
 
 		console.log("constructor", this.props.customerForm)
-		if (this.props.customerForm.data && this.props.customerForm.data.Data) {
-			this.props.getCustomerServiceList(this.props.regionId, this.props.customerForm.data.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
+		if (this.props.customerServiceForm.activeCustomer && this.props.customerServiceForm.activeCustomer.Data) {
+			this.props.getCustomerServiceList(this.props.regionId, this.props.customerServiceForm.activeCustomer.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
 		}
 	}
 	//
@@ -796,10 +796,10 @@ class ContactHistoryPage extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getCustomerServiceList(nextProps.regionId, this.props.customerForm.cus_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
+			this.props.getCustomerServiceList(nextProps.regionId, this.props.customerServiceForm.activeCustomer.Data.cus_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
 		}
 
-		if (nextProps.customerServiceForm.serviceList.data, this.props.customerServiceForm.serviceList.data) {
+		if (!_.isEqual(nextProps.customerServiceForm.serviceList.data, this.props.customerServiceForm.serviceList.data)) {
 			this.initRowsFromRawJson(nextProps.customerServiceForm.serviceList.data)
 		}
 	} // deprecate 
@@ -946,7 +946,7 @@ class ContactHistoryPage extends Component {
 		return (
 			<div className="flex flex-col">
 				<div className="flex justify-start">
-					{row.comment}
+					{row.call_com}
 				</div>
 			</div>
 		)
@@ -1210,7 +1210,7 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		customerForm: customers.customerForm,
+		// customerForm: customers.customerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
 		searchText: customers.searchText,

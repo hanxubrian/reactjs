@@ -28,7 +28,7 @@ class CustomersService {
 			Location,
 			Latitude,
 			Longitude,
-			SearchText
+			SearchText: ""
 		};
 		console.log("getCustomersList-data", data)
 		return new Promise((resolve, reject) => {
@@ -48,7 +48,7 @@ class CustomersService {
 	};
 	getCustomerStatusList() {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/getcustomerstatuslist?RegionId=99999`)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetCustomerStatus`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -65,7 +65,7 @@ class CustomersService {
 
 	getAccountTypeList() {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/GetAccountTypeList?RegionId=99999`)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/accountTypes`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -79,9 +79,9 @@ class CustomersService {
 				})
 		});
 	}
-	getAccountExecutiveList() {
+	getAccountExecutiveList(RegionId) {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/GetAccountExecutivesList?RegionId=2`)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/account/executives?RegionId=${RegionId}`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -178,6 +178,7 @@ class CustomersService {
 		});
 	}
 	createCustomer(regionId, param) {
+		console.log("createCustomer-param", param)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/create/${regionId}`, param)
 				.then(res => {
@@ -193,7 +194,25 @@ class CustomersService {
 				})
 		});
 	}
+	updateCustomer(regionId, param) {
+		console.log("updateCustomer-param", param)
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/update/${param._id}?regionId=${regionId}`, param)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 	getCustomer(regionId, customerId) {
+		console.log("getCustomer", customerId)
 		return new Promise((resolve, reject) => {
 			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Customer/${customerId}?RegionId=${regionId}`)
 				.then(res => {
@@ -228,7 +247,7 @@ class CustomersService {
 
 	getAccountTypesGroups() {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/GetAccountTypesGroups/?RegionId=2`)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/accountTypeGroups`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -297,6 +316,23 @@ fullbill: 0
 				})
 		});
 	}
+
+	stopFindersfees(regionId, fran_id) {
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/Stop/${fran_id}?regionId=${regionId}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 	findersfeeConfigs() {
 		/*
 		{
@@ -331,8 +367,8 @@ fullbill: 0
 	getCustomerServiceList(regionId, CustomerNo, fromDate, toDate) {
 		const data = {
 			CustomerNo: [CustomerNo],
-			fromDate: "2017-02-08T06:16:30.3466692-06:00",
-			toDate: "2019-02-08T06:16:30.3466692-06:00"
+			fromDate: "01/01/2000",
+			toDate: "12/30/2019"
 		}
 		console.log("getCustomerServiceList", data)
 		return new Promise((resolve, reject) => {
@@ -411,6 +447,194 @@ fullbill: 0
 	getFranchiseeBillingTypes(regionId) {
 		return new Promise((resolve, reject) => {
 			axios_instance.get(`${BASE_MONGO_API_URL}/api/Lists/GetBillingType?RegionId=${regionId}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+
+	getIncreaseDecrease(regionId, params) {
+		console.log('params=', params);
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/IncreaseDecrease`, params)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getFinderFeeTypes() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFinderFeeTypes`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getComputedFinderFee(data) {
+		// const data = {
+		// 	"RegionId": 1,
+		// 	"CalculationMethodCode": "sample string 2",
+		// 	"FranchiseeNum": "sample string 3",
+		// 	"CustomerNum": "sample string 4",
+		// 	"AmountPayableOn": 5.1,
+		// 	"DownPaymentPercent": 6.1,
+		// 	"DownPaymentAmount": 7.1,
+		// 	"MonthlyPaymentPercent": 8.1,
+		// 	"MonthlyPaymentAmount": 9.1,
+		// 	"NumberOfPayments": 10,
+		// 	"AmountFinanced": 11.1,
+		// 	"FinderFeeTotal": 12.1,
+		// 	"Balance": 13.1,
+		// 	"MultiTenantOccupancy": 14.1
+		// }
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/GetComputedFinderFee`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getFinderFee(RegionId, Id) {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/FinderFee/${Id}?RegionId=${RegionId}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+
+    /**
+     *
+     * @param regionId
+     * @param customerNo
+     * @param params, JSON object
+     * @returns {Promise<any>}
+     * @constructor
+     */
+	updateAssignedFranchisee(regionId, customerNo, params) {
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/AssignedFranchisee?CustomerNo=${customerNo}`, params)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee) {
+		const data = {
+			cancel_date,
+			region_id: reason_id,
+			region_note: reason_note,
+			lastday_service,
+			client_credit_amount, //double
+			canc_fee,//double
+			continue_findersfee,//bool
+		}
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Cancel?cust_no=${cust_no}`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date) {
+		const params = {
+			cust_no,
+			reason_id,
+			notes,
+			suspend_date,
+			restart_date
+		}
+		console.log("saveSuspendContract", `${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Suspend?cust_no=${cust_no}&reason_id=${reason_id}&notes=${notes}&suspend_date=${suspend_date}&restart_date=${restart_date}`)
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Suspend?cust_no=${cust_no}&reason_id=${reason_id}&notes=${notes}&suspend_date=${suspend_date}&restart_date=${restart_date}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getCancelReason() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/reasons?type=account_cancellation`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getSuspendReason() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/reasons?type=account_suspension`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);

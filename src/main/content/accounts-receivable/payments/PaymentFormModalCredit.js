@@ -381,30 +381,28 @@ class PaymentFormModalCredit extends React.Component {
 	};
 
 	handleCreatePayment = () => {
-		if (this.checkValidations()) {
 
-			let PayItems = []
+		let PayItems = []
 
-			this.props.createAccountReceivablePayment(
-				this.props.regionId,
-				this.state.customerNumber,
+		this.props.createAccountReceivablePayment(
+			this.props.regionId,
+			this.state.customerNumber,
 
-				"Credit",
-				this.state.ReferenceNo,
-				this.state.PaymentDate,
-				this.state.PaymentNote,
-				0, //overpayment
-				this.state.PaymentAmount,
+			"Credit",
+			this.state.ReferenceNo,
+			this.state.PaymentDate,
+			this.state.PaymentNote,
+			0, //overpayment
+			this.state.PaymentAmount,
 
-				PayItems,
+			PayItems,
 
-				this.props.filterParam.fromDate,
-				this.props.filterParam.toDate,
-				this.props.searchText,
-				this.props.filterParam.paymentStatus
-			)
-			this.handleClose();
-		}
+			this.props.filterParam.fromDate,
+			this.props.filterParam.toDate,
+			this.props.searchText,
+			this.props.filterParam.paymentStatus
+		)
+		this.handleClose();
 	}
 
 	render() {
@@ -445,7 +443,7 @@ class PaymentFormModalCredit extends React.Component {
 									label="Date"
 									className={classNames(classes.textField, "pr-6")}
 									InputLabelProps={{ shrink: true }}
-									value={this.state.PaymentDate}
+									value={this.state.PaymentDate || ''}
 									onChange={this.handleChange('PaymentDate')}
 									margin="dense"
 									variant="outlined"
@@ -474,7 +472,7 @@ class PaymentFormModalCredit extends React.Component {
 									// fullWidth
 									className={classNames(classes.textField, "pr-6")}
 									id="PaymentNote"
-									value={this.state.PaymentNote}
+									value={this.state.PaymentNote || ''}
 									onChange={this.handleChange('PaymentNote')}
 									label="Reason"
 									sm={6}
@@ -597,8 +595,9 @@ class PaymentFormModalCredit extends React.Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		getPaymentsDialogInvoiceList: Actions.getPaymentsDialogInvoiceList,
-		openPaymentDialog: Actions.openPaymentDialog
+		openPaymentDialog: Actions.openPaymentDialog,
+
+		createAccountReceivablePayment: Actions.createAccountReceivablePayment
 	}, dispatch);
 }
 

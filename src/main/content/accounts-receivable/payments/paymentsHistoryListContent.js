@@ -486,7 +486,7 @@ class paymentsHistoryListContent extends Component {
 
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.commitChanges = this.commitChanges.bind(this);
-		this.changeSearchValue = value => this.setState({ searchValue: value });
+		// this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
 
 		this.changeExpandedDetails = expandedRowIds => this.setState({ expandedRowIds });
@@ -501,7 +501,9 @@ class paymentsHistoryListContent extends Component {
 			);
 		}
 	}
-
+	changeSearchValue = value => {
+		this.setState({ searchValue: value })
+	};
 	changeSelection = (selection) => {
 		if (selection.length > 1) selection = [selection[selection.length - 1]]
 		this.setState({ selection })
@@ -593,6 +595,7 @@ class paymentsHistoryListContent extends Component {
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
 		})
+		this.changeSearchValue(this.props.searchText)
 		this.timer = null;
 	}
 	componentWillUnmount() {
@@ -624,7 +627,8 @@ class paymentsHistoryListContent extends Component {
 
 		if (nextProps.searchText !== this.props.searchText) {
 			console.log("------search text changed-------", nextProps.searchText)
-			this.search(nextProps.searchText);
+			// this.search(nextProps.searchText);
+			this.changeSearchValue(nextProps.searchText)
 		}
 
 		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
@@ -829,7 +833,7 @@ class paymentsHistoryListContent extends Component {
 				<span style={{ width: "10%" }}><strong>Amount: </strong></span>
 			</div>
 			{
-				row.PayItems.map((x, index) => (
+				row.PayHistoryItems && row.PayHistoryItems.map((x, index) => (
 					<div key={index} className="flex justify-end">
 						<span style={{ width: "10%", color: "#63b6ff" }}>{x.InvoiceNo}</span>
 						<span style={{ width: "10%", color: "#ffb26e" }}>$ {x.Amount}</span>

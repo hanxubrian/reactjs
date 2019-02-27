@@ -27,7 +27,7 @@ const initialState = {
         data : null,
         customer: null
     },
-    FromDate:moment().date(1).format("MM/DD/YYYY"),
+    FromDate:moment().subtract(5, 'months').startOf('month').format("MM/DD/YYYY"),
     ToDate: moment().add(1,'months').endOf('month').format("MM/DD/YYYY"),
     StatusId: [],
     PeriodId: [220],

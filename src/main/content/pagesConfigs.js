@@ -5,7 +5,9 @@ import {ProfilePageConfig} from './profile/ProfilePageConfig';
 import {RegionsConfig} from "./regions/regions/regionsConfig";
 import {TerritoriesConfig} from "./regions/territories/territoriesConfig";
 import {FranchiseesConfig} from "./franchisees/franchisees/franchiseesConfig";
+import {ChargebacksConfig} from "./franchisees/chargebacks/chargebacksConfig";
 import {LeasesConfig} from "./franchisees/leases/leasesConfig";
+import {NegativeDueConfig} from "./franchisees/NegativeDues/NegativeDueConfig";
 import {EndofmonthConfig} from "./franchisees/endofmonth/endofmonthConfig";
 import {DistributionsConfig} from "./franchisees/distributions/distributionsConfig";
 import {TransactionsConfig} from "./franchisees/transactions/transactionsConfig";
@@ -13,6 +15,7 @@ import {ContractsConfig} from "./customers/Contracts/contractsConfig";
 import {CustomersConfig} from "./customers/Customers/customersConfig";
 import {InspectionsConfig} from "./operations/inspections/inspectionsConfig";
 import {OperationsConfig} from "./operations/operations/operationsConfig";
+import {PrintChecksConfig} from "./accounts-payable/printchecks/printChecksAppConfig";
 import {SalesConfig} from "./sales/sales/salesConfig";
 import {CallListConfig} from "./sales/call-list/call-listConfig";
 import {LeadsConfig} from "./sales/leads/leadsConfig";
@@ -46,6 +49,7 @@ export const pagesConfigs = [
     RegionsConfig,
     TerritoriesConfig,
     FranchiseesConfig,
+    ChargebacksConfig,    
     LeasesConfig,
     EndofmonthConfig,
     DistributionsConfig,
@@ -65,6 +69,7 @@ export const pagesConfigs = [
     InvoiceConfig,
     PaymentsConfig,
     ArLogConfig,
+    PrintChecksConfig,
     BillRunConfig,
     AccountsReceivableConfig,
     ReportsConfig,
@@ -77,5 +82,6 @@ export const pagesConfigs = [
     PaymentLockBoxReportConfig,
     SystemNotificationConfig,
     AdminConfig,
-    AdminImportConfig
+    AdminImportConfig,
+    NegativeDueConfig,
 ];

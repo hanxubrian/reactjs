@@ -51,18 +51,35 @@ const usersReducer = function (state = initialState, action) {
     {
         case Actions.OPEN_USERS_FORM: {
             let userDetail = state.userDetail;
-            if(!action.payload.openForm) userDetail = null;
-            return {
+            if(!action.payload.openForm){
+                userDetail = null;
+            } 
+            if(userDetail === null){
+                return {
                 ...state,
                 openUsersFormStatus: action.payload.openForm, bNewForm: action.payload.bNewForm,
                 fpStatus: false, userDetail: userDetail
             }
+            }else{
+                return {
+                ...state,
+                openUsersFormStatus: action.payload.openForm, bNewForm: action.payload.bNewForm,
+                fpStatus: false, userDetail: userDetail,payload: userDetail.details
+            }
+        }                
+                  
         }
         case Actions.GET_USERS_LIST: {
           return {
               ...state,
               usersList: action.payload
           }
+        }
+        case Actions.UPDATE_USER: {
+            return {
+                ...state,
+                openUsersFormStatus: false
+            }
         }
         case Actions.UPDATE_USER_SELECT_ROWS:{
             return {

@@ -28,6 +28,7 @@ export const SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES = "[A.R.Payments] SET_PAYM
 export const FILTER_PAYMENT_START_DATE = "[A.R.Payments] FILTER_PAYMENT_START_DATE";
 export const FILTER_PAYMENT_END_DATE = "[A.R.Payments] FILTER_PAYMENT_END_DATE";
 
+export const GET_PAYMENT_TYPES = "[A.R.Payments] GET_PAYMENT_TYPES";
 
 export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status) {
 
@@ -73,6 +74,19 @@ export function getPaymentHistory(regionId, fromDate, toDate, status, paymentTyp
 		})();
 	}
 }
+export function getPaymentTypes() {
+
+	return (dispatch) => {
+
+		(async () => {
+			let res = await paymentService.getPaymentTypes();
+			dispatch({
+				type: GET_PAYMENT_TYPES,
+				payload: res.Data
+			});
+		})();
+	}
+}
 
 export function createAccountReceivablePayment(
 	RegionId,
@@ -84,6 +98,7 @@ export function createAccountReceivablePayment(
 	PaymentNote,
 	overpayment,
 	PaymentAmount,
+	PaymentAmountApplied,
 
 	PayItems,
 
@@ -114,6 +129,7 @@ export function createAccountReceivablePayment(
 				PaymentNote,
 				overpayment,
 				PaymentAmount,
+				PaymentAmountApplied,
 
 				PayItems,
 			);

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { withStyles,CircularProgress} from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from "redux";
+import * as MainActions from "store/actions";
 import * as Actions from './store/actions';
 import "react-table/react-table.css";
 import classNames from 'classnames';
@@ -315,6 +316,7 @@ class UsersList extends Component {
 
     constructor(props) {
         super(props);
+        props.getCustomers(props.regionId,0,[]); 
         this.state = {
             s: '',
             temp: [],
@@ -322,6 +324,7 @@ class UsersList extends Component {
             selectAll: false,
             selection: [],
             rows: [],
+            bLoadedUserList: false,
             tableColumnExtensions: [
                 {
                     title: "First Name",
@@ -503,9 +506,7 @@ class UsersList extends Component {
             this.setState({
                 rows: Object.values(obj)
             });
-        }
-        if(nextProps.usersList !== this.props.usersList){
-
+            this.setState({bLoadedUserList: true});
         }
     }
 
@@ -611,6 +612,7 @@ class UsersList extends Component {
             phoneNumberColumns,
             pageSizes,
             searchValue,
+            bLoadedUserList
         } = this.state;
 
 
@@ -705,11 +707,11 @@ class UsersList extends Component {
                 {this.props.openUsersFormStatus && (
                     <UsersForm/>
                 )}
-                {/* {(this.props.contacts) && (
+                {!bLoadedUserList && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"/>
                     </div>
-                )} */}
+                )}
             </Fragment>
         )
     }
@@ -719,6 +721,7 @@ class UsersList extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+        getCustomers: MainActions.getCustomers,
         getUsersList: Actions.getUsersList,
         getUserDetail: Actions.getUserDetail,
         updateSelectRows: Actions.updateSelectRows,
