@@ -34,6 +34,7 @@ import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
 import CustomersTable from "./customersTable";
+import FindersFeesTable from "./findersFeesTable";
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 
@@ -618,7 +619,9 @@ function getStepContent(franchiseeForm, step) {
             );
         case 4:
             return(
-                <Fragment></Fragment>
+                <Fragment>
+                    <FindersFeesTable/>
+                </Fragment>
             ); 
         default:
             return 'Unknown step';
@@ -801,6 +804,7 @@ class FranchiseesCreateForm extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+
   
     }
 
@@ -1051,6 +1055,7 @@ function mapDispatchToProps(dispatch) {
         franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
         createFranchisee : Actions.createFranchisees,
         updateFranchisees: Actions.updateFranchisees,
+        getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo
     }, dispatch);
 }
 
@@ -1067,6 +1072,7 @@ function mapStateToProps({ franchisees, auth }) {
         selectedExpDate: franchisees.selectedExpDate,
         selectedRenewDate: franchisees.selectedRenewDate,
         insertPayload: franchisees.insertPayload,
+        findersFees: franchisees.findersFees
     }
 }
 

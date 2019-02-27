@@ -19,7 +19,6 @@ import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 
 
-
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -44,7 +43,7 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-class CustomersTableHead extends React.Component {
+class FindersFeesTableHead extends React.Component {
 
     state = {
         docSendModal: false
@@ -75,6 +74,7 @@ class CustomersTableHead extends React.Component {
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
                                 sortDirection={orderBy === row.id ? order : false}
+                                style={{textAlign: "center"}}
                             >
                                 <Tooltip
                                     title="Sort"
@@ -99,7 +99,7 @@ class CustomersTableHead extends React.Component {
 }
 
 
-CustomersTableHead.propTypes = {
+FindersFeesTableHead.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
@@ -131,7 +131,7 @@ const toolbarStyles = theme => ({
     },
 });
 
-let CutomersTableToolbar = props => {
+let FindersFeesToolbar = props => {
     const { numSelected, classes } = props;
 
     return (
@@ -171,12 +171,12 @@ let CutomersTableToolbar = props => {
     );
 };
 
-CutomersTableToolbar.propTypes = {
+FindersFeesToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired
 };
 
-CutomersTableToolbar = withStyles(toolbarStyles)(CutomersTableToolbar);
+FindersFeesToolbar = withStyles(toolbarStyles)(FindersFeesToolbar);
 
 const styles = theme => ({
     root: {
@@ -231,7 +231,8 @@ const styles = theme => ({
     }
 });
 
-class CustomersTable extends React.Component {
+class FindersFeesTable extends React.Component {
+   
     state = {
         order: 'asc',
         selected: [],
@@ -243,9 +244,16 @@ class CustomersTable extends React.Component {
         uploadDateTime: [],
         fileSize: [],
         view: [],
-        customers: []
+        findersFees: []
     };
     
+    constructor (props){
+        super(props);
+        if(props.franchiseesForm.type === 'edit'){
+            props.getFinderfeesByFranchiseeNo(props.regionId,props.insertPayload.dlr_code);
+        }
+    }
+
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -264,12 +272,17 @@ class CustomersTable extends React.Component {
         
     }
     componentWillMount() {
-       if(this.props.insertPayload.Customers !== null && this.props.franchiseesForm.type === 'edit'){
-           this.setState({
-               customers: this.props.insertPayload.Customers
-           });
-       }
+       
     }
+    componentWillReceiveProps(nextProps){
+        if( (nextProps.findersFees !== this.props.findersFees) && nextProps.findersFees.length > 0 ){
+            this.setState({
+                findersFees: nextProps.findersFees
+            });
+        }
+  
+    }
+
 
     handleChangePage = (event, page) => {
         this.setState({ page });
@@ -281,7 +294,7 @@ class CustomersTable extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { customers,order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { findersFees,order, orderBy, selected, rowsPerPage, page } = this.state;
 
         const headers = [
             {
@@ -291,34 +304,34 @@ class CustomersTable extends React.Component {
                 label: 'Customer #'
             },
             {
-                id: 'cus_name',
+                id: 'cust_name',
                 numeric: false,
                 disablePadding: false,
                 label: 'Customer Name'
             },
             {
-                id: 'cus_addr',
+                id: 'ff_desc',
                 numeric: false,
                 disablePadding: false,
-                label: 'Address'
+                label: 'Description'
             },
             {
-                id: 'cus_city',
+                id: 'ff_tot',
                 numeric: false,
                 disablePadding: false,
-                label: 'City'
+                label: 'Total'
             },
             {
-                id: 'cus_zip',
+                id: 'ff_pytotl',
                 numeric: false,
                 disablePadding: false,
-                label: 'Zip'
+                label: 'Payment Total'
             },
             {
-                id: 'cont_bill',
+                id: 'Status',
                 numeric: false,
                 disablePadding: false,
-                label: 'Contract billing'
+                label: 'Status'
             },
             {
                 id: 'action',
@@ -332,17 +345,17 @@ class CustomersTable extends React.Component {
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
-                        <CustomersTableHead
+                        <FindersFeesTableHead
                             className={classNames(classes.documentuploadHeadRoot)}
                             numSelected={selected.length}
                             order={order}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={customers.length}
-                            headers={headers}
+                            rowCount={findersFees.length}
+                            headers={headers}                           
                         />
                         <TableBody>
-                            {customers.length > 0 && (
-                                stableSort(customers, getSorting(order, orderBy))
+                            {findersFees.length > 0 && (
+                                stableSort(findersFees, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((n,index) => {
                                             return (
@@ -350,34 +363,28 @@ class CustomersTable extends React.Component {
                                                     <TableCell style={{width: 150}}>
                                                         {n.cust_no}
                                                     </TableCell>
-                                                    <TableCell style={{width: 450}}>
-                                                        {n.cus_name}
+                                                    <TableCell style={{width: 550}}>
+                                                        {n.cust_name}
                                                     </TableCell>
                                                     <TableCell style={{width: 450}}>
-                                                        {n.cus_addr}
+                                                        {n.ff_desc}
                                                     </TableCell>
-                                                    <TableCell >
-                                                        {n.cus_city}
+                                                    <TableCell style={{width: 150,textAlign:"right"}}>
+                                                        ${n.ff_tot}
+                                                    </TableCell>
+                                                    <TableCell style={{width: 250,textAlign:"right"}}>
+                                                        ${n.ff_pytotl}
                                                     </TableCell>
                                                     <TableCell style={{width: 280}}>
-                                                        {n.cus_zip}
-                                                    </TableCell>
-                                                    <TableCell style={{width: 280}}>
-                                                        {n.cont_bill}
+                                                        {n.Status}
                                                     </TableCell>                                               
                                                     <TableCell>
                                                         <IconButton
                                                             className={classNames(classes.summaryPanelButton, "mr-12")}
                                                             aria-label="view-icon"
                                                             >
-                                                            <Icon>visibility</Icon>
+                                                            <Icon>stop</Icon>
                                                         </IconButton>
-                                                        {/* <IconButton
-                                                                className={classNames(classes.summaryPanelButton, "mr-12")}
-                                                                aria-label="send-icon"                       
-                                                                >
-                                                                <Icon>send</Icon>
-                                                        </IconButton> */}
                                                     </TableCell>
                                                 </TableRow>
                                             )
@@ -389,7 +396,7 @@ class CustomersTable extends React.Component {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={customers.length}
+                    count={findersFees.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     backIconButtonProps={{
@@ -407,16 +414,17 @@ class CustomersTable extends React.Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-       
+        getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo
     }, dispatch);
 }
 
 function mapStateToProps({ franchisees, auth }) {
     return {
+        findersFees: franchisees.findersFees,
+        franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         insertPayload: franchisees.insertPayload,
-        franchiseesForm: franchisees.createFranchisees,
     }
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomersTable)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FindersFeesTable)));

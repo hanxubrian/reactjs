@@ -22,6 +22,7 @@ const initialState = {
     planType: [],
     documentsList: [],
     franchiseeFees: [],
+    findersFees: [],
     Location: "all",
     detailPayload: null,
     eidtPayload: null,
@@ -432,6 +433,12 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 docViewModal: action.payload
+            }
+        }
+        case Actions.GET_FINDERS_FEES_BY_FRANCHISEENO: {
+            return{
+                ...state,
+                findersFees: action.payload
             }
         }
         default:

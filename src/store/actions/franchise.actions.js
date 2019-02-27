@@ -27,17 +27,15 @@ export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
 export const UPLOAD_INSERT_PAYLOAD = '[FRANCHISEES] UPDATE INSERT PAYLOAD';
 export const GET_FRANCHISEE_STATE_LIST = '[FRANCHISEES] GET FRANCHISEE STATE LIST';
 export const UPDATE_FRANCHISEE_UPDATE_CHECKBOX = '[FRANCHISEES] UPDATE FRANCHISEE UPDATE CHECKBOX';
-
 export const CREATE_FRANCHISEE = '[FRANCHISEES] CREATE FRANCHISEE';
 export const UPDATE_FRANCHISEE = '[FRANCHISEES] UPDATE FRANCHISEE';
 export const DELETE_FRANCHISEE = '[FRANCHISEES] DELETE FRANCHISEE';
 export const GET_FRANCHISEE_DETAIL = '[FRANCHISEES] GET FRANCHISEE DETAIL';
-
 export const UPDATE_REPORT_PERIOD = '[FRANCHISEES] UPDATE REPORT PERIOD';
 export const NULLIFY_FRANCHISEE_NEW_REPORT = '[FINDERSFEES APP] NULLIFY FRANCHISEE NEW REPORT';
-
 export const OPEN_CLOSE_DOC_SEND_ACTION_DIALOG = '[FRANCHISEES] OPEN CLOSE DOC SEND ACTION DIALOG ';
 export const OPEN_CLOSE_DOC_VIEW_ACTION_DIALOG = '[FRANCHISEES] OPEN CLOSE DOC VIEW ACTION DIALOG ';
+export const GET_FINDERS_FEES_BY_FRANCHISEENO = '[FRANCHISEES] GET_FINDERS_FEES_BY_FRANCHISEENO ';
 
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
@@ -335,5 +333,19 @@ export function openCloseDocViewActionDialog (flag){
         type: OPEN_CLOSE_DOC_VIEW_ACTION_DIALOG,
         payload: flag
     }
+}
+
+export function getFinderfeesByFranchiseeNo (RegionId,FranchiseeNo){
+     return (dispatch) => {
+        (async () => {
+            let res = await franchiseesService.getFinderfeesByFranchiseeNo(RegionId,FranchiseeNo);
+            if (res.IsSuccess) {                
+                dispatch({
+                    type: GET_FINDERS_FEES_BY_FRANCHISEENO,
+                    payload: res.Data
+                });
+            }
+        })();
+     }
 }
 
