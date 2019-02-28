@@ -1348,6 +1348,7 @@ function mapDispatchToProps(dispatch) {
 
 		setActiveFranchisee: Actions.setActiveFranchisee,
 		updateNewCustomerParam: Actions.updateNewCustomerParam,
+		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 
 	}, dispatch);
 }
