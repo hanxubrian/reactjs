@@ -458,7 +458,7 @@ BillRunDialog.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createBillrun: Actions.createbillrun,
+        createBillrun: Actions.createBillrun,
         showMessage: Actions.showMessage,
         hideMessage: Actions.hideMessage,
     }, dispatch);

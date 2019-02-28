@@ -22,15 +22,15 @@ import JanikingPagination from 'Commons/JanikingPagination';
 import moment from 'moment'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import _ from 'lodash';
 import classNames from 'classnames';
-import Pusher from 'pusher-js';
 
 
-import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
 import MomentUtils from "@date-io/moment/build/index";
 import BillRunDialog from './bill-run-create';
 import BillRunInvoiceDetail from './bill-run-invoice';
+
+import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
+
 const headerHeight = 100;
 
 const hexToRgb = (hex) =>{
@@ -144,6 +144,7 @@ const styles = theme => ({
         minWidth: 120,
     },
 });
+
 const THIS_WEEK = 1;
 const THIS_WEEK_TO_DATE = 2;
 const THIS_MONTH = 3;
@@ -254,9 +255,8 @@ class BillRun extends Component {
             if(this.props.loading === false && prevProps.loading===true){
             }
         }
-
-
     }
+
     componentWillUnmount(){
         this.child=null;
         this.child1=null;
@@ -265,6 +265,7 @@ class BillRun extends Component {
         channel = undefined;
 
     }
+
     componentWillReceiveProps(nextProps) {
         if(this.props.billruns===null && nextProps.billruns!==null && this._isMounted)
             this.getBillruns(nextProps.billruns);
@@ -285,7 +286,8 @@ class BillRun extends Component {
 
             this.setState({flag: !this.state.flag});
         }
-    }
+    };
+
     getBillRunList=()=>{
         if(!this._isMounted) return ;
         let regisonid       = [];
@@ -315,26 +317,24 @@ class BillRun extends Component {
             if(fromdate && fromdate != null && todate && todate != null){
 
                 if(regisonid && regisonid.length >0 && userids && userids.length >0 && !this.props.loading){
-
-                    console.log("regisonid,userids,isbillperiod,month,year,fromdate,todate",regisonid,userids,isbillperiod,month,year,fromdate,todate);
                     this.props.getAllBillruns(
-                        regisonid,userids,isbillperiod,month,year,fromdate,todate,searchtext
+                        regisonid,userids,fromdate,todate, isbillperiod,month,year,searchtext
                     );
                 }
             }
         }
-
-
-    }
+    };
 
     opendialogwin=()=>{
         // this.refs.child.handleClickOpen();
         this.child.handleClickOpen();
-    }
+    };
+
     closeDialog=()=>{
 
 
-    }
+    };
+
     handleChange1 = event => {
         if(!this._isMounted){return null;}
         this.setState({[event.target.name]: event.target.value});
@@ -416,6 +416,7 @@ class BillRun extends Component {
         }
 
     };
+
     handleBillRunFromDateChange = date => {
         this.setState({FromDate: date});
     };
@@ -423,6 +424,7 @@ class BillRun extends Component {
     handleBillRunToDateChange = date => {
         this.setState({ ToDate: date });
     };
+
     handlePeriodChange = date => {
         this.setState({ billrunDatePeriod: date });
         let year = moment(date).year();
@@ -432,14 +434,24 @@ class BillRun extends Component {
         this.setState({startDate: date});
         this.setState({endDate: date });
     };
-    openEditContactDialog=(rowinfo)=>{
+
+    gotoInvoice = async rowinfo => {
+
+        let year = rowinfo.Year;
+        let month = rowinfo.Month-1;
+
+        let startDate = moment().year(year).month(month).startOf('month');
+        let endDate = moment().year(year).month(month).endOf('month');
+
+        await this.props.updateInvoiceDate(UPDATE_FROM_DATE_INVOICE, startDate.format("MM/DD/YYYY"));
+        await this.props.updateInvoiceDate(UPDATE_TO_DATE_INVOICE, endDate.format("MM/DD/YYYY"));
         this.props.history.push("/accounts-receivable/invoices");
-        // this.child1.getInfofromParent(rowinfo);
-        // this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
-    }
+    };
+
     CloseDetail=()=>{
         this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
-    }
+    };
+
     render()
     {
         const {classes} = this.props;
@@ -560,8 +572,7 @@ class BillRun extends Component {
                                             onClick  : (e, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
-                                                    // alert('ok');
-                                                    this.openEditContactDialog(rowInfo.original);
+                                                    this.gotoInvoice(rowInfo.original);
                                                 }
                                             }
                                         }
@@ -803,7 +814,8 @@ function mapDispatchToProps(dispatch)
         getAllBillruns          : Actions.getAllBillruns,
         deleteSeletedBillRun    : Actions.deleteSeletedBillRun,
         openDialog              : Actions.openDialog,
-        closeDialog             : Actions.closeDialog
+        closeDialog             : Actions.closeDialog,
+        updateInvoiceDate: Actions.updateInvoiceDate,
     }, dispatch);
 }
 

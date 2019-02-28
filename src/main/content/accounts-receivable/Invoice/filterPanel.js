@@ -412,7 +412,7 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         toggleStatus: Actions.toggleStatus,
-        updateDate: Actions.updateDate,
+        updateDate: Actions.updateInvoiceDate,
         updateInvoiceStatus: Actions.updateInvoiceStatus,
         updateInvoiceDateOption: Actions.updateInvoiceDateOption,
         updatePeriodOption: Actions.updatePeriodOption

@@ -59,7 +59,7 @@ export function getAllBillruns(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYe
         });
 
         (async () => {
-            let res = await billrunService.getallbillrun(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYear,FromDate,ToDate,SearchText);
+            let res = await billrunService.getAllBillrun(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYear,FromDate,ToDate,SearchText);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_ALL_BILLRUN_SUCCESS,
@@ -83,7 +83,7 @@ export function deleteSeletedBillRun(RegionIds, billrunNo) {
         });
 
         (async () => {
-            let res = await billrunService.deletebillrun(RegionIds, billrunNo);
+            let res = await billrunService.deleteBillrun(RegionIds, billrunNo);
             if (res.IsSuccess) {
                 dispatch({
                     type: DELETE_BILLRUN_SUCCESS,
@@ -133,7 +133,7 @@ export function removeBillrun(key, invoices) {
 }
 
 
-export  function createbillrun(RegionId, Year ,Month,User, UserId,Message,Description) {
+export  function createBillrun(RegionId, Year ,Month,User, UserId,Message,Description) {
     return (dispatch) => {
 
         dispatch({
@@ -173,7 +173,7 @@ export  function getinvoicedetailfrombillrun(RegionId,BillRunNo) {
         });
 
         (async () => {
-            let res = await billrunService.getinvoicefrombillrun(RegionId,BillRunNo);
+            let res = await billrunService.getInvoiceFromBillrun(RegionId,BillRunNo);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_BILLRUN_INVOICE_DETAIL_BILLRUN_SUCCESS,
