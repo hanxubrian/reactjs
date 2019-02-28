@@ -168,9 +168,9 @@ const styles = theme => ({
     },
     chattogglebtn:{
         position: 'fixed',
-        bottom: '5px',
+        bottom: '30%',
         // right: '90px',
-        right: '15%',
+        right: '1%',
         zIndex: 999999,
     },
     chattogglebtnpro:{
