@@ -1076,18 +1076,20 @@ class FilterPanel extends Component {
 									margin="dense"
 									// variant="outlined"
 									autoFocus
-									style={{ width: '70%' }} />
-								<TextField
-									id="cust_no"
-									label="#"
-									className={classes.textField}
-									value={this.props.customerForm.type === 'new' ? 'PENDING' : (this.state.cust_no || '')}
-									onChange={this.handleChangeCustomerInfoProps('cust_no')}
-									InputLabelProps={{ shrink: true }}
-									InputProps={{ readOnly: true }}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: '30%' }} />
+									fullWidth />
+								{this.props.customerForm.type === 'edit' &&
+									<TextField
+										id="cust_no"
+										label="#"
+										className={classes.textField}
+										value={this.state.cust_no}
+										onChange={this.handleChangeCustomerInfoProps('cust_no')}
+										InputLabelProps={{ shrink: true }}
+										InputProps={{ readOnly: true }}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: '30%' }} />
+								}
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
