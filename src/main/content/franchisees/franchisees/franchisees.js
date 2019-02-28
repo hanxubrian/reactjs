@@ -837,7 +837,10 @@ class Franchisees extends Component {
                                                 className={classNames(classes.button, "mr-12")}
                                                 onClick={() => {this.closeComposeForm();}}
                                                 disabled={!this.canBeSubmitted()}
-                                            > Discard </Button>
+                                            >
+                                                Discard
+                                                <Icon className={classes.rightIcon}>delete</Icon>
+                                            </Button>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
                                             <Button
@@ -846,7 +849,10 @@ class Franchisees extends Component {
                                                 className={classNames(classes.button, "mr-12")}
                                                 onClick={() => {this.createFranchiseeForm();}}
                                                 disabled={!this.canBeSubmitted()}
-                                            > Save </Button>
+                                            >
+                                                Save
+                                                <Icon className={classes.rightIcon}>save</Icon>
+                                            </Button>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
                                             <Button
@@ -857,7 +863,10 @@ class Franchisees extends Component {
                                                     this.closeComposeForm();
                                                 }}
                                                 disabled={!this.canBeSubmitted()}
-                                            > Close </Button>
+                                            >
+                                                Close
+                                                <Icon className={classes.rightIcon}>close</Icon>
+                                            </Button>
                                         </FuseAnimate>
                                     </div>
                                 </div>
