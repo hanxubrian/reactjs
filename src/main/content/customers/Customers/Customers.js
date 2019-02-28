@@ -697,6 +697,9 @@ class Customers extends Component {
 	}
 	processConfirming = () => {
 		if (this.state.tryingToSubmitWithoutOffering === true) {
+			this.setState({
+				tryingToSubmitWithoutOffering: false,
+			})
 			this.submitForApproval()
 		}
 		if (this.state.tryingToCloseWithoutOffering === true) {

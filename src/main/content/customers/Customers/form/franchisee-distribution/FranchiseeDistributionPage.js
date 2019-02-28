@@ -496,6 +496,11 @@ class FranchiseeDistributionPage extends React.Component {
 			franchieesesToOffer: newFrans,
 		});
 		this.props.updateNewCustomerParam('AssignedFranchisees', newFrans)
+		//
+		//init selected grid
+		//
+		this.props.setFranchieesesToOffer([])
+
 		// this.props.activeCustomer.Data.AssignedFranchisees && this.props.activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
 		// 	if (x.FinderFeeId) {
 		// 		this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
