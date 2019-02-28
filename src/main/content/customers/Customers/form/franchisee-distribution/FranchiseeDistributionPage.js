@@ -967,7 +967,7 @@ class FranchiseeDistributionPage extends React.Component {
 	addMonthlyBilling = (fIndex) => {
 		const { franchieesesToOffer } = this.state
 		let newMonthlyBilling = {
-			"EscrowBilling": true,
+			"EscrowBilling": false,
 			"Status": "Status",
 			"BillingFrequency": "R",
 			"BillingTypeServiceId": "0",
