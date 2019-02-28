@@ -527,21 +527,18 @@ class FranchieesListPage extends Component {
 		// "AssignedDate": "sample string 5",
 		// "MonthlyBilling": []
 		// "CreatedById": 6
-
-		franchieesesToOffer.forEach(x => {
-			x = {
-				...x,
-				"FranchiseeNumber": x.Number,
-				"FranchiseeName": x.Name,
-				"Id": "",
-				"Status": "Assigned",
-				"AssignedDate": moment().format('YYYY-MM-DD'),
-				"CreatedById": 0,
-				"MonthlyBilling": [],
-				"FinderFee": {},
-			}
+		let newFranchieesesToOffer = _.cloneDeep(franchieesesToOffer)
+		newFranchieesesToOffer.forEach(x => {
+			x.FranchiseeNumber = x.Number
+			x.FranchiseeName = x.Name
+			// Id= ""
+			x.Status = "Assigned"
+			x.AssignedDate = moment().format('YYYY-MM-DD')
+			// CreatedById= 0
+			x.MonthlyBilling = []
+			x.FinderFee = {}
 		})
-		this.props.setFranchieesesToOffer(franchieesesToOffer)
+		this.props.setFranchieesesToOffer(newFranchieesesToOffer)
 	}
 
 	commitChanges = ({ added, changed, deleted }) => {
