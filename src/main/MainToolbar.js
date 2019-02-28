@@ -6,7 +6,28 @@ import {withRouter} from 'react-router-dom';
 
 
 import classNames from 'classnames';
-import {Avatar, Button,Fab,Tabs,Tab,Icon, AppBar,ClickAwayListener, IconButton,Divider, Paper,List, ListItem , ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
+import {
+    Avatar,
+    Button,
+    Fab,
+    Tabs,
+    Tab,
+    Icon,
+    AppBar,
+    ClickAwayListener,
+    IconButton,
+    Divider,
+    Paper,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Popover,
+    MenuItem,
+    Typography,
+    Hidden,
+    TextField
+} from '@material-ui/core';
 
 import * as quickPanelActions from 'main/quickPanel/store/actions';
 import * as authActions from '../auth/store/actions/login.actions';
@@ -17,12 +38,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Pusher from 'pusher-js';
 import moment from 'moment/moment';
-import ImageIcon from '@material-ui/icons/Image';
 import * as Actions from "./chatPanel/store/actions";
-
 import * as MainActions from 'store/actions';
 import ReactPlayer from 'react-player';
-import SystemNotification from './content/notifications/SystemNotification';
 import VersionUpgradeDialog from '../main/content/admin/AdminDialog/VersionUpgradeDialog';
 
 
@@ -190,7 +208,10 @@ const styles = theme => ({
         height          : '386px',
         right           : '40px',
         top             : '85%',
-    }
+    },
+    input1: {
+        padding: '12px 6px'
+    },
 });
 
 class MainToolbar extends Component {
@@ -218,6 +239,7 @@ class MainToolbar extends Component {
         MSG                         : null,
         triggerF                    : false,
         checkloadingchatMSG         : true,
+        period: -1,
 
     };
 
@@ -231,7 +253,12 @@ class MainToolbar extends Component {
 
     handleChange = event => {
         this.setState({[event.target.name]: event.target.value});
-        this.props.setRegionId(event.target.value);
+
+        if(event.target.name==='region')
+            this.props.setRegionId(event.target.value);
+
+        if(event.target.name==='period')
+            this.props.changeDefaultPeriod(event.target.value);
     };
 
     handleClose = () => {
@@ -263,6 +290,9 @@ class MainToolbar extends Component {
         adminchannel.bind('on-admin', data => {
             this.setState({ adminMSG:data});
         });
+
+        if(this.props.defaultPeriod!==-1)
+            this.setState({period: this.props.defaultPeriod})
     }
     shownotification=()=>{
         // e.stopPropagation();
@@ -491,19 +521,19 @@ class MainToolbar extends Component {
     }
     chatPanelshowbtn=()=>{
         this.props.openChatPanel();
-    }
+    };
     mailnotificationchat=()=>{
         this.props.openChatPanel();
         this.shownotification();
-    }
+    };
     openchatpanel=()=>{
         this.props.changechatpanelshowstatus();
         this.props.openChatPanel();
-    }
+    };
     closechatpanel=()=>{
         this.props.changechatpanelshowstatus();
         this.props.closeChatPanel();
-    }
+    };
     handleContactClick = (contactId) => {
         if(contactId && contactId != null){
             let contactid =contactId;
@@ -597,6 +627,7 @@ class MainToolbar extends Component {
                                     open={this.state.open}
                                     onClose={this.handleClose}
                                     onOpen={this.handleOpen}
+                                    name='region'
                                     defaultValue={this.props.login.DefaultRegionId}
                                     value={parseInt(this.state.region)}
                                     onChange={this.handleChange}
@@ -611,6 +642,25 @@ class MainToolbar extends Component {
                                         );
                                     })}
                                 </Select>
+                            </FormControl>
+                            <FormControl className={classNames(classes.formControl, "mt-12 pr-4") }>
+                                <TextField
+                                    select
+                                    name="period"
+                                    value={this.state.period}
+                                    onChange={this.handleChange}
+                                    className={classes.textField}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input2,
+                                        },
+                                    }}
+                                    fullWidth
+                                >
+                                    {this.props.all_periods.map((p, index)=>{
+                                        return (<MenuItem key={index} value={p}>{p}</MenuItem>)
+                                    })}
+                                </TextField>
                             </FormControl>
                         </form>
                     )}
@@ -897,6 +947,7 @@ function mapDispatchToProps(dispatch)
         toggleQuickPanel                : quickPanelActions.toggleQuickPanel,
         logout                          : authActions.logoutUser,
         setRegionId                     : authActions.changeRegionId,
+        changeDefaultPeriod             : authActions.changeDefaultPeriod,
         openChatPanel                   : chatPanelActions.openChatPanel,
         getChat                         : chatPanelActions.getChat,
         loadedMenu                      : authActions.loadedMenu,
@@ -916,6 +967,8 @@ function mapStateToProps({auth,chatPanel,contactsApp,notification,billruns})
     return {
         user                    : auth.user,
         login                   : auth.login,
+        all_periods             : auth.login.all_periods,
+        defaultPeriod           : auth.login.defaultPeriod,
         chat                    : chatPanel.chat,
         IndividualChat          : chatPanel.IndividualChat,
         contacts                : chatPanel.contacts,
