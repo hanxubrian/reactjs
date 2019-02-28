@@ -27,6 +27,7 @@
         "chart.js": "2.7.3",
         "date-fns": "2.0.0-alpha.21",
         "downshift": "3.1.5",
+        "emoji-picker-react": "^2.1.1",
         "firebase": "5.5.9",
         "formsy-react": "1.1.5",
         "google-map-react": "1.1.1",

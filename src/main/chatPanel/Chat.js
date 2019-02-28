@@ -7,7 +7,7 @@ import * as Actions from './store/actions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import _ from '@lodash';
-
+import EmojiPicker from 'emoji-picker-react';
 const styles = theme => ({
     messageRow  : {
         position                          : 'relative',
@@ -141,7 +141,7 @@ const styles = theme => ({
 class Chat extends Component {
     state = {
         messageText: '',
-
+        emojistatus:false,
     };
     constructor(props) {
         super(props);
@@ -213,6 +213,19 @@ class Chat extends Component {
         // this.nameInput.focus();
 
     }
+    myCallback=(props)=>{
+        let Omega = String.fromCodePoint(parseInt (props, 16))
+        // alert(Omega);
+        let message = this.state.messageText;
+        message+=Omega;
+        this.setState({messageText:message});
+    }
+    emotioncon=()=>{
+        this.setState({emojistatus:!this.state.emojistatus});
+    }
+    emotioncon1=()=>{
+        this.setState({emojistatus:false});
+    }
     render()
     {
         const {classes, chat, contacts, user, className,selectedContactId} = this.props;
@@ -221,6 +234,7 @@ class Chat extends Component {
         return (
             <Paper elevation={3} className={classNames("flex flex-col", className)}>
                 <FuseScrollbars
+
                     containerRef={(ref) => {
                         this.chatScroll = ref
                     }}
@@ -237,7 +251,7 @@ class Chat extends Component {
                         ) :
                         selectedContactId !==null && chat.dialog && chat.dialog.length > 0 ?
                             (
-                                <div>
+                                <div onClick={this.emotioncon1}>
                                 <div className="flex flex-col pt-16 pl-40 pb-40">
                                     {chat.dialog.map((item, i) => {
                                         const contact = item.who === user.id ? user : contacts.find(_contact => _contact.id === item.who);
@@ -294,6 +308,15 @@ class Chat extends Component {
                 {chat && (
 
                     <form onSubmit={this.onMessageSubmit} className={classNames(classes.bottom, "py-16 px-8")}>
+                        {this.state.emojistatus && (
+                            <div style={{
+                                position: 'absolute',
+                                bottom: 83
+                            }}>
+                                <EmojiPicker onEmojiClick={this.myCallback}/>
+                            </div>
+
+                        )}
 
                         <Paper className={classNames(classes.inputWrapper, "flex items-center relative")}>
                             {/*<input*/}
@@ -309,7 +332,9 @@ class Chat extends Component {
                                     {/*<Icon className="text-24" color="action">attach_file</Icon>*/}
                                 {/*</IconButton>*/}
                             {/*</label>*/}
-
+                            <IconButton onClick={this.emotioncon}>
+                                <Icon className="text-24" color="action">insert_emoticon</Icon>
+                            </IconButton>
                             <TextField
                                 autoFocus={false}
                                 id="message-input"
