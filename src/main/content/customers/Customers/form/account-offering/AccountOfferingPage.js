@@ -778,8 +778,9 @@ class AccountOfferingPage extends Component {
 			<div className={classNames("flex flex-col flex-1")}>
 
 				{this.props.bTransferFranchiseeFtate &&
-					<div>
-						<Typography variant="h6">Transfering franchisee...</Typography>
+					<div className="flex items-center" style={{ background: 'lemonchiffon', border: '2px #ffb6b6 solid', padding: 6 }}>
+						<Icon style={{ color: '#c56161' }}>warning</Icon>
+						<Typography variant="h6" style={{ color: '#c56161' }}>Transfering franchisee...</Typography>
 					</div>
 				}
 				{!this.props.bTransferFranchiseeFtate && <Stepper activeStep={step} style={{ padding: 0, background: 'unset' }} className='mb-12'>
