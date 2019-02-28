@@ -168,7 +168,7 @@ const styles = theme => ({
     },
     chattogglebtn:{
         position: 'fixed',
-        bottom: '5px',
+        bottom: '20%',
         // right: '90px',
         right: '15%',
         zIndex: 999999,
@@ -873,7 +873,7 @@ class MainToolbar extends Component {
 
                     <div className={classNames(classes.chattogglebtn,"chattogglebtnview")}>
                         <IconButton onClick={this.chatPanelshowbtn} style={{
-                            visibility: 'hidden',
+                            // visibility: 'hidden',
                             backgroundColor: '#3c93ec',
                             borderRadius: '50%',
                             color: 'white',
