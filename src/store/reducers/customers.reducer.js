@@ -313,6 +313,9 @@ const initialState = {
 
 	computedFinderFee: {},
 	finderFee: {},
+
+	updateCustomerResponse: null,
+	bUpdateCustomerStart: false,
 };
 
 
@@ -385,6 +388,21 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bCreateCustomerStart: true,
+				}
+			}
+		case Actions.UPDATE_CUSTOMER:
+			{
+				return {
+					...state,
+					updateCustomerResponse: action.payload,
+					bUpdateCustomerStart: false,
+				}
+			}
+		case Actions.UPDATE_CUSTOMER_START:
+			{
+				return {
+					...state,
+					bUpdateCustomerStart: true,
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:

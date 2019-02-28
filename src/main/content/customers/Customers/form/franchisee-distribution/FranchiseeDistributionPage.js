@@ -6,10 +6,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
-
+import FuseUtils from '@fuse/FuseUtils';
 import {
 	Icon, Tooltip, Button, TextField, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider,
-	ListItemLink, Checkbox, Switch, Fab, Snackbar, SnackbarContent, IconButton,
+	ListItemLink, Checkbox, Switch, Fab, Snackbar, SnackbarContent, IconButton, FormControl, Select,
 } from '@material-ui/core';
 
 // for store
@@ -426,7 +426,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 		this.setState({
 			customerServiceTypes: this.props.lists.customerServiceTypes,
-			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
+			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes.sort(FuseUtils.dynamicSortBy("Name")),
 			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
 		})
 
@@ -1117,58 +1117,52 @@ class FranchiseeDistributionPage extends React.Component {
 										// onBlur={() => this.handleUpdateAssignedFranchisees()}
 										/>
 
-										<TextField style={{ width: franHeaders[3].width + '%' }}
-											margin="dense"
-											className="pl-6"
-											value={m.BillingFrequency}
-											name="BillingFrequency"
-											select
-											InputProps={{
-												readOnly: false,
-												classes: {
-													input: classes.descriptionText,
-												},
-											}}
-											onChange={this.handleMonthlyBilling(index, mIndex, 'BillingFrequency')}
-										>
-											{[
-												{ label: 'Variable', value: 'V' },
-												{ label: 'Regular', value: 'R' },
-											].map((x, index) => (<MenuItem key={index} value={x.value}>{x.label}</MenuItem>))}
-										</TextField>
+										<FormControl className={classNames(classes.formControl, 'pl-6')} style={{ width: franHeaders[3].width + '%', marginTop: 2 }}>
+											{/* <InputLabel shrink htmlFor="BillingFrequency">Billing Type</InputLabel> */}
+											<Select
+												native
+												value={this.state.BillingFrequency || ''}
+												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingFrequency')}
+												inputProps={{
+													name: 'BillingFrequency',
+													id: 'BillingFrequency',
+												}}
+											>
+												{[
+													{ label: 'Variable', value: 'V' },
+													{ label: 'Regular', value: 'R' },
+												].map((x, index) => (<option key={index} value={x.value}>{x.label}</option>))}
+											</Select>
+										</FormControl>
 
-										<TextField style={{ width: franHeaders[4].width + '%' }}
-											margin="dense"
-											name='BillingTypeId'
-											className="pl-6 hidden"
-											value={m.BillingTypeId}
-											select
-											onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeId')}
-											InputProps={{
-												readOnly: true,
-												classes: {
-													input: classes.descriptionText,
-												},
-											}}
-										>
-											{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x._id}>{x.Name}</MenuItem>))}
-										</TextField>
+										{/* <FormControl className={classNames(classes.formControl, 'pl-6')} style={{ width: franHeaders[4].width + '%', marginTop: 2 }}>
+											<Select
+												native
+												value={this.state.BillingTypeId || ''}
+												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeId')}
+												inputProps={{
+													name: 'BillingTypeId',
+													id: 'BillingTypeId',
+												}}
+											>
+												{franchiseeBillingTypes.map((x, index) => (<option key={index} value={x._id}>{x.Name}</option>))}
+											</Select>
+										</FormControl> */}
 
-										<TextField style={{ width: franHeaders[5].width + '%' }}
-											margin="dense"
-											className="pl-6"
-											value={m.BillingTypeServiceId}
-											select
-											InputProps={{
-												readOnly: false,
-												classes: {
-													input: classes.descriptionText,
-												},
-											}}
-											onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeServiceId')}
-										>
-											{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x._id}>{x.Name}</MenuItem>))}
-										</TextField>
+										<FormControl className={classNames(classes.formControl, 'pl-6')} style={{ width: franHeaders[5].width + '%', marginTop: 2 }}>
+											{/* <InputLabel shrink htmlFor="BillingTypeServiceId">Service Type</InputLabel> */}
+											<Select
+												native
+												value={this.state.BillingTypeServiceId || ''}
+												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeServiceId')}
+												inputProps={{
+													name: 'BillingTypeServiceId',
+													id: 'BillingTypeServiceId',
+												}}
+											>
+												{franchiseeServiceTypes.map((x, index) => (<option key={index} value={x._id}>{x.Name}</option>))}
+											</Select>
+										</FormControl>
 
 										<TextField style={{ width: franHeaders[6].width + '%' }}
 											margin="dense"

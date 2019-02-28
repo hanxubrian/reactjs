@@ -547,7 +547,7 @@ class FilterPanel extends Component {
 				email1,
 				email2,
 
-				accounttype_groupid,
+				accounttype_groupid: accounttype_groupid || 1,
 				account_typeid,
 			});
 		}
@@ -603,7 +603,7 @@ class FilterPanel extends Component {
 				email1,
 				email2,
 
-				accounttype_groupid,
+				accounttype_groupid: accounttype_groupid || 1,
 				account_typeid,
 			});
 		}
@@ -1039,7 +1039,7 @@ class FilterPanel extends Component {
 				return parseInt(x.GroupId) === parseInt(this.state.accounttype_groupid)
 			})
 			if (accountTypeTexts.length > 0) {
-				accountTypeTexts = accountTypeTexts[0].Types.sort()
+				accountTypeTexts = accountTypeTexts[0].Types.sort(FuseUtils.dynamicSortBy("name"))
 			}
 		}
 		console.log("this.props.accountTypeList", this.props.accountTypeList, this.state.accounttype_groupid, accountTypeTexts)
@@ -1056,6 +1056,7 @@ class FilterPanel extends Component {
 			}).sort();
 		}
 
+		console.log('---this.props.accountTypeList---', this.state.accounttype_groupid, this.state.account_typeid)
 		return (
 			<div className={classNames(classes.root, "flex flex-1 flex-col p-20")}>
 				{/* <Paper className="flex flex-1 flex-col min-h-px p-20"> */}

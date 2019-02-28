@@ -551,7 +551,9 @@ class Customers extends Component {
 				nextProps.searchText);
 		}
 
-		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false) {
+		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false ||
+			nextProps.bUpdateCustomerStart !== this.props.bUpdateCustomerStart && nextProps.bUpdateCustomerStart === false
+		) {
 			this.props.getCustomers(
 				this.props.regionId,
 				this.props.statusId,
@@ -989,7 +991,13 @@ assign at least one franchisee.</DialogContentText>
 				{(this.props.bCreateCustomerStart) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Submitting customer data...</Typography>
+						<Typography variant="body2" color="primary">Creating customer data...</Typography>
+					</div>
+				)}
+				{(this.props.bUpdateCustomerStart) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Updating customer...</Typography>
 					</div>
 				)}
 				{(this.props.bGetCustomerStart) && (
@@ -1061,6 +1069,7 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bCustomerFetchStart: customers.bCustomerFetchStart,
 		createCustomerResponse: customers.createCustomerResponse,
 		bCreateCustomerStart: customers.bCreateCustomerStart,
+		bUpdateCustomerStart: customers.bUpdateCustomerStart,
 		bGetCustomerStart: customers.bGetCustomerStart,
 		filters: customers.filters,
 		activeCustomer: customers.activeCustomer,
