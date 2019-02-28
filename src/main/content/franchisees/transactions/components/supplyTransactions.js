@@ -185,9 +185,8 @@ class SupplyTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport===null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SUPPLY_TRXS===null )
+        if((franchiseeReport===null) || (franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SupplyTransactions===undefined) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SupplyTransactions===null))
             return (<div/>);
-
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SUPPLY_TRXS.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
 

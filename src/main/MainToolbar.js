@@ -66,8 +66,17 @@ const styles = theme => ({
             borderBottom: "solid 0px transparent !important"
         },'.MuiInput-underline-538:after': {
             borderBottom: "solid 0px transparent !important"
+        },
+        '& .period-select': {
+            minWidth: "120px",
+            paddingRight: "15px",
+            marginTop: "15px",
+        },
+        '& .period-select:before': {
+            borderBottom: "solid 0px transparent !important"
         }
     },
+
     notificationroot: {
         width: '100%',
         maxWidth: 600,
@@ -643,14 +652,15 @@ class MainToolbar extends Component {
                                     })}
                                 </Select>
                             </FormControl>
-                            <FormControl className={classNames(classes.formControl, "mt-12 pr-4") }>
+                            <FormControl className={classNames(classes.formControl) }>
                                 <TextField
                                     select
                                     name="period"
                                     value={this.state.period}
                                     onChange={this.handleChange}
-                                    className={classes.textField}
+                                    className="period-select"
                                     InputProps={{
+                                        name: "period",
                                         classes: {
                                             input: classes.input2,
                                         },
