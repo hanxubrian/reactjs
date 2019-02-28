@@ -143,8 +143,8 @@ class BillRunDialog extends Component {
         pusherMSG               : null,
         showP                   : false,
         year                    : moment().year(),
-        month                   : moment().month(),
-        desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+` `+moment().year(),
+        month                   : parseInt(this.props.defaultPeriod.split('/')[0])-1,
+        desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[parseInt(this.props.defaultPeriod.split('/')[0])-1].toUpperCase()+` `+moment().year(),
         isMounted               : false,
         labelWidth: 0,
     };
@@ -480,7 +480,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth,billruns})
+function mapStateToProps({invoices, auth, billruns})
 {
     return {
         invoices        : invoices.invoicesDB,
@@ -491,6 +491,7 @@ function mapStateToProps({invoices, auth,billruns})
         billstatus      : billruns.billrunstatus,
         regionId: auth.login.defaultRegionId,
         all_regions: auth.login.all_regions,
+        defaultPeriod: auth.login.defaultPeriod,
     }
 }
 
