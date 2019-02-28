@@ -68,7 +68,8 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-noData': {
             top: '250px',
-            border: '1px solid coral'
+            border: '1px solid coral',
+            display: 'none'
         },
         '& .ReactTable .rt-thead.-headerGroups': {
             paddingLeft: '0!important',
@@ -1097,7 +1098,6 @@ class Franchisees extends Component {
                                                             onChange={(event) => toggleAll(instance) }
                                                             checked={this.state.selectAll}
                                                             style={{color: 'white'}}
-                                                            //indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                                         />
                                                     ),
                                                     accessor : "",
