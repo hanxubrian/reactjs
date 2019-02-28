@@ -19,15 +19,63 @@ import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 import Button from "@material-ui/core/Button/Button";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
-import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import TextField from "@material-ui/core/TextField/TextField";
-import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import GridContainer from "../../../../../Commons/Grid/GridContainer";
 import GridItem from "../../../../../Commons/Grid/GridItem";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from '@material-ui/icons/Add';
+import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
+import Person from "@material-ui/core/SvgIcon/SvgIcon";
+
+const DialogTitle = withStyles(theme => ({
+    root: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        backgroundColor: "#3c93ec",
+        margin: 0,
+        padding: theme.spacing.unit * 2,
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing.unit,
+        top: theme.spacing.unit,
+        color: "white",
+    },
+}))(props => {
+    const { children, classes, onClose } = props;
+    return (
+        <MuiDialogTitle disableTypography className={classes.root}>
+            {children}
+            {onClose ? (
+                <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </MuiDialogTitle>
+    );
+});
+
+const DialogContent = withStyles(theme => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing.unit * 2,
+    },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles(theme => ({
+    root: {
+        borderTop: `1px solid ${theme.palette.divider}`,
+        margin: 0,
+        padding: theme.spacing.unit,
+    },
+}))(MuiDialogActions);
+
 
 
 function desc(a, b, orderBy) {
@@ -494,13 +542,18 @@ class FranchiseesMaintenanceTable extends React.Component {
             </Paper>
                 <Dialog
                     open={this.state.openDialog}
-                    onClose={this.handleClose}
+                    onClose={this.handleClose }
                     aria-labelledby="form-dialog-title"
                     maxWidth={"sm"}
                     fullWidth
                 >
                     <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddFees();}}>
-                        <DialogTitle id="form-dialog-title">ADD FRANCHISEE FEE</DialogTitle>
+                        <DialogTitle id="form-dialog-title" onClose={this.handleClose }>
+                            <h2 className={classes.dialogH2}>
+                                <AddIcon  className={classNames(classes.leftIcon)} />
+                                Add Franchisee Fee
+                            </h2>
+                        </DialogTitle>
                         <DialogContent>
                             <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -549,12 +602,8 @@ class FranchiseesMaintenanceTable extends React.Component {
                             </GridContainer>
                         </DialogContent>
                         <DialogActions style={{padding:"2%"}}>
-                            <Button style={{color:"gray"}} onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
-                                <CancelIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
-                                Cancel
-                            </Button>
-                            <Button style={{color:"gray"}} type={"submit"} variant="contained" size="small" className={classes.button}>
-                                <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
+                            <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
+                                <SaveIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
                                 Save
                             </Button>
                         </DialogActions>
