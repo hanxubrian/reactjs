@@ -20,6 +20,7 @@ import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Icon from "@material-ui/core/es/Icon/Icon";
 
 import FuseUtils from '@fuse/FuseUtils';
+import _ from 'lodash';
 
 function TabContainer(props) {
     return (
@@ -186,6 +187,7 @@ class UsersPermission extends React.Component {
                                 })
             
                             });
+                            console.log("temp-list",tempAppList);
                             nextProps.userPermissionList.forEach((x, xIndex) => {
                                 if(tempAppList[xIndex] === undefined){
                                     tempAppList.push({
@@ -195,7 +197,13 @@ class UsersPermission extends React.Component {
                                     });
                                 }
                                 x.menuOptions.forEach((y,yIndex)=>{
-                                    if(tempAppList[xIndex].menuOptions[yIndex]===undefined){
+                                    let yFlag = false;
+                                    tempAppList[xIndex].menuOptions.map(obj=>{
+                                        if(obj.MenuId === y.MenuId){
+                                            yFlag = true;
+                                        }
+                                    });
+                                    if(!yFlag){
                                         tempAppList[xIndex].menuOptions.push({
                                             MenuId: y.MenuId,
                                             Title: y.Title,
@@ -203,21 +211,28 @@ class UsersPermission extends React.Component {
                                         });
                                     }
                                     y.Children.forEach((z, zIndex) => {
-                                        if(tempAppList[xIndex].menuOptions[yIndex].Children[zIndex]===undefined){
-                                            tempAppList[xIndex].menuOptions[yIndex].Children.push({
-                                                MenuId: z.MenuId,
-                                                View: false,
-                                                Create: false,
-                                                Delete: false,
-                                                Edit: false,
-                                                Execute: false
+
+                                            let zFlag = false;
+                                            tempAppList[xIndex].menuOptions[yIndex].Children.map(obj=>{
+                                                if(obj.MenuId === z.MenuId){
+                                                     zFlag = true;
+                                                }
                                             });
-                                            checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = false;
-                                            checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = false;
-                                            checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = false;
-                                            checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = false;
-                                            checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = false;
-                                        }                                        
+                                            if(!zFlag){
+                                                tempAppList[xIndex].menuOptions[yIndex].Children.push({
+                                                    MenuId: z.MenuId,
+                                                    View: false,
+                                                    Create: false,
+                                                    Delete: false,
+                                                    Edit: false,
+                                                    Execute: false
+                                                });
+                                                checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                                checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                                checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                                checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                                checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                            }
                                     })
                                 })
             
