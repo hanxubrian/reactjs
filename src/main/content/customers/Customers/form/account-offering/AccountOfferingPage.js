@@ -777,7 +777,13 @@ class AccountOfferingPage extends Component {
 		return (
 			<div className={classNames("flex flex-col flex-1")}>
 
-				<Stepper activeStep={step} style={{ padding: 0, background: 'unset' }} className='mb-12'>
+				{this.props.bTransferFranchiseeFtate &&
+					<div className="flex items-center" style={{ background: 'lemonchiffon', border: '2px #ffb6b6 solid', padding: 6 }}>
+						<Icon style={{ color: '#c56161' }}>warning</Icon>
+						<Typography variant="h6" style={{ color: '#c56161' }}>Transfering franchisee...</Typography>
+					</div>
+				}
+				{!this.props.bTransferFranchiseeFtate && <Stepper activeStep={step} style={{ padding: 0, background: 'unset' }} className='mb-12'>
 					{['Offered Franchisees', 'Assign Franchisees', 'Offering Account', 'Revenue Distribution', 'Finders Fees'].map((label, index) => {
 						const props = {};
 						const labelProps = {};
@@ -797,13 +803,26 @@ class AccountOfferingPage extends Component {
 						);
 					})}
 				</Stepper>
+				}
 
 
-				{step === 0 && <FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
-				{step === 1 && <FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
-				{step === 2 && <FranchieesSubmitOfferPage setStep={this.setStep} setActiveRow={this.setActiveRow} activeRow={activeRow} />}
+				{
+					!this.props.bTransferFranchiseeFtate && step === 0 &&
+					<FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
+				{
+					(this.props.bTransferFranchiseeFtate && step === 0 ||
+						!this.props.bTransferFranchiseeFtate && step === 1) &&
+					< FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
+				{
+					(this.props.bTransferFranchiseeFtate && step === 1 ||
+						!this.props.bTransferFranchiseeFtate && step === 2) &&
+					<FranchieesSubmitOfferPage setStep={this.setStep} setActiveRow={this.setActiveRow} activeRow={activeRow} />
+				}
 
-				{step === 3 && <FranchiseeDistributionPage setStep={this.setStep} />}
+				{
+					(step === 3) &&
+					<FranchiseeDistributionPage setStep={this.setStep} />
+				}
 
 				<FranchieesAssignModal />
 			</div>
@@ -829,6 +848,8 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		Latitude: franchisees.Latitude,
 		Location: franchisees.Location,
 		SearchText: franchisees.SearchText,
+
+		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 	}
 }
 

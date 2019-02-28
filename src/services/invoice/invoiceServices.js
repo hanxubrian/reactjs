@@ -278,7 +278,7 @@ class invoiceService {
 
 	getInvoiceVendorLists = (RegionId) => {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_MONGO_API_URL}/v1/vendors/getvendorlist`,
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/${RegionId}/Vendor/List`,
 				{
 					params: { RegionId }
 				})

@@ -68,7 +68,8 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-noData': {
             top: '250px',
-            border: '1px solid coral'
+            border: '1px solid coral',
+            display: 'none'
         },
         '& .ReactTable .rt-thead.-headerGroups': {
             paddingLeft: '0!important',
@@ -767,7 +768,7 @@ class Franchisees extends Component {
             <React.Fragment >
               <FusePageCustomSidebarScroll
                 classes={{
-                    root: classNames(classes.layoutRoot,'test123'),
+                    root: classNames(classes.layoutRoot),
                     rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryStateFranchisees}),
                     leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterStateFranchisees}),
                     sidebarHeader: classes.layoutSidebarHeader,
@@ -837,7 +838,10 @@ class Franchisees extends Component {
                                                 className={classNames(classes.button, "mr-12")}
                                                 onClick={() => {this.closeComposeForm();}}
                                                 disabled={!this.canBeSubmitted()}
-                                            > Discard </Button>
+                                            >
+                                                Discard
+                                                <Icon className={classes.rightIcon}>delete</Icon>
+                                            </Button>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
                                             <Button
@@ -846,7 +850,10 @@ class Franchisees extends Component {
                                                 className={classNames(classes.button, "mr-12")}
                                                 onClick={() => {this.createFranchiseeForm();}}
                                                 disabled={!this.canBeSubmitted()}
-                                            > Save </Button>
+                                            >
+                                                Save
+                                                <Icon className={classes.rightIcon}>save</Icon>
+                                            </Button>
                                         </FuseAnimate>
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
                                             <Button
@@ -857,7 +864,10 @@ class Franchisees extends Component {
                                                     this.closeComposeForm();
                                                 }}
                                                 disabled={!this.canBeSubmitted()}
-                                            > Close </Button>
+                                            >
+                                                Close
+                                                <Icon className={classes.rightIcon}>close</Icon>
+                                            </Button>
                                         </FuseAnimate>
                                     </div>
                                 </div>
@@ -1088,7 +1098,6 @@ class Franchisees extends Component {
                                                             onChange={(event) => toggleAll(instance) }
                                                             checked={this.state.selectAll}
                                                             style={{color: 'white'}}
-                                                            //indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                                         />
                                                     ),
                                                     accessor : "",
@@ -1201,12 +1210,12 @@ class Franchisees extends Component {
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Franchisees</Typography>
                                     </FuseAnimate>
-                                )}  
+                                )}
                                 {createFranchisees.type === "new" && (
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
                                     </FuseAnimate>
-                                )}                                 
+                                )}
                             </div>
                         ) : (
                             <h4 className={classes.elementCenter}>Filter Panel</h4>

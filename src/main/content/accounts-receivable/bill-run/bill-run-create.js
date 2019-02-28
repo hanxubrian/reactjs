@@ -143,11 +143,16 @@ class BillRunDialog extends Component {
         pusherMSG               : null,
         showP                   : false,
         year                    : moment().year(),
-        month                   : moment().month(),
-        desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+` `+moment().year(),
+        month                   : parseInt(this.props.defaultPeriod.split('/')[0])-1,
+        desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[parseInt(this.props.defaultPeriod.split('/')[0])-1].toUpperCase()+` `+moment().year(),
         isMounted               : false,
         labelWidth: 0,
     };
+
+    constructor(props){
+        super(props);
+
+    }
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
@@ -159,6 +164,10 @@ class BillRunDialog extends Component {
     }
 
     componentDidMount() {
+        if(this.props.auth.UserId===-1) {
+            this.props.history.push('/auth/signin');
+        }
+
         this.setState({isMounted:true});
         this.props.onRef(this);
         let all_regions = this.props.all_regions;
@@ -168,6 +177,10 @@ class BillRunDialog extends Component {
         let month = period.month-1;
 
         this.setState({month: month});
+    }
+
+    componentWillMount() {
+
     }
 
     componentWillUnmount() {
@@ -249,10 +262,11 @@ class BillRunDialog extends Component {
 
     billrun=(e)=>{
 
+
         e.stopPropagation();
 
         if(this.props.auth && this.props.auth !==null){
-            let year = parseInt(this.setState.year);
+            let year = parseInt(this.state.year);
             let month = parseInt(this.state.month)+1;
             let user = this.props.auth.firstName+"     "+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;
@@ -321,6 +335,8 @@ class BillRunDialog extends Component {
 
 
     render() {
+        if(this.props.auth.UserId===-1)
+            return <div/>
 
         const { classes,loading } = this.props;
         const { showP} = this.state;
@@ -458,13 +474,13 @@ BillRunDialog.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createBillrun: Actions.createbillrun,
+        createBillrun: Actions.createBillrun,
         showMessage: Actions.showMessage,
         hideMessage: Actions.hideMessage,
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth,billruns})
+function mapStateToProps({invoices, auth, billruns})
 {
     return {
         invoices        : invoices.invoicesDB,
@@ -475,6 +491,7 @@ function mapStateToProps({invoices, auth,billruns})
         billstatus      : billruns.billrunstatus,
         regionId: auth.login.defaultRegionId,
         all_regions: auth.login.all_regions,
+        defaultPeriod: auth.login.defaultPeriod,
     }
 }
 

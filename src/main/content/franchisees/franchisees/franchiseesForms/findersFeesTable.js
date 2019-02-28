@@ -359,7 +359,7 @@ class FindersFeesTable extends React.Component {
                                                         ${n.ff_tot}
                                                     </TableCell>
                                                     <TableCell style={{width: 250}}>
-                                                        ${n.ff_pytotl*1+n.ff_pybill*1}
+                                                        {n.ff_pybill*1}&nbsp;of&nbsp;{n.ff_pytotl*1}
                                                     </TableCell>
                                                     <TableCell>
                                                         <Button
@@ -393,7 +393,7 @@ class FindersFeesTable extends React.Component {
                     }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />]
+                />
                 <FindersFeesStopModal />
             </Paper>
         );

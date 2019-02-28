@@ -137,6 +137,9 @@ const styles = theme => ({
     input: {
         padding: '12px 14px'
     },
+    inputp: {
+        padding: '12px 6px'
+    },
     inputReadonly:{
         padding: '12px 14px',
         // backgroundColor: '#eee'
@@ -374,7 +377,9 @@ class TransactionEditForm extends Component {
         deductionReason: '',
         trxClassAmount: 0.00,
         periods: null,
-        vendorList: null
+        vendorList: null,
+        year: moment().year(),
+        month: moment().month(),
     };
 
     constructor(props){
@@ -543,9 +548,63 @@ class TransactionEditForm extends Component {
             .then(response => response.json())
             .then(data => this.setState({ vendorList: data }));
 
+        let all_regions = this.props.all_regions;
+        let region = all_regions.filter(r=>r.regionid===this.props.regionId);
 
-        if(this.props.transactionForm.type === 'new')
+        if(this.props.all_regions) {
+            let periods = region[0].OpenPeriods;
+
+            let all_periods = [];
+
+            let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+            if (periods.current.month < 10)
+                period = '0' + period;
+            if(periods.current.status==='Open')
+                all_periods.push(period);
+            this.setState({period: period});
+
+
+            period = periods.next.month.toString() + '/' + periods.next.year.toString();
+            if (periods.next.month < 10)
+                period = '0' + period;
+            if(periods.next.status==='Open')
+                all_periods.push(period);
+            period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+            if (periods.previous.month < 10)
+                period = '0' + period;
+            if(periods.previous.status==='Open')
+                all_periods.push(period);
+
+            this.setState({periods: all_periods});
+        }
+
+
+        if(this.props.transactionForm.type === 'new') {
             this.setState({TransactionNo: "PENDING"});
+
+            if(this.props.all_regions) {
+                let period = region[0].OpenPeriods.current;
+                let month = period.month - 1;
+                let year = period.year;
+
+                this.setState({month: month, year: year});
+
+                let periods = region[0].OpenPeriods;
+
+                let all_periods = [];
+
+                period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+
+                this.setState({TransactionPeriod: period});
+
+                let transactionDate = moment().year(year).month(month);
+                this.setState({TransactionDate: transactionDate});
+            }
+        }
 
         if(this.props.transactionForm.type === 'edit' && this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
@@ -608,41 +667,17 @@ class TransactionEditForm extends Component {
         if(this.input) {
             setTimeout(() => {this.input.focus()}, 500);
         }
-        if(this.props.all_regions!==null && this.props.all_regions.length){
-            let all_regions = this.props.all_regions;
-            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
-
-            if(region.length){
-                let periods = region[0].OpenPeriods;
-
-                let all_periods = [];
-
-                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
-                if (periods.current.month < 10)
-                    period = '0' + period;
-                if(periods.current.status==='Open')
-                    all_periods.push(period);
-
-                this.setState({TransactionPeriod: period});
-
-                period = periods.next.month.toString() + '/' + periods.next.year.toString();
-                if (periods.next.month < 10)
-                    period = '0' + period;
-                if(periods.next.status==='Open')
-                    all_periods.push(period);
-                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
-                if (periods.previous.month < 10)
-                    period = '0' + period;
-                if(periods.previous.status==='Open')
-                    all_periods.push(period);
-
-                this.setState({periods: all_periods});
-            }
-        }
-    }
+    };
 
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+        if(event.target.name==='TransactionPeriod') {
+            let period = event.target.value.split('/');
+            let year = parseInt(period[1]);
+            let month = parseInt(period[0])-1;
+            let transactionDate = moment(this.state.TransactionDate).year(year).month(month);
+            this.setState({TransactionDate: transactionDate.format('MM/DD/YYYY')});
+        }
     };
 
     handleChange1 = name =>(event) => {
@@ -773,8 +808,14 @@ class TransactionEditForm extends Component {
     handleStartDateChange = date => {
         this.setState({ startDate: date});
     };
+
     handleTransactionDateChange = date => {
-        this.setState({ TransactionDate: date });
+        let period = this.state.TransactionPeriod.split('/');
+        let month = parseInt(period[0])-1;
+        let year = parseInt(period[1]);
+
+        let transactionDate = moment(date).year(year).month(month);
+        this.setState({TransactionDate: transactionDate});
     };
 
     storeInputReference = autosuggest => {
@@ -877,28 +918,27 @@ class TransactionEditForm extends Component {
                                 <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
                                     <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4 w-full")}>
                                         {this.state.periods!==null && (
-                                            <Select
-                                                classes={{
-                                                    selectMenu: classNames(classes.inputMenu2),
-                                                }}
+                                            <TextField
+                                                select
+                                                label="Period"
                                                 name="TransactionPeriod"
                                                 value={this.state.TransactionPeriod}
                                                 onChange={this.handleChange}
-                                                input={
-                                                    <OutlinedInput
-                                                        labelWidth={this.state.labelWidth}
-                                                        name="TransactionPeriod"
-                                                        id="TransactionPeriod"
-                                                    />
-                                                }
-                                                MenuProps = {{
-                                                    classes:{paper: classes.dropdownMenu},
+                                                variant={"outlined"}
+                                                className={classes.textField}
+                                                InputProps={{
+                                                    readOnly: this.props.transactionForm.type==='edit',
+                                                    classes: {
+                                                        input: classes.inputp,
+                                                    },
                                                 }}
+                                                fullWidth
+                                                required
                                             >
                                                 {this.state.periods.map((p, index)=>{
                                                     return (<MenuItem key={index} value={p}>{p}</MenuItem>)
                                                 })}
-                                            </Select>
+                                            </TextField>
                                         )}
 
                                     </FormControl>

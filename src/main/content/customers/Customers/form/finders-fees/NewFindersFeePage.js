@@ -145,6 +145,7 @@ class NewFindersFeePage extends React.Component {
 			MultiTenantOccupancy,
 		} = this.state
 
+		if (!CalculationMethodCode) return
 		const param = {
 			...this.props.findersFeeParams,
 			RegionId: this.props.regionId,

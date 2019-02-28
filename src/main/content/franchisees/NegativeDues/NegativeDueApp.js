@@ -2,9 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 
 //Material UI core
-import {
-    Icon, Typography, Button, CircularProgress
-} from '@material-ui/core';
+import { CircularProgress} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 
 //Theme

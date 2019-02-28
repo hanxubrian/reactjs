@@ -221,7 +221,7 @@ export function closeEditInvoiceForm()
     }
 }
 
-export function updateDate(key, date) {
+export function updateInvoiceDate(key, date) {
     return {
         type: key,
         payload: date

@@ -11,6 +11,7 @@ export const CLOSE_ALERT_DIALOG = 'CLOSE_ALERT_DIALOG';
 export const INITIALIZE_FROM_LOCAL = 'INITIALIZE_FROM_LOCAL';
 export const LOADED_MENU = 'LOADED_MENU';
 export const ADMIN_CLEAN_CACHE_FOR_UPGRADE = 'ADMIN_CLEAN_CACHE_FOR_UPGRADE';
+export const CHANGE_DEFAULT_PERIOD = '[AUTH-LOGIN] CHANGE_DEFAULT_PERIOD';
 
 
 
@@ -98,6 +99,15 @@ export function closeDialog() {
     return (dispatch) => {
         dispatch({
             type: CLOSE_ALERT_DIALOG
+        });
+    }
+}
+
+export function changeDefaultPeriod (period){
+    return (dispatch) => {
+        dispatch({
+            type: CHANGE_DEFAULT_PERIOD,
+            payload: period
         });
     }
 }

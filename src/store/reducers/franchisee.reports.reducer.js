@@ -1,7 +1,5 @@
 import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
-import moment from 'moment';
-import {NULLIFY_FRANCHISEE_NEW_REPORT} from "../actions/";
 
 const initialState = {
     franchiseeReports: null,
@@ -18,7 +16,7 @@ const initialState = {
     },
     // reportDate: "Sun Jan 01 2017 12:00:00 GMT-0600 (Central Standard Time)"
     // reportDate: moment().format('MM/YYYY')
-    reportDate: '01/2017'
+    reportDate: '01/2019'
 };
 
 

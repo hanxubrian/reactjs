@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from "lodash";
-import { Grid, Paper, withStyles } from '@material-ui/core';
+import {Grid, OutlinedInput, Paper, TextField, withStyles} from '@material-ui/core';
 
 //Material UI core
 import Switch from '@material-ui/core/Switch';
@@ -86,12 +86,15 @@ const PAYMENT_HISTORY_TYPE_LIST = [
 	"Lockbox",
 	"CreditFromOverpayment",
 	"ManualCreditCard",
-]
-const WAIT_INTERVAL = 1000
+];
+
+const WAIT_INTERVAL = 1000;
+const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 class FilterPanel extends Component {
 
 	constructor(props) {
-		super(props)
+		super(props);
 
 		this.state = {
 			checkedEbill: true,
@@ -110,13 +113,24 @@ class FilterPanel extends Component {
 				searchText: "",
 				fromDate: "",
 				toDate: "",
-			}
+			},
+			year                    : moment().year(),
+			month                   : moment().month(),
+			labelWidth: 0
 		}
 	}
 	componentDidMount() {
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
-		})
+		});
+
+		let all_regions = this.props.all_regions;
+		let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+		let period = region[0].OpenPeriods.current;
+		let month = period.month-1;
+
+		this.setState({month: month});
 	}
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
@@ -379,8 +393,28 @@ class FilterPanel extends Component {
 		this.props.updateFilterDate(FILTER_PAYMENT_END_DATE, endDate);
 	};
 
+	handlePeriodChange1 =  (event) => {
+		this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+		let year = event.target.name==='year' ? event.target.value : this.state.year;
+		let month = event.target.name==='month' ? event.target.value : this.state.month;
+
+		let startDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
+		let endDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
+
+		this.props.updateFilterDate(FILTER_PAYMENT_START_DATE, startDate);
+		this.props.updateFilterDate(FILTER_PAYMENT_END_DATE, endDate);
+	};
+
 	render() {
 		const { classes } = this.props;
+		let years = _.range(moment().year(), moment().year()+10);
+
+		let all_regions = this.props.all_regions;
+		let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+		let period = region[0].OpenPeriods.current;
+
+
 		return (
 			<div className={classNames(classes.root, "flex flex-col p-24")}>
 				{/* <div className={classNames()}> */}
@@ -447,31 +481,50 @@ class FilterPanel extends Component {
 					</MuiPickersUtilsProvider>
 				)}
 				{this.state.invoiceDateOption === PERIOD && (
-					<MuiPickersUtilsProvider utils={MomentUtils}>
-						<div className="flex flex-col mt-20" style={{ width: 200 }}>
-							{/* <h3 className="mb-20">Choose a Period</h3> */}
-							<DatePicker
-								margin="none"
-								label="Period"
-								name="invoiceDatePeriod"
-								variant="outlined"
-								format="MM/YYYY"
-								value={this.state.invoiceDatePeriod}
-								onChange={this.handlePeriodChange}
-								fullWidth
-								InputProps={{
-									classes: {
-										input: classes.input,
-									},
-								}}
-								InputLabelProps={{
-									shrink: true,
-									classes: { outlined: classes.label }
-								}}
-								openToYearSelection={true}
-							/>
-						</div>
-					</MuiPickersUtilsProvider>
+					<div className="flex flex-col mt-4" style={{ width: 200 }}>
+						<TextField
+							margin={"normal"}
+							name="month"
+							label="Month"
+							variant="outlined"
+							select
+							value={this.state.month}
+							onChange={this.handlePeriodChange1}
+							input={
+								<OutlinedInput
+									labelWidth={this.state.labelWidth}
+									name="month"
+									id="month"
+								/>
+							}
+							fullWidth
+						>
+							{mL.map((m, index)=>{
+								return (<MenuItem  key={index} value={index}>{m}</MenuItem>)
+							})}
+						</TextField>
+						<TextField
+							margin={"normal"}
+							name="year"
+							label="Year"
+							variant="outlined"
+							select
+							value={this.state.year}
+							onChange={this.handlePeriodChange1}
+							input={
+								<OutlinedInput
+									labelWidth={this.state.labelWidth}
+									name="year"
+									id="year"
+								/>
+							}
+							fullWidth
+						>
+							{years.map((year, index)=>{
+								return (<MenuItem  key={index} value={year}>{year}</MenuItem>)
+							})}
+						</TextField>
+					</div>
 				)}
 				<Divider variant="middle" className="mt-12 mb-6" />
 				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
@@ -599,14 +652,11 @@ function mapStateToProps({ auth, invoices, fuse, accountReceivablePayments }) {
 		ToDate: invoices.ToDate,
 		settings: fuse.settings.current,
 		invoiceDateOption: invoices.invoiceDateOption,
-
-		invoiceDateOption: invoices.invoiceDateOption,
-
 		viewMode: accountReceivablePayments.viewMode,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
 		filterParam: accountReceivablePayments.filterParam,
-
 		regionId: auth.login.defaultRegionId,
+		all_regions: auth.login.all_regions,
 	}
 }
 

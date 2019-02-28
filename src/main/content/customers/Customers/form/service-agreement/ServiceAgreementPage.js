@@ -1049,12 +1049,13 @@ class ServiceAgreementPage extends React.Component {
 				value = parseInt("0" + value)
 				break
 		}
-		if (name === "contract_lenght" && value !== 1) {
+		if (name === "contract_lenght" && [0, 2].indexOf(value) === -1) {
 			this.setState({ cont_bill: 0 })
 			this.props.updateNewCustomerParam("cont_bill", 0)
+		} else {
+			this.setState({ [name]: value })
+			this.props.updateNewCustomerParam(name, value)
 		}
-		this.setState({ [name]: value })
-		this.props.updateNewCustomerParam(name, value)
 	}
 	handleChangeCustomerInfoPropsChecked = name => event => {
 		let checked = event.target.checked
@@ -1599,7 +1600,7 @@ class ServiceAgreementPage extends React.Component {
 
 						{/* <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}> */}
 						<div className={classNames('items-center')}>
-							<div xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <div xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="ServiceType"
 									label="Service Type *"
@@ -1616,7 +1617,7 @@ class ServiceAgreementPage extends React.Component {
 										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField>
-							</div>
+							</div> */}
 
 							<div xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField

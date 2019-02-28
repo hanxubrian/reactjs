@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import {
     TextField, Button, Typography, Divider, FormControlLabel} from '@material-ui/core';
 // theme components
-import { FuseAnimate} from '@fuse';
+
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 //Custom components
@@ -215,8 +215,6 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginLeft:'1%'}}
                                 required
                             />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="financeCounty"
                                 label="County"
@@ -229,10 +227,12 @@ function getStepContent(franchiseeForm, step) {
                                 }}
                                 className={classes.textField}
                                 value={franchiseeForm.state.LegalCounty}
-                                style={{marginRight:'1%'}}
+                                style={{marginLeft:'1%'}}
                                 margin="dense"
                                 required
                             />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="outlined-phone"
                                 label="1099 Name"
@@ -246,7 +246,7 @@ function getStepContent(franchiseeForm, step) {
                                 }}
                                 className={classes.textField}
                                 margin="dense"
-                                style={{marginLeft:'1%'}}
+                                style={{marginRight:'1%'}}
                             />
                             <FormControlLabel
                                 control={
@@ -257,44 +257,84 @@ function getStepContent(franchiseeForm, step) {
                                 value={franchiseeForm.state.Print1099 === true ? "N" : "Y" }
                                 label="Print 1099"
                                 margin="dense"
-                                style={{marginLeft:'1%',marginRight: '1%'}}
+                                style={{marginLeft:'1%'}}
                             />
                         </GridItem>
+                    </GridContainer>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Company Type</h3>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <FormControlLabel
-                                    value="ein"
-                                    checked={franchiseeForm.state.LegalId === 'ein'}
-                                    onChange={franchiseeForm.handleTextChange("LegalId")}
-                                    control={<Radio color="primary" />}
-                                    label="EIN"
-                                    labelPlacement="end"
-                                    margin="dense"
-                                />
-                                <FormControlLabel
-                                    checked={franchiseeForm.state.LegalId === 'ssn'}
-                                    value="ssn"
-                                    onChange={franchiseeForm.handleTextChange("LegalId")}
-                                    control={<Radio color="primary" />}
-                                    label="SSN"
-                                    labelPlacement="end"
-                                    margin="dense"
-                                />
+                                {/*<FormControlLabel*/}
+                                    {/*value="ein"*/}
+                                    {/*checked={franchiseeForm.state.LegalId === 'ein'}*/}
+                                    {/*onChange={franchiseeForm.handleTextChange("LegalId")}*/}
+                                    {/*control={<Radio color="primary" />}*/}
+                                    {/*label="EIN"*/}
+                                    {/*labelPlacement="end"*/}
+                                    {/*margin="dense"*/}
+                                {/*/>*/}
+                                {/*<FormControlLabel*/}
+                                    {/*checked={franchiseeForm.state.LegalId === 'ssn'}*/}
+                                    {/*value="ssn"*/}
+                                    {/*onChange={franchiseeForm.handleTextChange("LegalId")}*/}
+                                    {/*control={<Radio color="primary" />}*/}
+                                    {/*label="SSN"*/}
+                                    {/*labelPlacement="end"*/}
+                                    {/*margin="dense"*/}
+                                {/*/>*/}
+                            <FormControlLabel
+                                value="llc_ein"
+                                checked={franchiseeForm.state.LegalId === 'llc_ein'}
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="LLC"
+                                labelPlacement="end"
+                                margin="dense"
+                            />
+                            <FormControlLabel
+                                checked={franchiseeForm.state.LegalId === 'corporation_ein'}
+                                value="corporation_ein"
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="Corporation"
+                                labelPlacement="end"
+                                margin="dense"
+                            />
+                            <FormControlLabel
+                                value="partnership_ein"
+                                checked={franchiseeForm.state.LegalId === 'partnership_ein'}
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="Partnership"
+                                labelPlacement="end"
+                                margin="dense"
+                            />
+                            <FormControlLabel
+                                checked={franchiseeForm.state.LegalId === 'sole_provider_ssn'}
+                                value="sole_provider_ssn"
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="Sole-Provider"
+                                style={{whiteSpace:'nowrap'}}
+                                labelPlacement="end"
+                                margin="dense"
+                            />
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="financeEinSsn"
-                                    label="EIN/SSN"
-                                    type="number"
-                                    className={classes.textField}
-                                    value={franchiseeForm.state.LegalIdNum}
-                                    onChange={franchiseeForm.handleTextChange("LegalIdNum")}
-                                    //style={{marginLeft:'1%'}}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    margin="dense"
-                                    required
-                                />
+                        <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                            <TextField
+                                id="financeEinSsn"
+                                label={franchiseeForm.state.LegalLabel}
+                                type="number"
+                                className={classes.textField}
+                                value={franchiseeForm.state.LegalIdNum}
+                                onChange={franchiseeForm.handleTextChange("LegalIdNum")}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                margin="dense"
+                                required
+                            />
                         </GridItem>
                     </GridContainer>
                     <div style={{ marginTop: '30px' }}></div>
@@ -395,7 +435,7 @@ function getStepContent(franchiseeForm, step) {
                                 inputProps={{
                                     readOnly: true,
                                     type: "number",
-                                    value: (franchiseeForm.state.ibAmount === NaN || franchiseeForm.state.ibAmount === null ) ? 0 : franchiseeForm.state.ibAmount 
+                                    value: (isNaN(franchiseeForm.state.ibAmount) || franchiseeForm.state.ibAmount === null ) ? 0 : franchiseeForm.state.ibAmount
                                 }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -663,13 +703,14 @@ class FranchiseesCreateForm extends Component {
         LegalZip: "",
         LegalCounty: "",
         LegalIdNum: 0,
-        LegalId: "ein",
+        LegalId: "llc_ein",
         NameOn1099: "",
         AllowBppAdminFee: true,
         AllowChargeBack: true,
         AllowAccountRebate: true,
         AllowGenerateReport: true,
-        AgreementTerm: 0
+        AgreementTerm: 0,
+        LegalLabel: "LLC"
     };
 
     initCloseState = () => {
@@ -713,7 +754,8 @@ class FranchiseesCreateForm extends Component {
             AllowChargeBack: true,
             AllowAccountRebate: true,
             AllowGenerateReport: true,
-            AgreementTerm: 0
+            AgreementTerm: 0,
+            LegalLabel: "LLC"
         });
     }
 
@@ -769,7 +811,28 @@ class FranchiseesCreateForm extends Component {
             interest: this.props.insertPayload.AgreementInterestRate,
             downPayment: this.props.insertPayload.AgreementDownPayment,
             ibAmount: this.props.insertPayload.AgreementInitialBusinessAmount
+
         });
+        if(this.props.insertPayload.LegalId === 'llc_ein'){
+            this.setState({
+                LegalLabel: "LLC"
+            })
+        }
+        if(this.props.insertPayload.LegalId === 'corporation_ein'){
+            this.setState({
+                LegalLabel: "Corporation"
+            })
+        }
+        if(this.props.insertPayload.LegalId === 'partnership_ein'){
+            this.setState({
+                LegalLabel: "Partnership"
+            })
+        }
+        if(this.props.insertPayload.LegalId === 'sole_provider_ssn'){
+            this.setState({
+                LegalLabel: "Sole-Provider"
+            })
+        }
 
         if(this.props.insertPayload.Print1099 === "Y"){
             this.setState({ Print1099: true });
@@ -908,6 +971,28 @@ class FranchiseesCreateForm extends Component {
         this.setState({
             [name]: event.target.value,
         });
+        if(name === 'LegalId'){
+            if(event.target.value === 'llc_ein'){
+                this.setState({
+                    LegalLabel: "LLC"
+                })
+            }
+            if(event.target.value === 'corporation_ein'){
+                this.setState({
+                    LegalLabel: "Corporation"
+                })
+            }
+            if(event.target.value === 'partnership_ein'){
+                this.setState({
+                    LegalLabel: "Partnership"
+                })
+            }
+            if(event.target.value === 'sole_provider_ssn'){
+                this.setState({
+                    LegalLabel: "Sole-Provider"
+                })
+            }
+        }
         this.handleInitialUpdate([name],event.target.value);
     };
 

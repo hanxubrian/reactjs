@@ -427,11 +427,11 @@ class InvoiceForm extends Component {
         this.setState({PO_number: suggestion.CustomerNo});
         this.setState({franchiseeFromCustomer: suggestion.Franchisees});
 
-        let year = moment().year();
-        let month = moment().month();
-        let invoiceDate = moment();
+        let period = this.state.period.split('/');
+        let year = parseInt(period[1]);
+        let month = parseInt(period[0])-1;
+        let invoiceDate = moment().year(year).month(month);
         let dueDate = moment().year(year).month(month).endOf('month');
-
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
 
@@ -537,7 +537,7 @@ class InvoiceForm extends Component {
             if(nextProps.invoiceForm.type==='edit') {
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.Inv_no});
                 this.setState({value: nextProps.invoiceForm.customer.CustomerName + ' - ' + nextProps.invoiceForm.customer.CustomerNo});
-                this.setState({PO_number: nextProps.invoiceForm.customer.CustomerNo});
+                this.setState({PO_number: nextProps.invoices.invoiceDetail.Data.PONumber});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
                 this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes===null ? '' : nextProps.invoices.invoiceDetail.Data.Notes});
                 this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
@@ -627,7 +627,6 @@ class InvoiceForm extends Component {
             this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
         }
         else if(event.target.name==='InvoiceDate'){
-            console.log('invoice date= ', event.target.value);
             let idate = event.target.value.split('-');
             let period = this.state.period.split('/');
             let year = parseInt(period[1]);
@@ -1066,27 +1065,30 @@ class InvoiceForm extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pl-4" >
-                                <TextField
-                                    margin="none"
-                                    label="P.O #"
-                                    placeholder="P.O #"
-                                    InputProps={{
-                                        classes: {
-                                            input: classes.input,
-                                        },
-                                    }}
-                                    InputLabelProps = {{
-                                        shrink: true,
-                                        classes: {outlined: classes.label}
-                                    }}
-                                    name="PO_number"
-                                    variant="outlined"
-                                    value={this.state.PO_number}
-                                    onChange={this.handleChange}
-                                    required
-                                    fullWidth
-                                    style={{paddingRight: 4}}
-                                />
+                                {this.props.invoiceForm.type==='edit' && (
+                                    <TextField
+                                        margin="none"
+                                        label="P.O #"
+                                        placeholder="P.O #"
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        name="PO_number"
+                                        variant="outlined"
+                                        value={this.state.PO_number}
+                                        onChange={this.handleChange}
+                                        required
+                                        fullWidth
+                                        style={{paddingRight: 4}}
+                                    />
+                                )}
+
                                 <TextField
                                     margin="none"
                                     label="Invoice #"

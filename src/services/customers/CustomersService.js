@@ -430,7 +430,7 @@ fullbill: 0
 
 	getFranchiseeServiceTypes(regionId) {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_MONGO_API_URL}/api/Lists/GetServiceType?RegionId=${regionId}&BillingTypeId=0`)
+			axios_instance.get(`${BASE_MONGO_API_URL}/api/Lists/GetServiceType?RegionId=${regionId}&BillingTypeId=4`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);

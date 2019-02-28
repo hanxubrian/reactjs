@@ -39,15 +39,13 @@ class FilterPanel extends Component {
                 let periods = region[0].OpenPeriods;
 
                 let all_periods = [];
-                all_periods.push('01/2017');
-                this.setState({period: '01/2017'});
 
                 let period = periods.current.month.toString() + '/' + periods.current.year.toString();
                 if (periods.current.month < 10)
                     period = '0' + period;
                 if (periods.current.status === 'Open')
                     all_periods.push(period);
-                // this.setState({period: period});
+                  this.setState({period: period});
 
 
                 period = periods.next.month.toString() + '/' + periods.next.year.toString();

@@ -1,11 +1,10 @@
 import axios from 'axios';
-import moment from 'moment'
+
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
     withCredentials: false
 });
 
-const BASE_API_URL='https://apifmsplus.jkdev.com';
 const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
 
 class BillrunService {
@@ -18,9 +17,10 @@ class BillrunService {
      * @param User
      * @param UserId
      * @param Message
+     * @param Description
      * @returns {Promise<any>}
      */
-    createbillrun=( RegionId, Year ,Month,User, UserId,Message,Description)=>{
+    createBillrun=( RegionId, Year ,Month, User, UserId, Message, Description)=>{
         const data ={
             'RegionId'                      : RegionId,
             'Year'                          : Year,
@@ -29,7 +29,8 @@ class BillrunService {
             'CreatedById'                   : UserId,
             'Message'                       : Message,
             'InvoiceDescription'            : Description,
-        }
+        };
+
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrun/create`,data)
                 .then( res => {
@@ -44,19 +45,14 @@ class BillrunService {
                     resolve(error);
                 })
         });
-    }
-    getallbillrun=( RegionIds, UserIds ,isBillPeriod,BillMonth,BillYear,FromDate,ToDate,SearchText)=>{
-        const data ={
-            'RegionIds'                             :RegionIds,
-            'UserIds'                               :UserIds,
-            'isBillPeriod'                          :isBillPeriod,
-            'BillMonth'                             :BillMonth,
-            'BillYear'                              :BillYear,
-            'FromDate'                              :FromDate,
-            'ToDate'                                :ToDate,
-            'SearchText'                            :SearchText,
+    };
 
-        }
+    getAllBillrun=( RegionIds, UserIds, FromDate, ToDate, isBillPeriod, BillMonth, BillYear, SearchText)=>{
+        const data ={
+            RegionIds, UserIds, isBillPeriod, BillMonth, BillYear, FromDate, ToDate, SearchText
+        };
+        console.log('bill-run data = ', JSON.stringify(data));
+
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrun/list`,data)
                 .then( res => {
@@ -71,12 +67,9 @@ class BillrunService {
                     resolve(error);
                 })
         });
-    }
-    deletebillrun=( RegionId, billrunNo)=>{
-        const data ={
-            'RegionId'                              :RegionId,
-            'billrunNo'                             :billrunNo,
-        }
+    };
+
+    deleteBillrun=( RegionId, billrunNo)=>{
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrun/delete/`+billrunNo+`?regionId=`+RegionId)
                 .then( res => {
@@ -91,12 +84,14 @@ class BillrunService {
                     resolve(error);
                 })
         });
-    }
-    getinvoicefrombillrun=( RegionId,BillRunNo)=>{
+    };
+
+    getInvoiceFromBillrun=( RegionId,BillRunNo)=>{
         const data ={
             'RegionId'                              :RegionId,
             'BillRunNo'                             :BillRunNo,
-        }
+        };
+
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/GetBillRunByNumber`,data)
                 .then( res => {

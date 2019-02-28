@@ -20,7 +20,9 @@ export const initialState = {
     Username: '',
     Phone: '',
     url: '',
-    menuObj: null
+    menuObj: null,
+    defaultPeriod: -1,
+    all_periods: null,
 };
 
 const login = function (state = initialState, action) {
@@ -30,6 +32,35 @@ const login = function (state = initialState, action) {
             return {...state, bLoginStart: action.payload};
         case Actions.LOGIN_SUCCESS:
         {
+            let all_regions = action.payload.Data.Regions;
+            let region = all_regions.filter(r=>r.regionid===action.payload.Data.DefaultRegionId);
+            let all_periods = [];
+            let defaultPeriod;
+
+            if(region.length) {
+                let periods = region[0].OpenPeriods;
+
+                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+
+                defaultPeriod = period;
+
+                period = periods.next.month.toString() + '/' + periods.next.year.toString();
+                if (periods.next.month < 10)
+                    period = '0' + period;
+                if(periods.next.status==='Open')
+                    all_periods.push(period);
+                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+                if (periods.previous.month < 10)
+                    period = '0' + period;
+                if(periods.previous.status==='Open')
+                    all_periods.push(period);
+
+            }
+
             const userState = {
                 IsSuccess: action.payload.IsSuccess,
                 UserId: action.payload.Data.UserId,
@@ -49,6 +80,7 @@ const login = function (state = initialState, action) {
             };
             return {
                 ...initialState,
+                defaultPeriod: defaultPeriod, all_periods: all_periods,
                 ...userState
             };
         }
@@ -73,7 +105,12 @@ const login = function (state = initialState, action) {
                 ...state,
                 defaultRegionId: action.payload
             };
-            case ADD_AUTH_NAVIGATION:
+        case Actions.CHANGE_DEFAULT_PERIOD:
+            return {
+                ...state,
+                defaultPeriod: action.payload
+            };
+        case ADD_AUTH_NAVIGATION:
             return {
                 ...state,
                 menuObj: action.payload
@@ -112,6 +149,6 @@ const login = function (state = initialState, action) {
 const persistConfig = {
     key: 'login',
     storage: storage,
-    blacklist: ['bLoginStart','regionId']
+    blacklist: ['bLoginStart','regionId', 'defaultPeriod', 'all_periods']
 };
 export default persistReducer(persistConfig, login);

@@ -313,6 +313,11 @@ const initialState = {
 
 	computedFinderFee: {},
 	finderFee: {},
+
+	updateCustomerResponse: null,
+	bUpdateCustomerStart: false,
+
+	bTransferFranchiseeFtate: false,
 };
 
 
@@ -385,6 +390,21 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bCreateCustomerStart: true,
+				}
+			}
+		case Actions.UPDATE_CUSTOMER:
+			{
+				return {
+					...state,
+					updateCustomerResponse: action.payload,
+					bUpdateCustomerStart: false,
+				}
+			}
+		case Actions.UPDATE_CUSTOMER_START:
+			{
+				return {
+					...state,
+					bUpdateCustomerStart: true,
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:
@@ -960,6 +980,11 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
 				activeFranchisee: action.payload
+			};
+		case Actions.SET_TRANSFER_FRANCHISEE_STATE:
+			return {
+				...state,
+				bTransferFranchiseeFtate: action.payload
 			};
 		default:
 			{

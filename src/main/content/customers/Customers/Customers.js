@@ -410,15 +410,16 @@ class Customers extends Component {
 
 	trySubmitForApproval = () => {
 
-		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0 ||
-			this.props.franchieesesToOffer && this.props.franchieesesToOffer.length > 0) {
+		if (this.props.activeCustomer &&
+			this.props.activeCustomer.Data &&
+			this.props.activeCustomer.Data.AssignedFranchisees &&
+			this.props.activeCustomer.Data.AssignedFranchisees.length > 0) {
 			this.submitForApproval()
 		} else {
 			this.setState({
 				tryingToSubmitWithoutOffering: true
 			})
 		}
-
 	}
 	tryClose = () => {
 		this.closeComposeForm()
@@ -440,11 +441,9 @@ class Customers extends Component {
 		if (!this.props.activeCustomer.Data.cus_addr) {
 			return "Customer address is invalid"
 		}
-		if (this.props.activeCustomer.Data.contract_lenght === 1 && this.props.activeCustomer.Data.cont_bill <= 0) {
+		if ([0, 2].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
 			return "Monthly contract amount is invalid"
 		}
-
-		return ""
 	}
 	submitForApproval = () => {
 		this.setState({
@@ -466,9 +465,6 @@ class Customers extends Component {
 
 		let param = {
 			...this.props.activeCustomer.Data,
-			AssignedFranchisees: [
-				...this.props.franchieesesToOffer,
-			]
 		}
 
 
@@ -555,7 +551,9 @@ class Customers extends Component {
 				nextProps.searchText);
 		}
 
-		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false) {
+		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false ||
+			nextProps.bUpdateCustomerStart !== this.props.bUpdateCustomerStart && nextProps.bUpdateCustomerStart === false
+		) {
 			this.props.getCustomers(
 				this.props.regionId,
 				this.props.statusId,
@@ -699,6 +697,9 @@ class Customers extends Component {
 	}
 	processConfirming = () => {
 		if (this.state.tryingToSubmitWithoutOffering === true) {
+			this.setState({
+				tryingToSubmitWithoutOffering: false,
+			})
 			this.submitForApproval()
 		}
 		if (this.state.tryingToCloseWithoutOffering === true) {
@@ -707,6 +708,9 @@ class Customers extends Component {
 			})
 			this.closeComposeForm()
 		}
+	}
+	debug = () => {
+		console.log("this.props.activeCustomer.Data = ", this.props.activeCustomer.Data)
 	}
 	render() {
 		console.log(this.props.documents)
@@ -818,6 +822,14 @@ class Customers extends Component {
 											</Tooltip> */}
 										</div>
 										<div className="flex items-center">
+											{this.props.customerForm.props.open &&
+												<Tooltip title="Log (DEBUG)">
+													<IconButton
+														className={classNames(classes.button)}
+														onClick={this.debug}
+													><Icon>check</Icon></IconButton>
+												</Tooltip>
+											}
 											{
 												customerForm.type === "edit" && <Button variant="contained" color="primary"
 													aria-label="Add an alarm"
@@ -982,7 +994,13 @@ assign at least one franchisee.</DialogContentText>
 				{(this.props.bCreateCustomerStart) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Submitting customer data...</Typography>
+						<Typography variant="body2" color="primary">Creating customer data...</Typography>
+					</div>
+				)}
+				{(this.props.bUpdateCustomerStart) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Updating customer...</Typography>
 					</div>
 				)}
 				{(this.props.bGetCustomerStart) && (
@@ -1054,6 +1072,7 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bCustomerFetchStart: customers.bCustomerFetchStart,
 		createCustomerResponse: customers.createCustomerResponse,
 		bCreateCustomerStart: customers.bCreateCustomerStart,
+		bUpdateCustomerStart: customers.bUpdateCustomerStart,
 		bGetCustomerStart: customers.bGetCustomerStart,
 		filters: customers.filters,
 		activeCustomer: customers.activeCustomer,

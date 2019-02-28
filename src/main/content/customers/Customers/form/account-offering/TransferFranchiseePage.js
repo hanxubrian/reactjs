@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
 import moment from 'moment';
-import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography, Switch } from '@material-ui/core';
+import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -384,7 +384,7 @@ const MapWithAMarkerClusterer2 = compose(
 );
 
 
-class FranchieesListPage extends Component {
+class TransferFranchiseePage extends Component {
 
 
 	constructor(props) {
@@ -663,12 +663,6 @@ class FranchieesListPage extends Component {
 		});
 	};
 
-	handleChangeChecked = name => event => {
-		this.setState({
-			[name]: event.target.checked
-		});
-	};
-
 	toggleSideBar = () => {
 		this.setState({
 			openSideBar: !this.state.openSideBar
@@ -759,47 +753,6 @@ class FranchieesListPage extends Component {
 
 		return (
 			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-				{this.props.bTransferFranchiseeFtate &&
-					<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
-						<TextField
-							type="date"
-							id="TransferEffectiveDate"
-							label="Transfer Effective Date *"
-							className={classNames(classes.textField, "mr-6")}
-							InputLabelProps={{ shrink: true }}
-							value={this.state.TransferEffectiveDate || ''}
-							onChange={this.handleChange('TransferEffectiveDate')}
-							margin="dense"
-							// variant="outlined"
-							style={{ width: "20%", minWidth: "180px" }}
-						/>
-
-						<TextField
-							id="Reason"
-							label="Reason"
-							className={classNames(classes.textField, "mr-6")}
-							InputLabelProps={{ shrink: true }}
-							value={this.state.Reason || ''}
-							onChange={this.handleChange('Reason')}
-							margin="dense"
-							// variant="outlined"
-							style={{ width: "50%", minWidth: "180px" }}
-						/>
-
-						<FormControlLabel
-							control={
-								<Switch
-									checked={this.state.StopFindersFee || false}
-									onChange={this.handleChangeChecked('StopFindersFee')}
-									value="StopFindersFee"
-								/>
-							}
-							label="Stop Finders Fee"
-						// style={{ width: '40%' }}
-						/>
-					</div>
-				}
-
 				<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
 					<Typography variant="h6">Active Franchisees</Typography>
 					<div>
@@ -816,9 +769,7 @@ class FranchieesListPage extends Component {
 							</IconButton>
 						</Tooltip>
 
-						{!this.props.bTransferFranchiseeFtate &&
-							<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						}
+						<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 
 						<Button
 							variant="contained"
@@ -1169,8 +1120,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		SearchText: franchisees.SearchText,
 
 		franchieesesToOffer: customers.franchieesesToOffer,
-		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchieesListPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransferFranchiseePage)));
