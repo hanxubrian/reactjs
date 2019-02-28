@@ -548,14 +548,41 @@ class TransactionEditForm extends Component {
             .then(response => response.json())
             .then(data => this.setState({ vendorList: data }));
 
+        let all_regions = this.props.all_regions;
+        let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+        if(this.props.all_regions) {
+            let periods = region[0].OpenPeriods;
+
+            let all_periods = [];
+
+            let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+            if (periods.current.month < 10)
+                period = '0' + period;
+            if(periods.current.status==='Open')
+                all_periods.push(period);
+            this.setState({period: period});
+
+
+            period = periods.next.month.toString() + '/' + periods.next.year.toString();
+            if (periods.next.month < 10)
+                period = '0' + period;
+            if(periods.next.status==='Open')
+                all_periods.push(period);
+            period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+            if (periods.previous.month < 10)
+                period = '0' + period;
+            if(periods.previous.status==='Open')
+                all_periods.push(period);
+
+            this.setState({periods: all_periods});
+        }
+
 
         if(this.props.transactionForm.type === 'new') {
             this.setState({TransactionNo: "PENDING"});
 
             if(this.props.all_regions) {
-                let all_regions = this.props.all_regions;
-                let region = all_regions.filter(r => r.regionid === this.props.regionId);
-
                 let period = region[0].OpenPeriods.current;
                 let month = period.month - 1;
                 let year = period.year;
@@ -576,19 +603,6 @@ class TransactionEditForm extends Component {
 
                 let transactionDate = moment().year(year).month(month);
                 this.setState({TransactionDate: transactionDate});
-
-                period = periods.next.month.toString() + '/' + periods.next.year.toString();
-                if (periods.next.month < 10)
-                    period = '0' + period;
-                if(periods.next.status==='Open')
-                    all_periods.push(period);
-                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
-                if (periods.previous.month < 10)
-                    period = '0' + period;
-                if(periods.previous.status==='Open')
-                    all_periods.push(period);
-
-                this.setState({periods: all_periods});
             }
         }
 

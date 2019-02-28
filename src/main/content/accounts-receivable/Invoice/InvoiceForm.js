@@ -427,11 +427,11 @@ class InvoiceForm extends Component {
         this.setState({PO_number: suggestion.CustomerNo});
         this.setState({franchiseeFromCustomer: suggestion.Franchisees});
 
-        let year = moment().year();
-        let month = moment().month();
-        let invoiceDate = moment();
+        let period = this.state.period.split('/');
+        let year = parseInt(period[1]);
+        let month = parseInt(period[0])-1;
+        let invoiceDate = moment().year(year).month(month);
         let dueDate = moment().year(year).month(month).endOf('month');
-
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
 
