@@ -262,10 +262,11 @@ class BillRunDialog extends Component {
 
     billrun=(e)=>{
 
+
         e.stopPropagation();
 
         if(this.props.auth && this.props.auth !==null){
-            let year = parseInt(this.setState.year);
+            let year = parseInt(this.state.year);
             let month = parseInt(this.state.month)+1;
             let user = this.props.auth.firstName+"     "+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;

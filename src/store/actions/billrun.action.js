@@ -142,7 +142,7 @@ export  function createBillrun(RegionId, Year ,Month,User, UserId,Message,Descri
         });
 
         (async () => {
-            let res = await billrunService.createbillrun(RegionId, Year ,Month,User, UserId,Message,Description);
+            let res = await billrunService.createBillrun(RegionId, Year ,Month,User, UserId,Message,Description);
             if (res.IsSuccess) {
                 dispatch({
                     type: CREATE_BILLRUN_SUCCESS,
