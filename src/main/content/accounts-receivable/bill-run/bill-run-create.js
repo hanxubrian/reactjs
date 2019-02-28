@@ -165,7 +165,6 @@ class BillRunDialog extends Component {
 
     componentDidMount() {
         if(this.props.auth.UserId===-1) {
-            console.log('proppss = ', this.props.auth, this.props.history);
             this.props.history.push('/auth/signin');
         }
 

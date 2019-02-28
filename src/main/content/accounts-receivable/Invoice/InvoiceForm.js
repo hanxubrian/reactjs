@@ -627,7 +627,6 @@ class InvoiceForm extends Component {
             this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
         }
         else if(event.target.name==='InvoiceDate'){
-            console.log('invoice date= ', event.target.value);
             let idate = event.target.value.split('-');
             let period = this.state.period.split('/');
             let year = parseInt(period[1]);
