@@ -1065,27 +1065,30 @@ class InvoiceForm extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pl-4" >
-                                <TextField
-                                    margin="none"
-                                    label="P.O #"
-                                    placeholder="P.O #"
-                                    InputProps={{
-                                        classes: {
-                                            input: classes.input,
-                                        },
-                                    }}
-                                    InputLabelProps = {{
-                                        shrink: true,
-                                        classes: {outlined: classes.label}
-                                    }}
-                                    name="PO_number"
-                                    variant="outlined"
-                                    value={this.state.PO_number}
-                                    onChange={this.handleChange}
-                                    required
-                                    fullWidth
-                                    style={{paddingRight: 4}}
-                                />
+                                {this.props.invoiceForm.type==='edit' && (
+                                    <TextField
+                                        margin="none"
+                                        label="P.O #"
+                                        placeholder="P.O #"
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        name="PO_number"
+                                        variant="outlined"
+                                        value={this.state.PO_number}
+                                        onChange={this.handleChange}
+                                        required
+                                        fullWidth
+                                        style={{paddingRight: 4}}
+                                    />
+                                )}
+
                                 <TextField
                                     margin="none"
                                     label="Invoice #"
