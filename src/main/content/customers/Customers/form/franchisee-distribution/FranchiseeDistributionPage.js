@@ -483,18 +483,19 @@ class FranchiseeDistributionPage extends React.Component {
 		// }
 	}
 
-	updateFranchiseesToOffer(franchieesesToOffer = this.props.franchieesesToOffer) {
+	updateFranchiseesToOffer(gridFrans = this.props.franchieesesToOffer) {
 		let newFrans = []
-		if (Array.isArray(franchieesesToOffer)) {
-			newFrans = [...newFrans, ...franchieesesToOffer]
+		if (Array.isArray(gridFrans)) {
+			newFrans = [...newFrans, ...gridFrans]
 		}
 		if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
 			newFrans = [...newFrans, ...this.props.activeCustomer.Data.AssignedFranchisees]
 		}
+		newFrans = _.cloneDeep(newFrans)
 		this.setState({
 			franchieesesToOffer: newFrans,
 		});
-
+		this.props.updateNewCustomerParam('AssignedFranchisees', newFrans)
 		// this.props.activeCustomer.Data.AssignedFranchisees && this.props.activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
 		// 	if (x.FinderFeeId) {
 		// 		this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
