@@ -186,8 +186,8 @@ class BillRun extends Component {
         super(props);
 
         if(!props.bLoadedBillruns) {
-            props.getBillruns();
         }
+
         this.fetchData = this.fetchData.bind(this);
         this._isMounted = false;
     }
@@ -201,18 +201,11 @@ class BillRun extends Component {
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
     };
+
     componentDidMount(){
         this._isMounted = true;
-        // const pusher = new Pusher('ecf6a4e23b186efa2d44', {
-        //     cluster: 'us2',
-        //     forceTLS: true
-        // });
-        // channel = pusher.subscribe('billruncreate');
-        // channel.bind('message', data => {
-        //     console.log("pusherdata",data);
-        //     this.setState({ pusherMSG:data});
-        // });
     }
+
     componentWillMount(){
         if( this._isMounted)
             this.getBillruns();

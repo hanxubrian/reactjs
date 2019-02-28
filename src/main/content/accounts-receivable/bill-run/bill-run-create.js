@@ -149,6 +149,11 @@ class BillRunDialog extends Component {
         labelWidth: 0,
     };
 
+    constructor(props){
+        super(props);
+
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
             this.setState({billruns: this.props.billruns});
@@ -159,6 +164,11 @@ class BillRunDialog extends Component {
     }
 
     componentDidMount() {
+        if(this.props.auth.UserId===-1) {
+            console.log('proppss = ', this.props.auth, this.props.history);
+            this.props.history.push('/auth/signin');
+        }
+
         this.setState({isMounted:true});
         this.props.onRef(this);
         let all_regions = this.props.all_regions;
@@ -168,6 +178,10 @@ class BillRunDialog extends Component {
         let month = period.month-1;
 
         this.setState({month: month});
+    }
+
+    componentWillMount() {
+
     }
 
     componentWillUnmount() {
@@ -321,6 +335,8 @@ class BillRunDialog extends Component {
 
 
     render() {
+        if(this.props.auth.UserId===-1)
+            return <div/>
 
         const { classes,loading } = this.props;
         const { showP} = this.state;

@@ -56,12 +56,12 @@ const styles = theme => ({
         '& tr th:first-child': {
             paddingLeft: '0px!important',
         },
-        '& tr th:nth-child(4)': {
+        '& tr th:nth-child(5)': {
             width: '100%'
         }
     },
     tableStriped:{
-        '& tbody tr td:nth-child(4)': {
+        '& tbody tr td:nth-child(5)': {
             width: '100%',
         },
         '& tr td': {
@@ -70,7 +70,7 @@ const styles = theme => ({
         '& tr td:first-child': {
             paddingLeft: '0px!important',
         },
-        '& colgroup col:nth-child(4)': {
+        '& colgroup col:nth-child(5)': {
             width: '100%',
         },
     }
@@ -168,14 +168,14 @@ class PrintChecksLists extends Component {
     {
         const { classes} = this.props;
         const columns = [
+            {name: "checktypename", title: "Check Type"},
             {name: "PayeeName", title: "Payee Name",},
             {name: "PayeeNumber", title: "Payee #"},
             {name: "PayeeAddress1", title: "Address"},
             // {name: "checkAmounttext", title: "Amount Text"},
-            {name: "checktypename", title: "Check Type"},
             {name: "checkamountnumber", title: "Amount"},
             // {name: "bankaddress1", title: "Bank Address"},
-            {name: "checkdate", title: "checkdate"},
+            {name: "checkdate", title: "Check Date"},
         ];
         let  tableColumnExtensions = [
             { columnName: 'PayeeAddress1', width: -1, },
@@ -184,8 +184,8 @@ class PrintChecksLists extends Component {
             { columnName: 'PayeeNumber', width: 100,},
             { columnName: 'checktypename', width: 120,},
             { columnName: 'PayeeAddress1', width: 200,},
-            { columnName: 'checkdate', width: 120},
-            { columnName: 'checkamountnumber', width: 120,  align: 'right'},
+            { columnName: 'checkdate', width: 140},
+            { columnName: 'checkamountnumber', width: 140,  align: 'right'},
         ];
 
         return (
