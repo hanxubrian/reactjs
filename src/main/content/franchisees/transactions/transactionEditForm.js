@@ -661,7 +661,7 @@ class TransactionEditForm extends Component {
             let period = event.target.value.split('/');
             let year = parseInt(period[1]);
             let month = parseInt(period[0])-1;
-            let transactionDate = moment().year(year).month(month);
+            let transactionDate = moment(this.state.TransactionDate).year(year).month(month);
             this.setState({TransactionDate: transactionDate.format('MM/DD/YYYY')});
         }
     };
