@@ -410,15 +410,16 @@ class Customers extends Component {
 
 	trySubmitForApproval = () => {
 
-		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0 ||
-			this.props.franchieesesToOffer && this.props.franchieesesToOffer.length > 0) {
+		if (this.props.activeCustomer &&
+			this.props.activeCustomer.Data &&
+			this.props.activeCustomer.Data.AssignedFranchisees &&
+			this.props.activeCustomer.Data.AssignedFranchisees.length > 0) {
 			this.submitForApproval()
 		} else {
 			this.setState({
 				tryingToSubmitWithoutOffering: true
 			})
 		}
-
 	}
 	tryClose = () => {
 		this.closeComposeForm()
@@ -440,11 +441,9 @@ class Customers extends Component {
 		if (!this.props.activeCustomer.Data.cus_addr) {
 			return "Customer address is invalid"
 		}
-		if ([1, 3].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
+		if ([0, 2].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
 			return "Monthly contract amount is invalid"
 		}
-
-		return ""
 	}
 	submitForApproval = () => {
 		this.setState({
@@ -466,9 +465,6 @@ class Customers extends Component {
 
 		let param = {
 			...this.props.activeCustomer.Data,
-			AssignedFranchisees: [
-				...this.props.franchieesesToOffer,
-			]
 		}
 
 

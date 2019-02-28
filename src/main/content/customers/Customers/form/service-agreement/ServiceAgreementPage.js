@@ -1049,12 +1049,13 @@ class ServiceAgreementPage extends React.Component {
 				value = parseInt("0" + value)
 				break
 		}
-		if (name === "contract_lenght" && value !== 1) {
+		if (name === "contract_lenght" && [0, 2].indexOf(value) === -1) {
 			this.setState({ cont_bill: 0 })
 			this.props.updateNewCustomerParam("cont_bill", 0)
+		} else {
+			this.setState({ [name]: value })
+			this.props.updateNewCustomerParam(name, value)
 		}
-		this.setState({ [name]: value })
-		this.props.updateNewCustomerParam(name, value)
 	}
 	handleChangeCustomerInfoPropsChecked = name => event => {
 		let checked = event.target.checked
