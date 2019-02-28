@@ -17,12 +17,8 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button/Button";
-import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import GridContainer from "../../../../../Commons/Grid/GridContainer";
 import GridItem from "../../../../../Commons/Grid/GridItem";
-import DialogActions from "@material-ui/core/DialogActions/DialogActions";
-import CancelIcon from '@material-ui/icons/Cancel';
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import SaveIcon from '@material-ui/icons/Save';
 import Person from '@material-ui/icons/Person';
@@ -35,7 +31,53 @@ import {withRouter} from "react-router-dom";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from '@material-ui/icons/Add';
 
+const DialogTitle = withStyles(theme => ({
+    root: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        backgroundColor: "#3c93ec",
+        margin: 0,
+        padding: theme.spacing.unit * 2,
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing.unit,
+        top: theme.spacing.unit,
+        color: "white",
+    },
+}))(props => {
+    const { children, classes, onClose } = props;
+    return (
+        <MuiDialogTitle disableTypography className={classes.root}>
+            {children}
+            {onClose ? (
+                <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </MuiDialogTitle>
+    );
+});
+
+const DialogContent = withStyles(theme => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing.unit * 2,
+    },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles(theme => ({
+    root: {
+        borderTop: `1px solid ${theme.palette.divider}`,
+        margin: 0,
+        padding: theme.spacing.unit,
+    },
+}))(MuiDialogActions);
 
 
 
@@ -132,7 +174,7 @@ const toolbarStyles = theme => ({
 	},
 	title: {
 		flex: '0 0 auto'
-	},
+	}
 });
 
 let CustomerLineTableToolbar = props => {
@@ -237,6 +279,11 @@ const styles = theme => ({
     iconSmall: {
         fontSize: 20,
     },
+    dialogH2: {
+        display: "flex",
+        alignItems: "center",
+        color: "white"
+    }
 });
 
 class FranchiseesOwnerTable extends React.Component {
@@ -332,7 +379,7 @@ class FranchiseesOwnerTable extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+		const { data, order, orderBy, rowsPerPage, page } = this.state;
 
 		return (
 			<div className={classes.root}>
@@ -392,116 +439,117 @@ class FranchiseesOwnerTable extends React.Component {
 				</div>
                 <Dialog
                     open={this.state.openDialog}
-                    onClose={this.handleClose}
+                    onClose={this.handleClose }
                     aria-labelledby="form-dialog-title"
                     maxWidth={"sm"}
                     fullWidth
                 >
-					<form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
-						<DialogTitle id="form-dialog-title">ADD OWNER</DialogTitle>
-						<DialogContent>
-							<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-									<TextField
-										id="dialogFirstName"
-										label="First Name"
-										className={classes.textField}
-										value={this.state.dialogForm.FirstName}
-										onChange={this.handleChangeAddOwnerSelect("FirstName")}
-										margin="dense"
-										inputProps={{
-											maxLength: 20
-										}}
-										fullWidth
-										style={{marginRight: "1%"}}
-										required
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position="start">
-													<Person style={{color:"gray"}} />
-												</InputAdornment>
-											),
-										}}
-									/>
-									<TextField
-										id="dialogLastName"
-										label="Last Name"
-										className={classes.textField}
-										value={this.state.dialogForm.LastName}
-										onChange={this.handleChangeAddOwnerSelect("LastName")}
-										margin="dense"
-										inputProps={{
-											maxLength: 20
-										}}
-										InputLabelProps={{
-											shrink: true
-										}}
-										style={{marginLeft: "1%"}}
-										fullWidth
-										required
-									/>
-								</GridItem>
-								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                    <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
+                        <DialogTitle id="form-dialog-title" onClose={this.handleClose }>
+                            <h2 className={classes.dialogH2}>
+                                <AddIcon  className={classNames(classes.leftIcon)} />
+                                Add Owner
+                            </h2>
+                        </DialogTitle>
+                        <DialogContent>
+                            <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                    <TextField
+                                        id="dialogFirstName"
+                                        label="First Name"
+                                        className={classes.textField}
+                                        value={this.state.dialogForm.FirstName}
+                                        onChange={this.handleChangeAddOwnerSelect("FirstName")}
+                                        margin="dense"
+                                        inputProps={{
+                                            maxLength: 20
+                                        }}
+                                        fullWidth
+                                        style={{marginRight: "1%"}}
+                                        required
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Person style={{color:"gray"}} />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                    <TextField
+                                        id="dialogLastName"
+                                        label="Last Name"
+                                        className={classes.textField}
+                                        value={this.state.dialogForm.LastName}
+                                        onChange={this.handleChangeAddOwnerSelect("LastName")}
+                                        margin="dense"
+                                        inputProps={{
+                                            maxLength: 20
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        style={{marginLeft: "1%"}}
+                                        fullWidth
+                                        required
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 
-								</GridItem>
-								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-									<TextField
-										id="dialogPhone"
-										label="Phone"
-										className={classes.textField}
-										margin="dense"
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position="start">
-													<Phone style={{color:"gray"}} />
-												</InputAdornment>
-											),
-											inputComponent: TextMaskCustom,
-											value:this.state.dialogForm.Phone,
-											onChange:this.handleChangeAddOwnerSelect("Phone"),
-										}}
-										inputProps={{
-											maxLength: 20
-										}}
-										fullWidth
-										required
-									/>
-								</GridItem>
-								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-									<TextField
-										id="dialogTitle"
-										label="Title"
-										className={classes.textField}
-										value={this.state.dialogForm.Title}
-										onChange={this.handleChangeAddOwnerSelect("Title")}
-										margin="dense"
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position="start">
-													<Title style={{color:"gray"}}/>
-												</InputAdornment>
-											),
-										}}
-										inputProps={{
-											maxLength: 20
-										}}
-										fullWidth
-										required
-									/>
-								</GridItem>
-							</GridContainer>
-						</DialogContent>
-						<DialogActions style={{padding:"2%"}}>
-							<Button onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
-								<CancelIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
-								Cancel
-							</Button>
-							<Button type="submit" variant="contained" size="small" className={classes.button}>
-								<SaveIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
-								Save
-							</Button>
-						</DialogActions>
-					</form>
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                    <TextField
+                                        id="dialogPhone"
+                                        label="Phone"
+                                        className={classes.textField}
+                                        margin="dense"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Phone style={{color:"gray"}} />
+                                                </InputAdornment>
+                                            ),
+                                            inputComponent: TextMaskCustom,
+                                            value:this.state.dialogForm.Phone,
+                                            onChange:this.handleChangeAddOwnerSelect("Phone"),
+                                        }}
+                                        inputProps={{
+                                            maxLength: 20
+                                        }}
+                                        fullWidth
+                                        required
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                    <TextField
+                                        id="dialogTitle"
+                                        label="Title"
+                                        className={classes.textField}
+                                        value={this.state.dialogForm.Title}
+                                        onChange={this.handleChangeAddOwnerSelect("Title")}
+                                        margin="dense"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Title style={{color:"gray"}}/>
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        inputProps={{
+                                            maxLength: 20
+                                        }}
+                                        fullWidth
+                                        required
+                                    />
+                                </GridItem>
+                            </GridContainer>
+                        </DialogContent>
+                        <DialogActions style={{padding:"2%"}}>
+                            <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
+                                <SaveIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                Save
+                            </Button>
+                        </DialogActions>
+                    </form>
                 </Dialog>
 			</div>
 		);
@@ -518,7 +566,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({ franchisees, auth }) {
+function mapStateToProps({ franchisees }) {
     return {
     	insertPayload: franchisees.insertPayload
     }

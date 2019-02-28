@@ -231,6 +231,11 @@ const styles = theme => ({
     iconSmall: {
         fontSize: 20,
     },
+    dialogH2: {
+        display: "flex",
+        alignItems: "center",
+        color: "white"
+    }
 });
 
 const feeTypeList = [
