@@ -544,6 +544,9 @@ class CancelContractPage extends React.Component {
 
 	handleChangeChecked = name => event => {
 		this.setState({ [name]: event.target.checked });
+		if (name === "enabled_cancelation_fee") {
+			this.setState({ canc_fee: event.target.checked ? 50 : '' })
+		}
 	};
 
 	handleChange = name => event => {

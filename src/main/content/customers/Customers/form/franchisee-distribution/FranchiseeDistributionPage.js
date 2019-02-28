@@ -485,6 +485,9 @@ class FranchiseeDistributionPage extends React.Component {
 
 	updateFranchiseesToOffer(gridFrans = this.props.franchieesesToOffer) {
 		let newFrans = []
+		// if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
+		// 	gridFrans = gridFrans.filter(x => this.props.activeCustomer.Data.AssignedFranchisees.map(y => y.Number).indexOf(x.Number) === -1)
+		// }
 		if (Array.isArray(gridFrans)) {
 			newFrans = [...newFrans, ...gridFrans]
 		}
@@ -499,7 +502,7 @@ class FranchiseeDistributionPage extends React.Component {
 		//
 		//init selected grid
 		//
-		this.props.setFranchieesesToOffer([])
+		// this.props.setFranchieesesToOffer([])
 
 		// this.props.activeCustomer.Data.AssignedFranchisees && this.props.activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
 		// 	if (x.FinderFeeId) {
