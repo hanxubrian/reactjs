@@ -316,6 +316,8 @@ const initialState = {
 
 	updateCustomerResponse: null,
 	bUpdateCustomerStart: false,
+
+	bTransferFranchiseeFtate: false,
 };
 
 
@@ -978,6 +980,11 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
 				activeFranchisee: action.payload
+			};
+		case Actions.SET_TRANSFER_FRANCHISEE_STATE:
+			return {
+				...state,
+				bTransferFranchiseeFtate: action.payload
 			};
 		default:
 			{

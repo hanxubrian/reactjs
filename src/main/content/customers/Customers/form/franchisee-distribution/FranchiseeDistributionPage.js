@@ -511,6 +511,57 @@ class FranchiseeDistributionPage extends React.Component {
 		// })
 	}
 
+	// updateFranchiseesToOffer(gridFrans = this.props.franchieesesToOffer) {
+	// 	let newFrans = []
+	// 	let newGridFrans = [], newGridFransNumhers = []
+	// 	let newActiveDataAssignedFranchisees = []
+	// 	if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
+	// 		//
+	// 		// existing ABSOLUTELY old franchisees
+	// 		//
+	// 		const newfs = this.props.activeCustomer.Data.AssignedFranchisees.filter(x => x.new)
+	// 		const oldfs = this.props.activeCustomer.Data.AssignedFranchisees.filter(x => !x.new)
+
+	// 		let newfNumbers = newfs.length > 0 ? newfs.map(x => x.Number) : []
+	// 		let oldfNumbers = oldfs.length > 0 ? oldfs.map(x => x.Number) : []
+
+	// 		//
+	// 		// remove old franchisses number in new franchisees
+	// 		//
+	// 		newGridFrans = gridFrans.filter(x => (newfNumbers.indexOf(x.Number) === -1 && oldfNumbers.indexOf(x.Number) === -1))
+	// 		newGridFransNumhers = newGridFrans.length > 0 ? newGridFrans.map(x => x.Number) : []
+	// 		//
+	// 		// remove deselected newly added franchisees
+	// 		//
+	// 		newActiveDataAssignedFranchisees = this.props.activeCustomer.Data.AssignedFranchisees.map(x => {
+	// 			if (x.new === false || x.new === true && gridFrans.indexOf(x.Number) === -1)
+	// 				return x
+	// 		}).filter(x => x)
+	// 	}
+
+	// 	if (Array.isArray(gridFrans)) {
+	// 		newFrans = [...newFrans, ...gridFrans]
+	// 	}
+	// 	if (Array.isArray(newActiveDataAssignedFranchisees)) {
+	// 		newFrans = [...newFrans, ...newActiveDataAssignedFranchisees]
+	// 	}
+	// 	newFrans = _.cloneDeep(newFrans)
+	// 	this.setState({
+	// 		franchieesesToOffer: newFrans,
+	// 	});
+	// 	this.props.updateNewCustomerParam('AssignedFranchisees', newFrans)
+	// 	//
+	// 	//init selected grid
+	// 	//
+	// 	// this.props.setFranchieesesToOffer([])
+
+	// 	// this.props.activeCustomer.Data.AssignedFranchisees && this.props.activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
+	// 	// 	if (x.FinderFeeId) {
+	// 	// 		this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
+	// 	// 	}
+	// 	// })
+	// }
+
 	initCustomerInfo = (activeCustomer = this.props.activeCustomer) => {
 		this.setState({
 			SA_Amount: activeCustomer.Data.cont_bill,
@@ -969,6 +1020,14 @@ class FranchiseeDistributionPage extends React.Component {
 		})
 		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	}
+	transferFranchisee = (fId) => {
+		this.props.setTransferFranchiseeState(true)
+		this.props.setStep(1)
+	}
+	transferFranchiseeComplete = (fId) => {
+		this.props.setTransferFranchiseeState(false)
+		this.props.setStep(1)
+	}
 	backToFranchiseeList = () => {
 		this.props.setStep(1)
 	}
@@ -1038,6 +1097,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						{this.props.activeStep === 1 && <Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>}
+						{this.props.activeStep === 1 && <Button variant="contained" onClick={this.transferFranchiseeComplete} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Complete Transfer</Button>}
 						{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
 					</div>
 				</div>
@@ -1086,8 +1146,12 @@ class FranchiseeDistributionPage extends React.Component {
 								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.Number || x.FranchiseeNumber}</Typography>
 								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name || x.FranchiseeName}</Typography>
 
-								<div style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }} />
-								<div style={{ width: franHeaders[3].width + '%', alignSelf: 'center' }} />
+								<div style={{ width: franHeaders[2].width + franHeaders[3].width + '%', alignSelf: 'center' }} >
+									<Button variant="contained" onClick={() => this.transferFranchisee(index)}
+										color="primary" className={classNames('')}>
+										<Icon fontSize="small">transfer_within_a_station</Icon> Transfer
+										</Button>
+								</div>
 								<div style={{ width: franHeaders[4].width + '%', alignSelf: 'center' }} />
 								<div style={{ width: franHeaders[5].width + '%', alignSelf: 'center' }} />
 								<div style={{ width: franHeaders[6].width + '%', alignSelf: 'center' }} />
@@ -1096,19 +1160,19 @@ class FranchiseeDistributionPage extends React.Component {
 								<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
 									<Tooltip title="Add monthly billing" aria-label="Add monthly billing">
 										<Fab aria-label="add"
-											color="primary" className={classNames(classes.ffBtn, "mr-6")}
+											color="primary" className={classNames(classes.ffBtn, "")}
 											onClick={() => this.addMonthlyBilling(index)} >
 											<Icon>add</Icon>
 										</Fab>
 									</Tooltip>
 
-									<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
+									{/* <Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
 										<Fab aria-label="remove"
 											onClick={() => this.removeFranchisee(index)}
 											color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
 											<Icon>close</Icon>
 										</Fab>
-									</Tooltip>
+									</Tooltip> */}
 								</div>
 							</div>
 							{
@@ -1352,6 +1416,8 @@ function mapDispatchToProps(dispatch) {
 		setActiveFranchisee: Actions.setActiveFranchisee,
 		updateNewCustomerParam: Actions.updateNewCustomerParam,
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
+
+		setTransferFranchiseeState: Actions.setTransferFranchiseeState,
 
 	}, dispatch);
 }

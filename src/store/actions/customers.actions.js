@@ -99,6 +99,8 @@ export const GET_FINDER_FEE = "[CUSTOMERS APP] GET_FINDER_FEE";
 export const SET_ACTIVE_FINDERS_FEE = "[CUSTOMERS APP] SET_ACTIVE_FINDERS_FEE";
 export const SET_ACTIVE_FRANCHISEE = "[CUSTOMERS APP] SET_ACTIVE_FRANCHISEE";
 
+export const SET_TRANSFER_FRANCHISEE_STATE = "[CUSTOMERS APP] SET_TRANSFER_FRANCHISEE_STATE";
+
 export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
 export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
 
@@ -789,5 +791,12 @@ export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend
 				payload: activeCustomer
 			});
 		})();
+	}
+}
+
+export function setTransferFranchiseeState(f) {
+	return {
+		type: SET_TRANSFER_FRANCHISEE_STATE,
+		payload: f
 	}
 }
