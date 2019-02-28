@@ -421,15 +421,16 @@ class Customers extends Component {
 
 	}
 	tryClose = () => {
-		if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0 ||
-			this.props.franchieesesToOffer && this.props.franchieesesToOffer.length > 0) {
-			this.closeComposeForm()
-		} else {
-			this.setState({
-				tryingToCloseWithoutOffering: true
-			})
-			this.processConfirming();
-		}
+		this.closeComposeForm()
+
+		// if (this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.AccountOfferings && this.props.activeCustomer.Data.AccountOfferings.length > 0 ||
+		// 	this.props.franchieesesToOffer && this.props.franchieesesToOffer.length > 0) {
+		// 	this.closeComposeForm()
+		// } else {
+		// 	this.setState({
+		// 		tryingToCloseWithoutOffering: true
+		// 	})
+		// }
 	}
 
 	validation() {
@@ -889,7 +890,7 @@ class Customers extends Component {
 							Confirm Dialog for submitting
 							 */}
 								<Dialog
-									open={!1 && (this.state.tryingToCloseWithoutOffering || this.state.tryingToSubmitWithoutOffering) }
+									open={(this.state.tryingToCloseWithoutOffering || this.state.tryingToSubmitWithoutOffering)}
 									onClose={this.handleCloseConfirmDialog}
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
