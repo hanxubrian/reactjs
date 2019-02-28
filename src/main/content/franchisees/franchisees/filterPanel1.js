@@ -51,15 +51,13 @@ class FilterPanel1 extends Component {
                 let periods = region[0].OpenPeriods;
 
                 let all_periods = [];
-                all_periods.push('01/2017');
-                this.setState({period: '01/2017'});
 
                 let period = periods.current.month.toString() + '/' + periods.current.year.toString();
                 if (periods.current.month < 10)
                     period = '0' + period;
                 if(periods.current.status==='Open')
                     all_periods.push(period);
-                // this.setState({period: period});
+                this.setState({period: period});
 
 
                 period = periods.next.month.toString() + '/' + periods.next.year.toString();
@@ -77,7 +75,8 @@ class FilterPanel1 extends Component {
             }
         }
 
-        this.setState({period: this.props.reportPeriod});
+        this.setState({period: this.props.defaultPeriod});
+        this.props.updateReportPeriod(this.props.defaultPeriod)
     }
 
     componentWillMount(){
@@ -167,6 +166,8 @@ function mapStateToProps({franchisees, auth})
         regionId: auth.login.defaultRegionId,
         reportPeriod: franchisees.reportPeriod,
         all_regions: auth.login.all_regions,
+        all_periods             : auth.login.all_periods,
+        defaultPeriod           : auth.login.defaultPeriod,
     }
 }
 

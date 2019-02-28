@@ -768,7 +768,7 @@ class Franchisees extends Component {
             <React.Fragment >
               <FusePageCustomSidebarScroll
                 classes={{
-                    root: classNames(classes.layoutRoot,'test123'),
+                    root: classNames(classes.layoutRoot),
                     rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryStateFranchisees}),
                     leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterStateFranchisees}),
                     sidebarHeader: classes.layoutSidebarHeader,
@@ -1210,12 +1210,12 @@ class Franchisees extends Component {
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Franchisees</Typography>
                                     </FuseAnimate>
-                                )}  
+                                )}
                                 {createFranchisees.type === "new" && (
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
                                     </FuseAnimate>
-                                )}                                 
+                                )}
                             </div>
                         ) : (
                             <h4 className={classes.elementCenter}>Filter Panel</h4>

@@ -1,22 +1,14 @@
 import React, {Component, Fragment} from 'react';
 import {
     Icon,
-    IconButton,
-    Fab,
     Typography,
-    Toolbar,
-    CircularProgress,
-    Menu,
-    MenuItem,
-    Checkbox,
-    FormControlLabel,
-    Tooltip,
     Button
 } from '@material-ui/core';
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
 import {bindActionCreators} from "redux";
-import {withStyles,ClickAwayListener} from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
 // for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
@@ -227,6 +219,7 @@ class ReportLayout extends Component {
 
 
     componentDidMount() {
+        this.props.updateReportPeriod(this.props.defaultPeriod)
     }
 
     componentWillUnmount() {
@@ -326,12 +319,14 @@ function mapDispatchToProps(dispatch) {
         openCloseReviseModal: Actions.openCloseReviseDialog,
         openCloseRejectModal: Actions.openCloseRejectDialog,
         nullifyFranchiseeNewReport: Actions.nullifyFranchiseeNewReport,
+        updateReportPeriod: Actions.updateReportPeriod,
     }, dispatch);
 }
 
 function mapStateToProps({auth, franchisees}) {
     return {
         filterStateFranchisees: franchisees.bOpenedFilterPanelFranchisees,
+        defaultPeriod           : auth.login.defaultPeriod,
     }
 }
 
