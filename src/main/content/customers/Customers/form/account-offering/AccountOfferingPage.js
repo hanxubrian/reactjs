@@ -805,11 +805,23 @@ class AccountOfferingPage extends Component {
 				}
 
 
-				{step === 0 && <FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
-				{step === 1 && <FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
-				{step === 2 && <FranchieesSubmitOfferPage setStep={this.setStep} setActiveRow={this.setActiveRow} activeRow={activeRow} />}
+				{
+					!this.props.bTransferFranchiseeFtate && step === 0 &&
+					<FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
+				{
+					(this.props.bTransferFranchiseeFtate && step === 0 ||
+						!this.props.bTransferFranchiseeFtate && step === 1) &&
+					< FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
+				{
+					(this.props.bTransferFranchiseeFtate && step === 1 ||
+						!this.props.bTransferFranchiseeFtate && step === 2) &&
+					<FranchieesSubmitOfferPage setStep={this.setStep} setActiveRow={this.setActiveRow} activeRow={activeRow} />
+				}
 
-				{step === 3 && <FranchiseeDistributionPage setStep={this.setStep} />}
+				{
+					(step === 3) &&
+					<FranchiseeDistributionPage setStep={this.setStep} />
+				}
 
 				<FranchieesAssignModal />
 			</div>

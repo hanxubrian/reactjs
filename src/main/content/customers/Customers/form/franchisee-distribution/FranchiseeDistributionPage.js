@@ -1022,14 +1022,26 @@ class FranchiseeDistributionPage extends React.Component {
 	}
 	transferFranchisee = (fId) => {
 		this.props.setTransferFranchiseeState(true)
-		this.props.setStep(1)
+		if (this.props.activeStep === 1) {
+			this.props.setStep(0)
+		} else {
+			this.props.updateCustomersParameter('activeStep', 1);
+		}
 	}
 	transferFranchiseeComplete = (fId) => {
 		this.props.setTransferFranchiseeState(false)
-		this.props.setStep(1)
+		if (this.props.activeStep === 1) {
+
+		} else {
+
+		}
 	}
 	backToFranchiseeList = () => {
-		this.props.setStep(1)
+		if (!this.props.bTransferFranchiseeFtate) {
+			this.props.setStep(1)
+		} else {
+			this.props.setStep(0)
+		}
 	}
 	addMonthlyBilling = (fIndex) => {
 		const { franchieesesToOffer } = this.state
@@ -1097,7 +1109,9 @@ class FranchiseeDistributionPage extends React.Component {
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						{this.props.activeStep === 1 && <Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>}
-						{this.props.activeStep === 1 && <Button variant="contained" onClick={this.transferFranchiseeComplete} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Complete Transfer</Button>}
+
+						{this.props.bTransferFranchiseeFtate && <Button variant="contained" onClick={this.transferFranchiseeComplete} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Complete Transfer</Button>}
+
 						{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
 					</div>
 				</div>
@@ -1147,10 +1161,13 @@ class FranchiseeDistributionPage extends React.Component {
 								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name || x.FranchiseeName}</Typography>
 
 								<div style={{ width: franHeaders[2].width + franHeaders[3].width + '%', alignSelf: 'center' }} >
-									<Button variant="contained" onClick={() => this.transferFranchisee(index)}
-										color="primary" className={classNames('')}>
-										<Icon fontSize="small">transfer_within_a_station</Icon> Transfer
+									{this.props.customerForm.type === 'edit' &&
+										<Button variant="contained" onClick={() => this.transferFranchisee(index)}
+											color="primary" className={classNames('')}>
+											<Icon fontSize="small">transfer_within_a_station</Icon>
+											Transfer
 										</Button>
+									}
 								</div>
 								<div style={{ width: franHeaders[4].width + '%', alignSelf: 'center' }} />
 								<div style={{ width: franHeaders[5].width + '%', alignSelf: 'center' }} />
@@ -1459,6 +1476,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 
 		activeFranchisee: customers.activeFranchisee,
 		findersFeeParams: customers.findersFeeParams,
+		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 
 	}
 }
