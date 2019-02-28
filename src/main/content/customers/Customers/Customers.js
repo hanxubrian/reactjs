@@ -440,7 +440,7 @@ class Customers extends Component {
 		if (!this.props.activeCustomer.Data.cus_addr) {
 			return "Customer address is invalid"
 		}
-		if (this.props.activeCustomer.Data.contract_lenght === 1 && this.props.activeCustomer.Data.cont_bill <= 0) {
+		if ([1, 3].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
 			return "Monthly contract amount is invalid"
 		}
 
@@ -708,6 +708,9 @@ class Customers extends Component {
 			this.closeComposeForm()
 		}
 	}
+	debug = () => {
+		console.log("this.props.activeCustomer.Data = ", this.props.activeCustomer.Data)
+	}
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -818,6 +821,14 @@ class Customers extends Component {
 											</Tooltip> */}
 										</div>
 										<div className="flex items-center">
+											{this.props.customerForm.props.open &&
+												<Tooltip title="Log (DEBUG)">
+													<IconButton
+														className={classNames(classes.button)}
+														onClick={this.debug}
+													><Icon>check</Icon></IconButton>
+												</Tooltip>
+											}
 											{
 												customerForm.type === "edit" && <Button variant="contained" color="primary"
 													aria-label="Add an alarm"

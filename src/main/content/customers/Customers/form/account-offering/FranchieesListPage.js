@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
+import moment from 'moment';
 import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 
@@ -518,10 +519,30 @@ class FranchieesListPage extends Component {
 
 		console.log(selection, franchieesesToOffer)
 
+		// "FranchiseeNumber": "sample string 1",
+		// "FranchiseeName": "sample string 2",
+		// "Id": "sample string 3",
+		// "FinderFee":
+		// "Status": "sample string 4",
+		// "AssignedDate": "sample string 5",
+		// "MonthlyBilling": []
+		// "CreatedById": 6
+
+		franchieesesToOffer.forEach(x => {
+			x = {
+				...x,
+				"FranchiseeNumber": x.Number,
+				"FranchiseeName": x.Name,
+				"Id": "",
+				"Status": "Assigned",
+				"AssignedDate": moment().format('YYYY-MM-DD'),
+				"CreatedById": 0,
+				"MonthlyBilling": [],
+				"FinderFee": {},
+			}
+		})
 		this.props.setFranchieesesToOffer(franchieesesToOffer)
 	}
-
-
 
 	commitChanges = ({ added, changed, deleted }) => {
 		let rows = this.state.addressRows;
@@ -550,6 +571,8 @@ class FranchieesListPage extends Component {
 		this.getFranchiseesFromStatus();
 
 		this.getLocation();
+
+
 	}
 	componentDidMount() {
 		console.log("componentDidMount");
@@ -585,9 +608,24 @@ class FranchieesListPage extends Component {
 		})
 		this.setState({ rows })
 
-
 		// this.setState({ temp: data });
 		// this.setState({ data: data });
+
+		//
+		// update selections per assignedFranchisees
+		//
+		const { franchieesesToOffer } = this.props
+
+		if (rows && franchieesesToOffer && franchieesesToOffer.length > 0) {
+			const fNumbers = franchieesesToOffer.map(x => x.Number)
+			console.log('this.state.rows', rows)
+			console.log('fNumbers', fNumbers)
+			console.log('franchieesesToOffer', rows.filter(x => fNumbers.indexOf(x.Number) > -1))
+			const selectedRows = rows.filter(x => fNumbers.indexOf(x.Number) > -1)
+			this.setState({
+				selection: selectedRows.map(x => rows.indexOf(x))
+			})
+		}
 	};
 	offerThisAccount = () => {
 		this.setState({ step: 1 })
@@ -1082,6 +1120,8 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		Latitude: franchisees.Latitude,
 		Location: franchisees.Location,
 		SearchText: franchisees.SearchText,
+
+		franchieesesToOffer: customers.franchieesesToOffer,
 	}
 }
 

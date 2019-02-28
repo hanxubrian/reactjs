@@ -417,10 +417,12 @@ class FranchiseeDistributionPage extends React.Component {
 
 	componentWillMount() {
 		this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-		this.getFranchiseesFromStatus();
+		// this.getFranchiseesFromStatus();
 
-		this.setRowData(this.props.payments)
+		// this.setRowData(this.props.payments)
+
 		this.initCustomerInfo();
+		this.updateFranchiseesToOffer();
 
 		this.setState({
 			customerServiceTypes: this.props.lists.customerServiceTypes,
@@ -465,50 +467,49 @@ class FranchiseeDistributionPage extends React.Component {
 		// 		PaymentType: nextProps.paymentDlgPayloads.paymentType
 		// 	})
 		// }
-		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getFranchiseeServiceTypes(nextProps.regionId)
-			this.props.getFranchiseeBillingTypes(nextProps.regionId)
-		}
-		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer)
-		}
-		if (!_.isEqual(nextProps.franchieesesToOffer, this.props.franchieesesToOffer)) {
-			this.initCustomerInfo(this.props.activeCustomer, nextProps.franchieesesToOffer)
-		}
-		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
-			this.getFranchiseesFromStatus(nextProps.franchisees);
-		}
+
+		// if (nextProps.regionId !== this.props.regionId) {
+		// 	this.props.getFranchiseeServiceTypes(nextProps.regionId)
+		// 	this.props.getFranchiseeBillingTypes(nextProps.regionId)
+		// }
+		// if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
+		// 	this.initCustomerInfo(nextProps.activeCustomer)
+		// }
+		// if (!_.isEqual(nextProps.franchieesesToOffer, this.props.franchieesesToOffer)) {
+		// 	this.updateFranchiseesToOffer(nextProps.franchieesesToOffer)
+		// }
+		// if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
+		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
+		// }
 	}
 
-	initCustomerInfo = (activeCustomer = this.props.activeCustomer, franchieesesToOffer = this.props.franchieesesToOffer) => {
-		let tmpFranchieesesToOffer = []
+	updateFranchiseesToOffer(franchieesesToOffer = this.props.franchieesesToOffer) {
+		let newFrans = []
 		if (Array.isArray(franchieesesToOffer)) {
-			tmpFranchieesesToOffer = [...tmpFranchieesesToOffer, ...franchieesesToOffer]
+			newFrans = [...newFrans, ...franchieesesToOffer]
 		}
-		if (activeCustomer.Data) {
-			if (Array.isArray(activeCustomer.Data.AssignedFranchisees)) {
-				tmpFranchieesesToOffer = [...tmpFranchieesesToOffer, ...activeCustomer.Data.AssignedFranchisees]
-			}
-			this.setState({
-				SA_Amount: activeCustomer.Data.cont_bill,
-				franchieesesToOffer: tmpFranchieesesToOffer,
-			});
-			// this.props.updateFindersFeeParams({
-			// 	FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
-			// 	CustomerNum: activeCustomer.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
-			// });
+		if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
+			newFrans = [...newFrans, ...this.props.activeCustomer.Data.AssignedFranchisees]
+		}
+		this.setState({
+			franchieesesToOffer: newFrans,
+		});
 
-			activeCustomer.Data.AssignedFranchisees && activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
-				if (x.FinderFeeId) {
-					this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
-				}
-			})
-		}
+		// this.props.activeCustomer.Data.AssignedFranchisees && this.props.activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
+		// 	if (x.FinderFeeId) {
+		// 		this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
+		// 	}
+		// })
+	}
+
+	initCustomerInfo = (activeCustomer = this.props.activeCustomer) => {
+		this.setState({
+			SA_Amount: activeCustomer.Data.cont_bill,
+		});
 	};
 
 	handleClose = () => {
 		this.props.showIncreaseDecreaseContractModalForm(false)
-
 	};
 
 	handleCloseSnackBar = (event, reason) => {
@@ -563,26 +564,26 @@ class FranchiseeDistributionPage extends React.Component {
 		this.setState({ rows });
 	}
 
-	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
-		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
-			return [];
-		let res = [...payments.Regions[0].Payments]
+	// setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
+	// 	if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
+	// 		return [];
+	// 	let res = [...payments.Regions[0].Payments]
 
-		res.forEach((x, index) => {
-			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
-			x.id = index
-		})
-		res = res.filter(x => {
-			return activePaymentRows.indexOf(x.id) > -1
-		})
-		if (res.length > 0) {
-			this.setState({
-				customerName: res[0].CustomerName,
-				customerNumber: res[0].CustomerNo,
-			})
-		}
-		this.setState({ rows: res })
-	}
+	// 	res.forEach((x, index) => {
+	// 		x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
+	// 		x.id = index
+	// 	})
+	// 	res = res.filter(x => {
+	// 		return activePaymentRows.indexOf(x.id) > -1
+	// 	})
+	// 	if (res.length > 0) {
+	// 		this.setState({
+	// 			customerName: res[0].CustomerName,
+	// 			customerNumber: res[0].CustomerNo,
+	// 		})
+	// 	}
+	// 	this.setState({ rows: res })
+	// }
 
 	onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
 		this.setState(state => {
@@ -771,82 +772,78 @@ class FranchiseeDistributionPage extends React.Component {
 		this.setState({ EmailNotesTo: value });
 	};
 
-	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-		let rows = [];
+	// getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
+	// 	let rows = [];
 
-		if (!rawData || !rawData.Data || !rawData.Data.Region) return;
+	// 	if (!rawData || !rawData.Data || !rawData.Data.Region) return;
 
-		rawData.Data.Region.forEach((x, index) => {
-			rows = [...rows, ...x.Franchisees]
-		})
-		this.setState({ rows })
+	// 	rawData.Data.Region.forEach((x, index) => {
+	// 		rows = [...rows, ...x.Franchisees]
+	// 	})
+	// 	this.setState({ rows })
+	// };
 
+	// ToolbarRootBase = ({ children, classes, className, ...restProps }) => (
+	// 	<Toolbar.Root
+	// 		className={classNames(className, classes.franchiseeGridToolbar)}
+	// 		style={{ flexDirection: "row-reverse" }}
+	// 		{...restProps}
 
-		// this.setState({ temp: data });
-		// this.setState({ data: data });
-	};
+	// 	>
+	// 		<Button variant="contained" onClick={this.addFranchiseeToCustomer} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">add</Icon>Add</Button>
 
-	ToolbarRootBase = ({ children, classes, className, ...restProps }) => (
-		<Toolbar.Root
-			className={classNames(className, classes.franchiseeGridToolbar)}
-			style={{ flexDirection: "row-reverse" }}
-			{...restProps}
+	// 		{children}
+	// 	</Toolbar.Root>
+	// );
+	// ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
 
-		>
-			<Button variant="contained" onClick={this.addFranchiseeToCustomer} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">add</Icon>Add</Button>
+	// addFranchiseeToCustomer = () => {
+	// 	const { selection, rows } = this.state;
+	// 	let selectedFranchisees = selection.map(x => rows[x])
+	// 	let newFranchisees = selectedFranchisees.map(x => {
+	// 		let temp = {};
+	// 		temp.AssignedDate = moment().format('MM/DD/YYYY');
+	// 		temp.CreatedById = this.props.userId;
+	// 		temp.FranchiseeNumber = x.Number;
+	// 		temp.FranchiseeName = x.Name;
+	// 		temp.Id = x.Id;
+	// 		temp.MonthlyBilling = [{
+	// 			BillingFrequency: "R",
+	// 			BillingTypeId: "",
+	// 			BillingTypeServiceId: "",
+	// 			Description: "",
+	// 			EscrowBilling: false,
+	// 			MonthlyBilling: 0,
+	// 			Status: "Active",
+	// 		}];
+	// 		temp.Status = "Active";
+	// 		return temp;
+	// 	});
 
-			{children}
-		</Toolbar.Root>
-	);
-	ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
+	// 	const franchieesesToOffer = [...this.state.franchieesesToOffer, ...newFranchisees]
+	// 	// if (this.props.activeCustomer) {
+	// 	this.setState({ franchieesesToOffer });
 
-	addFranchiseeToCustomer = () => {
-		const { selection, rows } = this.state;
-		let selectedFranchisees = selection.map(x => rows[x])
-		let newFranchisees = selectedFranchisees.map(x => {
-			let temp = {};
-			temp.AssignedDate = moment().format('MM/DD/YYYY');
-			temp.CreatedById = this.props.userId;
-			temp.FranchiseeNumber = x.Number;
-			temp.FranchiseeName = x.Name;
-			temp.Id = x.Id;
-			temp.MonthlyBilling = [{
-				BillingFrequency: "R",
-				BillingTypeId: "",
-				BillingTypeServiceId: "",
-				Description: "",
-				EscrowBilling: false,
-				MonthlyBilling: 0,
-				Status: "Active",
-			}];
-			temp.Status = "Active";
-			return temp;
-		});
-
-		const franchieesesToOffer = [...this.state.franchieesesToOffer, ...newFranchisees]
-		// if (this.props.activeCustomer) {
-		this.setState({ franchieesesToOffer });
-
-		//
-		this.props.updateActiveCustomerAssignedFranchisees(franchieesesToOffer)
-		// } else {
-		// 	if (this.state.franchieesesToOffer) {
-		// 		this.setState({
-		// 			franchieesesToOffer: [
-		// 				...this.state.franchieesesToOffer,
-		// 				...newFranchisees
-		// 			]
-		// 		});
-		// 	}
-		// 	else {
-		// 		this.setState({
-		// 			franchieesesToOffer: [
-		// 				...newFranchisees
-		// 			]
-		// 		});
-		// 	}
-		// }
-	};
+	// 	//
+	// 	this.props.updateActiveCustomerAssignedFranchisees(franchieesesToOffer)
+	// 	// } else {
+	// 	// 	if (this.state.franchieesesToOffer) {
+	// 	// 		this.setState({
+	// 	// 			franchieesesToOffer: [
+	// 	// 				...this.state.franchieesesToOffer,
+	// 	// 				...newFranchisees
+	// 	// 			]
+	// 	// 		});
+	// 	// 	}
+	// 	// 	else {
+	// 	// 		this.setState({
+	// 	// 			franchieesesToOffer: [
+	// 	// 				...newFranchisees
+	// 	// 			]
+	// 	// 		});
+	// 	// 	}
+	// 	// }
+	// };
 
 	changeSelection = selection => {
 		this.setState({ selection });
@@ -857,13 +854,13 @@ class FranchiseeDistributionPage extends React.Component {
 			step
 		})
 	}
-	saveAssignedFranchiseeDistributions = () => {
-		const { activeCustomer } = this.props
+	// saveAssignedFranchiseeDistributions = () => {
+	// 	const { activeCustomer } = this.props
 
-		this.props.updateAssignedFranchisee(this.props.regionId, activeCustomer.Data.cust_no, this.state.franchieesesToOffer)
-		this.setState({ openSnack: true });
+	// 	this.props.updateAssignedFranchisee(this.props.regionId, activeCustomer.Data.cust_no, this.state.franchieesesToOffer)
+	// 	this.setState({ openSnack: true });
 
-	};
+	// };
 
 	handleStepFranchiseeDistribution = () => {
 		this.handleStep(1)
@@ -903,100 +900,6 @@ class FranchiseeDistributionPage extends React.Component {
 		)
 	};
 
-	getNewAmountInputForm() {
-		const { classes } = this.props;
-		const {
-			franchiseeBillingTypes,
-			franchiseeServiceTypes
-		} = this.state
-
-		const franHeaders = [
-			{ width: 12, title: 'Number', field: 'Number' },
-			{ width: 22, title: 'Name', field: 'Name' },
-			{ width: 15, title: 'Billing', field: '' },
-			{ width: 15, title: 'Service', field: '' },
-			{ width: 25, title: 'Description', field: '' },
-			{ width: 10, title: 'Amount', field: '' },
-		];
-
-		return (
-			<>
-				<div className={classNames("flex mt-12 justify-between")}>
-
-					<TextField margin="dense" id="SA_Amount" label="Current Contract Amount" value={this.state.SA_Amount}
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						style={{ minWidth: 200 }}
-						InputProps={{
-							readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-					/>
-
-					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={this.handleStepFranchiseeDistribution}
-							disabled={this.state.NewAmount === ''}
-							color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Revenue Distributions<Icon fontSize="small">keyboard_arrow_right</Icon></Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-					</div>
-
-				</div>
-
-				<div className={classNames("flex mt-12 justify-start")}>
-					<TextField margin="dense" id="NewAmount" label="New Amount"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{
-							readOnly: false,
-							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-							inputComponent: NumberFormatCustomNoPrefix
-						}}
-						value={this.state.NewAmount || ''}
-						onChange={this.handleChange("NewAmount")}
-						autoFocus
-					/>
-					{this.state.decreaseReasons !== null && this.state.increaseReasons !== null && (
-						this.renderReasons())}
-
-					<TextField
-						type="date"
-						id="EffectiveDate"
-						label="Effective Date"
-						className={classNames(classes.textField, 'ml-24')}
-						InputLabelProps={{ shrink: true }}
-						value={this.state.EffectiveDate}
-						onChange={this.handleChange('EffectiveDate')}
-						margin="dense"
-					/>
-				</div>
-				<div className={classNames("flex mt-12 justify-start w-full")}>
-					<TextField
-						id="notes"
-						name="notes"
-						label="Note"
-						className={classes.textField}
-						value={this.state.notes}
-						onChange={this.handleChange1}
-						margin="dense"
-						variant="outlined"
-						fullWidth
-						multiline
-						InputLabelProps={{
-							shrink: true,
-							classes: { outlined: classes.label }
-						}}
-						InputProps={{
-							classes: {
-								input: classes.input, multiline: classes.input
-							},
-						}}
-						rows={3}
-					/>
-				</div>
-			</>
-		)
-	}
-
 	handleMonthlyBilling = (fId, mId, name) => event => {
 		let value;
 		switch (name) {
@@ -1016,11 +919,12 @@ class FranchiseeDistributionPage extends React.Component {
 		this.setState({
 			franchieesesToOffer: newFranchieesesToOffer
 		})
+		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	};
 
-	handleUpdateAssignedFranchisees = () => {
-		this.props.updateActiveCustomerAssignedFranchisees(this.state.franchieesesToOffer);
-	};
+	// handleUpdateAssignedFranchisees = () => {
+	// 	this.props.updateActiveCustomerAssignedFranchisees(this.state.franchieesesToOffer);
+	// };
 
 	gotoFindersFee = async (Franchisee, AmountPayableOn) => {
 		await this.props.updateFindersFeeParams({
@@ -1045,6 +949,8 @@ class FranchiseeDistributionPage extends React.Component {
 		this.setState({
 			franchieesesToOffer: newFranchieesesToOffer
 		})
+
+		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	};
 	removeFranchisee = (fId) => {
 		let newFranchieesesToOffer = _.clone(this.state.franchieesesToOffer)
@@ -1052,6 +958,7 @@ class FranchiseeDistributionPage extends React.Component {
 		this.setState({
 			franchieesesToOffer: newFranchieesesToOffer
 		})
+		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	}
 	backToFranchiseeList = () => {
 		this.props.setStep(1)
@@ -1079,6 +986,8 @@ class FranchiseeDistributionPage extends React.Component {
 		this.setState({
 			franchieesesToOffer: newFranchieesesToOffer
 		})
+
+		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 
 	}
 	getMonthlyBillingTotal(franchisee) {
@@ -1204,7 +1113,7 @@ class FranchiseeDistributionPage extends React.Component {
 											name="EscrowBilling"
 											checked={m.EscrowBilling}
 											onChange={this.handleMonthlyBilling(index, mIndex, 'EscrowBilling')}
-											onBlur={() => this.handleUpdateAssignedFranchisees()}
+										// onBlur={() => this.handleUpdateAssignedFranchisees()}
 										/>
 
 										<TextField style={{ width: franHeaders[3].width + '%' }}
@@ -1288,12 +1197,12 @@ class FranchiseeDistributionPage extends React.Component {
 										/>
 
 										<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
-											<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
-												<Fab aria-label="remove"
-													onClick={() => this.removeFranchiseeMonthly(index, mIndex)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
-													<Icon>remove</Icon>
-												</Fab>
-											</Tooltip>
+											{/* <Tooltip title="Remove this franchisee" aria-label="Remove Franchisee"> */}
+											<Fab aria-label="remove"
+												onClick={() => this.removeFranchiseeMonthly(index, mIndex)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
+												<Icon>remove</Icon>
+											</Fab>
+											{/* </Tooltip> */}
 										</div>
 									</div>
 								))
@@ -1343,53 +1252,6 @@ class FranchiseeDistributionPage extends React.Component {
 		)
 	}
 
-	getFranchiseesList() {
-		const { classes } = this.props;
-		const {
-			searchValue,
-			pageSizes,
-			sorting,
-			selection,
-			rows,
-			columns,
-		} = this.state;
-		return (
-			<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
-				<Typography variant='subtitle1'><strong>Franchisees</strong></Typography>
-				<div className="w-full h-full">
-					{/* grid area */}
-					<Grid rows={rows} columns={columns}>
-						<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
-						<IntegratedFiltering />
-						<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
-						<PagingState defaultCurrentPage={0} defaultPageSize={10} />
-						<PagingPanel pageSizes={pageSizes} />
-						<IntegratedSelection />
-						<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
-						<IntegratedSorting />
-						<IntegratedPaging />
-						<EditingState
-							// columnExtensions={editingColumnExtensions}
-							onCommitChanges={this.commitChanges} />
-						<Table />
-						{/* <VirtualTable height="auto" /> */}
-
-						<TableColumnResizing defaultColumnWidths={columns} />
-
-						<TableSelection showSelectAll selectByRowClick highlightRow />
-						<TableHeaderRow showSortingControls />
-
-						<Toolbar rootComponent={this.ToolbarRoot} />
-						<SearchPanel />
-						<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
-					</Grid>
-
-				</div>
-			</Paper>
-
-		)
-	}
-
 	handleSaveFindersFee = () => {
 		const { activeFranchisee } = this.props
 		const { franchieesesToOffer } = this.state
@@ -1408,6 +1270,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 
 		this.setState({ franchieesesToOffer: newFranchieesesToOffer })
+		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 
 		this.handleStep(0)
 	};
@@ -1438,16 +1301,8 @@ class FranchiseeDistributionPage extends React.Component {
 			{step === 0 &&
 				<>
 					<div className={classNames("flex flex-col")}>
-						{/*{step === 0 && this.getNewAmountInputForm()}*/}
 						{this.getFranchiseeAssignmentForm()}
-						{/*{step === 2 && this.getFindersFeesForm()}*/}
 					</div>
-
-					{/* <div className={classNames("flex flex-col")}>
-						<Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
-						{this.getFranchiseesList()}
-					</div> */}
-
 					<Snackbar
 						anchorOrigin={{
 							vertical: 'bottom',
@@ -1492,6 +1347,7 @@ function mapDispatchToProps(dispatch) {
 		getFinderFee: Actions.getFinderFee,
 
 		setActiveFranchisee: Actions.setActiveFranchisee,
+		updateNewCustomerParam: Actions.updateNewCustomerParam,
 
 	}, dispatch);
 }

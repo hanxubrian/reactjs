@@ -1599,7 +1599,7 @@ class ServiceAgreementPage extends React.Component {
 
 						{/* <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}> */}
 						<div className={classNames('items-center')}>
-							<div xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <div xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="ServiceType"
 									label="Service Type *"
@@ -1616,7 +1616,7 @@ class ServiceAgreementPage extends React.Component {
 										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField>
-							</div>
+							</div> */}
 
 							<div xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
