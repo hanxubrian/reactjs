@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import {
     TextField, Button, Typography, Divider, FormControlLabel} from '@material-ui/core';
 // theme components
-import { FuseAnimate} from '@fuse';
+
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 //Custom components
@@ -260,25 +260,65 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginLeft:'1%',marginRight: '1%'}}
                             />
                         </GridItem>
+                    </GridContainer>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Company Type</h3>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <FormControlLabel
-                                    value="ein"
-                                    checked={franchiseeForm.state.LegalId === 'ein'}
-                                    onChange={franchiseeForm.handleTextChange("LegalId")}
-                                    control={<Radio color="primary" />}
-                                    label="EIN"
-                                    labelPlacement="end"
-                                    margin="dense"
-                                />
-                                <FormControlLabel
-                                    checked={franchiseeForm.state.LegalId === 'ssn'}
-                                    value="ssn"
-                                    onChange={franchiseeForm.handleTextChange("LegalId")}
-                                    control={<Radio color="primary" />}
-                                    label="SSN"
-                                    labelPlacement="end"
-                                    margin="dense"
-                                />
+                                {/*<FormControlLabel*/}
+                                    {/*value="ein"*/}
+                                    {/*checked={franchiseeForm.state.LegalId === 'ein'}*/}
+                                    {/*onChange={franchiseeForm.handleTextChange("LegalId")}*/}
+                                    {/*control={<Radio color="primary" />}*/}
+                                    {/*label="EIN"*/}
+                                    {/*labelPlacement="end"*/}
+                                    {/*margin="dense"*/}
+                                {/*/>*/}
+                                {/*<FormControlLabel*/}
+                                    {/*checked={franchiseeForm.state.LegalId === 'ssn'}*/}
+                                    {/*value="ssn"*/}
+                                    {/*onChange={franchiseeForm.handleTextChange("LegalId")}*/}
+                                    {/*control={<Radio color="primary" />}*/}
+                                    {/*label="SSN"*/}
+                                    {/*labelPlacement="end"*/}
+                                    {/*margin="dense"*/}
+                                {/*/>*/}
+                            <FormControlLabel
+                                value="llc_ein"
+                                checked={franchiseeForm.state.LegalId === 'llc_ein'}
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="LLC EIN"
+                                labelPlacement="end"
+                                margin="dense"
+                            />
+                            <FormControlLabel
+                                checked={franchiseeForm.state.LegalId === 'corporation_ein'}
+                                value="corporation_ein"
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="Corporation EIN"
+                                labelPlacement="end"
+                                margin="dense"
+                            />
+                            <FormControlLabel
+                                value="partnership_ein"
+                                checked={franchiseeForm.state.LegalId === 'partnership_ein'}
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="Partnership EIN"
+                                labelPlacement="end"
+                                margin="dense"
+                            />
+                            <FormControlLabel
+                                checked={franchiseeForm.state.LegalId === 'sole_provider_ssn'}
+                                value="sole_provider_ssn"
+                                onChange={franchiseeForm.handleTextChange("LegalId")}
+                                control={<Radio color="primary" />}
+                                label="Sole-Provider SSN"
+                                labelPlacement="end"
+                                margin="dense"
+                            />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                 <TextField
@@ -395,7 +435,7 @@ function getStepContent(franchiseeForm, step) {
                                 inputProps={{
                                     readOnly: true,
                                     type: "number",
-                                    value: (franchiseeForm.state.ibAmount === NaN || franchiseeForm.state.ibAmount === null ) ? 0 : franchiseeForm.state.ibAmount 
+                                    value: (isNaN(franchiseeForm.state.ibAmount) || franchiseeForm.state.ibAmount === null ) ? 0 : franchiseeForm.state.ibAmount
                                 }}
                                 InputLabelProps={{
                                     shrink: true,

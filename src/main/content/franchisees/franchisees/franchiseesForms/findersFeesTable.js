@@ -393,7 +393,7 @@ class FindersFeesTable extends React.Component {
                     }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />]
+                />
                 <FindersFeesStopModal />
             </Paper>
         );
