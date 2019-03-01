@@ -312,8 +312,7 @@ class FranchiseesOwnerTable extends React.Component {
 
 	componentWillMount() {
         this.setState({
-            data: this.props.insertPayload.Owners,
-            insertPayload: this.props.insertPayload
+            data: this.props.insertPayload.Owners
         });
     }
 
@@ -350,7 +349,7 @@ class FranchiseesOwnerTable extends React.Component {
 	};
 
     handleRemoveOwner = (index) => {
-        const payloadData = this.state.insertPayload.Owners;
+        const payloadData = this.props.insertPayload.Owners;
         let removedData = payloadData.slice(0, index).concat(payloadData.slice(index+1, payloadData.length));
         this.handleUpdateOwnerInsertPayload(removedData,"remove");
     }
@@ -365,7 +364,7 @@ class FranchiseesOwnerTable extends React.Component {
 	}
 
 	handleUpdateOwnerInsertPayload = (param, actionType) => {
-    	const payloadData = this.state.insertPayload;
+    	const payloadData = this.props.insertPayload;
         if(actionType === "add"){
             payloadData.Owners.push(param);
         }
