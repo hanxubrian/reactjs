@@ -1210,7 +1210,7 @@ class FranchiseeDistributionPage extends React.Component {
 											{/* <InputLabel shrink htmlFor="BillingFrequency">Billing Type</InputLabel> */}
 											<Select
 												native
-												value={this.state.BillingFrequency || ''}
+												value={m.BillingFrequency || ''}
 												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingFrequency')}
 												inputProps={{
 													name: 'BillingFrequency',
@@ -1242,7 +1242,7 @@ class FranchiseeDistributionPage extends React.Component {
 											{/* <InputLabel shrink htmlFor="BillingTypeServiceId">Service Type</InputLabel> */}
 											<Select
 												native
-												value={this.state.BillingTypeServiceId || ''}
+												value={m.BillingTypeServiceId || ''}
 												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeServiceId')}
 												inputProps={{
 													name: 'BillingTypeServiceId',

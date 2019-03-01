@@ -418,7 +418,7 @@ class PaymentFormModal extends React.Component {
 
 			PaymentType: "Check",
 			ReferenceNo: "",
-			PaymentDate: moment().format("MM/DD/YYYY"),//new Date().toISOString().substr(0, 10),
+			PaymentDate: moment(new Date()).format("mm/dd/yyyy"),//new Date().toISOString().substr(0, 10),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
@@ -476,7 +476,7 @@ class PaymentFormModal extends React.Component {
 		this.setState({
 			PaymentType: "Check",
 			ReferenceNo: "",
-			PaymentDate: new Date().toISOString().substr(0, 10),
+			PaymentDate: moment(new Date()).format("mm/dd/yyyy"), //new Date().toISOString().substr(0, 10),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
