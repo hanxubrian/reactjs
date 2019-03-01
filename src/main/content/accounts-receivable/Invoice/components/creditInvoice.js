@@ -244,7 +244,9 @@ class CreditInvoiceFormModal extends React.Component {
                                     <div className="flex flex-row flex-1 w-full">
                                         <TextField type="text" value={customer.CustomerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="Customer Name" />
                                         <TextField type="text" value={customer.CustomerNo} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="Customer #" />
-                                        <TextField type="text" value={this.props.invoiceDetail.Data.Inv_no} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="InvoiceNumber" label="Invoice #" />
+                                        {this.props.invoiceDetail && (
+                                            <TextField type="text" value={this.props.invoiceDetail.Data.Inv_no} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="InvoiceNumber" label="Invoice #" />
+                                        )}
                                         <TextField type="text" value={this.state.ReferenceNo} required InputLabelProps={{ shrink: true }}  margin="dense" fullWidth className={classNames("pr-6")} id="ReferenceNo" label="ReferenceNo" />
                                     </div>
 
@@ -286,23 +288,22 @@ class CreditInvoiceFormModal extends React.Component {
                                             },
                                         }}
                                     />
-                                    <TextField  margin="normal" id="Reason" label="Reason" variant="outlined"
-                                                fullWidth
-                                                onChange={this.handleChange('Reason')}
-                                                placeholder="Reason"
-                                                value={this.state.Reason}
-                                                className={classNames("ml-12")}
-                                                InputProps={{
-                                                    classes: {input: classes.input}
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                    classes: {outlined: classes.label}
-                                                }}
-                                    />
                                 </div>
-
                             </div>
+                            <TextField  margin="normal" id="Reason" label="Reason" variant="outlined"
+                                        fullWidth
+                                        onChange={this.handleChange('Reason')}
+                                        placeholder="Reason"
+                                        value={this.state.Reason}
+                                        className={classNames("ml-12")}
+                                        InputProps={{
+                                            classes: {input: classes.input}
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                            />
                             <TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="2" rowsMax="2"
                                        value={this.state.PaymentNote}
                                        onChange={this.handleChange('PaymentNote')}
