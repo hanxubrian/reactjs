@@ -32,7 +32,8 @@ const initialState = {
 			open: false
 		},
 		data: null,
-		franchisee: null
+		franchisee: null,
+		lease: null
 	},
 	newLease: null,
 	leaseDetail: null,
@@ -128,6 +129,13 @@ const leases = function (state = initialState, action) {
 			{
 				return {
 					...initialState
+				}
+			}
+		case Actions.SELECT_LEASE:
+			{
+				return {
+					...state,
+					invoiceForm: {...state.invoiceForm, lease: action.payload}
 				}
 			}
 		case Actions.OPEN_NEW_LEASE_FORM:

@@ -81,11 +81,11 @@ class leaseService {
         });
     };
 
-    getLeaseDetailList = (LeaseId) => {
+    getLeaseDetailList = (id, regionId) => {
         return new Promise((resolve, reject) => {
-            axios.get(`${BASE_MONGO_API_URL}/v1/Lease/LeaseList/${LeaseId}`)
-            //     { params: {RegionId, LeaseTypeId}}
-            // )
+            axios.get(`${BASE_MONGO_API_URL}/v1/Lease/${id}`, {
+                 params: {regionId: regionId }
+                })
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

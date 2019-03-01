@@ -252,6 +252,7 @@ class LeaseForm extends Component {
         value: '',
         suggestions: [],
         PO_number: '',
+        selectedLease: null,
         selectedFranchisee: null,
         fSuggestions: [],
         labelWidth: 0,
@@ -428,11 +429,12 @@ class LeaseForm extends Component {
 
         if(this.props.leases.leaseDetail){
             let leaseDetail = this.props.leases.leaseDetail.Data;
-            let lease = this.props.leases.filter(lease => lease.LeaseName===leaseDetail.LeaseName && lease.LeaseNo===leaseDetail.LeaseNumber);
+            let lease = this.props.leases.leasesDB.Data[0].LeaseList.filter(lease => lease.Id === leaseDetail._id);
             if(lease.length>0) {
                 this.setState({selectedLease: lease[0]});
             }
         }
+
     }
 
     handleChange = (event) => {
@@ -531,21 +533,36 @@ class LeaseForm extends Component {
         else {
             result = {
                 ...this.props.leases.leaseDetail.Data,
+                "_id": "",
+                "RegionId": 2,
+                "CreatedBy": 0,
+                "company_no": "BUF701",
                 DateSigned: this.state.DateSigned,
                 PaymentStart: this.state.PaymentStart,
-                Make: this.state.make,
-                Model: this.state.model,
-                SerialNo: this.state.serialNo,
-                LeaseAmount: this.state.leaseAmount,
-                LeaseTerm: this.state.leaseTerm,
-                TotalTax: this.state.totalTax,
-                TotalLease: this.state.totalLease,
-                Description: this.state.LeaseDescription,
-                RegionId: this.props.regionId,
-                LeaseDate: moment(this.state.LeaseDate),
-                CreatedById: this.props.user.UserId,
-                CreatedDate: this.props.leaseForm.type === 'new' ? moment() : this.props.leases.leaseDetail.Data.CreatedDate,
-                Items: items
+                FranchiseeId: this.state.selectedFranchisee.Id,
+                // FranchiseeNumber: this.state.PO_number,
+                FranchiseeName: this.state.selectedFranchisee.Name,
+                FranchiseeNo: this.state.selectedFranchisee.Number,
+                "dlr_code": this.state.selectedFranchisee.Number,
+                "lease_no": "70-7777",
+                "description": this.state.LeaseDescription,
+                "make": this.state.make,
+                "model": this.state.model,
+                "date_sign": moment(this.state.DateSigned),
+                "orig_cost": 500.00,
+                "paymnt_amt": 31.28,
+                "paymnt_tax": 8.75,
+                "pymnt_adv": 2,
+                "pymnt_begn": "12/27/2018",
+                "pymnt_bill": 2,
+                "pymnt_totl": 16.00,
+                "serial": this.state.serialNo,
+                "year": 2019,
+                "stop": "N",
+                "stop_mon": 0,
+                "stop_year": 0,
+                "tofran": "",
+                "fromfran": ""
             };
 
             this.props.updateLease(this.props.leases.leaseDetail.Data._id, this.props.regionId, result);
@@ -702,14 +719,13 @@ class LeaseForm extends Component {
 
         let bReadonly = false;
         if(this.props.leaseForm.type === 'new') bReadonly = true;
-
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <GridContainer className={classNames(classes.formControl)}>
-                                <GridItem xs={4} sm={4} md={4} className="flex flex-row">
+                                <GridItem xs={4} sm={4} md={4} className="flex flex-row mb-4">
                                     <Autosuggest
                                         {...autosuggestProps}
                                         inputProps={{
@@ -732,7 +748,7 @@ class LeaseForm extends Component {
                                         ref={this.storeInputReference}
                                     />
                                 </GridItem>
-                                <GridItem xs={2} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <GridItem xs={2} sm={2} md={2} className="flex flex-row xs:flex-col mb-4">
                                     <TextField
                                         margin="none"
                                         label="Lease #"

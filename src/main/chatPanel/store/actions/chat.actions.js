@@ -66,7 +66,7 @@ export function assignRooms(currentUser)
         user.chatList.map((chat, i)=>{
 
             var room = rooms.find(_room=>_room.id === chat.chatId)
-            if (!room){
+            if (!room && chat.chatId){
                 currentUser.subscribeToRoom({
                     roomId: chat.chatId,
                     messageLimit: 100,

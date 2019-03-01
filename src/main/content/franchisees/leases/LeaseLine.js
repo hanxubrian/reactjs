@@ -407,7 +407,7 @@ class InvoiceLineTable extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.state.data!==null && prevState.data!==this.state.data){
-            this.props.updateInvoiceLine(this.state.data);
+            this.props.updateLeaseLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
             this.updateTaxFromLine();
@@ -1034,7 +1034,7 @@ InvoiceLineTable.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        updateInvoiceLine: Actions.updateInvoiceLine,
+        updateLeaseLine: Actions.updateLeaseLine,
         getCustomerTaxAmount: Actions.getCustomerTaxAmount
     }, dispatch);
 }

@@ -16,6 +16,8 @@ export const STARTING_SAVE_LEASE_FORM_DATA = "[LEASES] STARTING SAVE LEASE FORM 
 export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
 export const UPDATE_A_LEASE = "[LEASES] GET A LEASE";
 export const APPLY_SEARCH_TEXT_ARP = "[ARP] APPLY_SEARCH_TEXT_ARP";
+export const SELECT_LEASE = '[LEASES] SELECT LEASE';
+
 
 // for Add/Edit
 export const OPEN_NEW_LEASE_FORM = '[LEASES APP] OPEN NEW LEASE FORM';
@@ -27,7 +29,7 @@ export const UPDATE_LEASE = '[LEASES APP] UPDATE LEASE';
 export const UPDATED_LEASES = '[LEASES APP] UPDATED LEASES';
 export const UPDATE_LEASE_STATUS = '[LEASES APP] UPDATE LEASE STATUS';
 export const UPDATE_LEASE_DATE_OPTION = '[LEASES APP] UPDATE LEASE DATE OPTION';
-
+export const UPDATE_LEASE_LINE = '[LEASES APP] UPDATE LEASE LINE';
 
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
@@ -193,7 +195,7 @@ export function closeNewLeaseForm()
     }
 }
 
-export function openEditLeaseForm(data)
+export function openEditLeaseForm(leaseId, regionId)
 {
 return (dispatch) => {
     dispatch({
@@ -202,7 +204,7 @@ return (dispatch) => {
     });
 
     (async () => {
-        let res = await leaseService.getLeaseDetailList(data);
+        let res = await leaseService.getLeaseDetailList(leaseId, regionId);
         if (res) {
             dispatch({
                 type: GET_LEASE_DETAIL,
@@ -261,6 +263,14 @@ export function updateLease(data) {
         })();
     };
 }
+
+export function updateLeaseLine(data) {
+    return {
+        type: UPDATE_LEASE_LINE,
+        payload: data
+    }
+}
+
 export function updatedLeases() {
     return {
         type: UPDATED_LEASES,
@@ -286,7 +296,14 @@ export function resetLeaseForm(){
 
 export function selectFranchisee(obj) {
     return {
-        type: SELECT_TRANSACTION_FRANCHISEE,
+        type: SELECT_LEASE,
+        payload: obj
+    }
+}
+
+export function selectLease(obj) {
+    return {
+        type: SELECT_LEASE,
         payload: obj
     }
 }

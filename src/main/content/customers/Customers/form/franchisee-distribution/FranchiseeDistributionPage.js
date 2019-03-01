@@ -1297,11 +1297,13 @@ class FranchiseeDistributionPage extends React.Component {
 								<div style={{ width: (100 - 15 - franHeaders[8].width - franHeaders[7].width) + '%' }}>
 									{
 										x.FinderFee && <>
-											<span className='pr-12'>Fact: {x.FinderFee.calc_fact}</span>
-											<span className='pr-12'>Desc: {x.FinderFee.ff_desc}</span>
+											<span className='pr-12'>Method: {this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact).name}</span>
+											{/* <span className='pr-12'>Desc: {x.FinderFee.ff_desc}</span> */}
 											<span className='pr-12'>PayBill: {x.FinderFee.ff_pybill}</span>
-											<span className='pr-12'>Total: {x.FinderFee.ff_tot}</span>
-											<span className='pr-12'>Balance: {x.FinderFee.ff_balance}</span>
+											<span className='pr-12'># Of Payments: {x.FinderFee.ff_pybill}</span>
+											<span className='pr-12'>Total FF: {x.FinderFee.ff_tot}</span>
+											{/* <span className='pr-12'>Balance: {x.FinderFee.ff_balance}</span> */}
+											<span className='pr-12'>Starts on: {}</span>
 										</>
 									}
 								</div>
@@ -1367,7 +1369,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						<Button variant="contained" onClick={() => this.handleStep(0)} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						<Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Select This Plan'}</Button>
+						<Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Select This Plan</Button>
 					</div>
 				</div>
 
@@ -1479,6 +1481,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		activeFranchisee: customers.activeFranchisee,
 		findersFeeParams: customers.findersFeeParams,
 		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
+		findersFeeTypes: customers.findersFeeTypes,
 
 	}
 }

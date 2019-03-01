@@ -554,6 +554,9 @@ class InvoiceForm extends Component {
             }
         }
     };
+    componentWillUnmount() {
+        this.closeComposeForm();
+    }
 
     componentDidMount(){
         if(this.input) {

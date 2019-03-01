@@ -72,6 +72,8 @@ class NewFindersFeePage extends React.Component {
 			DownPaymentPaid: false,
 			findersFeeType: false,
 			FinderFeePayableOn: '',
+
+			ff_startdate: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().substr(0, 10),
 		};
 	}
 
@@ -273,7 +275,7 @@ class NewFindersFeePage extends React.Component {
 		console.log("findersFeeTypes", this.props.findersFeeTypes)
 		return (
 			<>
-				<div className={classNames("flex mt-12 justify-between")}>
+				<div className={classNames("flex mt-12")}>
 
 					<TextField select margin="dense" id="CalculationMethod" label="Calculation Method"
 						InputLabelProps={{ shrink: true }}
@@ -294,6 +296,18 @@ class NewFindersFeePage extends React.Component {
 						<Button variant="contained" onClick={() => this.handleGotoDistibutionPage()} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
 						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
 					</div> */}
+					<TextField
+						type="date"
+						id="ff_start_period"
+						label="Start Period *"
+						className={classNames(classes.textField, "pl-12")}
+						InputLabelProps={{ shrink: true }}
+						value={this.state.ff_startdate}
+						onChange={this.handleChange('ff_startdate')}
+						margin="dense"
+						// variant="outlined"
+						style={{ minWidth: "180px" }}
+					/>
 
 				</div>
 				<div className={classNames("flex mt-12 items-center")}>
