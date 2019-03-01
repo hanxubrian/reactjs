@@ -5,12 +5,10 @@ import {Link, withRouter} from 'react-router-dom';
 import {
     Paper, TextField, Typography, MenuItem,  Card,  CardHeader,  CardContent,  Divider, Button,  Snackbar, SnackbarContent,
     IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions,
-    Dialog, Fab, Select, OutlinedInput, FormControl
+    Dialog, Fab
 } from '@material-ui/core';
 
 import 'date-fns'
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, } from 'material-ui-pickers';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';

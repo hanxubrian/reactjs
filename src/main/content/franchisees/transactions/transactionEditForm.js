@@ -544,7 +544,7 @@ class TransactionEditForm extends Component {
 
     componentDidMount = () =>{
 
-        fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/vendors/getvendorlist?regionId=${this.props.regionId}`)
+        fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/${this.props.regionId}/vendor/list`)
             .then(response => response.json())
             .then(data => this.setState({ vendorList: data }));
 
