@@ -211,6 +211,7 @@ class InvoiceReport extends Component {
         if (!this.props.show) {
             return null;
         }
+        console.log('customer=', this.state.CustomerSoldTo);
 
         if (this.props.Detail.Data && this.props.Detail.Data !== null && this.state.RegionInfo && this.state.RegionInfo !== null ) {
             return (
@@ -248,12 +249,11 @@ class InvoiceReport extends Component {
                                         </th>
                                         <th width='50%' className="text-left" style={{color:'black'}}>
                                             Remit To:
-                                            <Typography  style={{color:'black'}}>{this.state.RegionInfo.address1}</Typography>
-                                            <Typography  style={{color:'black'}}>{this.state.RegionInfo.address2}</Typography>
-                                            <Typography  style={{color:'black'}}>{this.state.RegionInfo.address3}</Typography>
-                                            <Typography  style={{color:'black'}}>{this.state.RegionInfo.address4}</Typography>
-                                            {/*<Typography>{this.state.Region.Address}</Typography>*/}
-                                            {/*<Typography>{this.state.Region.Phone}</Typography>*/}
+                                            <Typography >{this.state.RegionInfo.address1}</Typography>
+                                            <Typography >{this.state.RegionInfo.address2}</Typography>
+                                            <Typography >{this.state.RegionInfo.address3}</Typography>
+                                            <Typography >{this.state.RegionInfo.address4}</Typography>
+                                            <Typography >{`${this.state.RegionInfo.regionname}, ${this.state.RegionInfo.city}, ${this.state.RegionInfo.state} `}</Typography>
                                         </th>
                                         <th>
                                             <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px',color:'black'}}>

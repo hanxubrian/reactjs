@@ -84,7 +84,8 @@ const initialState = {
     PaymentAmount: 0,
     overpayment: 0,
     errorMsg: "",
-    PaymentNote: ''
+    PaymentNote: '',
+    ReferenceNo: "",
 };
 
 class CreditInvoiceFormModal extends React.Component {
@@ -160,7 +161,12 @@ class CreditInvoiceFormModal extends React.Component {
     }
 
     checkValidations() {
-        if (!this.state.Reason || !this.state.Reason.toString().trim()) {
+        if (this.state.ReferenceNo==='') {
+            this.setState({
+                errorMsg: "Reference No is invalid",
+            })
+        }
+        else if (!this.state.Reason || !this.state.Reason.toString().trim()) {
             this.setState({
                 errorMsg: "Reason is invalid",
                 overpayment: this.getOverpaymentAmount(),
@@ -239,6 +245,7 @@ class CreditInvoiceFormModal extends React.Component {
                                         <TextField type="text" value={customer.CustomerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="Customer Name" />
                                         <TextField type="text" value={customer.CustomerNo} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="Customer #" />
                                         <TextField type="text" value={this.props.invoiceDetail.Data.Inv_no} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="InvoiceNumber" label="Invoice #" />
+                                        <TextField type="text" value={this.state.ReferenceNo} required InputLabelProps={{ shrink: true }}  margin="dense" fullWidth className={classNames("pr-6")} id="ReferenceNo" label="ReferenceNo" />
                                     </div>
 
                                 )}
