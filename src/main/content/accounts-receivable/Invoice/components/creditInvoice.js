@@ -84,6 +84,7 @@ const initialState = {
     PaymentAmount: 0,
     overpayment: 0,
     errorMsg: "",
+    PaymentNote: ''
 };
 
 class CreditInvoiceFormModal extends React.Component {
@@ -114,7 +115,7 @@ class CreditInvoiceFormModal extends React.Component {
         }
     }
 
-    handleClose = () => {
+    initializeState = () => {
         this.setState({
             ...initialState
         });
@@ -126,25 +127,24 @@ class CreditInvoiceFormModal extends React.Component {
             let customer = this.props.invoiceForm.customer;
             let PayItems = [{ InvoiceNo: this.props.invoiceDetail.Data.Inv_no,  Amount: this.state.PaymentAmount}];
 
-            this.props.createAccountReceivablePayment(
+            let payment =  {
+                PaymentType: 'Credit',
+                ReferenceNo: this.state.ReferenceNo,
+                PaymentDate:   this.state.PaymentDate,
+                Note: this.state.PaymentNote,
+                Amount:  this.props.invoiceDetail.Data.Items.Total,
+                AmountApplied: this.props.invoiceDetail.Data.Items.Total - parseFloat(this.state.PaymentAmount),
+                PayHistoryItems: PayItems
+            };
+
+
+            this.props.createInvoicePayment(
                 this.props.regionId,
                 customer.CustomerNo,
-                'Credit',//Payment Type
-                this.state.Reason,
-                this.state.PaymentDate,
-                '',//note
-                this.getOverpaymentAmount(),
-                this.state.PaymentAmount,
-
-                PayItems,
-
-                this.props.getPaymentsParam.fromDate,
-                this.props.getPaymentsParam.toDate,
-                this.props.searchText,
-                this.props.filter.paymentStatus
+                payment
             );
 
-            this.handleClose();
+            this.initializeState();
         }
     };
 
@@ -236,8 +236,9 @@ class CreditInvoiceFormModal extends React.Component {
                             <div className={classNames("flex flex-col")}>
                                 {customer!==null && (
                                     <div className="flex flex-row flex-1 w-full">
-                                        <TextField type="text" value={customer.CustomerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
-                                        <TextField type="text" value={customer.CustomerNo} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
+                                        <TextField type="text" value={customer.CustomerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="Customer Name" />
+                                        <TextField type="text" value={customer.CustomerNo} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="Customer #" />
+                                        <TextField type="text" value={this.props.invoiceDetail.Data.Inv_no} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="InvoiceNumber" label="Invoice #" />
                                     </div>
 
                                 )}
@@ -295,6 +296,10 @@ class CreditInvoiceFormModal extends React.Component {
                                 </div>
 
                             </div>
+                            <TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="2" rowsMax="2"
+                                       value={this.state.PaymentNote}
+                                       onChange={this.handleChange('PaymentNote')}
+                            />
                         </div>
                         <div className={classNames(classes.root, "flex flex-col flex-1 mt-12")}>
                             {this.state.overpayment > 0 &&
@@ -317,7 +322,7 @@ class CreditInvoiceFormModal extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        createAccountReceivablePayment: Actions.createAccountReceivablePayment,
+        createInvoicePayment: Actions.createInvoicePayment,
         closeCreditInvoiceFormDialog: Actions.closeCreditInvoiceFormDialog,
     }, dispatch);
 }

@@ -116,7 +116,7 @@ class PayInvoiceFormModal extends React.Component {
         }
     }
 
-    handleClose = () => {
+    initializeState = () => {
         this.setState({
             ...initialState
         });
@@ -132,8 +132,8 @@ class PayInvoiceFormModal extends React.Component {
                 ReferenceNo: this.state.ReferenceNo,
                 PaymentDate:   this.state.PaymentDate,
                 Note: this.state.PaymentNote,
-                Amount:  this.state.PaymentAmount,
-                "AmountApplied": 6.1,
+                Amount:  this.props.invoiceDetail.Data.Items.Total,
+                AmountApplied: this.props.invoiceDetail.Data.Items.Total - parseFloat(this.state.PaymentAmount),
                 PayHistoryItems: PayItems
             };
 
@@ -143,7 +143,7 @@ class PayInvoiceFormModal extends React.Component {
                 payment
             );
 
-            this.handleClose();
+            this.initializeState();
         }
     };
 
