@@ -106,9 +106,6 @@ class InvoiceReport extends Component {
 
     constructor(props){
         super(props);
-
-        this.downloadPDF = this.downloadPDF.bind(this);
-        this.getDataUri  = this.getDataUri.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -175,44 +172,6 @@ class InvoiceReport extends Component {
             }
         }
     }
-
-    getDataUri=(url, cb)=>
-    {
-        var image = new Image();
-        var log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        image.setAttribute('crossOrigin', 'anonymous');
-        image.onload = function () {
-            var canvas = document.createElement('canvas');
-            canvas.width = this.naturalWidth;
-            canvas.height = this.naturalHeight;
-            var ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fff';  /// set white fill style
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            canvas.getContext('2d').drawImage(this, 0, 0);
-            cb(canvas.toDataURL('image/png'));
-        };
-        image.src = log_url;
-    };
-
-    downloadPDF=(input, imgURL)=> {
-        let img = null;
-        if (input != null && imgURL != null) {
-            this.getDataUri(imgURL, function (dataUri) {
-                img = dataUri;
-            });
-            html2canvas(input)
-                .then((canvas) => {
-                    const imgData = canvas.toDataURL('image/jpeg',1.0);
-                    const pdf = new jsPDF();
-                    // const pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
-                    pdf.addImage(imgData, 'jpeg', 0, 0);
-                    pdf.addImage(img, 'jpeg', 8, 15, 40, 30);
-                    pdf.addImage(img, 'jpeg', 150, 102, 40, 30);
-                    pdf.save("download.pdf");
-                })
-            ;
-        }
-    };
 
     onInvoicePrint = async ()=> {
         await this.pdfInvoiceReportExportComponent.save();
@@ -491,9 +450,6 @@ class InvoiceReport extends Component {
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography> <Typography><br/></Typography>
                                             <Typography><br/></Typography> <Typography><br/></Typography>
-                                            <Typography><br/></Typography>
-                                            <Typography><br/></Typography>
-                                            <Typography><br/></Typography>
                                             <Typography><br/></Typography><Typography><br/></Typography>
                                         </td>
                                         <td >
