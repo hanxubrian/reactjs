@@ -372,18 +372,17 @@ class FilterPanel extends Component {
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
                             <h3>Invoice Status</h3>
                             {this.state.invoiceStatus.length>0 && this.state.invoiceStatus.map((iv, index)=> {
-                                if(index>0 && index<4)
                                 return (
                                     <FormControlLabel
                                         key={index}
                                         control={
                                             <Switch
-                                                checked={iv['checked'+iv.TransactionStatusListId]}
-                                                onChange={this.handleChange(index, iv.TransactionStatusListId)}
-                                                value="checkedPaid"
+                                                checked={iv['checked'+iv.type_id]}
+                                                onChange={this.handleChange(index, iv.type_id)}
+                                                value={iv.abbr}
                                             />
                                         }
-                                        label={iv.Name}
+                                        label={iv.name}
                                     />
                                 )
                             })}

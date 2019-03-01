@@ -254,7 +254,7 @@ class InvoiceApp extends Component {
             props.getBillingLists(props.regionId);
             props.getServiceLists(props.regionId);
             props.getVendorLists(props.regionId);
-            props.getInvoiceStatus(props.regionId);
+            props.getInvoiceStatus();
             props.getInvoices([props.regionId] ,props.StatusId, fromDate, toDate, props.PeriodId,
                 props.OpenOrClosed, props.InvoiceTypeId, props.ToPrintOrToEmail, props.SearchText);
         }

@@ -52,11 +52,9 @@ class invoiceService {
 		});
 	};
 
-	getInvoiceStatusList = (RegionId) => {
+	getInvoiceStatusList = () => {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/GetInvoiceStatusList`,
-				{ params: { RegionId: RegionId } }
-			)
+			axios_instance.get(`${BASE_MONGO_API_URL}//v1/Lists/GetInvoiceTypes`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);

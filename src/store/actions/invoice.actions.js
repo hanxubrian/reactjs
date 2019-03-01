@@ -106,10 +106,10 @@ export function getInvoiceDetail(InvoiceId,RegionId) {
     };
 }
 
-export function getInvoiceStatus(RegionId) {
+export function getInvoiceStatus() {
     return (dispatch) => {
        (async () => {
-            let res = await invoiceService.getInvoiceStatusList(RegionId);
+            let res = await invoiceService.getInvoiceStatusList();
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_INVOICE_STATUS,

@@ -4,6 +4,9 @@ import {withRouter} from 'react-router-dom';
 //Material-UI
 import {withStyles,Typography} from "@material-ui/core";
 
+//Kendo
+import { GridPDFExport, PDFExport, savePDF } from '@progress/kendo-react-pdf';
+
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -126,7 +129,6 @@ class InvoiceReport extends Component {
         this.props.onRef(undefined);
     }
     componentWillMount(){
-        // console.log("#################this.props.Detail",this.props.Detail);
         if(this.props.Detail !=="Failed"){
             this.setState({
                 invoiceDetail:this.props.Detail.Data,
@@ -214,8 +216,6 @@ class InvoiceReport extends Component {
         if (!this.props.show) {
             return null;
         }
-        console.log('customer=', this.state.customer);
-
         if (this.props.Detail.Data && this.props.Detail.Data !== null && this.state.RegionInfo && this.state.RegionInfo !== null ) {
             return (
 
@@ -349,11 +349,11 @@ class InvoiceReport extends Component {
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)'}}></div>
+                                <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)'}}/>
                                 <table style={{width: '85%',color:'black'}} align="center">
                                     <tbody>
                                     <tr>
-                                        <td width="20%"></td>
+                                        <td width="20%"/>
                                         <td width="60%" className="text-center">
                                             <Typography><strong><span style={{fontSize: '18px',color:'black'}}>JANI-KING OF {this.state.RegionInfo.regionname} ,INC</span></strong></Typography>
                                             <Typography><strong><span
@@ -421,8 +421,6 @@ class InvoiceReport extends Component {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {/*{this.state.Items != null && this.state.Items && this.state.Items.map((item, index) => {*/}
-                                    {/*return (*/}
                                     <tr >
                                         <td width="15%" style={{border: 'solid 1px',color:'black'}}
                                             className="text-center">{this.state.invoiceDetail.Inv_no}</td>
@@ -439,8 +437,6 @@ class InvoiceReport extends Component {
                                         <td width="10%" style={{border: 'solid 1px',color:'black'}}
                                             className="text-center">{moment(this.state.invoiceDetail.DueDate).format('MM/DD/YYYY')}</td>
                                     </tr>
-                                    {/*)*/}
-                                    {/*})}*/}
                                     </tbody>
                                 </table>
                                 <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px'}}>
@@ -495,7 +491,7 @@ class InvoiceReport extends Component {
                                     </tr>
 
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"></td>
+                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
                                         <td width="60%" className="text-center">  {this.state.invoiceDetail.InvMsg}</td>
                                         <td width="15%" style={{border: 'solid 1px'}} className="text-center">
                                             <strong>Amount of Sale</strong>
@@ -505,8 +501,8 @@ class InvoiceReport extends Component {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"></td>
-                                        <td width="60%" className="text-center"></td>
+                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
+                                        <td width="60%" className="text-center"/>
                                         <td width="15%" style={{border: 'solid 1px'}} className="text-center">
                                             <strong>Sales Tax</strong>
                                         </td>
@@ -515,7 +511,7 @@ class InvoiceReport extends Component {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"></td>
+                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
                                         <td width="60%" className="text-center">
                                             <Typography><strong style={{fontSize: '11px'}}>Make All Checks Payable To:</strong></Typography>
                                             <Typography><strong style={{fontSize: '11px'}}>JANI-KING OF
@@ -538,7 +534,7 @@ class InvoiceReport extends Component {
         }
         else {
 
-            return(<div></div>)
+            return(<div/>)
         }
     }
 }
@@ -569,6 +565,4 @@ function mapStateToProps({invoices})
     }
 }
 
-
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceReport)));
-
