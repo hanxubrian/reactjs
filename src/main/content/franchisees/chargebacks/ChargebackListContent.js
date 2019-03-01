@@ -121,124 +121,113 @@ const hexToRgb = (hex) => {
 };
 
 const styles = theme => ({
-	layoutTable: {
-		flexDirection: 'row',
-		'& .z-9999': {
-			height: 64
-		},
-		'& .-pageSizeOptions': {
-			display: 'none'
-		},
-		'& .openFilter': {
-			width: 'inherit'
-		},
-		'& .openSummary': {
-			width: 300
-		},
-		'& .p-12-impor': {
-			paddingLeft: '1.2rem!important',
-			paddingRight: '1.2rem!important',
-		},
-		'& .ReactTable .rt-noData': {
-			top: '250px',
-			border: '1px solid coral'
-		},
-		'& .ReactTable .rt-thead.-headerGroups': {
-			paddingLeft: '0!important',
-			paddingRight: '0!important',
-			minWidth: 'inherit!important'
-		},
-		'& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-			background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-			color: 'white!important'
-		},
-		'& .ReactTable .rt-tbody': {
-			overflowY: 'scroll',
-			overflowX: 'hidden'
-		},
-		'& .ReactTable .rt-tr-group': {
-			flex: '0 0 auto'
-		},
-		'& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-			justifyContent: 'center'
-		},
-		'& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-			width: 'inherit!important',
-			minWidth: 'inherit!important',
-		},
-		'& .ReactTable .rt-thead .rt-th:last-child': {
-			justifyContent: 'flex-end'
-		},
-	},
-	content: {
-		position: 'relative'
-	},
-	search: {
-		width: '100%',
-		[theme.breakpoints.down('sm')]: {
-			width: '100%'
-		}
-	},
-	tableTheadRow: {
-		// backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
-		// backgroundColor: 'rgb(' + hexToRgb('#b8c2cc').r + ',' + hexToRgb('#b8c2cc').g + ',' + hexToRgb('#b8c2cc').b + ')',
-		backgroundColor: '#606f7b',
-		'& tr': {
-            height: 48
+    layoutTable: {
+        flexDirection: 'row',
+        '& .z-9999': {
+            height: 64
         },
-        '& tr th': {
-            color: 'white'
+        '& .-pageSizeOptions': {
+            display: 'none'
+        },
+        '& .openFilter': {
+            width: 'inherit'
+        },
+        '& .openSummary': {
+            width: 300
+        },
+        '& .p-12-impor': {
+            paddingLeft: '1.2rem!important',
+            paddingRight: '1.2rem!important',
+        },
+        '& .ReactTable .rt-noData': {
+            top: '250px',
+            border: '1px solid coral'
+        },
+        '& .ReactTable .rt-thead.-headerGroups': {
+            paddingLeft: '0!important',
+            paddingRight: '0!important',
+            minWidth: 'inherit!important'
+        },
+        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
+            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
+            color: 'white!important'
+        },
+        '& .ReactTable .rt-tbody': {
+            overflowY: 'scroll',
+            overflowX: 'hidden'
+        },
+        '& .ReactTable .rt-tr-group': {
+            flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+            justifyContent: 'center'
+        },
+        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
+            width: 'inherit!important',
+            minWidth: 'inherit!important',
+        },
+        '& .ReactTable .rt-thead .rt-th:last-child': {
+            justifyContent: 'flex-end'
+        },
+    },
+    content: {
+        position: 'relative'
+    },
+    search: {
+        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
         }
-	},
-	tableThEven: {
-		backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .3)'
-	},
-	tableTdEven: {
-		// backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
-	},
-	filterPanelButton: {
-		backgroundColor: theme.palette.secondary.main,
-		minWidth: 42,
-		padding: 8,
-		justifyContent: 'center',
-		'&:hover': {
-			backgroundColor: theme.palette.primary.dark,
-		}
-	},
-	summaryPanelButton: {
-		backgroundColor: theme.palette.secondary.main,
-		minWidth: 42,
-		padding: 8,
-		color: 'white',
-		justifyContent: 'center',
-		'&:hover': {
-			backgroundColor: theme.palette.primary.dark,
-		}
-	},
-	imageIcon: {
-		width: 24
-	},
-	tableStriped: {
-		'& tbody tr:nth-of-type(odd)': {
-			backgroundColor: 'fade(' + theme.palette.primary.main + ', 0.03)',
-		},
-		'& tbody tr:nth-of-type(even)': {
-			backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
-		},
-	},
-	// overlay: {
-	// 	position: 'absolute',
-	// 	top: 0,
-	// 	left: 0,
-	// 	width: '100%',
-	// 	height: '100vh',
-	// 	backgroundColor: 'rgba(0,0,0, .9)',
-	// 	zIndex: 1000,
-	// 	alignItems: 'center',
-	// 	justifyContent: 'center',
-	// 	display: 'flex',
-	// 	opacity: 0.5
-	// }
+    },
+    tableTheadRow: {
+        //backgroundColor: theme.palette.primary.main
+    },
+    tableThEven: {
+        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .3)'
+    },
+    filterPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    summaryPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        color: 'white',
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    imageIcon: {
+        width: 24
+    },
+    tableStriped: {
+        '& tbody tr:nth-of-type(odd)': {
+            backgroundColor: 'fade(' + theme.palette.primary.main + ', 0.03)',
+        },
+        '& tbody tr:nth-of-type(even)': {
+            backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
+        },
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
+    }
 });
 //
 // table content rows stle
@@ -1015,147 +1004,15 @@ class ChargebackListContent extends Component {
 		console.log("initRowsFromRawJson", "ChargebackListContent.js", this.props.regionId, this.props.statusId, rawData)
 		let all_temp = [];
 		if (rawData === null || rawData === undefined) return;
-		// let regions = rawData.Data.Region.filter(x => {
-		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
-		// });
-
-
-		// console.log("regions", regions)
-
-		// regions.forEach(x => {
-		// 	all_temp = [...all_temp, ...x.ChargebackList];
-		// });
 		let regions = rawData.Data.filter(x => x)
 		all_temp = regions
-
-		// let _pins_temp = [];
-		// regions.forEach(x => {
-		// 	_pins_temp = [..._pins_temp, ...x.ChargebackList.map(chargeback => {
-		// 		return {
-		// 			lat: chargeback.Latitude,
-		// 			lng: chargeback.Longitude,
-		// 			text: chargeback.ChargebackName
-		// 		}
-		// 	})];
-
-		// })
-
-		// this.filterPins(_pins_temp, locationFilterValue)
-
 		this.setState({
 			rows: all_temp,
 			data: all_temp,
-			// "chargebacksParam": this.props.getChargebacksParam,
-			"rows": this.getRowData(this.props.chargebacks),
 			expandedGroups: [...new Set(this.getRowData(this.props.chargebacks).map(x => x.FranchiseeNameNo))]
 		});
 
 	};
-
-	// filterPins(pins, locationFilterValue) {
-	// 	// this.setState({ gmapVisible: !this.state.gmapVisible });
-	// 	console.log("-------filterPins---------", pins)
-	// 	let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
-	// 	let b = 12.5 - k / 5
-
-	// 	switch (locationFilterValue.id) {
-	// 		case "locationAll":
-	// 			if (!this.state.gmapVisible) {
-	// 				this.setState({
-	// 					gmapVisible: !this.state.gmapVisible,
-	// 					pins: pins === undefined ? [] : [...pins],
-	// 					pins2: []
-	// 				})
-	// 			} else {
-	// 				this.setState({
-	// 					gmapVisible: !this.state.gmapVisible,
-	// 					pins: [],
-	// 					pins2: pins === undefined ? [] : [...pins]
-	// 				})
-	// 			}
-	// 			map_zoom = DEFAULT_ZOOM
-	// 			break;
-	// 		case "locationNearBy":
-	// 			let _pins = []
-	// 			this.setState({
-	// 				addrLat: this.state.current_lat,
-	// 				addrLng: this.state.current_long
-	// 			})
-
-	// 			_pins = this.nearbyLocations(
-	// 				pins,
-	// 				{
-	// 					lat: this.state.current_lat,
-	// 					lng: this.state.current_long
-	// 				},
-	// 				locationFilterValue.miles)
-
-	// 			if (!this.state.gmapVisible) {
-	// 				this.setState({
-	// 					gmapVisible: !this.state.gmapVisible,
-	// 					pins: [..._pins],
-	// 					pins2: []
-	// 				})
-	// 			} else {
-	// 				this.setState({
-	// 					gmapVisible: !this.state.gmapVisible,
-	// 					pins: [],
-	// 					pins2: [..._pins]
-	// 				})
-	// 			}
-
-	// 			map_zoom = locationFilterValue.miles !== undefined ? k / locationFilterValue.miles + b : DEFAULT_ZOOM
-	// 			break;
-	// 		case "locationNearSpecificAddress":
-
-	// 			let _ = []
-	// 			if (locationFilterValue.addrZipcode !== undefined) {
-	// 				this.setState({
-	// 					addrLat: locationFilterValue.addrZipcode.lat,
-	// 					addrLng: locationFilterValue.addrZipcode.lng
-	// 				})
-	// 				_ = this.nearbyLocations(
-	// 					pins,
-	// 					{
-	// 						lat: locationFilterValue.addrZipcode.lat,
-	// 						lng: locationFilterValue.addrZipcode.lng
-	// 					},
-	// 					locationFilterValue.miles)
-	// 			} else {
-	// 				this.setState({
-	// 					addrLat: this.state.current_lat,
-	// 					addrLng: this.state.current_long
-	// 				})
-	// 				_ = this.nearbyLocations(
-	// 					pins,
-	// 					{
-	// 						lat: this.state.current_lat,
-	// 						lng: this.state.current_long
-	// 					},
-	// 					locationFilterValue.miles)
-	// 			}
-
-	// 			if (!this.state.gmapVisible) {
-	// 				this.setState({
-	// 					gmapVisible: !this.state.gmapVisible,
-	// 					pins: [..._],
-	// 					pins2: []
-	// 				})
-	// 			} else {
-	// 				this.setState({
-	// 					gmapVisible: !this.state.gmapVisible,
-	// 					pins: [],
-	// 					pins2: [..._]
-	// 				})
-	// 			}
-	// 			map_zoom = locationFilterValue.miles !== undefined ? k / locationFilterValue.miles + b : DEFAULT_ZOOM
-	// 			break;
-	// 		default:
-	// 			this.setState({ pins: pins })
-	// 			break;
-	// 	}
-
-	// }
 
 	Deg2Rad(deg) {
 		return deg * Math.PI / 180;

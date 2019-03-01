@@ -17,40 +17,19 @@ import {
 } from '@material-ui/core';
 
 // theme components
-import {FuseAnimate, FusePageCustom } from '@fuse';
+import {FuseAnimate, FusePageCustomSidebarScroll } from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import FilterPanel from './FilterPanel';
 
-// third party
-// import moment from 'moment'
-// import checkboxHOC from "react-table/lib/hoc/selectTable";
-// import Chance from "chance";
-// import ReactTable from "react-table";
 import "react-table/react-table.css";
-// import _ from 'lodash';
-
-
 import classNames from 'classnames';
 
-//table pagination
-// import JanikingPagination from './../../../../Commons/JanikingPagination';
-
-// import ChargebacksForm from './ChargebacksForm';
 import ChargebackListContent from './ChargebackListContent';
 import ChargeBackSearchBar from "./ChargeBackSearchBar"
 import ProcessModalForm from './ProcessModalForm';
-// import GoogleMap from 'google-map-react';
-
-// function Marker({ text }) {
-// 	return (
-// 		<Tooltip title={text} placement="top">
-// 			<Icon className="text-red">place</Icon>
-// 		</Tooltip>
-// 	);
-// }
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -66,59 +45,6 @@ const styles = theme => ({
 	root: {
 		background: "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
 		backgroundSize: 'cover',
-	},
-	layoutRoot: {
-		flexDirection: 'row',
-		'& .z-9999': {
-			height: 64
-		},
-		'& .-pageSizeOptions': {
-			display: 'none'
-		},
-		'& .ReactTable .rt-noData': {
-			top: '250px',
-			border: '1px solid coral'
-		},
-		'& .ReactTable .rt-thead.-headerGroups': {
-			paddingLeft: '0!important',
-			paddingRight: '0!important',
-			minWidth: 'inherit!important'
-		},
-		'& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-			background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-			color: 'white!important'
-		},
-		'& .openFilter': {
-			width: 'inherit'
-		},
-		'& .openSummary': {
-			width: 300
-		},
-		'& .ReactTable .rt-tbody': {
-			overflowY: 'scroll',
-			overflowX: 'hidden'
-		},
-		'& .ReactTable .rt-tr-group': {
-			flex: '0 0 auto'
-		},
-		'& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-			justifyContent: 'center'
-		},
-		'& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-			width: 'inherit!important',
-			minWidth: 'inherit!important',
-		},
-		'& .ReactTable .rt-thead .rt-th:last-child': {
-			justifyContent: 'flex-end'
-		},
-		'& .p-12-impor': {
-			paddingLeft: '1.2rem!important',
-			paddingRight: '1.2rem!important',
-		},
-		'& .wordwrap': {
-			whiteSpace: 'pre-line !important',
-			wordWrap: 'break-word',
-		}
 	},
 	card: {
 		width: '100%',
@@ -197,16 +123,6 @@ const styles = theme => ({
 			width: '100%'
 		}
 	},
-	tableTheadRow: {
-		// backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
-		backgroundColor: theme.palette.primary.main
-	},
-	tableThEven: {
-		backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .3)'
-	},
-	tableTdEven: {
-		backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .1)'
-	},
 	filterPanelButton: {
 		backgroundColor: theme.palette.secondary.main,
 		minWidth: 42,
@@ -256,9 +172,6 @@ class Chargebacks extends Component {
 		checkedOpen: true,
 		selection: [],
 		selectAll: false,
-		// regionId: [2, 24],
-		// statusId: [21, 24],
-		// searchText: '',
 		selectedChargebacks: null,
 		current_lat: 0,
 		current_long: 0,
@@ -392,34 +305,6 @@ class Chargebacks extends Component {
 			this.setState({ checkedOpen: !this.state.checkedOpen });
 			bChanged = true;
 		}
-
-		// if(regionId !== prevProps.regionId){
-        //     this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
-		// }
-
-		// if(regionId !== prevProps.regionId ||
-        //     month !== prevProps.month ||
-        //     year !== prevProps.year
-        // ) {
-        //     this.props.getChargebacks(regionId, month, year);
-		// }
-
-		// if(this.props.bChargebacksUpdated && this.props.bChargebacksUpdated!==prevProps.bChargebacksUpdated)
-		// 	this.props.getChargebacks(regionId, month, year);
-
-		// if (prevState.s !== this.state.s) {
-		// 	this.search(this.state.s);
-		// }
-
-		// if (bChanged)
-		// 	this.getChargebacksFromStatus();
-
-		// if (prevProps.chargebacks === null && this.props.chargebacks !== null) {
-		// 	this.getChargebacksFromStatus();
-		// }
-
-		// if(this.props.removedId!==undefined && this.props.removedId!==prevProps.removedId)
-		// 	this.props.getChargebacks(regionId, month, year);
 	}
 
 	componentWillMount() {
@@ -455,25 +340,8 @@ class Chargebacks extends Component {
 
 
 	getChargebacksFromStatus = (rawData = this.props.chargebacks) => {
-		// let temp = [];
 		let all_temp = [];
-		// let temp1 = [];
-		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 		if (rawData === null) return;
-
-		// let regions = rawData.Data.filter(x => {
-		// 	return this.props.regionId === 24 || x.Id === this.props.regionId;
-		// });
-
-		// regions.forEach(x => {
-		// 	all_temp = [...all_temp, ...x.ChargebacksList];
-		// });
-
-		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Chargebacks];
-		// 	return;
-        // });
 
 		let regions = rawData.Data.filter(x => x)
 		all_temp = regions
@@ -507,10 +375,6 @@ class Chargebacks extends Component {
 		}
 	}
 	search(val) {
-		// if (val === '') {
-		// 	this.getChargebacksFromStatus();
-		// 	return;
-		// }
 		const temp = this.state.data.filter(d => {
 			return (d.ChargebacksNo && d.ChargebacksNo.toString().indexOf(val) !== -1) || !val ||
 				(d.FranchiseeName && d.FranchiseeName.toString().indexOf(val) !== -1) ||
@@ -526,12 +390,6 @@ class Chargebacks extends Component {
 		this.setState({ temp: temp });
 	}
 
-	// onNewChargebacks = ()=>{
-    //     if(this.props.filterState) this.props.toggleFilterPanel();
-
-    //     this.props.openNewChargebacksForm();
-	// };
-
 	onNewChargebacks = () => {
 		this.props.showProcessModalForm(true)
 		// this.setState({isOpen: !this.state.isOpen})
@@ -539,10 +397,6 @@ class Chargebacks extends Component {
 
 	handleChange = prop => event => {
 		this.setState({ [prop]: event.target.value });
-
-		// if (prop === 's') {
-		// 	// this.search(event.target.value.toLowerCase());
-		// }
 	};
 
 	handleSearchChange = prop => event => {
@@ -551,10 +405,6 @@ class Chargebacks extends Component {
 
 	canBeSubmitted() {
 		return true;
-		// const { name } = this.state;
-		// return (
-		// 	name.length > 0
-		// );
 	}
 
 	removeChargebacks = () => {
@@ -579,9 +429,6 @@ class Chargebacks extends Component {
     render() {
 		const { classes, toggleFilterPanel, filterState, summaryState,
 		openNewChargebacksForm, chargebackForm } = this.props;
-		console.log(this.props)
-		console.log(this.state)
-		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
         const { selection } = this.state;
 
@@ -590,7 +437,7 @@ class Chargebacks extends Component {
 
         return (
             <React.Fragment >
-				<FusePageCustom
+				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
 						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
@@ -614,14 +461,6 @@ class Chargebacks extends Component {
 												</FuseAnimate>
 											</div>
 										</div>
-										{/* <div className="flex flex-shrink items-center">
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.sideButton, "mr-12")} onClick={()=>this.onNewChargebacks()}>
-                                                    <Icon>add</Icon>
-                                                </Fab>
-                                            </FuseAnimate>
-                                        </div> */}
 										<div className="flex flex-shrink items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
 												<Button 
@@ -636,34 +475,7 @@ class Chargebacks extends Component {
                                                 </Button>
                                             </FuseAnimate>
                                         </div>
-										{/* {this.props.processModalForm.open && <ProcessModalForm />} */}
 									</div>
-									{this.props.processModalForm.open && <ProcessModalForm />}
-									{/* <div className="flex flex-none items-end" style={{ display: 'none' }}>
-										<FuseAnimate animation="transition.expandIn" delay={600}>
-											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewChargebacksForm}>
-												<Icon>add</Icon>
-											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
-											<Fab color="primary" aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-												<Icon>mail_outline</Icon>
-											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
-											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-												<Icon>print</Icon>
-											</Fab>
-										</FuseAnimate>
-										{selection.length > 0 && (
-											<FuseAnimate animation="transition.expandIn" delay={600}>
-												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeChargebacks()}>
-													<Icon>delete</Icon>
-												</Fab>
-											</FuseAnimate>
-										)}
-									</div> */}
 								</div>
 							)}
 							{(this.state.temp && chargebackForm.props.open) && (
@@ -689,56 +501,7 @@ class Chargebacks extends Component {
 													</IconButton>
 												</Tooltip>
 												</div>
-										{/* <div className="flex flex-shrink items-center"> */}
 
-											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
-												<Icon>person_outline</Icon>
-											</IconButton>
-
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanel()}>
-												<Icon>check_circle</Icon>
-											</IconButton>
-
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-												<Icon>close</Icon>
-											</IconButton> */}
-
-											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classNames(classes.button, "mr-12")}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Discard </Button>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classNames(classes.button, "mr-12")}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Save </Button>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classes.button}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Close </Button>
-											</FuseAnimate> */}
-
-
-										{/* </div> */}
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
 										<FuseAnimate animation="transition.expandIn" delay={600}>
@@ -773,75 +536,11 @@ class Chargebacks extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {(this.state.temp && !chargebackForm.props.open) && (
                                 <div className={classNames("flex flex-col h-full")}>
-                                    <div className="flex flex-row items-center ">
-                                        {/* <div className="flex justify-start items-center">
-                                            <Hidden smDown>
-                                                <Button
-                                                    onClick={(ev) => toggleFilterPanel()}
-                                                    aria-label="toggle filter panel"
-                                                    color="secondary"
-                                                    disabled={filterState ? true : false}
-                                                    className={classNames(classes.filterPanelButton)}
-                                                >
-                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                                </Button>
-                                            </Hidden>
-                                            <Hidden smUp>
-                                                <Button
-                                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                                    aria-label="toggle filter panel"
-                                                    className={classNames(classes.filterPanelButton)}
-                                                >
-                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                                </Button>
-                                            </Hidden>
-                                        </div> */}
-                                        {/* <div className="flex items-center w-full h-44 mr-12 ml-12">
-                                            <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                                <Input
-                                                    placeholder="Search..."
-                                                    className={classNames(classes.search, 'pl-16')}
-                                                    // className="pl-16"
-                                                    disableUnderline
-                                                    fullWidth
-                                                    value={this.state.s}
-                                                    onChange={this.handleSearchChange('s')}
-                                                    inputProps={{
-                                                        'aria-label': 'Search'
-                                                    }}
-                                                />
-                                                <Icon color="action" className="mr-16">search</Icon>
-                                            </Paper>
-                                        </div> */}
-                                        {/* <div className="flex items-center justify-end pr-12">
-                                            <Hidden smDown>
-                                                <Button
-                                                    onClick={(ev) => toggleSummaryPanel()}
-                                                    aria-label="toggle summary panel"
-                                                    disabled={summaryState ? true : false}
-                                                    className={classNames(classes.summaryPanelButton)}
-                                                >
-                                                    <Icon>insert_chart</Icon>
-                                                </Button>
-                                            </Hidden>
-                                            <Hidden smUp>
-                                                <Button
-                                                    onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                                    aria-label="toggle summary panel"
-                                                    className={classNames(classes.summaryPanelButton)}
-                                                >
-                                                    <Icon>insert_chart</Icon>
-                                                </Button>
-                                            </Hidden>
-                                        </div> */}
-                                    </div>
 									<ChargeBackSearchBar />
                                     <ChargebackListContent data={this.state.temp}/>
                                 </div>
-                            )}
-                            {/* {(this.state.temp && chargebackForm.props.open) && (
-                                <ChargebacksForm franchisees={this.state.franchisees} selectedChargebacks={this.state.selectedChargebacks}/>
-                            )} */}
+							)}
+                            {this.props.processModalForm.open && <ProcessModalForm />}
                         </div>
                     }
 					leftSidebarHeader={
@@ -889,7 +588,7 @@ class Chargebacks extends Component {
 						this.pageLayout = instance;
 					}}
 				>
-				</FusePageCustom>
+				</FusePageCustomSidebarScroll>
 				{(this.props.bChargebacksStart || this.props.bFranchiseeFetchStart || this.props.bFranchiseesFetchStart) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
