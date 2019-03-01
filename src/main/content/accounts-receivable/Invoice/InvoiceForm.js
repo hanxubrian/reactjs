@@ -535,7 +535,8 @@ class InvoiceForm extends Component {
             if(nextProps.invoiceForm.type==='edit') {
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.Inv_no});
                 this.setState({value: nextProps.invoiceForm.customer.CustomerName + ' - ' + nextProps.invoiceForm.customer.CustomerNo});
-                this.setState({PO_number: nextProps.invoices.invoiceDetail.Data.PONumber});
+                if(nextProps.invoices.invoiceDetail.Data.PONumber)
+                    this.setState({PO_number: nextProps.invoices.invoiceDetail.Data.PONumber});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
                 this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes===null ? '' : nextProps.invoices.invoiceDetail.Data.Notes});
                 this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
@@ -1194,7 +1195,7 @@ class InvoiceForm extends Component {
                                                         control={
                                                             <Checkbox
                                                                 name="taxExempt"
-                                                                checked={this.state.selectedCustomer.TaxExempt==='Y' ? true : false}
+                                                                checked={this.state.selectedCustomer.TaxExempt==='Y'}
                                                                 onChange={this.handleChange}
                                                                 value="checkedB"
                                                                 color="primary"
