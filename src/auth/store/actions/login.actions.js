@@ -13,7 +13,21 @@ export const LOADED_MENU = 'LOADED_MENU';
 export const ADMIN_CLEAN_CACHE_FOR_UPGRADE = 'ADMIN_CLEAN_CACHE_FOR_UPGRADE';
 export const CHANGE_DEFAULT_PERIOD = '[AUTH-LOGIN] CHANGE_DEFAULT_PERIOD';
 
+export const MICROSOFT_USER_LOGIN = '[AUTH-LOGIN] MICROSOFT USER LOGIN'
 
+export function microsoftLogin(){
+    return(dispatch) =>{
+        (async () => {
+            let res = await authService.microsoftAuthSignin();
+            if(res.IsSuccess){
+                dispatch({
+                    type: MICROSOFT_USER_LOGIN,
+                    payload: res
+                });
+            }
+        })();
+    }
+}
 
 export function submitSignIn(email, password, url)  {
     return (dispatch) => {

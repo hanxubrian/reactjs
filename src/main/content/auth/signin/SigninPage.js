@@ -244,6 +244,14 @@ class SigninPage extends Component {
                                         SIGN IN
                                     </Button>
 
+                                    <Button variant="contained" color="primary" className="w-224 mx-auto mt-16 w-full" aria-label="LOG IN"
+                                        // disabled={!this.canBeSubmitted()}
+                                            onClick={()=> this.props.microsoftLogin()}
+                                            hidden={this.props.app.hidden}
+                                    >
+                                      MICROSOFT SIGN IN
+                                    </Button>
+
                                 </form>
 
                                 {this.props.app.hidden && (
@@ -281,7 +289,8 @@ function mapDispatchToProps(dispatch)
         closeAlertDialog: Actions.closeDialog,
         // initializeFromLocalStorage: Actions.initializeFromLocalStorage,
         loadAccountMenu: NavigationActions.add_auth_navigation,
-        loadHomeScreen: Actions.initialStart
+        loadHomeScreen: Actions.initialStart,
+        microsoftLogin: Actions.microsoftLogin
     }, dispatch);
 }
 

@@ -23,6 +23,7 @@ export const initialState = {
     menuObj: null,
     defaultPeriod: -1,
     all_periods: null,
+    mfLoginStart: false
 };
 
 const login = function (state = initialState, action) {
@@ -83,6 +84,17 @@ const login = function (state = initialState, action) {
                 defaultPeriod: defaultPeriod, all_periods: all_periods,
                 ...userState
             };
+        }
+        case Actions.MICROSOFT_USER_LOGIN:
+        {
+            // console.log("microsoft",action.payload);
+            if(action.payload.IsSuccess){
+                window.location.href = action.payload.Data
+            }
+            return {
+                mfLoginStart: true
+            };
+
         }
         case Actions.INITIALIZE_FROM_LOCAL:
             const userState = {IsSuccess: action.payload.IsSuccess,
