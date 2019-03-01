@@ -326,21 +326,15 @@ class ProcessModalForm extends React.Component {
             period: moment().format('MM/YYYY'),
             periods: null,
 			labelWidth: 0,
-			Notes: "",
-			chargeBackDate: undefined,
+			Notes: null,
 
 			paymentDlgPayloads: {
 				open: false,
 				paymentType: "Check",
 				paymentAmount: 0
 			},
-
 		}
 		this.props.getLogCallCustomerServiceTypes()
-	}
-
-	componentDidUpdate(prevProps, prevState, snapshot){
-
 	}
 
 	componentWillMount() {
@@ -357,52 +351,6 @@ class ProcessModalForm extends React.Component {
 			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
 			PaymentType: this.props.paymentDlgPayloads.paymentType
 		})
-<<<<<<< HEAD
-=======
-
-		// if (this.props.bOpenPaymentDialog === true) {
-		// 	this.checkValidations()
-        // }
-
-        let year = moment().year();
-        let month = moment().month();
-        // let invoiceDate = moment();
-        // let dueDate = moment().year(year).month(month).endOf('month');
-        // this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
-        // this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
-        // this.setState({ bShowInvoiceCloseBox: false });
-        if(this.props.all_regions!==null && this.props.all_regions.length){
-
-            let all_regions = this.props.all_regions;
-            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
-
-            if(region.length){
-                let periods = region[0].OpenPeriods;
-
-                let all_periods = [];
-
-                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
-                if (periods.current.month < 10)
-                    period = '0' + period;
-                if(periods.current.status==='Open')
-                    all_periods.push(period);
-                this.setState({period: period});
-
-
-                period = periods.next.month.toString() + '/' + periods.next.year.toString();
-                if (periods.next.month < 10)
-                    period = '0' + period;
-                if(periods.next.status==='Open')
-                    all_periods.push(period);
-                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
-                if (periods.previous.month < 10)
-                    period = '0' + period;
-                if(periods.previous.status==='Open')
-                    all_periods.push(period);
-                this.setState({periods: all_periods});
-            }
-        }
->>>>>>> f82e0e5c86862c3d4fa8a6dc93a1038a28f5fb90
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.payments !== this.props.payments) {
@@ -430,30 +378,11 @@ class ProcessModalForm extends React.Component {
 		this.setState({ [name]: event.target.checked });
 	};
 
-<<<<<<< HEAD
 	handleChange = name => event => {
 		this.setState({
 			[name]: event.target.value,
 			errorMsg: ""
 		});
-=======
-	// handleChange= name => event => {
-	// 	this.setState({
-	// 		[name]: event.target.value,
-	// 		errorMsg: ""
-	// 	});
-
-	// 	if (name === "PaymentAmount") {
-	// 		// this.setState({
-	// 		// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
-	// 		// })
-	// 	}
-	// 	// this.checkValidations(name, event.target.value)
-	// };
-
-	handleChange = (event) => {
-		this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
->>>>>>> f82e0e5c86862c3d4fa8a6dc93a1038a28f5fb90
 	};
 
 	commitChanges = ({ added, changed, deleted }) => {
@@ -713,6 +642,7 @@ class ProcessModalForm extends React.Component {
 	render() {
 		const { classes } = this.props;
         const { customerServiceTypes } = this.state;
+
 		return (
 			<div className={classes.root}>
 				<Dialog
@@ -729,7 +659,6 @@ class ProcessModalForm extends React.Component {
                         </h2>
                     </DialogTitle>
 					<DialogContent>
-<<<<<<< HEAD
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl,"mt-24")}>
 							<GridItem xs={12} sm={4} md={4} className="flex flex-row ">
 								<Select
@@ -747,195 +676,6 @@ class ProcessModalForm extends React.Component {
 											labelWidth={this.state.labelWidth}
 											name="period"
 											id="period"
-=======
-						{/* <DialogContentText>Payment Description</DialogContentText> */}
-						<div className={classNames("flex flex-col")}>
-							<div className={classNames("flex flex-col")}>
-								{/* <div className={classNames("flex")} sm={12} >
-									<TextField sm={3} type="text" value={customerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
-									<TextField sm={3} type="text" value={customerNumber} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
-								</div> */}
-
-								<div className={classNames("flex mt-12")} sm={12}>
-								{this.state.periods!==null && (
-										<Select
-											classes={{
-												selectMenu: classNames(classes.inputMenu1),
-											}}
-											label="Period"
-											name="period"
-											variant="outlined"
-											value={this.state.period}
-											onChange={this.handleChange}
-											input={
-												<OutlinedInput
-													labelWidth={this.state.labelWidth}
-													name="period"
-													id="period"
-												/>
-											}
-											className={classes.textField}
-											MenuProps = {{
-												classes:{paper: classes.dropdownMenu},
-											}}
-										>
-											{this.state.periods.map((p, index)=>{
-												return (<MenuItem key={index} value={p}>{p}</MenuItem>)
-											})}
-										</Select>
-								)}
-                                        <TextField
-                                                margin="none"
-                                                label="Chargeback date"
-                                                name="ChargebackDate"
-                                                type="date"
-                                                variant="outlined"
-                                                value={this.state.chargeBackDate}
-                                                onChange={this.handleChange}
-                                                fullWidth
-                                                required
-                                                className={classes.textField}
-                                                InputProps={{
-                                                    classes: {
-                                                        input: classes.input1,
-                                                    },
-                                                }}
-                                                InputLabelProps = {{
-                                                    shrink: true,
-                                                    classes: {outlined: classes.label}
-                                                }}
-                                            />
-                                            {/* <TextField
-                                                margin="none"
-                                                label="Year"
-                                                name="Year"
-                                                type="date"
-                                                variant="outlined"
-                                                value={this.state.Year}
-                                                onChange={this.handleChange}
-                                                fullWidth
-                                                required
-                                                InputProps={{
-                                                    classes: {
-                                                        input: classes.input1,
-                                                    },
-                                                }}
-                                                InputLabelProps = {{
-                                                    shrink: true,
-                                                    classes: {outlined: classes.label}
-                                                }}
-                                            /> */}
-									{/* <TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By"
-										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pr-6")}
-										value={this.state.InitiatedBy || ''}
-										onChange={this.handleChange('InitiatedBy')}
-										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										{[
-											"JK",
-											"Customer",
-											"Franchiees",
-										].map((x, index) => (
-											<MenuItem key={index} value={x}>{x}</MenuItem>
-										))}
-									</TextField>
-
-									<TextField sm={3} select margin="dense" id="Type" label="Type"
-										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pl-6 pr-6")}
-										value={this.state.Type || ''}
-										onChange={this.handleChange('Type')}
-										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										{customerServiceTypes.map((x, index) => (
-											<MenuItem key={index} value={x.ReasonNumber}>{x.name}</MenuItem>
-										))}
-
-
-									</TextField>
-
-									<TextField sm={3} select margin="dense" id="StatusBy" label="Status By"
-										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pl-6")}
-										value={this.state.StatusBy || ''}
-										onChange={this.handleChange('StatusBy')}
-										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										<MenuItem value={"Contactd"}>Contactd</MenuItem>
-									</TextField> */}
-
-									{/*
-									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
-										autoFocus
-										onChange={this.handleChange('ReferenceNo')}
-										value={this.state.ReferenceNo}
-										className={classNames(classes.textField, "pr-6")}
-										fullWidth
-									/>
-
-									<TextField sm={1}
-										type="date"
-										id="PaymentDate"
-										label="Payment Date"
-										className={classNames(classes.textField, "pr-6")}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.PaymentDate}
-										onChange={this.handleChange('PaymentDate')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									/>
-
-									<TextField
-										type="number"
-										InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-										required
-										className={classNames(classes.textField, "pr-6")}
-										id="PaymentAmount"
-										value={this.state.PaymentAmount}
-										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0,
-										}}
-										inputProps={{ min: 0 }}
-										onChange={this.handleChange('PaymentAmount')}
-										label="Payment Amount" sm={2}
-									/> */}
-
-								</div>
-
-								 <Divider variant="middle" style={{ margin: 10, width: '50%', alignSelf: 'center' }} />
-
-								 <div className="flex flex-col w-full pr-6 pl-6">
-										<TextField margin="dense" variant="outlined" fullWidth id="Notes" label="Notes" multiline rows="9" rowsMax="9"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.Notes || ''}
-											name= "Notes"
-											onChange={this.handleChange}
-										/>
-									</div>
-								{/*
-								<div className="flex">
-									<div className="flex flex-col w-full pr-6">
-										<TextField margin="dense" fullWidth id="SpokeWith" label="Spoke With"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.SpokeWith || ''}
-											onChange={this.handleChange('SpokeWith')}
-										/>
-
-										<TextField margin="dense" fullWidth id="ActionValue" label="Action"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.ActionValue || ''}
-											onChange={this.handleChange('ActionValue')}
->>>>>>> f82e0e5c86862c3d4fa8a6dc93a1038a28f5fb90
 										/>
 									}
 									className={classes.textField}
