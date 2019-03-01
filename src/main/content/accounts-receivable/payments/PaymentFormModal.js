@@ -637,7 +637,7 @@ class PaymentFormModal extends React.Component {
 
 				if (invBalance <= floatPaymentAmount) {
 					rows[i] = { ...rows[i], PaymentAmount: invBalance };
-					floatPaymentAmount = floatPaymentAmount - invBalance
+					floatPaymentAmount = +(floatPaymentAmount - invBalance).toFixed(12)
 				} else {
 					rows[i] = { ...rows[i], PaymentAmount: floatPaymentAmount };
 					floatPaymentAmount = 0
