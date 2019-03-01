@@ -418,7 +418,7 @@ class PaymentFormModal extends React.Component {
 
 			PaymentType: "Check",
 			ReferenceNo: "",
-			PaymentDate: moment(new Date()).format("mm/dd/yyyy"),//new Date().toISOString().substr(0, 10),
+			PaymentDate: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().substr(0, 10),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
@@ -476,7 +476,7 @@ class PaymentFormModal extends React.Component {
 		this.setState({
 			PaymentType: "Check",
 			ReferenceNo: "",
-			PaymentDate: moment(new Date()).format("mm/dd/yyyy"), //new Date().toISOString().substr(0, 10),
+			PaymentDate: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().substr(0, 10),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
@@ -813,7 +813,7 @@ class PaymentFormModal extends React.Component {
 	render() {
 		const { classes } = this.props;
 		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid, columnsForReactDataGridCredit } = this.state;
-		console.log("activeRows", rows)
+		console.log("PaymentDate", this.state.PaymentDate)
 		return (
 			<div>
 				<Dialog
