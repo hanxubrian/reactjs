@@ -52,6 +52,7 @@ export const OPEN_INVOICE_VENDOR_DIALOG_BOX = '[INVOICES APP] OPEN INVOICE VENDO
 export const CLOSE_INVOICE_VENDOR_DIALOG_BOX = '[INVOICES APP] CLOSE INVOICE VENDOR DIALOG BOX';
 export const UPDATE_INVOICE_VENDOR_ID = '[INVOICES APP] UPDATE INVOICE VENDOR_ID';
 export const CREATE_INVOICE_PAYMENT = '[INVOICES APP] CREATE INVOICE PAYMENT';
+export const CREATE_INVOICE_CREDIT = '[INVOICES APP] CREATE INVOICE CREDIT';
 
 
 export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText) {
@@ -496,6 +497,21 @@ export function createInvoicePayment(regionId, CustomerNo, payment) {
             if (res.IsSuccess) {
                 dispatch({
                     type: CREATE_INVOICE_PAYMENT,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+export function createInvoiceCredit(regionId, CustomerNo, payment) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.createInvoiceCredit(regionId, CustomerNo, payment);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: CREATE_INVOICE_CREDIT,
                     payload: res.Data
                 });
             } else {

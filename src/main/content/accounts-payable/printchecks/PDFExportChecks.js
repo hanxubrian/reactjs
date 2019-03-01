@@ -122,10 +122,10 @@ class ExportChecks extends React.Component {
                             });
                             return (
                                 <div key={index} className={classNames("flex flex-col h-full relative",{'page-break': index>0})}>
-                                    <div className="flex flex-row relative justify-center mt-12">
-                                        <div className="absolute checks-date small" style={{left: 0}}>{moment().format('MM/DD/YYYY')}</div>
-                                        <Typography variant={"inherit"}>JaniKing | Franchise Management System</Typography>
-                                    </div>
+                                    {/*<div className="flex flex-row relative justify-center mt-12">*/}
+                                        {/*<div className="absolute checks-date small" style={{left: 0}}>{moment().format('MM/DD/YYYY')}</div>*/}
+                                        {/*<Typography variant={"inherit"}>JaniKing | Franchise Management System</Typography>*/}
+                                    {/*</div>*/}
                                     <GridM container>
                                         <GridM item sm={3}>
                                             <img style={{border: '0px solid black'}} alt="Janiking"

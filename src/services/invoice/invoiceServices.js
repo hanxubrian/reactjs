@@ -323,6 +323,28 @@ class invoiceService {
 				})
 		});
 	};
+
+	createInvoiceCredit = (regionId, CustomerNo, payment) => {
+		const data = {
+			RegionId: regionId,
+			CustomerNo: CustomerNo,
+			Payment: payment,
+		};
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/createCredit`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	};
 }
 
 const instance = new invoiceService();

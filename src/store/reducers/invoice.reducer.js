@@ -58,7 +58,8 @@ const initialState = {
     itemId: 0,
     bInvoiceVendorBox: false,
     bSkip: false,
-    payment: null
+    payment: null,
+    credit: null,
 };
 
 
@@ -338,6 +339,10 @@ const invoices = function(state = initialState, action) {
         case Actions.CREATE_INVOICE_PAYMENT:
         {
             return {...state, payment: action.payload}
+        }
+        case Actions.CREATE_INVOICE_CREDIT:
+        {
+            return {...state, credit: action.payload}
         }
         case Actions.UPDATED_INVOICES: {
             return {...state, bInvoicesUpdated: true, bInvoiceStart: true}
