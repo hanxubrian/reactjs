@@ -1381,32 +1381,34 @@ class FranchiseeDistributionPage extends React.Component {
 		const { classes } = this.props;
 		const { customerServiceTypes, step } = this.state;
 
-		return <>
-			{step === 0 &&
-				<>
-					<div className={classNames("flex flex-col")}>
-						{this.getFranchiseeAssignmentForm()}
-					</div>
-					<Snackbar
-						anchorOrigin={{
-							vertical: 'bottom',
-							horizontal: 'center',
-						}}
-						open={this.state.openSnack}
-						autoHideDuration={3000}
-						onClose={this.handleCloseSnackBar}
-					>
-						<MySnackbarContentWrapper
-							onClose={this.handleCloseSnackBar}
-							variant="success"
-							message={this.state.snackMessage}
-						/>
-					</Snackbar>
-				</>
-			}
-			{step === 1 && this.getFindersFeesForm()}
-		</>
+		return (
+			<div className="flex flex-col flex-1">
+				<div className={classNames("flex flex-col")}>
+					<div className={classNames('items-center')}>
+						{step === 0 &&
+							this.getFranchiseeAssignmentForm()
+							// 		< Snackbar
+							// 	anchorOrigin={{
+							// 		vertical: 'bottom',
+							// 		horizontal: 'center',
+							// 	}}
+							// 	open={this.state.openSnack}
+							// 	autoHideDuration={3000}
+							// 	onClose={this.handleCloseSnackBar}
+							// 	>
+							// 	<MySnackbarContentWrapper
+							// 		onClose={this.handleCloseSnackBar}
+							// 		variant="success"
+							// 		message={this.state.snackMessage}
+							// 	/>
+							// </Snackbar>
 
+						}
+						{step === 1 && this.getFindersFeesForm()}
+					</div>
+				</div>
+			</div>
+		)
 	}
 }
 
