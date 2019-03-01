@@ -1117,6 +1117,262 @@ class LeaseForm extends Component {
                                     }}
                                 />
                                 </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="paymentsBilled"
+                                    name="paymentsBilled"
+                                    label="Payments Billed"
+                                    type="number"
+                                    placeholder="Payments Billed"
+                                    className={classes.textField}
+                                    value={this.state.paymentsBilled}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <div className="w-full mt-4">
+                                </div>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="taxRate"
+                                    name="taxRate"
+                                    label="Tax Rate"
+                                    type="number"
+                                    placeholder="Tax Rate"
+                                    className={classes.textField}
+                                    value={this.state.taxRate}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="originalCost"
+                                    name="originalCost"
+                                    label="Original Cost"
+                                    type="number"
+                                    placeholder="Original Cost"
+                                    className={classes.textField}
+                                    value={this.state.originalCost}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="advancePayments"
+                                    name="advancePayments"
+                                    label="Advance Payments"
+                                    type="number"
+                                    placeholder="Advance Payments"
+                                    className={classes.textField}
+                                    value={this.state.advancePayments}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <div className="w-full mt-4">
+                                </div>
+                                <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="fromFran"
+                                    name="fromFran"
+                                    label="From Fran"
+                                    type="number"
+                                    placeholder="From Fran"
+                                    className={classes.textField}
+                                    value={this.state.fromFran}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                <TextField
+                                    id="toFran"
+                                    name="toFran"
+                                    label="To Fran"
+                                    type="number"
+                                    placeholder="To Fran"
+                                    className={classes.textField}
+                                    value={this.state.toFran}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <div className="w-full mt-4">
+                                </div>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="hold"
+                                    name="hold"
+                                    label="Hold"
+                                    type="number"
+                                    placeholder="Hold"
+                                    className={classes.textField}
+                                    value={this.state.hold}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="month"
+                                    name="month"
+                                    label="Month"
+                                    type="number"
+                                    placeholder="Month"
+                                    className={classes.textField}
+                                    value={this.state.month}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
+                                <TextField
+                                    id="year"
+                                    name="year"
+                                    label="Year"
+                                    type="number"
+                                    placeholder="Year"
+                                    className={classes.textField}
+                                    value={this.state.year}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                        // startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
                                 <div className="w-full mt-224">
                                 </div>
                                 <div className="flex flex-1 flex-row justify-between items-center">
