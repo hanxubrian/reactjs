@@ -294,7 +294,10 @@ class SystemNotificationViewById extends Component {
         console.log("props==================",props);
         let midCustomersQualifiedForCPI = {};
 
-        if(JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI && JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI.length){
+        if(props.sysnotification && props.sysnotification !== null && props.sysnotification.length &&
+            props.sysnotification[0] && props.sysnotification[0]!== null &&
+            props.sysnotification[0].payload && props.sysnotification[0].payload !==null &&
+            JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI && JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI.length){
             midCustomersQualifiedForCPI = JSON.parse(props.sysnotification[0].payload).CustomersQualifiedForCPI[0];
         }
         console.log("midCustomersQualifiedForCPI==================",midCustomersQualifiedForCPI);
