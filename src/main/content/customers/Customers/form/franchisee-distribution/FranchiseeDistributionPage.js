@@ -1297,7 +1297,7 @@ class FranchiseeDistributionPage extends React.Component {
 								<div style={{ width: (100 - 15 - franHeaders[8].width - franHeaders[7].width) + '%' }}>
 									{
 										x.FinderFee && <>
-											<span className='pr-12'>Method: {this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact).name}</span>
+											<span className='pr-12'>Method: {this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact) ? this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact).name : ''}</span>
 											{/* <span className='pr-12'>Desc: {x.FinderFee.ff_desc}</span> */}
 											<span className='pr-12'>PayBill: {x.FinderFee.ff_pybill}</span>
 											<span className='pr-12'># Of Payments: {x.FinderFee.ff_pybill}</span>
