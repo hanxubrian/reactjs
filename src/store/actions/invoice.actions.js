@@ -51,6 +51,7 @@ export const GET_INVOICE_VENDOR_LIST = '[INVOICES APP] GET INVOICE VENDOR LIST';
 export const OPEN_INVOICE_VENDOR_DIALOG_BOX = '[INVOICES APP] OPEN INVOICE VENDOR DIALOG BOX';
 export const CLOSE_INVOICE_VENDOR_DIALOG_BOX = '[INVOICES APP] CLOSE INVOICE VENDOR DIALOG BOX';
 export const UPDATE_INVOICE_VENDOR_ID = '[INVOICES APP] UPDATE INVOICE VENDOR_ID';
+export const CREATE_INVOICE_PAYMENT = '[INVOICES APP] CREATE INVOICE PAYMENT';
 
 
 export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText) {
@@ -232,11 +233,6 @@ export function updateInvoiceDate(key, date) {
 export function addInvoice(regionId, data)
 {
     return (dispatch) => {
-        // dispatch({
-        //     type: GET_INVOICES_FETCH_START,
-        //     payload: true
-        // });
-
         (async () => {
             let res = await invoiceService.createNewInvoice(regionId, data);
             if (res.IsSuccess) {
@@ -491,4 +487,20 @@ export function updateInvoiceVendor(vendorId, vendorInvNo) {
         payload: {vendorId,vendorInvNo}
     }
 
+}
+
+export function createInvoicePayment(regionId, CustomerNo, payment) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.createInvoicePayment(regionId, CustomerNo, payment);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: CREATE_INVOICE_PAYMENT,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
 }

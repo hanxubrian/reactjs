@@ -57,7 +57,8 @@ const initialState = {
     vendorList: null,
     itemId: 0,
     bInvoiceVendorBox: false,
-    bSkip: false
+    bSkip: false,
+    payment: null
 };
 
 
@@ -333,6 +334,10 @@ const invoices = function(state = initialState, action) {
         case Actions.UPDATE_AN_INVOICE:
         {
             return {...state, newInvoice: action.payload}
+        }
+        case Actions.CREATE_INVOICE_PAYMENT:
+        {
+            return {...state, payment: action.payload}
         }
         case Actions.UPDATED_INVOICES: {
             return {...state, bInvoicesUpdated: true, bInvoiceStart: true}

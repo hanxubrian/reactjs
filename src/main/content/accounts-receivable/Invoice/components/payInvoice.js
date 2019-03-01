@@ -127,24 +127,20 @@ class PayInvoiceFormModal extends React.Component {
 
             let customer = this.props.invoiceForm.customer;
             let PayItems = [{ InvoiceNo: this.props.invoiceDetail.Data.Inv_no,  Amount: this.state.PaymentAmount}];
+            let payment =  {
+                PaymentType: this.state.PaymentType,
+                ReferenceNo: this.state.ReferenceNo,
+                PaymentDate:   this.state.PaymentDate,
+                Note: this.state.PaymentNote,
+                Amount:  this.state.PaymentAmount,
+                "AmountApplied": 6.1,
+                PayHistoryItems: PayItems
+            };
 
-            this.props.createAccountReceivablePayment(
+            this.props.createInvoicePayment(
                 this.props.regionId,
                 customer.CustomerNo,
-
-                this.state.PaymentType,
-                this.state.ReferenceNo,
-                this.state.PaymentDate,
-                this.state.PaymentNote,
-                this.getOverpaymentAmount(),
-                this.state.PaymentAmount,
-
-                PayItems,
-
-                this.props.getPaymentsParam.fromDate,
-                this.props.getPaymentsParam.toDate,
-                this.props.searchText,
-                this.props.filter.paymentStatus
+                payment
             );
 
             this.handleClose();
@@ -355,7 +351,7 @@ class PayInvoiceFormModal extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        createAccountReceivablePayment: Actions.createAccountReceivablePayment,
+        createInvoicePayment: Actions.createInvoicePayment,
         closePaymentInvoiceFormDialog: Actions.closePaymentInvoiceFormDialog
     }, dispatch);
 }

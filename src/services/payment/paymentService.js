@@ -24,8 +24,8 @@ class PaymentListService {
 			"ToDate": ToDate, //"12/31/2019",
 			"SearchText": SearchText,
 			"Status": Status
-		}
-		console.log("getAccountReceivablePaymentsList", data)
+		};
+
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Payment/PaymentList`, data)
 				.then(res => {
@@ -56,8 +56,8 @@ class PaymentListService {
 				"AmountApplied": PaymentAmountApplied,
 				"PayHistoryItems": PayItems
 			}
-		}
-		console.log("createAccountReceivablePayment", data)
+		};
+
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/create`, data)
 				.then(res => {
@@ -71,7 +71,7 @@ class PaymentListService {
 					resolve(error);
 				})
 		});
-	}
+	};
 
 	getPaymentHistory = (regionId, fromDate, toDate, status, paymentTypes = []) => {
 		// fromDate = "01/31/2017"
@@ -82,12 +82,11 @@ class PaymentListService {
 				fromDate,
 				toDate,
 				PaymentTypes: paymentTypes
-			}
-			console.log("getPaymentHistory", data)
+			};
+
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/gethistory`, data)
 				// axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory?regionId=${regionId}&fromDate=${fromDate}&toDate=${toDate}`)
 				.then(res => {
-					console.log("getPaymentHistory service", res)
 					if (res.status === 200) {
 						resolve(res.data);
 					} else if (res.status !== 200) {
@@ -98,7 +97,7 @@ class PaymentListService {
 					resolve(error);
 				})
 		});
-	}
+	};
 
 	getPaymentLogList = (regionId, LogDate) => {
 		const data = { regionId, LogDate };
@@ -116,7 +115,7 @@ class PaymentListService {
 					resolve(error);
 				})
 		});
-	}
+	};
 
 	getPaymentTypes = () => {
 		return new Promise((resolve, reject) => {

@@ -1,5 +1,4 @@
 import { paymentService } from "services";
-import { TOGGLE_FILTER_PANEL_FRANCHISEES, TOGGLE_SUMMARY_PANEL_FRANCHISEES } from "./franchise.actions";
 
 export const GET_ALL_RECEIVABLE_PAYMENTS = "[A.R.Payments] GETS ALL";
 export const ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_FILTER_PANEL = "[A.RPayments] FILTER PANEL TOGGLE";

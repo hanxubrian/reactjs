@@ -99,6 +99,17 @@ class FilterPanel extends Component {
 
     componentDidMount()
     {
+        if(this.props.defaultPeriod!==-1) {
+            let period = this.props.defaultPeriod.split('/');
+            let month = parseInt(period[0]) - 1;
+            let year = parseInt(period[1]);
+            let startDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
+            let endDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
+
+            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
+            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
+            this.setState({year: year, month: month})
+        }
     }
 
     componentWillMount(){
@@ -107,8 +118,6 @@ class FilterPanel extends Component {
             checkedPrint: this.props.transactionStatus.checkedPrint});
 
         this.setState({invoiceStatus: this.props.invoiceStatus});
-        this.setState({FromDate: this.props.FromDate});
-        this.setState({ToDate: this.props.ToDate});
         this.setState({invoiceDateOption: this.props.invoiceDateOption});
     }
 
@@ -419,7 +428,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices, fuse})
+function mapStateToProps({invoices, fuse, auth})
 {
     return {
         filterState: invoices.bOpenedFilterPanel,
@@ -429,6 +438,7 @@ function mapStateToProps({invoices, fuse})
         ToDate: invoices.ToDate,
         settings       : fuse.settings.current,
         invoiceDateOption: invoices.invoiceDateOption,
+        defaultPeriod: auth.login.defaultPeriod,
     }
 }
 

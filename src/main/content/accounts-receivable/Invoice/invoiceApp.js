@@ -36,6 +36,9 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
+import moment from "moment"
+
+import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
 
 const headerHeight = 80;
 
@@ -242,11 +245,17 @@ class InvoiceApp extends Component {
         super(props);
 
         if(!props.bLoadedInvoices) {
+            let period = props.defaultPeriod.split('/');
+            let month = parseInt(period[0]) - 1;
+            let year = parseInt(period[1]);
+            let fromDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
+            let toDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
+
             props.getBillingLists(props.regionId);
             props.getServiceLists(props.regionId);
             props.getVendorLists(props.regionId);
             props.getInvoiceStatus(props.regionId);
-            props.getInvoices([props.regionId] ,props.StatusId, props.FromDate, props.ToDate, props.PeriodId,
+            props.getInvoices([props.regionId] ,props.StatusId, fromDate, toDate, props.PeriodId,
                 props.OpenOrClosed, props.InvoiceTypeId, props.ToPrintOrToEmail, props.SearchText);
         }
 
@@ -398,6 +407,17 @@ class InvoiceApp extends Component {
             this.props.getBillingLists(this.props.regionId);
         if(this.props.serviceLists===null)
             this.props.getServiceLists(this.props.regionId);
+
+        if(this.props.defaultPeriod!==-1) {
+            let period = this.props.defaultPeriod.split('/');
+            let month = parseInt(period[0]) - 1;
+            let year = parseInt(period[1]);
+            let startDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
+            let endDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
+
+            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
+            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
+        }
     }
 
     componentWillUnmount(){
@@ -761,6 +781,7 @@ function mapDispatchToProps(dispatch)
         closeCustomerAlertDialog: Actions.closeCustomerAlertDialog,
         openPaymentInvoiceFormDialog: Actions.openPaymentInvoiceFormDialog,
         openCreditInvoiceFormDialog: Actions.openCreditInvoiceFormDialog,
+        updateDate: Actions.updateInvoiceDate,
     }, dispatch);
 }
 
@@ -809,7 +830,8 @@ function mapStateToProps({invoices, auth, customers, franchisees, fuse})
         fLatitude: franchisees.Latitude,
         fSearchText: franchisees.SearchText,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
-        navigation: fuse.navigation
+        navigation: fuse.navigation,
+        defaultPeriod: auth.login.defaultPeriod,
     }
 }
 
