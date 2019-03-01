@@ -114,12 +114,13 @@ class InvoiceReport extends Component {
         }
     }
     componentDidMount(){
+        this.props.onRef(this);
         if(this.props.Detail ==="Failed"){
             alert("GET INVOICE DETAIL FAILD!!!");
         }
     }
     componentWillUnmount(){
-
+        this.props.onRef(undefined);
     }
     componentWillMount(){
         // console.log("#################this.props.Detail",this.props.Detail);

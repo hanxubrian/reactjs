@@ -273,11 +273,12 @@ class InvoiceListContent extends Component {
         this.props.removeInvoiceAction(this.props.regionId, this.state.selectedId);
         this.setState({alertOpen: false});
     };
+
     printDocument=()=> {
         let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
         const input = document.getElementById('divToPrint');
-        this.refs.child.downloadPDF(input, imgUrl);
-    }
+        this.child.downloadPDF(input, imgUrl);
+    };
 
     render()
     {
@@ -505,7 +506,7 @@ class InvoiceListContent extends Component {
                     </DialogActions>
                 </Dialog>
                 {this.props.invoiceDetail!==null && this.props.invoiceDetail!==undefined && this.state.invoiceDetail !=="Faild" && this.state.isOpen && (
-                    <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId} Detail={this.props.invoiceDetail} />
+                    <InvoiceReport childCall={this.printDocument.bind(this)} onRef={ref => (this.child = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId} Detail={this.props.invoiceDetail} />
                 )}
                 {this.state.isOpen && this.state.invoiceDetail!==null &&(
                 <div className="mb5" style={{zIndex:999999}}>
