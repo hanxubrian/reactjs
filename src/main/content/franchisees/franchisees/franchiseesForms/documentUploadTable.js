@@ -14,7 +14,6 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 // third party
-import TextField from "@material-ui/core/TextField/TextField";
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
@@ -239,7 +238,8 @@ class FranchiseesDocumentUploadTable extends React.Component {
         documentName: [],
         uploadDateTime: [],
         fileSize: [],
-        view: []
+        view: [],
+
     };
     
     handleRequestSort = (event, property) => {
@@ -263,7 +263,26 @@ class FranchiseesDocumentUploadTable extends React.Component {
         if(this.props.documentsList != null){
             this.setState({
                 documentsList: this.props.documentsList
-            })
+            });
+
+            let documentPayloadList = [];
+            this.props.documentsList.map(x=>{
+                documentPayloadList.push(
+                    {
+                        status: x.status,
+                        type: x.type,
+                        name: x.name,
+                        document_id: x.document_id,
+                        group_permissions: x.group_permissions,
+                        date_sent: "MM/DD/YYYY",
+                        date_signed: "MM/DD/YYYY",
+                        sign_via: "MM/DD/YYYY"
+                    }
+                )
+            });
+            let iStatus = this.props.insertPayload;
+            iStatus.Documents = documentPayloadList;
+            this.props.franchiseeUpdateInsertPayload(iStatus);
         }
     }
 
@@ -382,7 +401,7 @@ function mapDispatchToProps(dispatch) {
        getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList,
        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
        openCloseDocSendActionDialog: Actions.openCloseDocSendActionDialog,
-       openCloseDocViewActionDialog: Actions.openCloseDocViewActionDialog,
+       openCloseDocViewActionDialog: Actions.openCloseDocViewActionDialog
     }, dispatch);
 }
 

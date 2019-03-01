@@ -620,18 +620,13 @@ class NegativeDueAppList extends Component {
 
 		const {
 			rows,
-			columns,
 			selection,
 			tableColumnExtensions,
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
-			phoneNumberColumns,
-			pageSize,
 			pageSizes,
-			amountFilterOperations,
 			searchValue,
-			grouping,
 			atRiskColumns,
 		} = this.state;
 

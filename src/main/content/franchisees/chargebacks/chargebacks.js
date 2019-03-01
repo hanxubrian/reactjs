@@ -237,7 +237,7 @@ class Chargebacks extends Component {
           That can then be iterated to get all the currently visible records and set
           the selection state.
         */
-		const selectAll = this.state.selectAll ? false : true;
+		const selectAll = !this.state.selectAll;
 		const selection = [];
 		if (selectAll) {
 			let currentRecords = instance.data;
@@ -427,13 +427,9 @@ class Chargebacks extends Component {
 
 
     render() {
-		const { classes, toggleFilterPanel, filterState, summaryState,
-		openNewChargebacksForm, chargebackForm } = this.props;
+		const { classes, toggleFilterPanel, filterState, summaryState, chargebackForm } = this.props;
 
         const { selection } = this.state;
-
-
-		console.log('props=', this.props);
 
         return (
             <React.Fragment >
@@ -470,7 +466,6 @@ class Chargebacks extends Component {
 													onClick={this.onNewChargebacks}
 												>
                                                     Process Chargebacks
-													 {/* {this.props.processModalForm.open && <ProcessModalForm />} */}
                                                     <Icon className={classes.rightIcon}>add</Icon>
                                                 </Button>
                                             </FuseAnimate>

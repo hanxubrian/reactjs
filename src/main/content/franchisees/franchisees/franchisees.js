@@ -330,6 +330,7 @@ class Franchisees extends Component {
         pins: [],
         pins2: [],
         gmapVisible: false,
+        insertPayload:[]
     };
 
     toggleSelection = (key, shift, row) => {
@@ -444,7 +445,11 @@ class Franchisees extends Component {
             });
             this.getFranchiseesFromStatus(this.props.franchisees, this.props.Active, nextProps.InActive);
         }
-
+        // if(this.props.insertPayload !== nextProps.insertPayload){
+        //     this.setState({
+        //         insertPayload: this.props.insertPayload
+        //     })
+        // }
     }
     getFranchiseesFromStatus =(rawData=this.props.franchisees, Active=this.state.Active, InActive=this.state.InActive) =>{
         let data = [];
@@ -545,7 +550,7 @@ class Franchisees extends Component {
         return true;
     }
     closeComposeForm = () => {
-        this.props.createFranchisees.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
+        this.props.franchiseesForm.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
     getLocation() {
         if (navigator.geolocation) {
@@ -750,6 +755,7 @@ class Franchisees extends Component {
             await this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
             await this.props.getFranchisees(this.props.regionId);
             await this.initCloseState();
+            // console.log("insertPayload",this.props.insertPayload);
         }
         if(this.props.franchiseesForm.type ==="edit"){
             await this.props.updateFranchisees(this.props.insertPayload._id , this.props.regionId, this.props.insertPayload);
@@ -758,9 +764,54 @@ class Franchisees extends Component {
         }
     };
 
+    initCloseState = () => {
+        this.setState({
+            labelWidth: 0,
+            selectedWork: "",
+            activeStep: 0,
+            completed: new Set(),
+            termsYrs: '',
+            skipped: new Set(),
+            Print1099: true,
+            chargeBack: false,
+            bbpAdministration: false,
+            accountRebate: false,
+            generateReport: false,
+            StateValue: '',
+            defaultPlanType: "A",
+            selectedSignDate: new Date(),
+            selectedRenewDate: new Date(),
+            selectedExpDate: new Date(),
+            planAmount: 8600.00,
+            ibAmount: 500.00,
+            downPayment: 2000.00,
+            interest: 0.00,
+            noOfPayments: 48,
+            daysToFullfill: 120,
+            paymentAmount: 0,
+            documentsList: [],
+            franchiseeFees: [],
+            LegalName : "",
+            LegalAddressLine1: "",
+            LegalAddressLine2: "",
+            LegalCity: "",
+            LegalState: "",
+            LegalZip: "",
+            LegalCounty: "",
+            LegalIdNum: 0,
+            LegalId: "ein",
+            NameOn1099: "",
+            AllowBppAdminFee: true,
+            AllowChargeBack: true,
+            AllowAccountRebate: true,
+            AllowGenerateReport: true,
+            AgreementTerm: 0,
+            LegalLabel: "LLC"
+        });
+    }
     render()
     {
-        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
+        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, franchiseesForm, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
         const { selection, anchorEl,pins, pins2,gmapVisible } = this.state;
         let period = this.props.reportPeriod.split('/');
@@ -777,7 +828,7 @@ class Franchisees extends Component {
                 }}
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-                        {this.state.temp  && (!createFranchisees.props.open) && (
+                        {this.state.temp  && (!franchiseesForm.props.open) && (
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
@@ -801,7 +852,7 @@ class Franchisees extends Component {
                                 </div>
                             </div>
                         )}
-                        {this.state.temp  && (createFranchisees.props.open) && (
+                        {this.state.temp  && (franchiseesForm.props.open) && (
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
@@ -877,7 +928,7 @@ class Franchisees extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
-                        {this.state.temp  && (!createFranchisees.props.open) && mapViewState && (
+                        {this.state.temp  && (!franchiseesForm.props.open) && mapViewState && (
                             <div className={classNames(classes.franchiseeListContent, "flex flex-col h-full")}>
                                 <div className="flex flex-row items-center p-12">
                                     <div className="flex items-center justify-start">
@@ -961,7 +1012,7 @@ class Franchisees extends Component {
                                 </div>
                             </div>
                         )}
-                        {this.state.temp  && (!createFranchisees.props.open) && !mapViewState && (
+                        {this.state.temp  && (!franchiseesForm.props.open) && !mapViewState && (
                             <div className={classNames(classes.franchiseeListContent, "flex flex-col h-full")}>
                                <div className="flex flex-row items-center p-12">
                                     <div className="flex items-center justify-start">
@@ -1192,26 +1243,26 @@ class Franchisees extends Component {
                             </div>
 
                         )}
-                        {(this.state.temp && createFranchisees.props.open) && (
+                        {(this.state.temp && franchiseesForm.props.open) && (
                             <CreateFranchiseesPage/>
                         )}
                     </div>
                 }
                 leftSidebarHeader={
                     <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterStateFranchisees})}>
-                        {createFranchisees.props.open ? (
+                        {franchiseesForm.props.open ? (
                             <div className = "flex items-center" style = {{paddingRight:20}}>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Toolbar className="pl-12 pr-0">
                                         <img className="mr-12" alt="icon-white" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
                                     </Toolbar>
                                 </FuseAnimate>
-                                {createFranchisees.type === "edit" && (
+                                {franchiseesForm.type === "edit" && (
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Franchisees</Typography>
                                     </FuseAnimate>
                                 )}
-                                {createFranchisees.type === "new" && (
+                                {franchiseesForm.type === "new" && (
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
                                     </FuseAnimate>
@@ -1265,12 +1316,14 @@ function mapDispatchToProps(dispatch)
         getBillingLists: Actions.getBillingLists,
         getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
         getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
+        createFranchisee : Actions.createFranchisees,
     }, dispatch);
 }
 
 function mapStateToProps({franchisees,auth, invoices, transactions})
 {
     return {
+        franchiseesForm: franchisees.createFranchisees,
         franchisees: franchisees.franchiseesDB,
         bLoadedFranchisees: franchisees.bLoadedFranchisees,
         Active: franchisees.Active,
@@ -1278,7 +1331,6 @@ function mapStateToProps({franchisees,auth, invoices, transactions})
         filterStateFranchisees: franchisees.bOpenedFilterPanelFranchisees,
         summaryStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
         regionId: auth.login.defaultRegionId,
-        createFranchisees: franchisees.createFranchisees,
         statusId: franchisees.statusId,
         Longitude: franchisees.Longitude,
         Latitude: franchisees.Latitude,
@@ -1293,6 +1345,7 @@ function mapStateToProps({franchisees,auth, invoices, transactions})
         reportPeriod: franchisees.reportPeriod,
         billingLists: invoices.billingLists,
         transactionTypeList: transactions.transactionTypeList,
+        insertPayload: franchisees.insertPayload
     }
 }
 

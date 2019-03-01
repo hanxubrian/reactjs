@@ -241,16 +241,6 @@ const franchisees = function(state = initialState, action) {
         case Actions.GET_FRANCHISEE_DOCUMENTS_LIST:
         {
             let documentsList = action.payload;
-            if(action.payload.length>0) {
-                documentsList = action.payload.map(iv => {
-                    return {
-                        ["Type"]: "",
-                        ["Status"]: "",
-                        ["documentView"]: "",
-                        ...iv
-                    }
-                });
-            }
             return{
                 ...state,
                 documentsList: documentsList

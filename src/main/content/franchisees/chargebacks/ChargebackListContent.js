@@ -2,15 +2,8 @@ import React, { Component, Fragment } from 'react';
 // import ReactDOM from 'react-dom';
 
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
-
-//Janiking
-import JanikingPagination from 'Commons/JanikingPagination';
-
-// theme components
-// import {FuseAnimate} from '@fuse';
-
-import { withStyles, Checkbox } from "@material-ui/core";
+import {  IconButton, Input,  Button, } from '@material-ui/core';
+import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
 
@@ -20,26 +13,12 @@ import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
 // third party
-// import moment from 'moment'
-import ReactTable from "react-table";
 import "react-table/react-table.css";
-import _ from 'lodash';
 import classNames from 'classnames';
-
-
-import { Tooltip } from '@material-ui/core';
-// import GoogleMap from 'google-map-react';
-import {
-	withScriptjs,
-	withGoogleMap,
-	GoogleMap,
-	Marker,
-} from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
 import {
-	Getter, Template, TemplateConnector
+	 Template, TemplateConnector
   } from '@devexpress/dx-react-core';
 
 import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
@@ -67,18 +46,9 @@ import {
 	TableSelection,
 	PagingPanel,
 	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
 	TableGroupRow,
 	TableFilterRow,
-	SearchPanel,
 	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
 	VirtualTable,
 
 } from '@devexpress/dx-react-grid-material-ui';
@@ -88,26 +58,9 @@ import * as PropTypes from 'prop-types';
 import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
-import { fade } from '@material-ui/core/styles/colorManipulator';
-
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
-import Spinner from 'react-spinner-material';
-import { getOverlappingDaysInIntervals } from 'date-fns';
-// import ChargebackSearchBar from './ChargebackSearchBar';
-import { getChargebacks } from '../../../../store/actions';
-
-// function Marker({ text }) {
-// 	return (
-// 		<Tooltip title={text} placement="top">
-// 			<Icon className="text-red">place</Icon>
-// 		</Tooltip>
-// 	);
-// }
 
 
 
@@ -134,41 +87,7 @@ const styles = theme => ({
         },
         '& .openSummary': {
             width: 300
-        },
-        '& .p-12-impor': {
-            paddingLeft: '1.2rem!important',
-            paddingRight: '1.2rem!important',
-        },
-        '& .ReactTable .rt-noData': {
-            top: '250px',
-            border: '1px solid coral'
-        },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
-        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-            color: 'white!important'
-        },
-        '& .ReactTable .rt-tbody': {
-            overflowY: 'scroll',
-            overflowX: 'hidden'
-        },
-        '& .ReactTable .rt-tr-group': {
-            flex: '0 0 auto'
-        },
-        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-            justifyContent: 'center'
-        },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width: 'inherit!important',
-            minWidth: 'inherit!important',
-        },
-        '& .ReactTable .rt-thead .rt-th:last-child': {
-            justifyContent: 'flex-end'
-        },
+        }
     },
     content: {
         position: 'relative'
@@ -390,129 +309,6 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
-const DEFAULT_ZOOM = 8
-let map_zoom = DEFAULT_ZOOM
-
-const MapWithAMarkerClusterer = compose(
-	withProps({
-		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
-		loadingElement: <div style={{ height: `100%` }} />,
-		containerElement: <div style={{ height: `100%` }} />,
-		mapElement: <div style={{ height: `100%` }} />,
-	}),
-	withHandlers({
-		onMarkerClustererClick: () => (markerClusterer) => {
-			const clickedMarkers = markerClusterer.getMarkers()
-			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-			console.log(clickedMarkers)
-		},
-	}),
-	// lifecycle({
-	// 	componentDidMount() {
-
-	// 		this.setState({
-
-	// 			zoomToMarkers: map => {
-	// 				console.log("Zoom to markers");
-	// 				const bounds = new window.google.maps.LatLngBounds();
-	// 				props.markers.forEach((child) => {
-	// 					if (child.type === Marker) {
-	// 						bounds.extend(new window.google.maps.LatLng(child.props.position.lat, child.props.position.lng));
-	// 					}
-	// 				})
-	// 				map.fitBounds(bounds);
-	// 			}
-	// 		})
-	// 	},
-	// }),
-	withScriptjs,
-	withGoogleMap
-)(props =>
-	<GoogleMap
-		// ref={props.markers}
-		defaultZoom={map_zoom}
-		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
-	>
-		<MarkerClusterer
-			onClick={props.onMarkerClustererClick}
-			averageCenter
-			enableRetinaIcons
-			gridSize={60}
-		>
-			{props.markers.map((x, index) => (
-				<Marker
-					key={index}
-					position={{ lat: x.lat, lng: x.lng }}
-				/>
-			))}
-		</MarkerClusterer>
-	</GoogleMap>
-);
-
-
-const MapWithAMarkerClusterer2 = compose(
-	withProps({
-		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
-		loadingElement: <div style={{ height: `100%` }} />,
-		containerElement: <div style={{ height: `100%` }} />,
-		mapElement: <div style={{ height: `100%` }} />,
-	}),
-	withHandlers({
-		onMarkerClustererClick: () => (markerClusterer) => {
-			const clickedMarkers = markerClusterer.getMarkers()
-			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-			console.log(clickedMarkers)
-		},
-	}),
-	// lifecycle({
-	// 	componentDidMount() {
-
-	// 		this.setState({
-
-	// 			zoomToMarkers: map => {
-	// 				console.log("Zoom to markers");
-	// 				const bounds = new window.google.maps.LatLngBounds();
-	// 				props.markers.forEach((child) => {
-	// 					if (child.type === Marker) {
-	// 						bounds.extend(new window.google.maps.LatLng(child.props.position.lat, child.props.position.lng));
-	// 					}
-	// 				})
-	// 				map.fitBounds(bounds);
-	// 			}
-	// 		})
-	// 	},
-	// }),
-	withScriptjs,
-	withGoogleMap
-)(props =>
-	<GoogleMap
-		// ref={props.zoomToMarkers}
-		defaultZoom={map_zoom}
-		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
-	>
-		<MarkerClusterer
-			onClick={props.onMarkerClustererClick}
-			averageCenter
-			enableRetinaIcons
-			gridSize={60}
-		>
-			{props.markers.map((x, index) => (
-				<Marker
-					key={index}
-					position={{ lat: x.lat, lng: x.lng }}
-				/>
-			))}
-		</MarkerClusterer>
-	</GoogleMap>
-);
-
-// const GroupCellContent = ({ row, ...restProps }) => (
-// 	<TableGroupRow.Content {...restProps}>
-// 	  {row.value.columnName}
-// 	</TableGroupRow.Content>
-//   );
-
-
 class ChargebackListContent extends Component {
 	constructor(props) {
 		super(props);
@@ -554,16 +350,6 @@ class ChargebackListContent extends Component {
 					togglingEnabled: true,
 					showWhenGrouped: true
 				},
-				// {
-				// 	title: "Franchisee No",
-				// 	name: "FranchiseeNo",
-				// 	columnName: "FranchiseeNo",
-				// 	width: 200,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// 	showWhenGrouped: true
-				// },
 				{
 					title: "Customer Name",
 					name: "cust_name",
@@ -595,142 +381,32 @@ class ChargebackListContent extends Component {
 					groupingEnabled: true,
 					showWhenGrouped: true
 				},
-				// {
-				// 	title: "CB Date",
-				// 	name: "CBDate",
-				// 	columnName: "CBDate",
-				// 	width: 150,
-				// 	align: 'right',
-				// 	wordWrapEnabled: true,
-				// 	sortingEnabled: false,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// 	showWhenGrouped: true
-				// },
-				// {
-				// 	title: "Total Amount Paid",
-				// 	name: "TotalPaidAmount",
-				// 	columnName: 'TotalPaidAmount',
-				// 	width: 200,
-				// 	align: 'right',
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// 	showWhenGrouped: true
-				// },
-				// {
-				// 	title: "Phone",
-				// 	name: "Phone",
-				// 	columnName: "Phone",
-				// 	width: 100,
-				// 	sortingEnabled: false,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
-				// {
-				// 	title: "Account Type",
-				// 	name: "AccountTypeListName",
-				// 	columnName: "AccountTypeListName",
-				// 	width: 150,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// },
-				// {
-				// 	title: "Period to Charge Back",
-				// 	name: "CBPeriod",
-				// 	columnName: 'CBPeriod',
-				// 	width: 200,
-				// 	align: 'center',
-				// 	wordWrapEnabled: true,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// 	showWhenGrouped: true
-				// },
-				// {
-				// 	title: "Balance",
-				// 	name: "TotalBalance",
-				// 	columnName: "TotalBalance",
-				// 	width: 100,
-				// 	align: 'right',
-				// 	sortingEnabled: false,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// 	showWhenGrouped: true
-				// },
-				// {
-				// 	title: "Status",
-				// 	name: "Status",
-				// 	columnName: 'Status',
-				// 	width: 150,
-				// 	align: 'center',
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// 	showWhenGrouped: true
-				// },
-				// {
-				// 	title: "Contract Amount",
-				// 	name: "Amount",
-				// 	columnName: 'Amount',
-				// 	width: 120,
-				// 	align: 'right',
-				// 	wordWrapEnabled: true,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-
-				// },
-				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 			],
-			// groupingColumns: [
-			// 	// { columnName: 'CustomerName' },
-			// 	// { columnName: 'CustomerNo' },
-			// 	{ columnName: 'FranchiseeNameNo' }
-
-			// ],
 			expandedGroups: ['FranchiseeNameNo'],
 			sorting: [
 				{ columnName: 'ChargebackNo', direction: 'asc' }
 			],
 			editingColumnExtensions: [
-				// {
-				// 	columnName: 'firstName',
-				// 	createRowChange: (row, value) => ({ user: { ...row.user, firstName: value } }),
-				// },
 			],
 			currencyColumns: [
 				'cb_amt'
 			],
 			dateColumns: ['saleDate'],
-			// groupingColumns: [
-			// 	{ columnName: 'StateName', groupingEnabled: false },
-			// 	{ columnName: 'AccountTypeListName', groupingEnabled: false },
-			// 	{ columnName: 'StatusName', groupingEnabled: false },
-			// ],
 			grouping: [
-				// { columnName: 'AccountTypeListName' },
 			],
 			pageSize: 20,
 			pageSizes: [10, 20, 30, 50, 100],
 			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
-			// defaultFilters: [{ columnName: 'StateName', value: 'PA' }],
 			searchValue: '',
 			chargebacksParam: [],
 			chargebacks: []
-			// leftColumns: ['ChargebackNo', 'ChargebackName'],
-			// rightColumns: ['Amount'],
 		};
 
 		this.fetchData = this.fetchData.bind(this);
-		// this.escFunction = this.escFunction.bind(this);
 
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.commitChanges = this.commitChanges.bind(this);
-		// this.changeCurrentPage = currentPage => this.setState({ currentPage });
-		// this.changePageSize = pageSize => this.setState({ pageSize });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
@@ -774,25 +450,14 @@ class ChargebackListContent extends Component {
 
 	toggleSelection = (key, shift, row) => {
 		console.log("toggleSelection");
-
-		/*
-		  https://react-table.js.org/#/story/select-table-hoc
-		  Implementation of how to manage the selection state is up to the developer.
-		  This implementation uses an array stored in the component state.
-		  Other implementations could use object keys, a Javascript Set, or Redux... etc.
-		*/
-		// start off with the existing state
 		let selection = [...this.state.selection];
 		const keyIndex = selection.indexOf(key);
-		// check to see if the key exists
 		if (keyIndex >= 0) {
-			// it does exist so we will remove it using destructing
 			selection = [
 				...selection.slice(0, keyIndex),
 				...selection.slice(keyIndex + 1)
 			];
 		} else {
-			// it does not exist so add it
 			selection.push(key);
 		}
 		// update the state
@@ -800,13 +465,11 @@ class ChargebackListContent extends Component {
 	};
 
 	toggleAll = (instance) => {
-		console.log("toggleAll");
 
-		const selectAll = this.state.selectAll ? false : true;
+		const selectAll = !this.state.selectAll;
 		const selection = [];
 		if (selectAll) {
 			let currentRecords = instance.data;
-			// we just push all the IDs onto the selection array
 			let page = this.state.page;
 			let pageSize = this.state.pageSize;
 			let start_index = page * pageSize;
@@ -820,35 +483,15 @@ class ChargebackListContent extends Component {
 	};
 
 	isSelected = key => {
-		console.log("isSelected");
-
-		/*
-		  Instead of passing our external selection state we provide an 'isSelected'
-		  callback and detect the selection state ourselves. This allows any implementation
-		  for selection (either an array, object keys, or even a Javascript Set object).
-		*/
 		return this.state.selection.includes(key);
-	};
-
-	logSelection = () => {
-		console.log("logSelection", this.state.selection);
 	};
 
 	shouldComponentUpdate(nextProps, nextState) {
 		console.log("shouldComponentUpdate", this.state !== nextState);
-
-		// return this.state !== nextState
-		// 	|| this.props.mapViewState !== nextProps.mapViewState
-		// 	|| this.props.chargebacks !== nextProps.chargebacks
-		// 	// || this.props.bOpenedFilterPanel !== nextProps.bOpenedFilterPanel
-		// 	// 	// || this.props.loading !== nextProps.loading
-		// 	// 	|| this.props.pins !== nextProps.pins
-		// 	|| this.props.searchText !== nextProps.searchText
 		return true;
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
-		// this.setState({ mapViewState: nextProps.mapViewState });
 		console.log("componentWillReceiveProps", "ChargebackListContent.js", nextProps.locationFilterValue)
 
 		if (nextProps.chargebacks !== this.props.chargebacks) {
@@ -859,7 +502,6 @@ class ChargebackListContent extends Component {
 		}
 
 		if (nextProps.searchText !== this.props.searchText) {
-			console.log("------search text changed-------", nextProps.searchText)
 			this.search(nextProps.searchText);
 		}
 	} // deprecate 
@@ -875,42 +517,25 @@ class ChargebackListContent extends Component {
 		}
 	}
 
-	processData(data) {
-		let temp = [...data];
-        temp.forEach(x => {
-            x.FranchiseeNameNo = `${x.dlr_name} - ${x.dlr_code}`
-        });
-
-
-        this.setState(
-            {data: temp,
-            expandedGroups: [...new Set(temp.map(x => x.FranchiseeNameNo))]},
-        );
-    }
 
 	getRowData(chargebacks) {
 		
 		if (chargebacks.data !== undefined) {
-            let res = ''
-            res = chargebacks.Data
+            let res = '';
+            res = chargebacks.Data;
 			return res;
 		} else {
-			let res = [...chargebacks.Data]
+			let res = [...chargebacks.Data];
 			res.forEach(x=>{
 				x.FranchiseeNameNo = `${x.dlr_name} - ${x.dlr_code}`;
-			})
+			});
 			console.log("getRowData", res);
 			return res;
 			}
 	}
 
 	search(val) {
-		console.log("---------search---------", val);
 		val = val.toLowerCase();
-		// if (val === '') {
-		// 	this.setState({ rows: this.getRowData(this.props.chargebacks) });
-		// 	return;
-		// }
 		const temp =this.getRowData(this.props.chargebacks).filter(d => {
 			return (d.ChargebackNo && d.ChargebackNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.ChargebackName && d.ChargebackName.toString().toLowerCase().indexOf(val) !== -1) ||
@@ -932,38 +557,15 @@ class ChargebackListContent extends Component {
 	componentWillMount() {
 		console.log("componentWillMount");
 		this.initRowsFromRawJson();
-		// this.processData(this.props.data);
 
 		this.timer = null;
 	}
 	componentWillUnmount() {
-		console.log("componentWillUnmount");
 	}
 
 
 	handleChange = prop => event => {
-		console.log("handleChange");
-
-
 		this.setState({ [prop]: event.target.value });
-
-		// if (prop === 's') {
-		// 	clearTimeout(this.timer);
-		// 	this.timer = setTimeout(this.search, this.WAIT_INTERVAL);
-		// }
-	};
-
-	removeChargebacks = () => {
-		console.log("removeChargebacks");
-
-		if (this.state.selection.length === 0) {
-			alert("Pchargeback choose chargeback(s) to delete");
-			return;
-		}
-		if (window.confirm("Do you really want to remove the selected chargeback(s)")) {
-			this.props.deleteChargebacksAction(this.state.selection, this.props.chargebacks);
-			this.setState({ selection: [], selectAll: false })
-		}
 	};
 
 	fetchData(state, instance) {
@@ -976,8 +578,6 @@ class ChargebackListContent extends Component {
 	}
 
 	capital_letter(str) {
-		console.log("capital_letter");
-
 		str = str.split(" ").map(x => {
 			if (x.length > 1) {
 				return x[0].toUpperCase() + x.substr(1).toLowerCase();
@@ -991,17 +591,7 @@ class ChargebackListContent extends Component {
 		return str.join(" ");
 	}
 
-	generateRows() {
-		console.log("generateRows");
-
-		console.log(this.props.data.slice(0, 15));
-		return this.props.data;
-	}
-
-
-
 	initRowsFromRawJson = (rawData = this.props.chargebacks) => {
-		console.log("initRowsFromRawJson", "ChargebackListContent.js", this.props.regionId, this.props.statusId, rawData)
 		let all_temp = [];
 		if (rawData === null || rawData === undefined) return;
 		let regions = rawData.Data.filter(x => x)
@@ -1014,51 +604,8 @@ class ChargebackListContent extends Component {
 
 	};
 
-	Deg2Rad(deg) {
-		return deg * Math.PI / 180;
-	}
-
-	PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
-		lat1 = this.Deg2Rad(lat1);
-		lat2 = this.Deg2Rad(lat2);
-		lon1 = this.Deg2Rad(lon1);
-		lon2 = this.Deg2Rad(lon2);
-		var R = 6371; // km
-		var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
-		var y = (lat2 - lat1);
-		var d = Math.sqrt(x * x + y * y) * R;
-		return d;
-	}
-
-	// NearestCity(latitude, longitude) {
-	// 	var mindif = 99999;
-	// 	var closest;
-
-	// 	for (index = 0; index < cities.length; ++index) {
-	// 		var dif = this.PythagorasEquirectangular(latitude, longitude, cities[index][1], cities[index][2]);
-	// 	}
-	// }
-
-	nearbyLocations(pins, center, miles = 5, addrZipcode = "") {
-		// let _nearbys = [];
-		// this.props.pins.forEach(x => {
-		// 	let dist = this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng);
-
-		// 	if (dist <= miles) {
-		// 		_nearbys = [..._nearbys, x]
-		// 	}
-
-		// });
-
-		return [...pins.filter(x => {
-			return (this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng) <= miles)
-		})];
-		// return _nearbys
-	}
 
 	TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
-		// workaround for using the click & doubleClick events at the same time
-		// from https://stackoverflow.com/questions/25777826/onclick-works-but-ondoubleclick-is-ignored-on-react-component
 		let timer = 0;
 		let delay = 200;
 		let prevent = false;
@@ -1074,8 +621,6 @@ class ChargebackListContent extends Component {
 		const handleDoubleClick = () => {
 			clearTimeout(timer);
 			prevent = true;
-			// alert(JSON.stringify(tableRow.row));
-			console.log(restProps);
 			this.props.openEditChargebackForm(tableRow.row.ChargebackId);
 		}
 		return (
@@ -1095,298 +640,115 @@ class ChargebackListContent extends Component {
 
 	GroupCellContent = ({ column, row }) => (
 		<span>
-			{/* {column.title} */}
 			<strong>{row.value}</strong>
 		</span>
 	);
 
-	emptyMessageContent = ({column, row}) => (
-        <span>
-			{/* {column.title} */}
-            <strong>{row.value}</strong>
-		</span>
-    );
 
 
 	render() {
-		const {
-			classes,
-			toggleFilterPanel,
-			toggleSummaryPanel,
-			mapViewState,
-			toggleMapView,
-			filterState,
-			locationFilterValue,
-		} = this.props;
+		const {classes} = this.props;
 
 		const {
-			pins,
-			// locationFilterValue,
-			pins2,
-			gmapVisible,
-			// mapViewState,
 			rows,
-			columns,
 			selection,
 			tableColumnExtensions,
-			tableGroupColumnExtension,
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
-			pageSize,
 			pageSizes,
 			amountFilterOperations,
-			// booleanColumns,
 			searchValue,
 			grouping,
-			groupingColumns,
 			expandedGroups,
-			// leftColumns,
-			// rightColumns,
 		} = this.state;
 
-		console.log("-------render-------", locationFilterValue, pins, pins2)
-		console.log([expandedGroups[0]])
 		return (
-			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-					{/* Mapview */}
-					{mapViewState && (<div className="w-full h-full" >
-						<div className="w-full h-full">
-							{/* <GoogleMap
-								bootstrapURLKeys={{
-									key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-								}}
-								defaultZoom={12}
-								defaultCenter={[this.state.current_lat, this.state.current_long]}
+					 <div className={classNames("flex flex-col")} >
+						<Grid
+							rootComponent={GridRootComponent}
+							rows={rows}
+							columns={tableColumnExtensions}
+						>
+							<DragDropProvider />
+							<PagingState
+								defaultCurrentPage={0}
+								defaultPageSize={100}
+							/>
+							<PagingPanel pageSizes={pageSizes} />
+							<SelectionState
+								selection={selection}
+								onSelectionChange={this.changeSelection}
+							/>
+							<IntegratedSelection />
+							<IntegratedPaging />
+							<SortingState
+								sorting={sorting}
+								onSortingChange={this.changeSorting}
+								columnExtensions={tableColumnExtensions}
+							/>
+							<IntegratedSorting />
+							<SearchState
+								value={searchValue}
+								onValueChange={this.changeSearchValue}
+							/>
+							<FilteringState
+								defaultFilters={[]}
+								columnExtensions={tableColumnExtensions}
+							/>
+							<IntegratedFiltering />
+							<EditingState
+								columnExtensions={editingColumnExtensions}
+								onCommitChanges={this.commitChanges}
+							/>
+							<GroupingState
+								grouping={[
+									{columnName: 'FranchiseeNameNo'}
+								]}
+								expandedGroups={expandedGroups}
+								onExpandedGroupsChange={this.expandedGroupsChange}
+							/>
+							<IntegratedGrouping />
+							<VirtualTable
+								tableComponent={TableComponent}
+								headComponent = {TableHeadComponent}
+								columnExtensions={tableColumnExtensions}
+								rowComponent = {this.TableRow}
+							/>
+							<TableHeaderRow showSortingControls />
+							<DataTypeProvider for={grouping}/>
+							<TableGroupRow
+								  showColumnsWhenGrouped contentComponent={this.GroupCellContent}
+							/>
+							<CurrencyTypeProvider
+								for={currencyColumns}
+								availableFilterOperations={amountFilterOperations}
+								editorComponent={AmountEditor}
+							/>
+							<TableSelection showSelectAll highlightRow  rowComponent={this.TableRow}/>
+							<TableEditRow />
+							<Template
+								name="tableRow"
+								predicate={({ tableRow }) => tableRow.type === 'data'}
 							>
-								{
-									this.props.pins.map((x, index) => (
-										<Marker
-											key={index}
-											text={x.text}
-											lat={x.lat}
-											lng={x.lng}
-										/>
-									))
-								}
-							</GoogleMap> */}
-
-							{gmapVisible && (<MapWithAMarkerClusterer
-								markers={pins}
-								center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-							/>)}
-
-							{!gmapVisible && (<MapWithAMarkerClusterer2
-								markers={pins2}
-								center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-							/>)}
-
-						</div>
-					</div>)}
-
-					{/* Gridview */}
-					{!mapViewState &&
-						(
-							<div className={classNames("flex flex-col")} 
-								// className={classNames(classes.layoutTable, "flex flex-col h-full")}
-							// style={{ flex: '1', }}
-							>
-								<Grid
-									rootComponent={GridRootComponent}
-									rows={rows}
-									columns={tableColumnExtensions}
-								>
-									<DragDropProvider />
-									<PagingState
-										defaultCurrentPage={0}
-										// currentPage={currentPage}
-										// onCurrentPageChange={this.changeCurrentPage}
-										// pageSize={pageSize}
-										// onPageSizeChange={this.changePageSize}
-										defaultPageSize={100}
-									/>
-									<PagingPanel pageSizes={pageSizes} />
-
-									<SelectionState
-										selection={selection}
-										onSelectionChange={this.changeSelection}
-									/>
-									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
-									<IntegratedSelection />
-
-									<IntegratedPaging />
-
-									<SortingState
-										sorting={sorting}
-										onSortingChange={this.changeSorting}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedSorting />
-
-									<SearchState
-										// defaultValue="Paris"
-										value={searchValue}
-										onValueChange={this.changeSearchValue}
-									/>
-
-									<FilteringState
-										defaultFilters={[]}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedFiltering />
-
-									<EditingState
-										columnExtensions={editingColumnExtensions}
-										onCommitChanges={this.commitChanges}
-									/>
-
-									<GroupingState
-										grouping={[
-											{columnName: 'FranchiseeNameNo'}
-										]}
-										expandedGroups={expandedGroups}
-										onExpandedGroupsChange={this.expandedGroupsChange}
-									/>
-									<IntegratedGrouping />
-									<VirtualTable
-										// height="530"
-										tableComponent={TableComponent}
-										headComponent = {TableHeadComponent}
-										columnExtensions={tableColumnExtensions}
-										rowComponent = {this.TableRow}
-									/>
-
-									{/* <TableColumnResizing defaultColumnWidths={tableColumnExtensions} /> */}
-									<TableHeaderRow showSortingControls />
-									<DataTypeProvider for={grouping}/>
-									<TableGroupRow
-										  showColumnsWhenGrouped contentComponent={this.GroupCellContent}
-									/>
-
-									{/* <GroupingState
-										// grouping={grouping}
-										// onGroupingChange={this.changeGrouping}
-									    defaultGrouping={[{ columnName: 'Franchisee' }]}
-									    defaultExpandedGroups={[ 'ChargebackNumber' ]}
-									    columnExtensions={tableColumnExtensions}
-									/> */}
-
-									{/* <IntegratedGrouping /> */}
-
-									{/* <BooleanTypeProvider
-									for={booleanColumns}
-								/> */}
-
-									<CurrencyTypeProvider
-										for={currencyColumns}
-										availableFilterOperations={amountFilterOperations}
-										editorComponent={AmountEditor}
-									/>
-									{/* <DateTypeProvider
-									for={dateColumns}
-								/> */}
-
-
-									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} /> */}
-									{/* <TableColumnResizing defaultColumnWidths={tableColumnExtensions} /> */}
-									{/* <TableHeaderRow showSortingControls={true} /> */}
-									{/* showGroupingControls */}
-
-
-									{/* <TableFixedColumns
-									leftColumns={leftColumns}
-									rightColumns={rightColumns}
-								/> */}
-
-									<TableSelection showSelectAll highlightRow  rowComponent={this.TableRow}/>
-
-									<TableEditRow />
-									{/* <TableEditColumn
-										// showAddCommand
-										showEditCommand
-										showDeleteCommand
-										commandComponent={Command}
-									/> */}
-									{/* <Getter
-										name="tableColumns"
-										computed={({ tableColumns }) => {
-											// debugger
-											const result = [
-												...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-												{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 140 }
-											];
-											return result;
-										}
-										}
-									/> */}
-									{/* <TableColumnReordering
-										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
-									/> */}
-									{/* Column Visibility */}
-									{/* Disable Column Visibility Toggling */}
-									{/* <TableColumnVisibility
-										defaultHiddenColumnNames={[]}
-										columnExtensions={tableColumnExtensions}
-									/> */}
-									{/* <SearchPanel /> */}
-									{/* Column Visibility */}
-									{/* <ColumnChooser /> */}
-
-									{/* {filterState && (
-										<TableFilterRow
-											showFilterSelector
-											iconComponent={FilterIcon}
-										// messages={{ month: 'Month equals' }}
-										/>
-									)} */}
-
-									{/* <TableGroupRow /> */}
-									{/* <Toolbar /> */}
-									{/* <GroupingPanel showSortingControls={true} /> */}
-
-									<Template
-										name="tableRow"
-										predicate={({ tableRow }) => tableRow.type === 'data'}
-									>
-										{params => (
-											<TemplateConnector>
-												{({ selection }, { toggleSelection }) => (
-													<this.TableRow
-														{...params}
-														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-														onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
-													/>
-												)}
-											</TemplateConnector>
+								{params => (
+									<TemplateConnector>
+										{({ selection }, { toggleSelection }) => (
+											<this.TableRow
+												{...params}
+												selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+												onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+											/>
 										)}
-									</Template>
-
-									<CustomizedDxGridSelectionPanel selection={selection} rows={rows}/>
-										{/* <TableColumnVisibility
-                        				hiddenColumnNames={['FranchiseeNameNo']}
-                        				emptyMessageComponent={this.emptyMessageContent} /> */}
-								</Grid>
-
-								{/* <div
-									// className={classNames(classes.layoutTable, "flex flex-row")}
-									style={{ justifyContent: "space-between" }}
-								>
-									<span className={"p-6"}>
-										Rows Selected: <strong>{selection.length}</strong>
-									</span>
-
-									<span className={"p-6"}>
-										Total Rows: <strong>{rows.length}</strong>
-									</span>
-								</div> */}
-
-							</div>
-						)
-					}
+									</TemplateConnector>
+								)}
+							</Template>
+							<CustomizedDxGridSelectionPanel selection={selection} rows={rows}/>
+						</Grid>
+					 </div>
 				</div>
-			</Fragment>
 		)
 	}
 }
