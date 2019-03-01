@@ -428,16 +428,22 @@ class ProcessModalForm extends React.Component {
             period: moment().format('MM/YYYY'),
             periods: null,
 			labelWidth: 0,
-			Notes: null,
+			Notes: "",
+			chargeBackDate: undefined,
 
 			paymentDlgPayloads: {
 				open: false,
 				paymentType: "Check",
 				paymentAmount: 0
 			},
+
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 		this.props.getLogCallCustomerServiceTypes()
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot){
+
 	}
 
 	componentWillMount() {
@@ -459,45 +465,44 @@ class ProcessModalForm extends React.Component {
 		// 	this.checkValidations()
         // }
 
-        // let year = moment().year();
-        // let month = moment().month();
+        let year = moment().year();
+        let month = moment().month();
         // let invoiceDate = moment();
         // let dueDate = moment().year(year).month(month).endOf('month');
         // this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         // this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
         // this.setState({ bShowInvoiceCloseBox: false });
+        if(this.props.all_regions!==null && this.props.all_regions.length){
 
-        // if(this.props.all_regions!==null && this.props.all_regions.length){
-        //     let all_regions = this.props.all_regions;
-        //     let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+            let all_regions = this.props.all_regions;
+            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
 
-        //     if(region.length){
-        //         let periods = region[0].OpenPeriods;
+            if(region.length){
+                let periods = region[0].OpenPeriods;
 
-        //         let all_periods = [];
+                let all_periods = [];
 
-        //         let period = periods.current.month.toString() + '/' + periods.current.year.toString();
-        //         if (periods.current.month < 10)
-        //             period = '0' + period;
-        //         if(periods.current.status==='Open')
-        //             all_periods.push(period);
-        //         this.setState({period: period});
+                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+                this.setState({period: period});
 
 
-        //         period = periods.next.month.toString() + '/' + periods.next.year.toString();
-        //         if (periods.next.month < 10)
-        //             period = '0' + period;
-        //         if(periods.next.status==='Open')
-        //             all_periods.push(period);
-        //         period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
-        //         if (periods.previous.month < 10)
-        //             period = '0' + period;
-        //         if(periods.previous.status==='Open')
-        //             all_periods.push(period);
-
-        //         this.setState({periods: all_periods});
-        //     }
-        // }
+                period = periods.next.month.toString() + '/' + periods.next.year.toString();
+                if (periods.next.month < 10)
+                    period = '0' + period;
+                if(periods.next.status==='Open')
+                    all_periods.push(period);
+                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+                if (periods.previous.month < 10)
+                    period = '0' + period;
+                if(periods.previous.status==='Open')
+                    all_periods.push(period);
+                this.setState({periods: all_periods});
+            }
+        }
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.payments !== this.props.payments) {
@@ -547,18 +552,22 @@ class ProcessModalForm extends React.Component {
 		this.setState({ [name]: event.target.checked });
 	};
 
-	handleChange = name => event => {
-		this.setState({
-			[name]: event.target.value,
-			errorMsg: ""
-		});
+	// handleChange= name => event => {
+	// 	this.setState({
+	// 		[name]: event.target.value,
+	// 		errorMsg: ""
+	// 	});
 
-		if (name === "PaymentAmount") {
-			// this.setState({
-			// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
-			// })
-		}
-		// this.checkValidations(name, event.target.value)
+	// 	if (name === "PaymentAmount") {
+	// 		// this.setState({
+	// 		// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
+	// 		// })
+	// 	}
+	// 	// this.checkValidations(name, event.target.value)
+	// };
+
+	handleChange = (event) => {
+		this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
 	};
 
 	commitChanges = ({ added, changed, deleted }) => {
@@ -847,7 +856,6 @@ class ProcessModalForm extends React.Component {
 	render() {
 		const { classes } = this.props;
         const { customerServiceTypes } = this.state;
-
 		return (
 			<div>
 				<Dialog
@@ -875,6 +883,7 @@ class ProcessModalForm extends React.Component {
 								</div> */}
 
 								<div className={classNames("flex mt-12")} sm={12}>
+								{this.state.periods!==null && (
 										<Select
 											classes={{
 												selectMenu: classNames(classes.inputMenu1),
@@ -896,17 +905,18 @@ class ProcessModalForm extends React.Component {
 												classes:{paper: classes.dropdownMenu},
 											}}
 										>
-											{/* {this.state.periods.map((p, index)=>{
+											{this.state.periods.map((p, index)=>{
 												return (<MenuItem key={index} value={p}>{p}</MenuItem>)
-											})} */}
+											})}
 										</Select>
+								)}
                                         <TextField
                                                 margin="none"
-                                                label="Month"
-                                                name="Month"
+                                                label="Chargeback date"
+                                                name="ChargebackDate"
                                                 type="date"
                                                 variant="outlined"
-                                                value={this.state.Month}
+                                                value={this.state.chargeBackDate}
                                                 onChange={this.handleChange}
                                                 fullWidth
                                                 required
@@ -921,7 +931,7 @@ class ProcessModalForm extends React.Component {
                                                     classes: {outlined: classes.label}
                                                 }}
                                             />
-                                            <TextField
+                                            {/* <TextField
                                                 margin="none"
                                                 label="Year"
                                                 name="Year"
@@ -940,7 +950,7 @@ class ProcessModalForm extends React.Component {
                                                     shrink: true,
                                                     classes: {outlined: classes.label}
                                                 }}
-                                            />
+                                            /> */}
 									{/* <TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pr-6")}
@@ -1034,7 +1044,8 @@ class ProcessModalForm extends React.Component {
 										<TextField margin="dense" variant="outlined" fullWidth id="Notes" label="Notes" multiline rows="9" rowsMax="9"
 											InputLabelProps={{ shrink: true }}
 											value={this.state.Notes || ''}
-											onChange={this.handleChange('Notes')}
+											name= "Notes"
+											onChange={this.handleChange}
 										/>
 									</div>
 								{/*

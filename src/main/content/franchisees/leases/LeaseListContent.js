@@ -1241,7 +1241,7 @@ class LeaseListContent extends Component {
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
 			console.log(restProps);
-			this.props.openEditLeaseForm(tableRow.row.LeaseId);
+			this.props.openEditLeaseForm(tableRow.row.Id, this.props.regionId);
 		}
 		return (
 			<Table.Row
@@ -1464,7 +1464,7 @@ class LeaseListContent extends Component {
 									rightColumns={rightColumns}
 								/> */}
 
-									{/* <TableSelection showSelectAll selectByRowClick highlightRow  rowComponent={this.TableRow}/> */}
+									<TableSelection showSelectAll selectByRowClick highlightRow rowComponent={this.TableRow}/>
 
 									<TableEditRow />
 									<TableEditColumn

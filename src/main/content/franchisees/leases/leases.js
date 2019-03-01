@@ -650,9 +650,16 @@ class Leases extends Component {
 													</Toolbar>
 												</FuseAnimate>
 
-												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-													<Typography variant="h6" className="hidden sm:flex">Leases | New Leases</Typography>
-												</FuseAnimate>
+												{this.props.leaseForm.type === 'edit' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Leases | Edit Lease</Typography>
+                                                    </FuseAnimate>
+                                                )}
+                                                {this.props.leaseForm.type === 'new' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Leases | New Lease</Typography>
+                                                    </FuseAnimate>
+                                                )}
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
