@@ -344,9 +344,11 @@ class UsersApp extends Component {
                     }
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
-                            <Fragment>
-                                <UsersList/>
-                            </Fragment>
+                            <div className={classNames("flex flex-col h-full")}>
+                                <Fragment>
+                                    <UsersList/>
+                                </Fragment>
+                            </div>
                         </div>
                     }
                     leftSidebarHeader={

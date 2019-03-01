@@ -534,8 +534,7 @@ class NegativeDueAppList extends Component {
                     })
                 }
             });
-             
-            console.log("nextProps=======",all_temp);
+
 
             this.setState({
                 rows: all_temp
@@ -638,90 +637,88 @@ class NegativeDueAppList extends Component {
 
 
 		return (
-			<Fragment>
-				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>								
-							<div className={classNames("flex flex-col")}>
-								<Grid
-									rows={rows}
-									columns={tableColumnExtensions}
-								>
-									<DragDropProvider />
-									<PagingState
-										defaultCurrentPage={0}
-										defaultPageSize={10}
-									/>
+			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+				<div className={classNames("flex flex-col")}>
+					<Grid
+						rows={rows}
+						columns={tableColumnExtensions}
+					>
+						<DragDropProvider />
+						<PagingState
+							defaultCurrentPage={0}
+							defaultPageSize={10}
+						/>
 
-									<PagingPanel pageSizes={pageSizes} />
+						<PagingPanel pageSizes={pageSizes} />
 
-									<SelectionState
-										selection={selection}
-										onSelectionChange={this.changeSelection}
-									/>
-									<IntegratedSelection />
+						<SelectionState
+							selection={selection}
+							onSelectionChange={this.changeSelection}
+						/>
+						<IntegratedSelection />
 
-									<SortingState
-										sorting={sorting}
-										onSortingChange={this.changeSorting}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedSorting />
-
+						<SortingState
+							sorting={sorting}
+							onSortingChange={this.changeSorting}
+							columnExtensions={tableColumnExtensions}
+						/>
+						<IntegratedSorting />
 
 
-									<SearchState
-										value={searchValue}
-										onValueChange={this.changeSearchValue}
-									/>
 
-									<FilteringState
-										defaultFilters={[]}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedFiltering />
+						<SearchState
+							value={searchValue}
+							onValueChange={this.changeSearchValue}
+						/>
 
-									<IntegratedPaging />
+						<FilteringState
+							defaultFilters={[]}
+							columnExtensions={tableColumnExtensions}
+						/>
+						<IntegratedFiltering />
 
-									<EditingState
-										columnExtensions={editingColumnExtensions}
-										onCommitChanges={this.commitChanges}
-									/>
-									<CurrencyTypeProvider for={currencyColumns}/>
+						<IntegratedPaging />
 
-									<AtRiskProvider for={atRiskColumns} />
+						<EditingState
+							columnExtensions={editingColumnExtensions}
+							onCommitChanges={this.commitChanges}
+						/>
+						<CurrencyTypeProvider for={currencyColumns}/>
 
-									{/* <PhoneNumberTypeProvider/> */}
+						<AtRiskProvider for={atRiskColumns} />
 
-									<VirtualTable height="auto" rowComponent={this.TableRow} />
+						{/* <PhoneNumberTypeProvider/> */}
 
-									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+						<VirtualTable height="auto" rowComponent={this.TableRow} />
 
-									<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+						<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
-									<TableHeaderRow showSortingControls />
+						<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
-									<Template
-										name="tableRow"
-										predicate={({ tableRow }) => tableRow.type === 'data'}
-									>
-										{params => (
-											<TemplateConnector>
-												{({ selection }, { toggleSelection }) => (
-													<this.TableRow
-														{...params}
-														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-														onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
-													/>
-												)}
-											</TemplateConnector>
-										)}
-									</Template>
+						<TableHeaderRow showSortingControls />
 
-									<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+						<Template
+							name="tableRow"
+							predicate={({ tableRow }) => tableRow.type === 'data'}
+						>
+							{params => (
+								<TemplateConnector>
+									{({ selection }, { toggleSelection }) => (
+										<this.TableRow
+											{...params}
+											selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+											onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+										/>
+									)}
+								</TemplateConnector>
+							)}
+						</Template>
 
-								</Grid>
-							</div>
+						<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+
+					</Grid>
 				</div>
-			</Fragment>
+			</div>
 		)
 	}
 }

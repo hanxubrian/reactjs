@@ -188,6 +188,9 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         backgroundColor: theme.palette.secondary.main,
+    },
+    negativeDueAppListContainer: {
+        overflow: 'scroll',
     }
 });
 
@@ -210,7 +213,6 @@ class NegativeDueApp extends Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
         if(nextProps.negativeDueDB !== this.props.negativeDueDB){
-            console.log("*********************---",nextProps.negativeDueDB);
         }
     }
 
@@ -247,12 +249,10 @@ class NegativeDueApp extends Component {
                     }
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
-                           
-                            <Fragment>
-                              <NegativeDueSearchBar/>
-                              <NegativeDueAppList/>
-                            </Fragment>
-
+                            <div className={classNames("flex flex-col h-full")}>
+                                  <NegativeDueSearchBar/>
+                                  <NegativeDueAppList/>
+                            </div>
                         </div>
                     }
                     leftSidebarHeader={
