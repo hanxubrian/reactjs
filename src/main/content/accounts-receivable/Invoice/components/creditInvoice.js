@@ -83,6 +83,8 @@ const initialState = {
     PaymentDate: moment().format('YYYY-MM-DD'),
     PaymentAmount: 0,
     overpayment: 0,
+    tax: 0,
+    subTotal: 0,
     errorMsg: "",
     PaymentNote: '',
     ReferenceNo: "",
@@ -108,10 +110,16 @@ class CreditInvoiceFormModal extends React.Component {
         if(nextProps.invoiceForm.data!==null) {
             let lines = nextProps.invoiceForm.data.line;
             let s = 0;
+            let tax = 0;
+            let subTotal = 0;
             lines.forEach(line=>{
                 s+=parseFloat(line.total);
+                tax+=parseFloat(line.tax);
+                subTotal+=parseFloat(line.amount);
             });
             this.setState({PaymentAmount: s});
+            this.setState({tax: tax});
+            this.setState({subTotal: subTotal});
             this.setState({invoiceAmount: s});
         }
     }
@@ -126,7 +134,12 @@ class CreditInvoiceFormModal extends React.Component {
         if (this.checkValidations()) {
 
             let customer = this.props.invoiceForm.customer;
-            let PayItems = [{ InvoiceNo: this.props.invoiceDetail.Data.Inv_no,  Amount: this.state.PaymentAmount}];
+            let PayItems = [{
+                InvoiceNo: this.props.invoiceDetail.Data.Inv_no,
+                Amount: this.state.PaymentAmount,
+                Tax: this.state.tax,
+                SubTotal: this.state.subTotal,
+            }];
 
             let payment =  {
                 PaymentType: 'Credit',
@@ -135,17 +148,18 @@ class CreditInvoiceFormModal extends React.Component {
                 Note: this.state.PaymentNote,
                 Amount:  this.props.invoiceDetail.Data.Items.Total,
                 AmountApplied: this.props.invoiceDetail.Data.Items.Total - parseFloat(this.state.PaymentAmount),
+                reason: '',
                 PayHistoryItems: PayItems
             };
 
-
-            this.props.createInvoicePayment(
+            this.props.createInvoiceCredit(
                 this.props.regionId,
                 customer.CustomerNo,
                 payment
             );
 
             this.initializeState();
+            setTimeout(()=>this.props.closeCreditInvoiceFormDialog(), 500);
         }
     };
 
@@ -244,7 +258,9 @@ class CreditInvoiceFormModal extends React.Component {
                                     <div className="flex flex-row flex-1 w-full">
                                         <TextField type="text" value={customer.CustomerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="Customer Name" />
                                         <TextField type="text" value={customer.CustomerNo} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="Customer #" />
-                                        <TextField type="text" value={this.props.invoiceDetail.Data.Inv_no} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="InvoiceNumber" label="Invoice #" />
+                                        {this.props.invoiceDetail && (
+                                            <TextField type="text" value={this.props.invoiceDetail.Data.Inv_no} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="InvoiceNumber" label="Invoice #" />
+                                        )}
                                         <TextField type="text" value={this.state.ReferenceNo} required InputLabelProps={{ shrink: true }}  margin="dense" fullWidth className={classNames("pr-6")} id="ReferenceNo" label="ReferenceNo" />
                                     </div>
 
@@ -267,6 +283,46 @@ class CreditInvoiceFormModal extends React.Component {
                                         variant="outlined"
                                     />
                                     <TextField
+                                        id="subTotal"
+                                        name="subTotal"
+                                        label="Sub Total"
+                                        className={classNames(classes.textField, 'ml-12')}
+                                        value={this.state.subTotal}
+                                        onChange={this.handleChange('subTotal')}
+                                        margin="normal" fullWidth
+                                        variant="outlined"
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            inputComponent: NumberFormatCustom2,
+                                            classes: {
+                                                input: classNames(classes.input, "text-right")
+                                            },
+                                        }}
+                                    />
+                                    <TextField
+                                        id="tax"
+                                        name="tax"
+                                        label="Tax"
+                                        className={classNames(classes.textField, 'ml-12')}
+                                        value={this.state.tax}
+                                        onChange={this.handleChange('tax')}
+                                        margin="normal" fullWidth
+                                        variant="outlined"
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            inputComponent: NumberFormatCustom2,
+                                            classes: {
+                                                input: classNames(classes.input, "text-right")
+                                            },
+                                        }}
+                                    />
+                                    <TextField
                                         id="PaymentAmount"
                                         name="PaymentAmount"
                                         label="Amount"
@@ -286,23 +342,22 @@ class CreditInvoiceFormModal extends React.Component {
                                             },
                                         }}
                                     />
-                                    <TextField  margin="normal" id="Reason" label="Reason" variant="outlined"
-                                                fullWidth
-                                                onChange={this.handleChange('Reason')}
-                                                placeholder="Reason"
-                                                value={this.state.Reason}
-                                                className={classNames("ml-12")}
-                                                InputProps={{
-                                                    classes: {input: classes.input}
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                    classes: {outlined: classes.label}
-                                                }}
-                                    />
                                 </div>
-
                             </div>
+                            <TextField  margin="normal" id="Reason" label="Reason" variant="outlined"
+                                        fullWidth
+                                        onChange={this.handleChange('Reason')}
+                                        placeholder="Reason"
+                                        value={this.state.Reason}
+                                        className={classNames("hidden")}
+                                        InputProps={{
+                                            classes: {input: classes.input}
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                            />
                             <TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="2" rowsMax="2"
                                        value={this.state.PaymentNote}
                                        onChange={this.handleChange('PaymentNote')}
@@ -329,7 +384,7 @@ class CreditInvoiceFormModal extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        createInvoicePayment: Actions.createInvoicePayment,
+        createInvoiceCredit: Actions.createInvoiceCredit,
         closeCreditInvoiceFormDialog: Actions.closeCreditInvoiceFormDialog,
     }, dispatch);
 }

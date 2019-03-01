@@ -355,13 +355,13 @@ const invoices = function(state = initialState, action) {
             return {...state, bOpenPaymentInvoiceForm: true}
         }
         case Actions.CLOSE_PAYMENT_INVOICE_FORM: {
-            return {...state, bOpenPaymentInvoiceForm: false}
+            return {...state, bOpenPaymentInvoiceForm: false, payment: null}
         }
         case Actions.OPEN_CREDIT_INVOICE_FORM: {
             return {...state, bOpenCreditInvoiceForm: true}
         }
         case Actions.CLOSE_CREDIT_INVOICE_FORM: {
-            return {...state, bOpenCreditInvoiceForm: false}
+            return {...state, bOpenCreditInvoiceForm: false, credit: null}
         }
         case Actions.GET_INVOICE_VENDOR_LIST: {
             return {...state, vendorList: action.payload}

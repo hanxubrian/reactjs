@@ -331,6 +331,8 @@ class InvoiceForm extends Component {
         bLoadingDetail: false,
         customerStatusLabel: '',
         periods: null,
+        openCredit: false,
+        openPayment: false,
     };
 
     constructor(props) {
@@ -524,6 +526,12 @@ class InvoiceForm extends Component {
                 setTimeout(() => {this.closeComposeForm()}, 3000);
             }
         }
+        if(this.props.credit && this.props.credit!==prevProps.credit){
+            this.setState({openCredit: true});
+        }
+        if(this.props.payment && this.props.payment!==prevProps.payment){
+            this.setState({openPayment: true});
+        }
     }
 
     componentWillMount(){
@@ -535,7 +543,8 @@ class InvoiceForm extends Component {
             if(nextProps.invoiceForm.type==='edit') {
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.Inv_no});
                 this.setState({value: nextProps.invoiceForm.customer.CustomerName + ' - ' + nextProps.invoiceForm.customer.CustomerNo});
-                this.setState({PO_number: nextProps.invoices.invoiceDetail.Data.PONumber});
+                if(nextProps.invoices.invoiceDetail.Data.PONumber)
+                    this.setState({PO_number: nextProps.invoices.invoiceDetail.Data.PONumber});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
                 this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes===null ? '' : nextProps.invoices.invoiceDetail.Data.Notes});
                 this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
@@ -907,6 +916,20 @@ class InvoiceForm extends Component {
 
         this.setState({ openSnack1: false });
     };
+    handleCloseCredit = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ openCredit: false });
+    };
+    handleClosePayment = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ openPayment: false });
+    };
 
     focusDescriptionInputField = input => {
         if ( input && this.props.invoiceForm.type === 'edit') {
@@ -1194,7 +1217,7 @@ class InvoiceForm extends Component {
                                                         control={
                                                             <Checkbox
                                                                 name="taxExempt"
-                                                                checked={this.state.selectedCustomer.TaxExempt==='Y' ? true : false}
+                                                                checked={this.state.selectedCustomer.TaxExempt==='Y'}
                                                                 onChange={this.handleChange}
                                                                 value="checkedB"
                                                                 color="primary"
@@ -1383,6 +1406,36 @@ class InvoiceForm extends Component {
                             message={this.state.snackMessage1}
                         />
                     </Snackbar>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        open={this.state.openCredit}
+                        autoHideDuration={3000}
+                        onClose={this.handleCloseCredit}
+                    >
+                        <MySnackbarContentWrapper
+                            onClose={this.handleCloseCredit}
+                            variant="success"
+                            message="Saved successfully"
+                        />
+                    </Snackbar>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        open={this.state.openPayment}
+                        autoHideDuration={3000}
+                        onClose={this.handleClosePayment}
+                    >
+                        <MySnackbarContentWrapper
+                            onClose={this.handleClosePayment}
+                            variant="success"
+                            message="Saved successfully"
+                        />
+                    </Snackbar>
                     <Dialog
                         open={this.state.bCustomerNotFound}
                         onClose={()=>this.handleCloseNewCustomer()}
@@ -1484,6 +1537,8 @@ function mapStateToProps({invoices, auth, franchisees})
         bStartingSaveFormData: invoices.bStartingSaveFormData,
         franchisees: franchisees.franchiseesDB,
         all_regions: auth.login.all_regions,
+        credit: invoices.credit,
+        payment: invoices.payment,
     }
 }
 

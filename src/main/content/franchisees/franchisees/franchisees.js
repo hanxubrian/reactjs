@@ -330,7 +330,11 @@ class Franchisees extends Component {
         pins: [],
         pins2: [],
         gmapVisible: false,
+<<<<<<< HEAD
         insertPayload:[]
+=======
+        reportPeriod: this.props.reportPeriod,
+>>>>>>> 227c591960271943e56b1fd2d12773c20f248cc9
     };
 
     toggleSelection = (key, shift, row) => {
@@ -486,6 +490,9 @@ class Franchisees extends Component {
 
     componentDidMount(){
         document.addEventListener("keydown", this.escFunction, false);
+        this.setState({reportPeriod: this.props.defaultPeriod});
+        this.props.updateReportDate(this.props.defaultPeriod);
+
         this.getLocation();
     }
 
@@ -814,7 +821,7 @@ class Franchisees extends Component {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, franchiseesForm, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
         const { selection, anchorEl,pins, pins2,gmapVisible } = this.state;
-        let period = this.props.reportPeriod.split('/');
+        let period = this.state.reportPeriod.split('/');
         return (
             <React.Fragment >
               <FusePageCustomSidebarScroll
@@ -1121,7 +1128,6 @@ class Franchisees extends Component {
                                         }
                                     }}
                                     getTrProps={(state, rowInfo, column) => {
-                                        let period = this.props.reportPeriod.split('/');
                                         return {
                                             className: "cursor-pointer",
                                             onClick  : (ev, handleOriginal) => {
@@ -1316,7 +1322,11 @@ function mapDispatchToProps(dispatch)
         getBillingLists: Actions.getBillingLists,
         getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
         getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
+<<<<<<< HEAD
         createFranchisee : Actions.createFranchisees,
+=======
+        updateReportDate : Actions.updateReportDate,
+>>>>>>> 227c591960271943e56b1fd2d12773c20f248cc9
     }, dispatch);
 }
 
@@ -1345,7 +1355,11 @@ function mapStateToProps({franchisees,auth, invoices, transactions})
         reportPeriod: franchisees.reportPeriod,
         billingLists: invoices.billingLists,
         transactionTypeList: transactions.transactionTypeList,
+<<<<<<< HEAD
         insertPayload: franchisees.insertPayload
+=======
+        defaultPeriod: auth.login.defaultPeriod,
+>>>>>>> 227c591960271943e56b1fd2d12773c20f248cc9
     }
 }
 

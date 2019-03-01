@@ -14,8 +14,6 @@ const initialState = {
         },
         data : null
     },
-    // reportDate: "Sun Jan 01 2017 12:00:00 GMT-0600 (Central Standard Time)"
-    // reportDate: moment().format('MM/YYYY')
     reportDate: '01/2019'
 };
 

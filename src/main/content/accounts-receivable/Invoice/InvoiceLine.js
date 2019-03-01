@@ -524,8 +524,10 @@ class InvoiceLineTable extends React.Component {
             if(!this.props.bSkip && this.props.invoiceForm.type==='edit') {
                 if(data.length>0 && this.props.invoiceForm.data.line.length>0){
                     data.map((line, index)=>{
-                        line.vendorId=this.props.invoiceForm.data.line[index].vendorId;
-                        line.vendorInvNo=this.props.invoiceForm.data.line[index].vendorInvNo;
+                        if(index<this.props.invoiceForm.data.line.length) {
+                            line.vendorId = this.props.invoiceForm.data.line[index].vendorId;
+                            line.vendorInvNo = this.props.invoiceForm.data.line[index].vendorInvNo;
+                        }
                     })
                 }
             }
