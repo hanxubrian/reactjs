@@ -294,6 +294,10 @@ class PrintChecksLayout extends Component {
             const {paymentDate, checkDate, checktypeId, entityTypeId, year, month} = nextProps.filters;
             this.props.getCheckDetailByType(this.props.regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
         }
+        if(this.props.checksObj!==nextProps.checksObj){
+            this.child1.onPrint();
+        }
+
     }
 
 
@@ -352,20 +356,17 @@ class PrintChecksLayout extends Component {
     };
 
     handlePrint = async ()=>{
-        // this.props.history.push('/accounts-payable/preview-checks');
-        // return;
-
         const {selections, printChecksDB} = this.props;
         await this.setState({openPrintModal: false});
         await this.setState({completed: 0});
         await this.setState({bPrint: true});
 
-        selections.forEach(async index=>{
-            let checkObj = printChecksDB[index];
-            await this.props.setCheckObj(checkObj);
-            await this.child1.onPrint();
-            await this.progress();
-            await setTimeout(null, 200);
+        selections.forEach(index=>{
+            setTimeout(()=>{
+                let checkObj = printChecksDB[index];
+                this.props.setCheckObj(checkObj);
+                this.progress();
+            }, 2000);
         });
 
     };
@@ -622,6 +623,7 @@ function mapStateToProps({auth, printChecks, fuse}) {
         all_regions: auth.login.all_regions,
         filters: printChecks.filters,
         checkTypes: printChecks.checkTypes,
+        checksObj: printChecks.checksObj,
     }
 }
 

@@ -4,6 +4,9 @@ import {withRouter} from 'react-router-dom';
 //Material-UI
 import {withStyles,Typography} from "@material-ui/core";
 
+//Kendo
+import { GridPDFExport, PDFExport, savePDF } from '@progress/kendo-react-pdf';
+
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -89,6 +92,7 @@ const styles = theme => ({
 });
 
 class InvoiceReport extends Component {
+    pdfInvoiceReportExportComponent;
     state = {
         isOpen                          : false,
         invoiceDetail                   : [],
@@ -102,9 +106,6 @@ class InvoiceReport extends Component {
 
     constructor(props){
         super(props);
-
-        this.downloadPDF = this.downloadPDF.bind(this);
-        this.getDataUri  = this.getDataUri.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -125,8 +126,8 @@ class InvoiceReport extends Component {
     componentWillUnmount(){
         this.props.onRef(undefined);
     }
+
     componentWillMount(){
-        // console.log("#################this.props.Detail",this.props.Detail);
         if(this.props.Detail !=="Failed"){
             this.setState({
                 invoiceDetail:this.props.Detail.Data,
@@ -146,8 +147,8 @@ class InvoiceReport extends Component {
         if(this.props.Detail ==="Faild"){
 
         }
-
     }
+
     componentDidUpdate(prevProps, prevState,){
         if(this.props.Detail !=="Faild" &&  this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
             this.setState({
@@ -171,51 +172,17 @@ class InvoiceReport extends Component {
             }
         }
     }
-    getDataUri=(url, cb)=>
-    {
-        var image = new Image();
-        var log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        image.setAttribute('crossOrigin', 'anonymous');
-        image.onload = function () {
-            var canvas = document.createElement('canvas');
-            canvas.width = this.naturalWidth;
-            canvas.height = this.naturalHeight;
-            var ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fff';  /// set white fill style
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            canvas.getContext('2d').drawImage(this, 0, 0);
-            cb(canvas.toDataURL('image/png'));
-        };
-        image.src = log_url;
-    };
 
-    downloadPDF=(input, imgURL)=> {
-        let img = null;
-        if (input != null && imgURL != null) {
-            this.getDataUri(imgURL, function (dataUri) {
-                img = dataUri;
-            });
-            html2canvas(input)
-                .then((canvas) => {
-                    const imgData = canvas.toDataURL('image/jpeg',1.0);
-                    const pdf = new jsPDF();
-                    // const pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
-                    pdf.addImage(imgData, 'jpeg', 0, 0);
-                    pdf.addImage(img, 'jpeg', 8, 15, 40, 30);
-                    pdf.addImage(img, 'jpeg', 150, 102, 40, 30);
-                    pdf.save("download.pdf");
-                })
-            ;
-        }
+    onInvoicePrint = async ()=> {
+        await this.pdfInvoiceReportExportComponent.save();
     };
 
     render() {
+        console.log('customer=', this.state.customer);
 
         if (!this.props.show) {
             return null;
         }
-        console.log('customer=', this.state.customer);
-
         if (this.props.Detail.Data && this.props.Detail.Data !== null && this.state.RegionInfo && this.state.RegionInfo !== null ) {
             return (
 
@@ -239,7 +206,13 @@ class InvoiceReport extends Component {
                         margin: '0 auto',
                         padding: 30
                     }}>
-                        <div style={{width: '100%',color:'black'}}>
+                        <PDFExport
+                            paperSize="A4"
+                            margin="1cm"
+                            ref={(component) => this.pdfInvoiceReportExportComponent = component}
+                            scale={0.75}
+                        >
+                            <div style={{width: '100%',color:'black'}}>
                                 <table style={{width: '100%',color:'black'}}>
                                     <thead>
                                     <tr>
@@ -349,11 +322,11 @@ class InvoiceReport extends Component {
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)'}}></div>
+                                <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)'}}/>
                                 <table style={{width: '85%',color:'black'}} align="center">
                                     <tbody>
                                     <tr>
-                                        <td width="20%"></td>
+                                        <td width="20%"/>
                                         <td width="60%" className="text-center">
                                             <Typography><strong><span style={{fontSize: '18px',color:'black'}}>JANI-KING OF {this.state.RegionInfo.regionname} ,INC</span></strong></Typography>
                                             <Typography><strong><span
@@ -421,8 +394,6 @@ class InvoiceReport extends Component {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {/*{this.state.Items != null && this.state.Items && this.state.Items.map((item, index) => {*/}
-                                    {/*return (*/}
                                     <tr >
                                         <td width="15%" style={{border: 'solid 1px',color:'black'}}
                                             className="text-center">{this.state.invoiceDetail.Inv_no}</td>
@@ -439,8 +410,6 @@ class InvoiceReport extends Component {
                                         <td width="10%" style={{border: 'solid 1px',color:'black'}}
                                             className="text-center">{moment(this.state.invoiceDetail.DueDate).format('MM/DD/YYYY')}</td>
                                     </tr>
-                                    {/*)*/}
-                                    {/*})}*/}
                                     </tbody>
                                 </table>
                                 <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px'}}>
@@ -481,9 +450,6 @@ class InvoiceReport extends Component {
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography> <Typography><br/></Typography>
                                             <Typography><br/></Typography> <Typography><br/></Typography>
-                                            <Typography><br/></Typography>
-                                            <Typography><br/></Typography>
-                                            <Typography><br/></Typography>
                                             <Typography><br/></Typography><Typography><br/></Typography>
                                         </td>
                                         <td >
@@ -495,7 +461,7 @@ class InvoiceReport extends Component {
                                     </tr>
 
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"></td>
+                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
                                         <td width="60%" className="text-center">  {this.state.invoiceDetail.InvMsg}</td>
                                         <td width="15%" style={{border: 'solid 1px'}} className="text-center">
                                             <strong>Amount of Sale</strong>
@@ -505,8 +471,8 @@ class InvoiceReport extends Component {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"></td>
-                                        <td width="60%" className="text-center"></td>
+                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
+                                        <td width="60%" className="text-center"/>
                                         <td width="15%" style={{border: 'solid 1px'}} className="text-center">
                                             <strong>Sales Tax</strong>
                                         </td>
@@ -515,7 +481,7 @@ class InvoiceReport extends Component {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"></td>
+                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
                                         <td width="60%" className="text-center">
                                             <Typography><strong style={{fontSize: '11px'}}>Make All Checks Payable To:</strong></Typography>
                                             <Typography><strong style={{fontSize: '11px'}}>JANI-KING OF
@@ -531,6 +497,7 @@ class InvoiceReport extends Component {
                                     </tbody>
                                 </table>
                             </div>
+                        </PDFExport>
 
                     </div>
                 </div>
@@ -538,7 +505,7 @@ class InvoiceReport extends Component {
         }
         else {
 
-            return(<div></div>)
+            return(<div/>)
         }
     }
 }
@@ -569,6 +536,4 @@ function mapStateToProps({invoices})
     }
 }
 
-
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceReport)));
-

@@ -90,11 +90,10 @@ class ExportChecks extends React.Component {
     render() {
         const {classes} = this.props;
         const  log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        // const  log_url = 'assets/images/logo-blank.png';
 
-        // let selections = this.props.selectionsChecks.map((index)=>this.props.printChecksDB[index]);
         if(this.props.checksObj===null)
-            return (<div/>)
+            return (<div/>);
+
         let selections = [this.props.checksObj];
 
         return (
@@ -123,13 +122,13 @@ class ExportChecks extends React.Component {
                             });
                             return (
                                 <div key={index} className={classNames("flex flex-col h-full relative",{'page-break': index>0})}>
-                                    <div className="flex flex-row relative justify-center mt-12">
-                                        <div className="absolute checks-date small" style={{left: 0}}>{moment().format('MM/DD/YYYY')}</div>
-                                        <Typography variant={"inherit"}>JaniKing | Franchise Management System</Typography>
-                                    </div>
+                                    {/*<div className="flex flex-row relative justify-center mt-12">*/}
+                                        {/*<div className="absolute checks-date small" style={{left: 0}}>{moment().format('MM/DD/YYYY')}</div>*/}
+                                        {/*<Typography variant={"inherit"}>JaniKing | Franchise Management System</Typography>*/}
+                                    {/*</div>*/}
                                     <GridM container>
                                         <GridM item sm={3}>
-                                            <img style={{border: '0px solid black'}}
+                                            <img style={{border: '0px solid black'}} alt="Janiking"
                                                 src={log_url}
                                             />
                                         </GridM>
@@ -189,7 +188,7 @@ class ExportChecks extends React.Component {
                                     <div className={classNames("flex flex-col absolute checks")} style={{left: 0, bottom:0}}>
                                         <div className={classNames("flex flex-row w-full")}>
                                             <div style={{width: '12%'}}>
-                                                <img style={{border: '0px solid black'}}
+                                                <img style={{border: '0px solid black'}} alt="Janiking Logo"
                                                      src={log_url}
                                                 />
                                             </div>

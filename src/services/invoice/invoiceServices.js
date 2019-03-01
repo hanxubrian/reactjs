@@ -52,11 +52,9 @@ class invoiceService {
 		});
 	};
 
-	getInvoiceStatusList = (RegionId) => {
+	getInvoiceStatusList = () => {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/GetInvoiceStatusList`,
-				{ params: { RegionId: RegionId } }
-			)
+			axios_instance.get(`${BASE_MONGO_API_URL}//v1/Lists/GetInvoiceTypes`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -312,6 +310,28 @@ class invoiceService {
 		};
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/create/`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	};
+
+	createInvoiceCredit = (regionId, CustomerNo, payment) => {
+		const data = {
+			RegionId: regionId,
+			CustomerNo: CustomerNo,
+			Payment: payment,
+		};
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/createCredit`, data)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
