@@ -275,9 +275,10 @@ class InvoiceListContent extends Component {
     };
 
     printDocument=()=> {
-        let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        const input = document.getElementById('divToPrint');
-        this.child.downloadPDF(input, imgUrl);
+        // let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        // const input = document.getElementById('divToPrint');
+        // this.child.downloadPDF(input, imgUrl);
+        this.child.onInvoicePrint();
     };
 
     render()

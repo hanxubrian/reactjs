@@ -92,6 +92,7 @@ const styles = theme => ({
 });
 
 class InvoiceReport extends Component {
+    pdfInvoiceReportExportComponent;
     state = {
         isOpen                          : false,
         invoiceDetail                   : [],
@@ -128,6 +129,7 @@ class InvoiceReport extends Component {
     componentWillUnmount(){
         this.props.onRef(undefined);
     }
+
     componentWillMount(){
         if(this.props.Detail !=="Failed"){
             this.setState({
@@ -148,8 +150,8 @@ class InvoiceReport extends Component {
         if(this.props.Detail ==="Faild"){
 
         }
-
     }
+
     componentDidUpdate(prevProps, prevState,){
         if(this.props.Detail !=="Faild" &&  this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
             this.setState({
@@ -173,6 +175,7 @@ class InvoiceReport extends Component {
             }
         }
     }
+
     getDataUri=(url, cb)=>
     {
         var image = new Image();
@@ -211,7 +214,12 @@ class InvoiceReport extends Component {
         }
     };
 
+    onInvoicePrint = async ()=> {
+        await this.pdfInvoiceReportExportComponent.save();
+    };
+
     render() {
+        console.log('customer=', this.state.customer);
 
         if (!this.props.show) {
             return null;
@@ -239,7 +247,13 @@ class InvoiceReport extends Component {
                         margin: '0 auto',
                         padding: 30
                     }}>
-                        <div style={{width: '100%',color:'black'}}>
+                        <PDFExport
+                            paperSize="A4"
+                            margin="1cm"
+                            ref={(component) => this.pdfInvoiceReportExportComponent = component}
+                            scale={0.75}
+                        >
+                            <div style={{width: '100%',color:'black'}}>
                                 <table style={{width: '100%',color:'black'}}>
                                     <thead>
                                     <tr>
@@ -527,6 +541,7 @@ class InvoiceReport extends Component {
                                     </tbody>
                                 </table>
                             </div>
+                        </PDFExport>
 
                     </div>
                 </div>
