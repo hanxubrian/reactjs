@@ -97,7 +97,7 @@ class InvoiceReport extends Component {
         CustomerSoldTo                  : [],
         CustomerFor                     : [],
         RegionInfo                      : null,
-
+        customer: null,
     };
 
     constructor(props){
@@ -106,12 +106,15 @@ class InvoiceReport extends Component {
         this.downloadPDF = this.downloadPDF.bind(this);
         this.getDataUri  = this.getDataUri.bind(this);
     }
+
     componentWillReceiveProps(nextProps) {
-
-
-        if(nextProps.Detail ==="Failed"){
-            // alert("GET INVOICE DETAIL FAILD!!!");
+        if(nextProps.Detail!==this.props.Detail){
+            let customers = this.props.customersDB.Data.Regions[0].CustomerList;
+            let customer = customers.filter(c=>c.CustomerNo===nextProps.Detail.Data.CustomerNo);
+            if(customer.length)
+                this.setState({customer: customer[0]});
         }
+
     }
     componentDidMount(){
         this.props.onRef(this);
@@ -211,7 +214,7 @@ class InvoiceReport extends Component {
         if (!this.props.show) {
             return null;
         }
-        console.log('customer=', this.state.CustomerSoldTo);
+        console.log('customer=', this.state.customer);
 
         if (this.props.Detail.Data && this.props.Detail.Data !== null && this.state.RegionInfo && this.state.RegionInfo !== null ) {
             return (
@@ -304,21 +307,22 @@ class InvoiceReport extends Component {
                                 </table>
                                 <table style={{width: '85%',color:'black'}} align="center">
                                     <tbody>
-                                    <tr>
-                                        <td width='60%' className="text-left">
-                                            <Typography  style={{color:'black'}}><strong>Sold To:</strong></Typography>
-                                            <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
-                                            <Typography  style={{color:'black'}}><br/></Typography>
-                                            <Typography  style={{color:'black'}}>ONE BILLS DRIVE</Typography>
-                                        </td>
-                                        <td width='40%' className="text-left">
-                                            <Typography  style={{color:'black'}}><strong>For:</strong></Typography>
-                                            <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
-                                            <Typography  style={{color:'black'}}>OPERATIONS CENTER</Typography>
-                                            <Typography  style={{color:'black'}}>ONE BILLS DRIVE</Typography>
-                                        </td>
-                                    </tr>
-
+                                    {this.state.customer && (
+                                        <tr>
+                                            <td width='60%' className="text-left">
+                                                <Typography  style={{color:'black'}}><strong>Sold To:</strong></Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.customer.BillingAddress}</Typography>
+                                                <Typography  style={{color:'black'}}>{`${this.state.customer.BillingCity}, ${this.state.customer.BillingState}, ${this.state.customer.BillingPostalCode}`}</Typography>
+                                            </td>
+                                            <td width='40%' className="text-left">
+                                                <Typography  style={{color:'black'}}><strong>For:</strong></Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.customer.Address}</Typography>
+                                                <Typography  style={{color:'black'}}>{`${this.state.customer.City}, ${this.state.customer.StateName}, ${this.state.customer.PostalCode}`}</Typography>
+                                            </td>
+                                        </tr>
+                                    )}
                                     <tr>
                                         <td width='50%' className="text-left">
                                             <Typography  style={{color:'black'}}><span  style={{color:'black'}}>{this.state.CustomerSoldTo.AddressLine1}</span><span
@@ -373,21 +377,22 @@ class InvoiceReport extends Component {
                                 </table>
                                 <table style={{width: '85%',color:'black'}} align="center">
                                     <tbody>
-                                    <tr>
-                                        <td width='60%' className="text-left">
-                                            <Typography style={{color:'black'}}><strong>Sold To:</strong></Typography>
-                                            <Typography style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
-                                            <Typography><br/></Typography>
-                                            <Typography style={{color:'black'}}>ONE BILLS DRIVE</Typography>
-                                        </td>
-                                        <td width='40%' className="text-left">
-                                            <Typography><strong style={{color:'black'}}>For:</strong></Typography>
-                                            <Typography style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
-                                            <Typography style={{color:'black'}}>OPERATIONS CENTER</Typography>
-                                            <Typography style={{color:'black'}}>ONE BILLS DRIVE</Typography>
-                                        </td>
-                                    </tr>
-
+                                    {this.state.customer && (
+                                        <tr>
+                                            <td width='60%' className="text-left">
+                                                <Typography  style={{color:'black'}}><strong>Sold To:</strong></Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.customer.BillingAddress}</Typography>
+                                                <Typography  style={{color:'black'}}>{`${this.state.customer.BillingCity}, ${this.state.customer.BillingState}, ${this.state.customer.BillingPostalCode}`}</Typography>
+                                            </td>
+                                            <td width='40%' className="text-left">
+                                                <Typography  style={{color:'black'}}><strong>For:</strong></Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
+                                                <Typography  style={{color:'black'}}>{this.state.customer.Address}</Typography>
+                                                <Typography  style={{color:'black'}}>{`${this.state.customer.City}, ${this.state.customer.StateName}, ${this.state.customer.PostalCode}`}</Typography>
+                                            </td>
+                                        </tr>
+                                    )}
                                     <tr>
                                         <td width='50%' className="text-left">
                                             <Typography><span style={{color:'black'}}>{this.state.CustomerSoldTo.AddressLine1}</span><span
@@ -539,17 +544,6 @@ class InvoiceReport extends Component {
 }
 
 
-
-// The modal "window"
-// const modalStyle = {
-//     backgroundColor: '#fff',
-//     borderRadius: 5,
-//     maxWidth: 500,
-//     minHeight: 300,
-//     margin: '0 auto',
-//     padding: 30
-// };
-
 InvoiceReport.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
@@ -571,7 +565,7 @@ function mapStateToProps({invoices})
 {
     return {
         customersDB: invoices.customersDB,
-        invoiceDetail: invoices.invoiceDetail,
+        Detail: invoices.invoiceDetail
     }
 }
 

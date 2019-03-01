@@ -506,7 +506,7 @@ class InvoiceListContent extends Component {
                     </DialogActions>
                 </Dialog>
                 {this.props.invoiceDetail!==null && this.props.invoiceDetail!==undefined && this.state.invoiceDetail !=="Faild" && this.state.isOpen && (
-                    <InvoiceReport childCall={this.printDocument.bind(this)} onRef={ref => (this.child = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId} Detail={this.props.invoiceDetail} />
+                    <InvoiceReport childCall={this.printDocument.bind(this)} onRef={ref => (this.child = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId}  />
                 )}
                 {this.state.isOpen && this.state.invoiceDetail!==null &&(
                 <div className="mb5" style={{zIndex:999999}}>
