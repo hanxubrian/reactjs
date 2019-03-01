@@ -1,16 +1,11 @@
 import React, { Component, Fragment } from 'react';
-// import ReactDOM from 'react-dom';
 
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
-
-//Janiking
-import JanikingPagination from 'Commons/JanikingPagination';
+import { Icon, IconButton, Input, Button } from '@material-ui/core';
 
 // theme components
-// import {FuseAnimate} from '@fuse';
 
-import { withStyles, Checkbox } from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
 
@@ -20,26 +15,14 @@ import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
 // third party
-// import moment from 'moment'
-import ReactTable from "react-table";
+
 import "react-table/react-table.css";
-import _ from 'lodash';
 import classNames from 'classnames';
-
-
-import { Tooltip } from '@material-ui/core';
-// import GoogleMap from 'google-map-react';
-import {
-	withScriptjs,
-	withGoogleMap,
-	GoogleMap,
-	Marker,
-} from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers, lifecycle } from "recompose";
+
 
 import {
-	Getter, Template, TemplateConnector
+	Template, TemplateConnector
 } from '@devexpress/dx-react-core';
 import {
 	SelectionState,
@@ -49,8 +32,6 @@ import {
 	SortingState,
 	IntegratedSorting,
 	EditingState,
-	GroupingState,
-	IntegratedGrouping,
 	DataTypeProvider,
 	FilteringState,
 	IntegratedFiltering,
@@ -65,19 +46,9 @@ import {
 	TableHeaderRow,
 	TableSelection,
 	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
 	TableFilterRow,
-	SearchPanel,
 	DragDropProvider,
-	TableColumnReordering,
 	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
 	VirtualTable,
 
 } from '@devexpress/dx-react-grid-material-ui';
@@ -88,15 +59,11 @@ import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-
-import Spinner from 'react-spinner-material';
-import { getOverlappingDaysInIntervals } from 'date-fns';
 
 
 const hexToRgb = (hex) => {
@@ -218,7 +185,7 @@ const styles = theme => ({
 	}
 });
 //
-// table content rows stle
+// table content rows style
 //
 const TableComponentBase = ({ classes, ...restProps }) => (
 	<Table.Table
@@ -404,6 +371,8 @@ const Command = ({ id, onExecute }) => {
 		/>
 	);
 };
+
+
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
 class NegativeDueAppList extends Component {
@@ -415,12 +384,10 @@ class NegativeDueAppList extends Component {
 			locationFilterValue: [],
 			pins: [],
 			pins2: [],
-
 			s: '',
 			temp: [],
 			data: [],
 			selectAll: false,
-
 			selection: [],
 			rows: [],
 
@@ -510,7 +477,6 @@ class NegativeDueAppList extends Component {
 				'Phone'
 			],
 			dateColumns: ['saleDate'],
-
 			grouping: [
 				// { columnName: 'AccountTypeListName' },
 			],
@@ -522,7 +488,6 @@ class NegativeDueAppList extends Component {
 		};
 
 		this.fetchData = this.fetchData.bind(this);
-		// this.escFunction = this.escFunction.bind(this);
 
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
@@ -573,7 +538,7 @@ class NegativeDueAppList extends Component {
             console.log("nextProps=======",all_temp);
 
             this.setState({
-                row: all_temp
+                rows: all_temp
             })
         }
 	} // deprecate
@@ -599,7 +564,7 @@ class NegativeDueAppList extends Component {
             
 
             this.setState({
-                row: all_temp
+                rows: all_temp
             })
         }
         		
