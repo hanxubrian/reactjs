@@ -371,7 +371,7 @@ class CancelContractPage extends React.Component {
 			],
 			rows: [],
 			currencyColumns: [
-				'InvoiceAmount', 'InvoiceBalance', 'PaymentAmount'
+				'ff_tot', 'ff_pytotl', 'ff_pyamt'
 			],
 			selection: [],
 			customerName: "",
@@ -406,6 +406,7 @@ class CancelContractPage extends React.Component {
 			NewAmount: this.props.NewAmount,
 			snackMessage: "",
 			openSnack: false,
+			stop_finders_fee: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().substr(0, 10),
 		};
 		// this._isMounted = false;
 		// this.commitChanges = this.commitChanges.bind(this);
@@ -1010,6 +1011,7 @@ class CancelContractPage extends React.Component {
 						<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
 						<IntegratedSorting />
 						{/* <IntegratedPaging /> */}
+						{/* <CurrencyTypeProvider for={currencyColumns} /> */}
 						<EditingState
 							// columnExtensions={editingColumnExtensions}
 							onCommitChanges={this.commitChanges} />
@@ -1105,7 +1107,7 @@ class CancelContractPage extends React.Component {
 						type="date"
 						id="EffectiveDate"
 						label="Effective Date"
-						className={classNames(classes.textField, 'ml-24')}
+						className={classNames(classes.textField, '')}
 						InputLabelProps={{ shrink: true }}
 						value={this.state.EffectiveDate || ''}
 						onChange={this.handleChange('EffectiveDate')}
@@ -1121,7 +1123,7 @@ class CancelContractPage extends React.Component {
 						type="date"
 						id="lastday_service"
 						label="Last Day of Service"
-						className={classNames(classes.textField, 'ml-24')}
+						className={classNames(classes.textField, '')}
 						value={this.state.lastday_service || ''}
 						margin="dense"
 						onChange={this.handleChange('lastday_service')}
@@ -1132,8 +1134,7 @@ class CancelContractPage extends React.Component {
 						label="Client Credit"
 						placeholder="Amount"
 						type="number"
-						multiline
-						className={classNames(classes.textField, 'ml-24 mr-24')}
+						className={classNames(classes.textField, 'ml-12')}
 						margin="dense"
 						value={this.state.client_credit_amount || ''}
 						onChange={this.handleChange('client_credit_amount')}
@@ -1153,7 +1154,7 @@ class CancelContractPage extends React.Component {
 						type="number"
 						value={this.state.enabled_cancelation_fee ? (this.state.canc_fee || '') : ''}
 						onChange={this.handleChange('canc_fee')}
-						className={classNames(classes.textField, 'mr-24')}
+						className={classNames(classes.textField, '')}
 						InputLabelProps={{ shrink: this.state.enabled_cancelation_fee }}
 						margin="dense"
 					/>
@@ -1161,9 +1162,21 @@ class CancelContractPage extends React.Component {
 						checked={this.state.continue_findersfee || false}
 						onChange={this.handleChangeChecked('continue_findersfee')}
 						style={{ marginTop: 14 }} />
-					<font
-						style={{ alignSelf: 'center', marginTop: 14 }}>Stop Finders Fee
-					</font>
+					<font style={{ alignSelf: 'center', marginTop: 14 }}>Stop Finders Fee</font>
+					{this.state.continue_findersfee &&
+						<TextField
+							type="date"
+							id="stop_finders_fee"
+							label="Stop Date"
+							className={classNames(classes.textField, "ml-12")}
+							InputLabelProps={{ shrink: true }}
+							value={this.state.stop_finders_fee}
+							onChange={this.handleChange('stop_finders_fee')}
+							margin="dense"
+							// variant="outlined"
+							style={{ minWidth: "180px" }}
+						/>
+					}
 					{/*<TextField*/}
 					{/*id="cancelfindersfee"*/}
 					{/*label="Stop Finders Fee"*/}
