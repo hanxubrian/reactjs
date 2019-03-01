@@ -602,7 +602,7 @@ class FranchieesListPage extends Component {
 		// }
 
 		rawData.Data.Region.forEach((x, index) => {
-			rows = [...rows, ...x.Franchisees]
+			rows = [...rows, ...(x.Franchisees.filter(f => f.StatusName === "Y"))]
 		})
 		this.setState({ rows })
 
