@@ -1052,10 +1052,10 @@ class ServiceAgreementPage extends React.Component {
 		if (name === "contract_lenght" && [0, 2].indexOf(value) === -1) {
 			this.setState({ cont_bill: 0 })
 			this.props.updateNewCustomerParam("cont_bill", 0)
-		} else {
-			this.setState({ [name]: value })
-			this.props.updateNewCustomerParam(name, value)
 		}
+		this.setState({ [name]: value })
+		this.props.updateNewCustomerParam(name, value)
+
 	}
 	handleChangeCustomerInfoPropsChecked = name => event => {
 		let checked = event.target.checked
@@ -1095,7 +1095,7 @@ class ServiceAgreementPage extends React.Component {
 									<InputLabel shrink htmlFor="contract_lenght">Type</InputLabel>
 									<Select
 										native
-										value={(this.state.contract_lenght === undefined || this.state.contract_lenght === null) ? '' : this.state.contract_lenght}
+										value={this.state.contract_lenght || ''}
 										onChange={this.handleChangeCustomerInfoProps('contract_lenght')}
 										inputProps={{
 											name: 'contract_lenght',

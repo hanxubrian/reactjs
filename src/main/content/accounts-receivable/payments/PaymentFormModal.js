@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import moment from "moment"
 import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
 // for store
@@ -418,7 +418,7 @@ class PaymentFormModal extends React.Component {
 
 			PaymentType: "Check",
 			ReferenceNo: "",
-			PaymentDate: new Date().toISOString().substr(0, 10),
+			PaymentDate: moment().format("MM/DD/YYYY"),//new Date().toISOString().substr(0, 10),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
