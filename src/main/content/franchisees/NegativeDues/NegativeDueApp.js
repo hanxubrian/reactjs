@@ -6,7 +6,7 @@ import { CircularProgress} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 
 //Theme
-import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
+import {FusePageCustomSidebarScroll} from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -229,7 +229,6 @@ class NegativeDueApp extends Component {
 
     render() {
         const {classes, filterState, summaryState} = this.props;
-        const { HeaderIcon} = this.state;
 
         return (
             <React.Fragment>
