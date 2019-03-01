@@ -331,6 +331,8 @@ class InvoiceForm extends Component {
         bLoadingDetail: false,
         customerStatusLabel: '',
         periods: null,
+        openCredit: false,
+        openPayment: false,
     };
 
     constructor(props) {
@@ -523,6 +525,12 @@ class InvoiceForm extends Component {
                 this.setState({openSnack1: true});
                 setTimeout(() => {this.closeComposeForm()}, 3000);
             }
+        }
+        if(this.props.credit && this.props.credit!==prevProps.credit){
+            this.setState({openCredit: true});
+        }
+        if(this.props.payment && this.props.payment!==prevProps.payment){
+            this.setState({openPayment: true});
         }
     }
 
@@ -907,6 +915,20 @@ class InvoiceForm extends Component {
         }
 
         this.setState({ openSnack1: false });
+    };
+    handleCloseCredit = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ openCredit: false });
+    };
+    handleClosePayment = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ openPayment: false });
     };
 
     focusDescriptionInputField = input => {
@@ -1384,6 +1406,36 @@ class InvoiceForm extends Component {
                             message={this.state.snackMessage1}
                         />
                     </Snackbar>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        open={this.state.openCredit}
+                        autoHideDuration={3000}
+                        onClose={this.handleCloseCredit}
+                    >
+                        <MySnackbarContentWrapper
+                            onClose={this.handleCloseCredit}
+                            variant="success"
+                            message="Saved successfully"
+                        />
+                    </Snackbar>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        open={this.state.openPayment}
+                        autoHideDuration={3000}
+                        onClose={this.handleClosePayment}
+                    >
+                        <MySnackbarContentWrapper
+                            onClose={this.handleClosePayment}
+                            variant="success"
+                            message="Saved successfully"
+                        />
+                    </Snackbar>
                     <Dialog
                         open={this.state.bCustomerNotFound}
                         onClose={()=>this.handleCloseNewCustomer()}
@@ -1485,6 +1537,8 @@ function mapStateToProps({invoices, auth, franchisees})
         bStartingSaveFormData: invoices.bStartingSaveFormData,
         franchisees: franchisees.franchiseesDB,
         all_regions: auth.login.all_regions,
+        credit: invoices.credit,
+        payment: invoices.payment,
     }
 }
 

@@ -143,7 +143,9 @@ class PayInvoiceFormModal extends React.Component {
                 payment
             );
 
+            setTimeout(()=>this.props.closePaymentInvoiceFormDialog(), 500);
             this.initializeState();
+
         }
     };
 
