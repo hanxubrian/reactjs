@@ -5,10 +5,6 @@ const axios_instance = axios.create({
     withCredentials: false
 });
 
-const userId = localStorage.getItem('jk_user_id');
-console.log('userId',userId);
-
-const BASE_API_URL='https://apifmsplus_c.jkdev.com';
 const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class menuService {
@@ -31,7 +27,6 @@ class menuService {
                             }
                         })
                 });
-              break
             case "itdept.local":
                 return new Promise((resolve, reject) => {
                     axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appid=${urlObj["itdept.local"]}&userId=${userId}`)
@@ -44,7 +39,6 @@ class menuService {
                             }
                         })
                 });
-              break
             case "franport.local":
               return new Promise((resolve, reject) => {
                   axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appid=${urlObj["franport.local"]}&userId=${userId}`)
@@ -57,7 +51,6 @@ class menuService {
                           }
                       })
               });
-            break
 			default:
 				return new Promise((resolve, reject) => {
 					axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appid=2&userId=${userId}`)
@@ -70,7 +63,6 @@ class menuService {
 							}
 						})
 				});
-				return "none"
         }
     };
 
