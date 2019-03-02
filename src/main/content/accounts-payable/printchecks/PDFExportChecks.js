@@ -59,7 +59,7 @@ const styles = theme => ({
 const CurrencyFormatter = ({value}) => (
     <NumberFormat value={value}
                   displayType={'text'}
-                  fixedDecimalScale={true}
+                  fixedDecimalScale={true}su
                   thousandSeparator
                   decimalScale={2}
                   prefix="$" renderText={value => <div className="sum-01">{value}</div>}/>
