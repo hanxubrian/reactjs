@@ -445,11 +445,6 @@ class Franchisees extends Component {
             });
             this.getFranchiseesFromStatus(this.props.franchisees, this.props.Active, nextProps.InActive);
         }
-        // if(this.props.insertPayload !== nextProps.insertPayload){
-        //     this.setState({
-        //         insertPayload: this.props.insertPayload
-        //     })
-        // }
     }
     getFranchiseesFromStatus =(rawData=this.props.franchisees, Active=this.state.Active, InActive=this.state.InActive) =>{
         let data = [];
@@ -1056,14 +1051,14 @@ class Franchisees extends Component {
                                         <IconButton
                                             className={classNames(classes.summaryPanelButton, "mr-12")}
                                             aria-label="Add an alarm"
-                                            onClick={(ev) => toggleFranchiseeMapView()}>
+                                            onClick={() => toggleFranchiseeMapView()}>
                                             <Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
                                         </IconButton>
                                     </div>
                                     <div className="flex items-center justify-end">
                                         <Hidden smDown>
                                             <Button
-                                                onClick={(ev) => toggleSummaryPanelFranchisees()}
+                                                onClick={() => toggleSummaryPanelFranchisees()}
                                                 aria-label="toggle summary panel"
                                                 className={classNames(classes.summaryPanelButton)}
                                             >
@@ -1072,7 +1067,7 @@ class Franchisees extends Component {
                                         </Hidden>
                                         <Hidden smUp>
                                             <Button
-                                                onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                                onClick={() => this.pageLayout.toggleRightSidebar()}
                                                 aria-label="toggle summary panel"
                                                 className={classNames(classes.summaryPanelButton)}
                                             >
@@ -1086,7 +1081,7 @@ class Franchisees extends Component {
                                     minRows = {0}
                                     onFetchData={this.fetchData}
                                     PaginationComponent={JanikingPagination}
-                                    getTheadThProps={(state, rowInfo, column, instance) =>{
+                                    getTheadThProps={(state, rowInfo, column) =>{
                                         let border = '1px solid rgba(255,255,255,.6)';
                                         if(column.Header==='Actions') border = 'none';
 
@@ -1102,7 +1097,7 @@ class Franchisees extends Component {
                                             },
                                         }
                                     }}
-                                    getTheadProps={(state, rowInfo, column, instance) =>{
+                                    getTheadProps={() =>{
                                         return {
                                             style:{
                                                 fontSize: 12,
@@ -1110,7 +1105,7 @@ class Franchisees extends Component {
                                             className: classes.tableTheadRow
                                         }
                                     }}
-                                    getTdProps={(state, rowInfo, column, instance) =>{
+                                    getTdProps={() =>{
                                         return {
                                             style:{
                                                 textAlign: 'center',
@@ -1120,14 +1115,13 @@ class Franchisees extends Component {
                                             },
                                         }
                                     }}
-                                    getTrProps={(state, rowInfo, column) => {
+                                    getTrProps={(state, rowInfo) => {
                                         let period = this.props.reportPeriod.split('/');
                                         return {
                                             className: "cursor-pointer",
-                                            onClick  : (ev, handleOriginal) => {
+                                            onClick  : () => {
                                                 if ( rowInfo )
                                                 {
-                                                    //console.log(rowInfo);
                                                    this.handleEditRowFranchisee(rowInfo.original.Id,this.props.regionId);
                                                 }
                                             },
