@@ -61,17 +61,36 @@ class SigninPage extends Component {
         document.removeEventListener('keydown', this.handleDocumentKeyDown);
     }
 
+    componentWillMount() {
+
+        let urlGetParam = new URLSearchParams(window.location.search);
+        let code = "";
+        let state = "";
+        if(urlGetParam.has("code") && urlGetParam.has("state")){
+            code = urlGetParam.get("code");
+            state = urlGetParam.get("state");
+
+            if( code!==""&&state!==""){
+                this.props.microsoftLoginVerify(code,state,this.state.url);
+            }
+        }
+    }
+
+
     handleAppStart = (url) => {
        this.props.loadHomeScreen(url);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("login",nextProps.login);
         if(nextProps.login.IsSuccess){
             this.props.history.push('/profile');
         }
         if(nextProps.login.bAlertShown) {
             this.setState({alertOpen: true})
+        }
+
+        if((nextProps.mfLoginVerifyResult !== this.props.mfLoginVerifyResult)&& (nextProps.mfLoginVerifyResult !==null || nextProps.mfLoginVerifyResult !== [] )){
+            console.log("LoginVerifyResult=",nextProps.mfLoginVerifyResult);
         }
     }
 
@@ -148,7 +167,7 @@ class SigninPage extends Component {
                                 hidden={this.props.app.hidden}
                                 />
 
-                {this.props.login.bLoginStart && (
+                {(this.props.login.bLoginStart || this.props.mfLoginStart) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                     </div>
@@ -277,6 +296,11 @@ class SigninPage extends Component {
                         </Card>
                     </FuseAnimate>
                 </div>
+                {this.props.mfLoginStart&& (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
             </div>
         );
     }
@@ -287,10 +311,10 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         signinUser: Actions.submitSignIn,
         closeAlertDialog: Actions.closeDialog,
-        // initializeFromLocalStorage: Actions.initializeFromLocalStorage,
         loadAccountMenu: NavigationActions.add_auth_navigation,
         loadHomeScreen: Actions.initialStart,
-        microsoftLogin: Actions.microsoftLogin
+        microsoftLogin: Actions.microsoftLogin,
+        microsoftLoginVerify: Actions.microsoftLoginVerify
     }, dispatch);
 }
 
@@ -299,7 +323,9 @@ function mapStateToProps({auth,fuse})
     return {
         login       :      auth.login,
         accountmenu :      fuse.navigation,
-        app         :      auth.app
+        app         :      auth.app,
+        mfLoginVerifyResult: auth.login.mfLoginVerifyResult,
+        mfLoginStart: auth.login.mfLoginStart
         }
 }
 

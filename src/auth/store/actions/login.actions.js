@@ -13,7 +13,7 @@ export const LOADED_MENU = 'LOADED_MENU';
 export const ADMIN_CLEAN_CACHE_FOR_UPGRADE = 'ADMIN_CLEAN_CACHE_FOR_UPGRADE';
 export const CHANGE_DEFAULT_PERIOD = '[AUTH-LOGIN] CHANGE_DEFAULT_PERIOD';
 
-export const MICROSOFT_USER_LOGIN = '[AUTH-LOGIN] MICROSOFT USER LOGIN'
+export const MICROSOFT_USER_LOGIN = '[AUTH-LOGIN] MICROSOFT USER LOGIN';
 
 export function microsoftLogin(){
     return(dispatch) =>{
@@ -24,6 +24,32 @@ export function microsoftLogin(){
                     type: MICROSOFT_USER_LOGIN,
                     payload: res
                 });
+            }
+        })();
+    }
+}
+
+export function microsoftLoginVerify(code,state,url){
+    return(dispatch) =>{
+        (async () => {
+            let res = await authService.microsoftLoginVerify(code,state ,url);
+            if(res.IsSuccess){
+                let regions = await authService.getRegions(res.Data.UserId);
+                res.Data.Regions = regions;
+                let navigations = await menuService.loadAccountMenu(url,res.Data.UserId);
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    payload: res
+                });
+                dispatch({
+                    type: ADD_AUTH_NAVIGATION,
+                    payload: navigations
+                });
+            }else {
+                dispatch({
+                    type: LOGIN_ERROR,
+                    payload: res.Message
+                })
             }
         })();
     }

@@ -23,7 +23,8 @@ export const initialState = {
     menuObj: null,
     defaultPeriod: -1,
     all_periods: null,
-    mfLoginStart: false
+    mfLoginStart: false,
+    mfLoginVerifyResult: []
 };
 
 const login = function (state = initialState, action) {
@@ -33,6 +34,7 @@ const login = function (state = initialState, action) {
             return {...state, bLoginStart: action.payload};
         case Actions.LOGIN_SUCCESS:
         {
+            console.log("res========",action.payload);
             let all_regions = action.payload.Data.Regions;
             let region = all_regions.filter(r=>r.regionid===action.payload.Data.DefaultRegionId);
             let all_periods = [];
@@ -82,7 +84,8 @@ const login = function (state = initialState, action) {
             return {
                 ...initialState,
                 defaultPeriod: defaultPeriod, all_periods: all_periods,
-                ...userState
+                ...userState,
+                mfLoginStart: false
             };
         }
         case Actions.MICROSOFT_USER_LOGIN:
