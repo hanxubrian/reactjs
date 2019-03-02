@@ -500,85 +500,6 @@ class FranchiseeDistributionPage extends React.Component {
 		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	}
 
-	updateFranchiseesToOffer_old(gridFrans = this.props.franchieesesToOffer) {
-		let newFrans = []
-		// if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
-		// 	gridFrans = gridFrans.filter(x => this.props.activeCustomer.Data.AssignedFranchisees.map(y => y.Number).indexOf(x.Number) === -1)
-		// }
-		if (Array.isArray(gridFrans)) {
-			newFrans = [...newFrans, ...gridFrans]
-		}
-		if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
-			newFrans = [...newFrans, ...this.props.activeCustomer.Data.AssignedFranchisees]
-		}
-		newFrans = _.cloneDeep(newFrans)
-		this.setState({
-			franchieesesToOffer: newFrans,
-		});
-		this.props.updateNewCustomerParam('AssignedFranchisees', newFrans)
-		//
-		//init selected grid
-		//
-		// this.props.setFranchieesesToOffer([])
-
-		// this.props.activeCustomer.Data.AssignedFranchisees && this.props.activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
-		// 	if (x.FinderFeeId) {
-		// 		this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
-		// 	}
-		// })
-	}
-
-	// updateFranchiseesToOffer(gridFrans = this.props.franchieesesToOffer) {
-	// 	let newFrans = []
-	// 	let newGridFrans = [], newGridFransNumhers = []
-	// 	let newActiveDataAssignedFranchisees = []
-	// 	if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
-	// 		//
-	// 		// existing ABSOLUTELY old franchisees
-	// 		//
-	// 		const newfs = this.props.activeCustomer.Data.AssignedFranchisees.filter(x => x.new)
-	// 		const oldfs = this.props.activeCustomer.Data.AssignedFranchisees.filter(x => !x.new)
-
-	// 		let newfNumbers = newfs.length > 0 ? newfs.map(x => x.Number) : []
-	// 		let oldfNumbers = oldfs.length > 0 ? oldfs.map(x => x.Number) : []
-
-	// 		//
-	// 		// remove old franchisses number in new franchisees
-	// 		//
-	// 		newGridFrans = gridFrans.filter(x => (newfNumbers.indexOf(x.Number) === -1 && oldfNumbers.indexOf(x.Number) === -1))
-	// 		newGridFransNumhers = newGridFrans.length > 0 ? newGridFrans.map(x => x.Number) : []
-	// 		//
-	// 		// remove deselected newly added franchisees
-	// 		//
-	// 		newActiveDataAssignedFranchisees = this.props.activeCustomer.Data.AssignedFranchisees.map(x => {
-	// 			if (x.new === false || x.new === true && gridFrans.indexOf(x.Number) === -1)
-	// 				return x
-	// 		}).filter(x => x)
-	// 	}
-
-	// 	if (Array.isArray(gridFrans)) {
-	// 		newFrans = [...newFrans, ...gridFrans]
-	// 	}
-	// 	if (Array.isArray(newActiveDataAssignedFranchisees)) {
-	// 		newFrans = [...newFrans, ...newActiveDataAssignedFranchisees]
-	// 	}
-	// 	newFrans = _.cloneDeep(newFrans)
-	// 	this.setState({
-	// 		franchieesesToOffer: newFrans,
-	// 	});
-	// 	this.props.updateNewCustomerParam('AssignedFranchisees', newFrans)
-	// 	//
-	// 	//init selected grid
-	// 	//
-	// 	// this.props.setFranchieesesToOffer([])
-
-	// 	// this.props.activeCustomer.Data.AssignedFranchisees && this.props.activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
-	// 	// 	if (x.FinderFeeId) {
-	// 	// 		this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
-	// 	// 	}
-	// 	// })
-	// }
-
 	initCustomerInfo = (activeCustomer = this.props.activeCustomer) => {
 		this.setState({
 			SA_Amount: activeCustomer.Data.cont_bill,
@@ -1159,23 +1080,23 @@ class FranchiseeDistributionPage extends React.Component {
 
 				<Typography className="mb-12 mt-12 hidden" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
 				<div className={classNames("flex flex-col w-full")}>
-					<div className={classNames("flex w-full")}>
+					<div className={classNames("flex w-full pt-12 pb-12 items-center")} style={{ background: '#3c93ec' }}>
 						{franHeaders.map((f, findex) => {
 							if (findex === 4) return false;
 							return (
-								<Typography key={findex} style={{ width: f.width + '%', textAlign: f.align }}
+								<Typography key={findex} style={{ width: f.width + '%', textAlign: f.align, color: 'white' }}
 									variant="subtitle2">{f.title}</Typography>
 							)
 						})}
 					</div>
 
-					<Divider variant="middle" className='mb-12 w-full' style={{ alignSelf: 'center' }} />
+					<Divider variant="middle" className='w-full' style={{ alignSelf: 'center', height: 2, background: '#9c9c9c' }} />
 
 					{franchieesesToOffer && franchieesesToOffer.map((x, index) => (
 						<div key={index} className={classNames("flex flex-col w-full")} style={{ alignItems: 'bottom' }}>
-							<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
-								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.Number || x.FranchiseeNumber}</Typography>
-								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name || x.FranchiseeName}</Typography>
+							<div className={classNames("flex w-full items-center pt-6 pb-6")} style={{ alignItems: 'bottom', background: 'bisque' }}>
+								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption" color="primary">{x.Number || x.FranchiseeNumber}</Typography>
+								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption" color="primary">{x.Name || x.FranchiseeName}</Typography>
 
 								<div style={{ width: franHeaders[2].width + franHeaders[3].width + '%', alignSelf: 'center' }} >
 									{this.props.customerForm.type === 'edit' &&
@@ -1346,7 +1267,7 @@ class FranchiseeDistributionPage extends React.Component {
 								</div>
 
 							</div>
-							<Divider variant="middle" className='mt-12 mb-12 w-full' style={{ alignSelf: 'center' }} />
+							<Divider variant="middle" className='mt-6 w-full' style={{ alignSelf: 'center', height: 2, background: '#9c9c9c' }} />
 						</div>
 
 					))}
