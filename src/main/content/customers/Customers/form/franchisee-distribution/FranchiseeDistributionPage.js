@@ -482,8 +482,25 @@ class FranchiseeDistributionPage extends React.Component {
 		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
 		// }
 	}
+	updateFranchiseesToOffer(selectedFrans = this.props.franchieesesToOffer) {
+		const activeCustomerFranchisees = this.props.activeCustomer.Data.AssignedFranchisees
+		// all selected numbers in grid
+		const selectedNumners = selectedFrans.map(x => x.Number)
+		// numbers to be remained
+		const remainedFranchisees = _.cloneDeep(activeCustomerFranchisees.filter(x => (x.new && selectedNumners.indexOf(x.FranchiseeNumber) > -1 || !x.new)))
+		const newExistingNumbers = remainedFranchisees.map(x => x.FranchiseeNumber)
+		// Franchisees to be added
+		const newFrans = _.cloneDeep(selectedFrans.filter(x => (newExistingNumbers.indexOf(x.Number) === -1)))
+		// add
+		const newFranchieesesToOffer = [...newFrans, ...remainedFranchisees]
 
-	updateFranchiseesToOffer(gridFrans = this.props.franchieesesToOffer) {
+		this.setState({
+			franchieesesToOffer: newFranchieesesToOffer,
+		});
+		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
+	}
+
+	updateFranchiseesToOffer_old(gridFrans = this.props.franchieesesToOffer) {
 		let newFrans = []
 		// if (Array.isArray(this.props.activeCustomer.Data.AssignedFranchisees)) {
 		// 	gridFrans = gridFrans.filter(x => this.props.activeCustomer.Data.AssignedFranchisees.map(y => y.Number).indexOf(x.Number) === -1)
