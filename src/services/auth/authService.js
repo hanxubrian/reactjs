@@ -8,7 +8,6 @@ const axios_instance = axios.create({
 });
 
 
-const BASE_API_URL='https://apifmsplus_c.jkdev.com';
 const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class authService {

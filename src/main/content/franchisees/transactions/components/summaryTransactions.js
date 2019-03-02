@@ -103,12 +103,6 @@ const CurrencyFormatter = ({value}) => (
                   prefix="$" renderText={value => <div>{value}</div>}/>
 );
 
-const CurrencyTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
 
 class SummaryTransactons extends Component {
     state = {
@@ -135,7 +129,7 @@ class SummaryTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SummaryPages[0]===null)
+        if(franchiseeReport===null || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SummaryPages[0]===null))
             return (<div/>);
 
         const {SummaryPages }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];

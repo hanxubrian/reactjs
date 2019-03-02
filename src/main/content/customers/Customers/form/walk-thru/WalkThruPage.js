@@ -347,7 +347,7 @@ class WalkThruPage extends React.Component {
 						</div>
 
 						<div xs={12} sm={12} md={12} className="flex flex-row">
-							<div xs={12} sm={12} md={12} className="flex flex-col" style={{ justifyContent: 'space-evenly' }}>
+							<div xs={12} sm={12} md={12} className="flex flex-col w-full" style={{ justifyContent: 'space-evenly' }}>
 								<FormControlLabel
 									control={<Switch checked={this.state.SignedMaintenaceAgreement} onChange={this.handleChange('SignedMaintenaceAgreement')} value={this.state.SignedMaintenaceAgreement} />}
 									label="1. Signed Maintenace Agreement?"
@@ -375,7 +375,7 @@ class WalkThruPage extends React.Component {
 								/>
 							</div>
 
-							<div xs={12} sm={12} md={12} className="flex flex-col" style={{ justifyContent: 'space-evenly' }}>
+							<div xs={12} sm={12} md={12} className="flex flex-col w-full" style={{ justifyContent: 'space-evenly' }}>
 								<TextField
 									id="SignatureAE"
 									label="A.E."
