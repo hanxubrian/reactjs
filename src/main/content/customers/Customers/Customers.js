@@ -946,6 +946,22 @@ assign at least one franchisee.</DialogContentText>
 									/>
 								</Snackbar>
 
+								<Snackbar
+									anchorOrigin={{
+										vertical: this.props.snack.vertical,
+										horizontal: this.props.snack.horizontal,
+									}}
+									open={this.props.snack.open}
+									autoHideDuration={this.props.snack.duration}
+									onClose={this.props.closeSnackbar}
+								>
+									<MySnackbarContentWrapper
+										onClose={this.props.closeSnackbar}
+										variant={this.props.snack.icon}
+										message={this.props.snack.message}
+									/>
+								</Snackbar>
+
 							</div>
 						</div>
 					}
@@ -1049,6 +1065,9 @@ function mapDispatchToProps(dispatch) {
 		createCustomer: Actions.createCustomer,
 		updateCustomer: Actions.updateCustomer,
 		updateCustomersParameter: Actions.updateCustomersParameter,
+
+		openSnackbar: Actions.openSnackbar,
+		closeSnackbar: Actions.closeSnackbar,
 	}, dispatch);
 }
 
@@ -1079,6 +1098,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bFindersFeesStart: customers.bFindersFeesStart,
 
 		franchieesesToOffer: customers.franchieesesToOffer,
+
+		snack: customers.snack,
 	}
 }
 

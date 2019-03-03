@@ -104,6 +104,11 @@ export const SET_TRANSFER_FRANCHISEE_STATE = "[CUSTOMERS APP] SET_TRANSFER_FRANC
 export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
 export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
 
+export const SET_FRANCHISEE_TO_TRANSFER = "[CUSTOMERS APP] SET_FRANCHISEE_TO_TRANSFER";
+
+export const OPEN_SNACK_BAR = "[CUSTOMERS APP] OPEN_SNACK_BAR";
+export const CLOSE_SNACK_BAR = "[CUSTOMERS APP] CLOSE_SNACK_BAR";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -798,5 +803,30 @@ export function setTransferFranchiseeState(f) {
 	return {
 		type: SET_TRANSFER_FRANCHISEE_STATE,
 		payload: f
+	}
+}
+export function setFranchiseeToTransfer(key, value) {
+	return {
+		type: SET_FRANCHISEE_TO_TRANSFER,
+		payload: { key, value }
+	}
+}
+export function openSnackbar(message = "", icon = "error", duration = 3000, open = true, vertical = "bottom", horizontal = 'center') {
+	const param = {
+		open,
+		icon,
+		message,
+		vertical,
+		horizontal,
+		duration,
+	}
+	return {
+		type: OPEN_SNACK_BAR,
+		payload: param
+	}
+}
+export function closeSnackbar() {
+	return {
+		type: CLOSE_SNACK_BAR,
 	}
 }

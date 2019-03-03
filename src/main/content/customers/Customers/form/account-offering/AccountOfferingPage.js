@@ -777,13 +777,7 @@ class AccountOfferingPage extends Component {
 		return (
 			<div className={classNames("flex flex-col flex-1")}>
 
-				{this.props.bTransferFranchiseeFtate &&
-					<div className="flex items-center" style={{ background: 'lemonchiffon', border: '2px #ffb6b6 solid', padding: 6 }}>
-						<Icon style={{ color: '#c56161' }}>warning</Icon>
-						<Typography variant="h6" style={{ color: '#c56161' }}>Transfering franchisee...</Typography>
-					</div>
-				}
-				{!this.props.bTransferFranchiseeFtate && <Stepper activeStep={step} style={{ padding: 0, background: 'unset' }} className='mb-12'>
+				<Stepper activeStep={step} style={{ padding: 0, background: 'unset' }} className='mb-12'>
 					{['Offered Franchisees', 'Assign Franchisees', 'Offering Account', 'Revenue Distribution', 'Finders Fees'].map((label, index) => {
 						const props = {};
 						const labelProps = {};
@@ -803,24 +797,15 @@ class AccountOfferingPage extends Component {
 						);
 					})}
 				</Stepper>
-				}
 
-
-				{
-					!this.props.bTransferFranchiseeFtate && step === 0 &&
+				{step === 0 &&
 					<FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
-				{
-					(this.props.bTransferFranchiseeFtate && step === 0 ||
-						!this.props.bTransferFranchiseeFtate && step === 1) &&
+				{step === 1 &&
 					< FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
-				{
-					(this.props.bTransferFranchiseeFtate && step === 1 ||
-						!this.props.bTransferFranchiseeFtate && step === 2) &&
+				{step === 2 &&
 					<FranchieesSubmitOfferPage setStep={this.setStep} setActiveRow={this.setActiveRow} activeRow={activeRow} />
 				}
-
-				{
-					(step === 3) &&
+				{step === 3 &&
 					<FranchiseeDistributionPage setStep={this.setStep} />
 				}
 

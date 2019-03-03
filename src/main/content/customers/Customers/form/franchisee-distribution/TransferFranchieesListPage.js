@@ -384,7 +384,7 @@ const MapWithAMarkerClusterer2 = compose(
 );
 
 
-class FranchieesListPage extends Component {
+class TransferFranchieesListPage extends Component {
 
 
 	constructor(props) {
@@ -512,6 +512,7 @@ class FranchieesListPage extends Component {
 	}
 
 	changeSelection = selection => {
+		selection = selection.length > 0 ? [selection[selection.length - 1]] : []
 		this.setState({ selection });
 
 		const { rows } = this.state
@@ -519,27 +520,19 @@ class FranchieesListPage extends Component {
 
 		console.log(selection, franchieesesToOffer)
 
-		// "FranchiseeNumber": "sample string 1",
-		// "FranchiseeName": "sample string 2",
-		// "Id": "sample string 3",
-		// "FinderFee":
-		// "Status": "sample string 4",
-		// "AssignedDate": "sample string 5",
-		// "MonthlyBilling": []
-		// "CreatedById": 6
-		let newFranchieesesToOffer = _.cloneDeep(franchieesesToOffer)
-		newFranchieesesToOffer.forEach(x => {
-			x.FranchiseeNumber = x.Number
-			x.FranchiseeName = x.Name
-			// Id= ""
-			x.Status = "Assigned"
-			x.AssignedDate = moment().format('YYYY-MM-DD')
-			// CreatedById= 0
-			x.MonthlyBilling = []
-			x.FinderFee = {}
-			x.new = true // to indentify newly added
-		})
-		this.props.setFranchieesesToOffer(newFranchieesesToOffer)
+		// let newFranchieesesToOffer = _.cloneDeep(franchieesesToOffer)
+		// newFranchieesesToOffer.forEach(x => {
+		// 	x.FranchiseeNumber = x.Number
+		// 	x.FranchiseeName = x.Name
+		// 	// Id= ""
+		// 	x.Status = "Assigned"
+		// 	x.AssignedDate = moment().format('YYYY-MM-DD')
+		// 	// CreatedById= 0
+		// 	x.MonthlyBilling = []
+		// 	x.FinderFee = {}
+		// 	x.new = true // to indentify newly added
+		// })
+		// this.props.setFranchieesesToOffer(newFranchieesesToOffer)
 	}
 
 	commitChanges = ({ added, changed, deleted }) => {
@@ -612,14 +605,12 @@ class FranchieesListPage extends Component {
 		//
 		// update selections per assignedFranchisees
 		//
-		const { franchieesesToOffer } = this.props
+		const { franchiseeToTransfer } = this.props
 
-		if (rows && franchieesesToOffer && franchieesesToOffer.length > 0) {
-			const fNumbers = franchieesesToOffer.map(x => x.Number)
-			console.log('this.state.rows', rows)
-			console.log('fNumbers', fNumbers)
-			console.log('franchieesesToOffer', rows.filter(x => fNumbers.indexOf(x.Number) > -1))
-			const selectedRows = rows.filter(x => fNumbers.indexOf(x.Number) > -1)
+		if (rows && franchiseeToTransfer.new) {
+			const fNumber = franchiseeToTransfer.new.Number
+			console.log('franchieesesToOffer', rows.filter(x => x.Number === fNumber))
+			const selectedRows = rows.filter(x => x.Number === fNumber)
 			this.setState({
 				selection: selectedRows.map(x => rows.indexOf(x))
 			})
@@ -732,6 +723,29 @@ class FranchieesListPage extends Component {
 		// this.props.showFranchieesAssignModalForm(true)
 		this.props.setStep(3)
 	}
+	gotoTransferSummary = () => {
+		const { selection } = this.state
+		if (selection.length < 1) {
+			this.props.openSnackbar("Please select a franchisee to tranfer", "error")
+			return
+		}
+
+		const fId = selection[selection.length - 1]
+		const newFranchisee = this.state.rows[fId]
+		const existFranchisees = this.props.activeCustomer.Data.AssignedFranchisees.filter(x => x.FranchiseeNumber === newFranchisee.Number)
+		if (existFranchisees && existFranchisees.length > 0) {
+			this.props.openSnackbar("Already assigned franchisee", "error")
+			return
+		}
+
+		this.props.setFranchiseeToTransfer('new', newFranchisee)
+		this.props.handleStep(3)
+	}
+	cancelTransfer = () => {
+		this.props.setTransferFranchiseeState(false)
+		// this.props.showFranchieesAssignModalForm(true)
+		this.props.handleStep(0)
+	}
 
 	render() {
 		const {
@@ -759,7 +773,7 @@ class FranchieesListPage extends Component {
 
 		return (
 			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-				{/* {this.props.bTransferFranchiseeFtate &&
+				{this.props.bTransferFranchiseeFtate &&
 					<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
 						<TextField
 							type="date"
@@ -798,12 +812,12 @@ class FranchieesListPage extends Component {
 						// style={{ width: '40%' }}
 						/>
 					</div>
-				} */}
+				}
 
 				<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
-					<Typography variant="h6">Active Franchisees</Typography>
+					<Typography variant="h6">Active Franchisees (To Transfer)</Typography>
 					<div>
-						<Tooltip title="Location Filter">
+						{/* <Tooltip title="Location Filter">
 							<IconButton onClick={this.toggleSideBar}><Icon>menu</Icon></IconButton>
 						</Tooltip>
 
@@ -811,21 +825,31 @@ class FranchieesListPage extends Component {
 							<IconButton className={classNames(classes.button, "mr-12")}
 								onClick={this.toggleMapView}
 							>
-								{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
 								<Icon>location_on</Icon>
 							</IconButton>
-						</Tooltip>
+						</Tooltip> */}
 
 						{!this.props.bTransferFranchiseeFtate &&
 							<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 						}
 
-						<Button
+						{/* <Button
 							variant="contained"
 							color="primary"
 							className={classNames(classes.button, "pr-24 pl-24")}
 							onClick={this.onClickAssign}
-						> <Icon fontSize="small">check</Icon>Assign </Button>
+						> <Icon fontSize="small">check</Icon>Assign </Button> */}
+						<Button
+							variant="contained"
+							className={classNames(classes.button, "pr-24 pl-24 mr-12")}
+							onClick={this.cancelTransfer}
+						> <Icon fontSize="small">close</Icon>Cancel Transfer </Button>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classNames(classes.button, "pr-24 pl-24")}
+							onClick={this.gotoTransferSummary}
+						> <Icon fontSize="small">keyboard_arrow_right</Icon>Next </Button>
 					</div>
 				</div>
 
@@ -964,14 +988,14 @@ class FranchieesListPage extends Component {
 								<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
 								<IntegratedSorting />
 								<IntegratedPaging />
-								<EditingState onCommitChanges={this.commitChanges} />
+								{/* <EditingState onCommitChanges={this.commitChanges} /> */}
 								<VirtualTable height="auto" />
 
 								<TableColumnResizing defaultColumnWidths={columns} />
 
-								<TableSelection showSelectAll selectByRowClick highlightRow />
+								<TableSelection selectByRowClick highlightRow />
 								<TableHeaderRow showSortingControls />
-								<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent} />
+								{/* <TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent} /> */}
 								<Toolbar rootComponent={this.ToolbarRoot} />
 								<SearchPanel />
 								<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
@@ -1152,6 +1176,10 @@ function mapDispatchToProps(dispatch) {
 
 		showFranchieesAssignModalForm: Actions.showFranchieesAssignModalForm,
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
+		setTransferFranchiseeState: Actions.setTransferFranchiseeState,
+
+		setFranchiseeToTransfer: Actions.setFranchiseeToTransfer,
+		openSnackbar: Actions.openSnackbar,
 	}, dispatch);
 }
 
@@ -1170,7 +1198,11 @@ function mapStateToProps({ customers, franchisees, auth }) {
 
 		franchieesesToOffer: customers.franchieesesToOffer,
 		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
+
+		snack: customers.snack,
+		activeCustomer: customers.activeCustomer,
+		franchiseeToTransfer: customers.franchiseeToTransfer,
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchieesListPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransferFranchieesListPage)));

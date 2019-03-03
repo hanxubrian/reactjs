@@ -77,7 +77,6 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 import NewFindersFeePage from '../finders-fees/NewFindersFeePage'
 import TransferFranchieesListPage from './TransferFranchieesListPage';
-import TransferSummaryPage from './TransferSummaryPage';
 const styles = theme => ({
 	root: {
 		'& .react-grid-Cell': {
@@ -211,7 +210,7 @@ MySnackbarContent.propTypes = {
 const MySnackbarContentWrapper = withStyles(stylesSnackbar)(MySnackbarContent);
 
 
-class FranchiseeDistributionPage extends React.Component {
+class TransferSummaryPage extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -961,7 +960,6 @@ class FranchiseeDistributionPage extends React.Component {
 		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	}
 	transferFranchisee = (fId) => {
-		this.props.setFranchiseeToTransfer('old', this.props.activeCustomer.Data.AssignedFranchisees[fId])
 		this.props.setTransferFranchiseeState(true)
 		// if (this.props.activeStep === 1) {
 		// 	this.props.setStep(0)
@@ -972,6 +970,13 @@ class FranchiseeDistributionPage extends React.Component {
 	}
 	transferFranchiseeComplete = (fId) => {
 		this.props.setTransferFranchiseeState(false)
+
+		this.props.setFranchiseeToTransfer('old', null)
+		this.props.setFranchiseeToTransfer('new', null)
+
+		this.props.handleStep(0)
+
+		this.props.openSnackbar("Transfered successfully!", "success")
 		if (this.props.activeStep === 1) {
 
 		} else {
@@ -1015,6 +1020,14 @@ class FranchiseeDistributionPage extends React.Component {
 	getMonthlyBillingTotal(franchisee) {
 		return franchisee.MonthlyBilling && franchisee.MonthlyBilling.length > 0 && franchisee.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0
 	}
+	cancelTransfer = () => {
+		this.props.setTransferFranchiseeState(false)
+		// this.props.showFranchieesAssignModalForm(true)
+		this.props.handleStep(0)
+	}
+	backToTransferFranchiseeList = () => {
+		this.props.handleStep(2)
+	}
 	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
 
@@ -1044,26 +1057,41 @@ class FranchiseeDistributionPage extends React.Component {
 			{ width: 9, title: 'Action', align: 'center', field: '' },
 		];
 
+		const oldFranchisee = this.props.franchiseeToTransfer.old
+		const newFranchisee = this.props.franchiseeToTransfer.new
+
+		const oldFranchiseeSumAmount = this.getMonthlyBillingTotal(oldFranchisee)
 		return (
 			<>
 				<div className={classNames("flex mt-12 justify-between")}>
-					<Typography variant="h6">Franchisee Distribution</Typography>
+					<Typography variant="h6">Transfer Franchisee Distribution</Typography>
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						{this.props.activeStep === 1 &&
-							<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						}
+						<Button
+							variant="contained"
+							onClick={this.transferFranchiseeComplete}
+							color="primary"
+							className={classNames("pl-24 pr-24")}>
+							Complete Transfer</Button>
 
-						{/* {this.props.bTransferFranchiseeFtate && this.props.activeStep === 2 &&
-							<Button variant="contained" onClick={this.transferFranchiseeComplete} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Complete Transfer</Button>
-						} */}
+						<Button
+							variant="contained"
+							className={classNames(classes.button, "pr-24 pl-24 ml-24")}
+							onClick={this.backToTransferFranchiseeList}
+						> <Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
+						<Button
+							variant="contained"
+							className={classNames(classes.button, "pr-24 pl-24 ml-6")}
+							onClick={this.cancelTransfer}
+						> <Icon fontSize="small">close</Icon>Cancel Transfer </Button>
+
 
 						{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
 					</div>
 				</div>
 
 				<div className={classNames("flex mt-12 justify-between ")}>
-					<TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
+					<TextField margin="dense" id="Amount" label="Amount"
 						InputLabelProps={{ shrink: true }}
 						style={{ minWidth: 220 }}
 						className={classNames(classes.textField, "pr-6 mb-24")}
@@ -1077,7 +1105,7 @@ class FranchiseeDistributionPage extends React.Component {
 						}}
 						// value={this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ""}
 						// onChange={this.handleChange("NewAmount")}
-						value={this.props.activeCustomer.Data.cont_bill}
+						value={oldFranchiseeSumAmount}
 					/>
 
 					{/* <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -1086,199 +1114,22 @@ class FranchiseeDistributionPage extends React.Component {
 					</div> */}
 				</div>
 
-				<Typography className="mb-12 mt-12 hidden" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
+				{/* <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography> */}
 				<div className={classNames("flex flex-col w-full")}>
-					<div className={classNames("flex w-full pt-12 pb-12 items-center")} style={{ background: '#3c93ec' }}>
-						{franHeaders.map((f, findex) => {
-							if (findex === 4) return false;
-							return (
-								<Typography key={findex} style={{ width: f.width + '%', textAlign: f.align, color: 'white' }}
-									variant="subtitle2">{f.title}</Typography>
-							)
-						})}
+					<Typography style={{ width: '10%' }} variant="caption">(Original)</Typography>
+					<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
+
+						<Typography style={{ width: '10%', alignSelf: 'center' }} variant="caption">{oldFranchisee.FranchiseeNumber}</Typography>
+						<Typography style={{ width: '30%', alignSelf: 'center' }} variant="subtitle2"><strong>{oldFranchisee.FranchiseeName}</strong></Typography>
 					</div>
 
-					<Divider variant="middle" className='w-full' style={{ alignSelf: 'center', height: 2 }} />
+					<Divider variant="middle" className='m-6 w-full' style={{ alignSelf: 'center', height: 2 }} />
 
-					{franchieesesToOffer && franchieesesToOffer.map((x, index) => (
-						<div key={index} className={classNames("flex flex-col w-full")} style={{ alignItems: 'bottom' }}>
-							<div className={classNames("flex w-full items-center pt-6 pb-6")} style={{ alignItems: 'bottom', background: 'rgba(175, 175, 175, 0.2)' }}>
-								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption"><strong>{x.Number || x.FranchiseeNumber}</strong></Typography>
-								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption"><strong>{x.Name || x.FranchiseeName}</strong></Typography>
-
-								<div style={{ width: franHeaders[2].width + franHeaders[3].width + '%', alignSelf: 'center' }} >
-									{this.props.customerForm.type === 'edit' && this.props.activeStep === 2 &&
-										<Button variant="contained" onClick={() => this.transferFranchisee(index)}
-											color="primary" className={classNames('')}>
-											<Icon fontSize="small">swap_horiz</Icon>&nbsp;
-											Transfer
-										</Button>
-									}
-								</div>
-								<div style={{ width: franHeaders[4].width + '%', alignSelf: 'center' }} />
-								<div style={{ width: franHeaders[5].width + '%', alignSelf: 'center' }} />
-								<div style={{ width: franHeaders[6].width + '%', alignSelf: 'center' }} />
-								<div style={{ width: franHeaders[7].width + '%', alignSelf: 'center' }} />
-
-								<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
-									<Tooltip title="Add monthly billing" aria-label="Add monthly billing">
-										<Fab aria-label="add"
-											color="primary" className={classNames(classes.ffBtn, "")}
-											onClick={() => this.addMonthlyBilling(index)} >
-											<Icon>add</Icon>
-										</Fab>
-									</Tooltip>
-
-									{/* <Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
-										<Fab aria-label="remove"
-											onClick={() => this.removeFranchisee(index)}
-											color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
-											<Icon>close</Icon>
-										</Fab>
-									</Tooltip> */}
-								</div>
-							</div>
-							{
-								x.MonthlyBilling && x.MonthlyBilling.map((m, mIndex) => (
-									<div key={mIndex} className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
-
-										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">-</Typography>
-										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">-</Typography>
-
-										<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
-											name="EscrowBilling"
-											checked={m.EscrowBilling}
-											onChange={this.handleMonthlyBilling(index, mIndex, 'EscrowBilling')}
-										// onBlur={() => this.handleUpdateAssignedFranchisees()}
-										/>
-
-										<FormControl className={classNames(classes.formControl, 'pl-6')} style={{ width: franHeaders[3].width + '%', marginTop: 2 }}>
-											{/* <InputLabel shrink htmlFor="BillingFrequency">Billing Type</InputLabel> */}
-											<Select
-												native
-												value={m.BillingFrequency || ''}
-												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingFrequency')}
-												inputProps={{
-													name: 'BillingFrequency',
-													id: 'BillingFrequency',
-												}}
-											>
-												{[
-													{ label: 'Variable', value: 'V' },
-													{ label: 'Regular', value: 'R' },
-												].map((x, index) => (<option key={index} value={x.value}>{x.label}</option>))}
-											</Select>
-										</FormControl>
-
-										{/* <FormControl className={classNames(classes.formControl, 'pl-6')} style={{ width: franHeaders[4].width + '%', marginTop: 2 }}>
-											<Select
-												native
-												value={this.state.BillingTypeId || ''}
-												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeId')}
-												inputProps={{
-													name: 'BillingTypeId',
-													id: 'BillingTypeId',
-												}}
-											>
-												{franchiseeBillingTypes.map((x, index) => (<option key={index} value={x._id}>{x.Name}</option>))}
-											</Select>
-										</FormControl> */}
-
-										<FormControl className={classNames(classes.formControl, 'pl-6')} style={{ width: franHeaders[5].width + '%', marginTop: 2 }}>
-											{/* <InputLabel shrink htmlFor="BillingTypeServiceId">Service Type</InputLabel> */}
-											<Select
-												native
-												value={m.BillingTypeServiceId || ''}
-												onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeServiceId')}
-												inputProps={{
-													name: 'BillingTypeServiceId',
-													id: 'BillingTypeServiceId',
-												}}
-											>
-												{franchiseeServiceTypes.map((x, index) => (<option key={index} value={x._id}>{x.Name}</option>))}
-											</Select>
-										</FormControl>
-
-										<TextField style={{ width: franHeaders[6].width + '%' }}
-											margin="dense"
-											className="pl-6"
-											value={m.Description}
-											onChange={this.handleMonthlyBilling(index, mIndex, 'Description')}
-											InputProps={{
-												classes: {
-													input: classes.descriptionText,
-												},
-											}}
-										/>
-										<TextField style={{ width: franHeaders[7].width + '%' }}
-											// type='number'
-											InputProps={{
-												readOnly: false,
-												classes: {
-													input: classNames(classes.descriptionText, 'text-right')
-												},
-												startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-												inputComponent: NumberFormatCustomNoPrefix
-											}}
-											margin="dense"
-											className="pl-6"
-											value={m.MonthlyBilling}
-											onChange={this.handleMonthlyBilling(index, mIndex, 'MonthlyBilling')}
-										/>
-
-										<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
-											{/* <Tooltip title="Remove this franchisee" aria-label="Remove Franchisee"> */}
-											<Fab aria-label="remove"
-												onClick={() => this.removeFranchiseeMonthly(index, mIndex)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
-												<Icon>remove</Icon>
-											</Fab>
-											{/* </Tooltip> */}
-										</div>
-									</div>
-								))
-							}
-
-							< div className='flex mt-12 items-center' >
-								<Typography variant='body2' style={{ width: '15%' }}><strong>Finders Fee:</strong></Typography>
-								<div style={{ width: (100 - 15 - franHeaders[8].width - franHeaders[7].width) + '%' }}>
-									{
-										x.FinderFee && <>
-											<span className='pr-12'>Method: {this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact) ? this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact).name : ''}</span>
-											{/* <span className='pr-12'>Desc: {x.FinderFee.ff_desc}</span> */}
-											<span className='pr-12'>PayBill: {x.FinderFee.ff_pybill}</span>
-											<span className='pr-12'># Of Payments: {x.FinderFee.ff_pybill}</span>
-											<span className='pr-12'>Total FF: {x.FinderFee.ff_tot}</span>
-											{/* <span className='pr-12'>Balance: {x.FinderFee.ff_balance}</span> */}
-											<span className='pr-12'>Starts on: {}</span>
-										</>
-									}
-								</div>
-								<TextField style={{ width: franHeaders[7].width + '%' }}
-									// type='number'
-									InputProps={{
-										readOnly: true,
-										classes: {
-											input: classNames(classes.descriptionText, 'text-right')
-										},
-										startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-										inputComponent: NumberFormatCustomNoPrefix
-									}}
-									margin="dense"
-									className="pl-6"
-									value={this.getMonthlyBillingTotal(x)}
-								/>
-								<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
-									<Button variant="contained" onClick={() => this.gotoFindersFee(x, this.getMonthlyBillingTotal(x))}
-										color="primary" className={classNames('')}>
-										<Icon fontSize="small">queue</Icon>
-									</Button>
-								</div>
-
-							</div>
-							<Divider variant="middle" className='mt-6 w-full' style={{ alignSelf: 'center', height: 2 }} />
-						</div>
-
-					))}
+					<Typography style={{ width: '10%' }} variant="caption">(New)</Typography>
+					<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
+						<Typography style={{ width: '10%', alignSelf: 'center' }} variant="caption">{newFranchisee.Number}</Typography>
+						<Typography style={{ width: '30%', alignSelf: 'center' }} variant="subtitle2"><strong>{newFranchisee.Name}</strong></Typography>
+					</div>
 				</div>
 			</>
 		)
@@ -1333,13 +1184,17 @@ class FranchiseeDistributionPage extends React.Component {
 			<div className="flex flex-col flex-1">
 				<div className={classNames("flex flex-col")}>
 					<div className={classNames('items-center')}>
+
+						<div className="flex items-center" style={{ background: 'lemonchiffon', border: '2px #ffb6b6 solid', padding: 6 }}>
+							<Icon style={{ color: '#c56161' }}>warning</Icon>
+							<Typography variant="h6" style={{ color: '#c56161' }}>Transfering franchisee...</Typography>
+						</div>
+
 						{step === 0 && this.getFranchiseeAssignmentForm()}
 						{step === 1 && this.getFindersFeesForm()}
-						{step === 3 && <TransferSummaryPage handleStep={this.handleStep} />}
 					</div>
 					{step === 2 && <TransferFranchieesListPage handleStep={this.handleStep} />}
 					{/* setStep={this.setStep} setActiveRow={this.setActiveRow} */}
-
 				</div>
 			</div>
 		)
@@ -1372,6 +1227,9 @@ function mapDispatchToProps(dispatch) {
 
 		setTransferFranchiseeState: Actions.setTransferFranchiseeState,
 		setFranchiseeToTransfer: Actions.setFranchiseeToTransfer,
+
+		openSnackbar: Actions.openSnackbar,
+		closeSnackbar: Actions.closeSnackbar,
 
 	}, dispatch);
 }
@@ -1416,7 +1274,10 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 		findersFeeTypes: customers.findersFeeTypes,
 
+		franchiseeToTransfer: customers.franchiseeToTransfer,
+
+		snack: customers.snack,
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseeDistributionPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransferSummaryPage)));

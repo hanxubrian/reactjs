@@ -318,6 +318,18 @@ const initialState = {
 	bUpdateCustomerStart: false,
 
 	bTransferFranchiseeFtate: false,
+	franchiseeToTransfer: {
+		new: null,
+		old: null,
+	},
+	snack: {
+		open: false,
+		icon: "error",
+		message: "",
+		vertical: "bottom",
+		horizontal: 'center',
+		duration: 3000,
+	}
 };
 
 
@@ -988,6 +1000,30 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
 				bTransferFranchiseeFtate: action.payload
+			};
+		case Actions.SET_FRANCHISEE_TO_TRANSFER:
+			return {
+				...state,
+				franchiseeToTransfer: {
+					...state.franchiseeToTransfer,
+					[action.payload.key]: action.payload.value
+				}
+			};
+		case Actions.OPEN_SNACK_BAR:
+			return {
+				...state,
+				snack: {
+					...state.snack,
+					...action.payload,
+				}
+			};
+		case Actions.CLOSE_SNACK_BAR:
+			return {
+				...state,
+				snack: {
+					...state.snack,
+					open: false,
+				}
 			};
 		default:
 			{
