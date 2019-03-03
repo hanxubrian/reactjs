@@ -554,11 +554,9 @@ class InvoiceLineTable extends React.Component {
         }
 
         if(this.props.fn!==null && prevProps.fn!==this.props.fn){
-            let selectedFranchiess =[];
             let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
-            this.props.fn.forEach(f=>{
-                selectedFranchiess = _.filter(franchisees, franchisee=>f.Number===franchisee.Number && f.Name===franchisee.Name);
-            });
+            let selectedFranchiess = _.filter(franchisees, franchisee=>this.props.fn.map(x=>x.Number).indexOf(franchisee.Number)>-1);
+
 
             //in case of selection any customer from auto suggestion
             if(selectedFranchiess.length>0) {
@@ -566,13 +564,12 @@ class InvoiceLineTable extends React.Component {
 
                 let f_row = data[0];
 
-                let findex = 0;
+                let fIndex = 0;
                 selectedFranchiess.forEach(sf=>{
-                    let fline = createFranchisee(0, findex, sf.Number, sf.Name, sf.DistributionAmount);
-                    // f_row.franchisees[0] = [...f_row.franchisees, fline];
-                    f_row.franchisees[0] = fline;
-                    this.setState({["nameValue"+findex]: sf.Name});
-                    findex++;
+                    let fLine = createFranchisee(0, fIndex, sf.Number, sf.Name, sf.DistributionAmount);
+                    f_row.franchisees[fIndex] = fLine;
+                    this.setState({["nameValue"+fIndex]: sf.Name});
+                    fIndex++;
                 });
             }
         }
@@ -621,8 +618,7 @@ class InvoiceLineTable extends React.Component {
         let suggestions =  franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
 
 
-        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName==='Y');
-        return suggestionsExcludedInActive;
+       return suggestions.filter(c=>c.StatusName==='Y');
     };
 
     getSuggestionfName = (suggestion) => {
