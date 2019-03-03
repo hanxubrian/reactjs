@@ -15,7 +15,7 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import classNames from 'classnames';
 
-import AgingReportList from './arLogDetail';
+import AgingReportList from './agingReportList';
 import FilterPanel from "./agingReportFilterPanel";
 
 const headerHeight = 80;
