@@ -238,7 +238,7 @@ class SummaryTransactons extends Component {
                 </table>
 
                 <h2 className="pt-16" >FRANCHISEE DEDUCTIONS:</h2>
-                {summaryRoyalty && (
+                {summaryRoyalty && summaryRoyalty.BaseRoyaltyAmount>0 && summaryRoyalty.MinRoyaltyAmount (
                     <table className="">
                         <thead>
                         <tr>
