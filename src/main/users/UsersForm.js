@@ -109,7 +109,7 @@ TextMaskCustom.propTypes = {
 let franchiseeSuggestions = [];
 let customerSuggestions = [];
 let suggestions = [];
-  
+
 
 // Define render input component function
 function renderInputComponent(inputProps) {
@@ -128,8 +128,6 @@ function renderInputComponent(inputProps) {
                 classes: {
                     input: classes.input,
                 },
-            }}
-            inputProps={{
                 autoComplete: 'off',
             }}
             {...other}
@@ -140,7 +138,7 @@ function renderInputComponent(inputProps) {
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     const matches = match(suggestion.label, query);
     const parts = parse(suggestion.label, matches);
-  
+
     return (
       <MenuItem selected={isHighlighted} component="div">
         <div>
@@ -164,17 +162,17 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
-  
+
     return inputLength === 0
       ? []
       : suggestions.filter(suggestion => {
           const keep =
             count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
-  
+
           if (keep) {
             count += 1;
           }
-  
+
           return keep;
         });
   }
@@ -182,7 +180,7 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
   function getSuggestionValue(suggestion) {
     return suggestion.label;
   }
-  
+
 
 let GroupList = [];
 let RoleList = [];
@@ -199,11 +197,6 @@ const MenuProps = {
 };
 
 class UsersForm extends React.Component {
-
-    constructor(props) {
-        super(props);       
-    }
-
     state = {
         FirstName: '',
         LastName : '',
@@ -278,7 +271,7 @@ class UsersForm extends React.Component {
         this.props.getUserFormUserTypeList();
         this.props.getUserStateList();
         this.props.getUserDepartmentList(this.props.regionId);
-        this.props.getFranchisees(this.props.regionId);        
+        this.props.getFranchisees(this.props.regionId);
         if(this.props.payload.UserId !== this.props.userId){
             this.updateUserFormPayload("UserId", this.props.userId);
         }
@@ -288,7 +281,7 @@ class UsersForm extends React.Component {
         }
 
         if(!this.props.bNewForm && this.props.userDetail.details !== null){
-            this.setState({ 
+            this.setState({
                 payload: {
                   ...this.state.payload,
                   ...this.props.userDetail.details
@@ -300,7 +293,7 @@ class UsersForm extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(!this.props.bNewForm && this.props.userRoleList.length>0 && (this.props.userRoleList!==prevProps.userRoleList) && (this.props.userDetail!==null && this.props.userDetail.details)){
             RoleList = [];
-            this.props.userDetail.details.Roles.map(x=>{
+            this.props.userDetail.details.Roles.forEach(x=>{
                 RoleList.push(
                     x.RoleName
                 );
@@ -309,7 +302,7 @@ class UsersForm extends React.Component {
             this.setState({Roles: RoleList});
 
             let regions = [];
-            this.props.userDetail.details.Regions.map(x=>{
+            this.props.userDetail.details.Regions.forEach(x=>{
                 regions.push(
                     x.Name
                 );
@@ -320,8 +313,8 @@ class UsersForm extends React.Component {
 
         if(!this.props.bNewForm && this.props.userGroupList.length>0 && (this.props.userGroupList!==prevProps.userGroupList) && (this.props.userDetail!==null && this.props.userDetail.details)){
             GroupList = [];
-            this.props.userDetail.details.Groups.map(x=>{
-                this.props.userGroupList.map(y=>{
+            this.props.userDetail.details.Groups.forEach(x=>{
+                this.props.userGroupList.forEach(y=>{
                     if(y.group_id === x ){
                         GroupList.push(y.name);
                     }
@@ -335,7 +328,7 @@ class UsersForm extends React.Component {
 
     componentDidMount(){
         if(this.props.regions !== null){
-            this.props.regions.map(x=>{
+            this.props.regions.forEach(x=>{
                 this.state.MultiRegion.push(x.regionname);
                 this.state.DefaultRegions.push({
                     "RegionId": x.regionid,
@@ -347,12 +340,12 @@ class UsersForm extends React.Component {
         }
         if(!this.props.bNewForm && this.props.userDetail!==null && this.props.userDetail.details){
             let details = _.cloneDeep(this.props.userDetail.details);
-            details.Roles = details.Roles.map(x=>{
+            details.Roles = details.Roles.forEach(x=>{
                 RoleList.push(
                     x.RoleName
                 );
             });
-            details.Regions = details.Regions.map(x=>{
+            details.Regions = details.Regions.forEach(x=>{
                 RoleList.push(
                     x.Name
                 );
@@ -368,7 +361,7 @@ class UsersForm extends React.Component {
             if(nextProps.userGroupList !== null)
             {
                 GroupList = [];
-                nextProps.userGroupList.map(x=>{
+                nextProps.userGroupList.forEach(x=>{
                     GroupList.push(x.name);
                 });
             }
@@ -378,7 +371,7 @@ class UsersForm extends React.Component {
             if(nextProps.userRoleList !== null)
             {
                 RoleList = [];
-                nextProps.userRoleList.map(x=>{
+                nextProps.userRoleList.forEach(x=>{
                     RoleList.push(
                         x.name
                     );
@@ -398,20 +391,20 @@ class UsersForm extends React.Component {
         {
             if(nextProps.userStateList !== null)
             {
-                this.state.StateList = nextProps.userStateList;
+                this.setState({StateList:nextProps.userStateList});
             }
         }
         if ( nextProps.userDepartmentList !== this.props.userDepartmentList )
         {
             if(nextProps.userDepartmentList !== null)
             {
-                this.state.DepartmentList = nextProps.userDepartmentList;
+                this.setState({DepartmentList:nextProps.userDepartmentList});
             }
         }
         if ( nextProps.customers !== this.props.customers ){
             if(nextProps.customers !== null){
-                nextProps.customers.Data.Regions.map(x=>{
-                    x.CustomerList.map(y=>{
+                nextProps.customers.Data.Regions.forEach(x=>{
+                    x.CustomerList.forEach(y=>{
                         customerSuggestions.push({label: y.CustomerName});
                     });
                 });
@@ -419,8 +412,8 @@ class UsersForm extends React.Component {
         }
         if ( nextProps.franchisees !== this.props.franchisees ){
             if(nextProps.franchisees !== null){
-                nextProps.franchisees.Data.Region.map(x=>{
-                    x.Franchisees.map(y=>{
+                nextProps.franchisees.Data.Region.forEach(x=>{
+                    x.Franchisees.forEach(y=>{
                         franchiseeSuggestions.push({label: y.Name});
                     });
                 });
@@ -440,8 +433,8 @@ class UsersForm extends React.Component {
         if(name === "Groups" || name === "Regions" || name ==="Roles" || name === "UserType"){
             if(name === "Groups"){
                 let changedGroups = [];
-                event.target.value.map(x=>{
-                    this.props.userGroupList.map(y=>{
+                event.target.value.forEach(x=>{
+                    this.props.userGroupList.forEach(y=>{
                         if(x === y.name){
                             changedGroups.push(y.group_id);
                         }
@@ -452,8 +445,8 @@ class UsersForm extends React.Component {
             if(name === "Regions") {
 
                 let changedRegions = [];
-                event.target.value.map(x=>{
-                    this.props.regions.map(y=>{
+                event.target.value.forEach(x=>{
+                    this.props.regions.forEach(y=>{
                         if(x === y.regionname){
                             changedRegions.push({
                                 "RegionId": y.regionid,
@@ -468,8 +461,8 @@ class UsersForm extends React.Component {
             }
             if(name === "Roles") {
                 let changedRoles = [];
-                event.target.value.map(x=>{
-                    this.props.userRoleList.map((y,index)=>{
+                event.target.value.forEach(x=>{
+                    this.props.userRoleList.forEach((y,index)=>{
                         if(x === y.name){
                             changedRoles.push(
                                 {
@@ -897,7 +890,7 @@ class UsersForm extends React.Component {
                                 inputProps={{
                                     classes,
                                     label: 'Franchisee Name',
-                                    placeholder: 'Franchisee Name',                                    
+                                    placeholder: 'Franchisee Name',
                                     value: this.state.UserTypeValue,
                                     onChange: this.handleAutoChange('UserTypeValue'),
                                     inputRef: node => {
@@ -911,7 +904,7 @@ class UsersForm extends React.Component {
                                     suggestionsList: classes.suggestionsList,
                                     suggestion: classes.suggestion,
                                 }}
-                                renderSuggestionsContainer={options => (                                   
+                                renderSuggestionsContainer={options => (
                                     <Paper
                                         square
                                         {...options.containerProps}
@@ -919,7 +912,7 @@ class UsersForm extends React.Component {
                                         className={classes.autoSuggest}
                                     >
                                         {options.children}
-                                    </Paper>                                   
+                                    </Paper>
                                 )}
                             />
                         )}
@@ -930,7 +923,7 @@ class UsersForm extends React.Component {
                                 inputProps={{
                                     classes,
                                     label: 'Customer Name',
-                                    placeholder: 'Customer Name',                                    
+                                    placeholder: 'Customer Name',
                                     value: this.state.UserTypeValue,
                                     onChange: this.handleAutoChange('UserTypeValue'),
                                     inputRef: node => {
@@ -944,7 +937,7 @@ class UsersForm extends React.Component {
                                     suggestionsList: classes.suggestionsList,
                                     suggestion: classes.suggestion,
                                 }}
-                                renderSuggestionsContainer={options => (                                   
+                                renderSuggestionsContainer={options => (
                                     <Paper
                                         square
                                         {...options.containerProps}
@@ -952,7 +945,7 @@ class UsersForm extends React.Component {
                                         className={classes.autoSuggest}
                                     >
                                         {options.children}
-                                    </Paper>                                   
+                                    </Paper>
                                 )}
                             />
                         )}
@@ -969,7 +962,7 @@ class UsersForm extends React.Component {
                             >
                             </TextField>
                         )}
-                            
+
                         </GridItem>
                     </GridContainer>
                 </div>
