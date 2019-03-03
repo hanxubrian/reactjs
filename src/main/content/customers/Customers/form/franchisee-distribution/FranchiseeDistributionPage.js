@@ -1249,7 +1249,7 @@ class FranchiseeDistributionPage extends React.Component {
 								))
 							}
 
-							< div className='flex mt-12 items-center' >
+							<div className='flex mt-12 items-center' >
 								<Typography variant='body2' style={{ width: '15%' }}><strong>Finders Fee:</strong></Typography>
 								<div style={{ width: (100 - 15 - franHeaders[8].width - franHeaders[7].width) + '%' }}>
 									{

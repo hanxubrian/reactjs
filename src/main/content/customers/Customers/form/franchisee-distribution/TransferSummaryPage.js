@@ -1061,6 +1061,7 @@ class TransferSummaryPage extends React.Component {
 		const newFranchisee = this.props.franchiseeToTransfer.new
 
 		const oldFranchiseeSumAmount = this.getMonthlyBillingTotal(oldFranchisee)
+		const x = oldFranchisee
 		return (
 			<>
 				{/* <div className={classNames("flex mt-12 justify-between")}>
@@ -1129,6 +1130,47 @@ class TransferSummaryPage extends React.Component {
 						<Typography style={{ width: '10%', alignSelf: 'center' }} variant="caption">{newFranchisee.Number}</Typography>
 						<Typography style={{ width: '30%', alignSelf: 'center' }} variant="subtitle2"><strong>{newFranchisee.Name}</strong></Typography>
 					</div>
+				</div>
+
+				<Divider variant="middle" className='mt-6 w-full' style={{ alignSelf: 'center', height: 2 }} />
+
+
+				<div className='flex mt-12 items-center' >
+					<Typography variant='body2' style={{ width: '15%' }}><strong>Finders Fee:</strong></Typography>
+					<div style={{ width: (100 - 15 - franHeaders[8].width - franHeaders[7].width) + '%' }}>
+						{
+							x.FinderFee && <>
+								<span className='pr-12'>Method: {this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact) ? this.props.findersFeeTypes.find(fftp => fftp.code === x.FinderFee.calc_fact).name : ''}</span>
+								{/* <span className='pr-12'>Desc: {x.FinderFee.ff_desc}</span> */}
+								<span className='pr-12'>PayBill: {x.FinderFee.ff_pybill}</span>
+								<span className='pr-12'># Of Payments: {x.FinderFee.ff_pybill}</span>
+								<span className='pr-12'>Total FF: {x.FinderFee.ff_tot}</span>
+								{/* <span className='pr-12'>Balance: {x.FinderFee.ff_balance}</span> */}
+								<span className='pr-12'>Starts on: {}</span>
+							</>
+						}
+					</div>
+					<TextField style={{ width: franHeaders[7].width + '%' }}
+						// type='number'
+						InputProps={{
+							readOnly: true,
+							classes: {
+								input: classNames(classes.descriptionText, 'text-right')
+							},
+							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+							inputComponent: NumberFormatCustomNoPrefix
+						}}
+						margin="dense"
+						className="pl-6"
+						value={this.getMonthlyBillingTotal(x)}
+					/>
+					<div className="text-center" style={{ width: franHeaders[8].width + '%' }}>
+						{/* <Button variant="contained" onClick={() => this.gotoFindersFee(x, this.getMonthlyBillingTotal(x))}
+							color="primary" className={classNames('')}>
+							<Icon fontSize="small">queue</Icon>
+						</Button> */}
+					</div>
+
 				</div>
 			</>
 		)
