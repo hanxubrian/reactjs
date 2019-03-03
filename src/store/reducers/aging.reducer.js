@@ -9,7 +9,17 @@ import _ from 'lodash';
 const initialState = {
     agingReports: null,
     bFetchingAging: false,
-    errorMsg: ''
+    errorMsg: '',
+    agingParams: {
+        CustomerNoList: [],
+        AgingDate: moment().format('MM/DD/YYYY'),
+        PaymentDate: moment().format('MM/DD/YYYY'),
+        IncludeMonth: 12,
+        CalculateMethod: "Bill Month",
+        OrderBy: "",
+        BalanceRestriction: 0,
+        ChargeBackOn: true,
+    }
 };
 
 const agings = function(state = initialState, action) {

@@ -534,7 +534,6 @@ class InvoiceListContent extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        deleteInvoicesAction: Actions.deleteInvoices,
         removeInvoiceAction: Actions.removeInvoice,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
