@@ -563,6 +563,14 @@ class Customers extends Component {
 				this.props.latitude,
 				this.props.longitude,
 				this.props.searchText);
+			this.props.getSuggestCustomersList(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
+
 		}
 
 		if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
@@ -1031,6 +1039,12 @@ assign at least one franchisee.</DialogContentText>
 						<Typography variant="body2" color="primary">Updating Finders Fee...</Typography>
 					</div>
 				)}
+				{(this.props.bSuggestCustomersFetchStart) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Fetching Suggest Customer List...</Typography>
+					</div>
+				)}
 				{/* {(this.props.isStartedFindersFeesFetching) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
@@ -1068,10 +1082,12 @@ function mapDispatchToProps(dispatch) {
 
 		openSnackbar: Actions.openSnackbar,
 		closeSnackbar: Actions.closeSnackbar,
+
+		getSuggestCustomersList: Actions.getSuggestCustomersList,
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth, franchisees }) {
+function mapStateToProps({ customers, auth, franchisees, invoices }) {
 	return {
 		franchisees: franchisees.franchiseesDB,
 		customers: customers.customersDB,
@@ -1100,6 +1116,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		franchieesesToOffer: customers.franchieesesToOffer,
 
 		snack: customers.snack,
+
+		bSuggestCustomersFetchStart: invoices.bSuggestCustomersFetchStart,
 	}
 }
 
