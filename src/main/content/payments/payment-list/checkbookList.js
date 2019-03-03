@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom';
 // for store
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
-import * as Actions from 'store/actions';
 import classNames from 'classnames';
 
 import {
@@ -253,12 +252,11 @@ class CheckbookList extends Component {
     };
 
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
-        let timer = 0;
         let delay = 200;
         let prevent = false;
         delete restProps.selectByRowClick;
         const handleClick = () => {
-            timer = setTimeout(() => {
+            setTimeout(() => {
                 if (!prevent) {
                     onToggle();
                 }

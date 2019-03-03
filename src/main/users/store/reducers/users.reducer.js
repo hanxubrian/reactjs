@@ -53,7 +53,7 @@ const usersReducer = function (state = initialState, action) {
             let userDetail = state.userDetail;
             if(!action.payload.openForm){
                 userDetail = null;
-            } 
+            }
             if(userDetail === null){
                 return {
                 ...state,
@@ -66,8 +66,8 @@ const usersReducer = function (state = initialState, action) {
                 openUsersFormStatus: action.payload.openForm, bNewForm: action.payload.bNewForm,
                 fpStatus: false, userDetail: userDetail,payload: userDetail.details
             }
-        }                
-                  
+        }
+
         }
         case Actions.GET_USERS_LIST: {
           return {
@@ -130,12 +130,6 @@ const usersReducer = function (state = initialState, action) {
             }
         }
         case Actions.CREATE_USER:
-        {
-            return{
-                ...state,
-            }
-        }
-        case Actions.UPDATE_USER:
         {
             return{
                 ...state,

@@ -12,7 +12,7 @@ import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 import GridContainer from "../../../../../Commons/Grid/GridContainer";
 import GridItem from "../../../../../Commons/Grid/GridItem";
-import AssignmentTurnedIn from '@material-ui/icons/AssignmentTurnedIn'; 
+import AssignmentTurnedIn from '@material-ui/icons/AssignmentTurnedIn';
 
 
 import Button from '@material-ui/core/Button';
@@ -97,10 +97,6 @@ class DocumentSignatureDialog extends React.Component {
         radioValue: "docuSign",
         regionName: ""
     };
-    constructor (props){
-        super(props);
-    }
-
 
     componentDidMount() {
 
@@ -108,13 +104,10 @@ class DocumentSignatureDialog extends React.Component {
 
     componentWillMount() {
         this.setState({openDialog:this.props.docSendModal});
-        this.props.regions.map(x=>{
-             if(x.regionid === this.props.regionId){
-                 this.setState({
-                     regionName: x.regionname
-                 });
-             }
-        })
+        let region = this.props.regions.filter(x=>x.regionid === this.props.regionId)
+
+        if(region.length)
+            this.setState({regionName: region[0].regionname});
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -183,10 +176,10 @@ class DocumentSignatureDialog extends React.Component {
                                     </RadioGroup>
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between">
-                                    <Typography style={{fontSize:"16px"}} className="justify-start">From : {this.props.Username}</Typography>   
+                                    <Typography style={{fontSize:"16px"}} className="justify-start">From : {this.props.Username}</Typography>
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-12">
-                                    <Typography style={{fontSize:"16px"}} className="justify-start">Department : {this.props.DepartmentId}</Typography>   
+                                    <Typography style={{fontSize:"16px"}} className="justify-start">Department : {this.props.DepartmentId}</Typography>
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-24">
                                     <TextField
@@ -202,7 +195,7 @@ class DocumentSignatureDialog extends React.Component {
                                         margin="dense"
                                         variant="outlined"
                                         fullWidth
-                                    />   
+                                    />
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between">
                                     <TextField

@@ -106,9 +106,6 @@ class StopModal extends React.Component {
         stopReason: "Reason 1",
         notice: ""
     };
-    constructor (props){
-        super(props);
-    }
 
     componentWillMount() {
         this.setState({openDialog: this.props.stopReasonModal});

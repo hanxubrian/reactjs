@@ -8,7 +8,7 @@ import {
 import {withStyles} from "@material-ui/core";
 
 //Theme
-import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
+import {FusePageCustomSidebarScroll} from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -240,6 +240,8 @@ class VerificationsApp extends Component {
             case "new":
                 this.props.closeNewVerificationForm();
                 break;
+            default:
+                break
         }
     };
 
@@ -270,11 +272,9 @@ class VerificationsApp extends Component {
         this.setState({"aTransactionSelections": this.props.aTransactionSelections});
         this.setState({openDialog: this.props.verifiedModal});
 
-        this.props.nav.map(item=>{
-            if(item.TabName==="Activity"){
-                this.setState({HeaderIcon: item.Icon});
-            }
-        });
+        let activity = this.props.nav.filter(item=>item.TabName==="Activity");
+        if(activity.length)
+            this.setState({HeaderIcon: activity[0].Icon});
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
