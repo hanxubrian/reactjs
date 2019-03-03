@@ -443,7 +443,12 @@ class InvoiceLineTable extends React.Component {
 
     constructor(props) {
         super(props);
-        // this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
+        this.keyPress = this.keyPress.bind(this);
+    }
+
+    keyPress(e){
+        // if(e.target.name==='x')
+            console.log('fired key edit event', e.target.name);
     }
 
     componentWillMount() {
@@ -566,8 +571,7 @@ class InvoiceLineTable extends React.Component {
 
                 let fIndex = 0;
                 selectedFranchiess.forEach(sf=>{
-                    let fLine = createFranchisee(0, fIndex, sf.Number, sf.Name, sf.DistributionAmount);
-                    f_row.franchisees[fIndex] = fLine;
+                    f_row.franchisees[fIndex] = createFranchisee(0, fIndex, sf.Number, sf.Name, sf.DistributionAmount);
                     this.setState({["nameValue"+fIndex]: sf.Name});
                     fIndex++;
                 });
@@ -1229,6 +1233,7 @@ class InvoiceLineTable extends React.Component {
                                                     value={row.original.tax}
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'tax')}
                                                     onBlur={this.handleChangeInvoiceTaxLine(row.original, 'tax')}
+                                                    onKeyDown={this.keyPress}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom,
                                                         classes: {
