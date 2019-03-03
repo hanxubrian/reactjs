@@ -303,10 +303,7 @@ const initialState = {
 	assignedFranchisees: null,
 	activeCustomerFranchisees: null,
 
-	loading: {
-		count: 0,
-		msg: ""
-	},
+	loading: {},
 
 	cancelReasons: [],
 	suspendReasons: [],
@@ -343,7 +340,11 @@ const customers = function (state = initialState, action) {
 					cancelReasons: action.payload.cancelReasons,
 					suspendReasons: action.payload.suspendReasons,
 					bLoadedCustomers: true,
-					bCustomerFetchStart: false
+					bCustomerFetchStart: false,
+					loading: {
+						...state.loading,
+						bCustomerFetchStart: "",
+					}
 				};
 			}
 		case Actions.GET_ACCOUNT_TYPE_LIST:
@@ -387,6 +388,10 @@ const customers = function (state = initialState, action) {
 					...state,
 					createCustomerResponse: action.payload,
 					bCreateCustomerStart: false,
+					loading: {
+						...state.loading,
+						bCreateCustomerStart: "",
+					},
 					customerForm: {
 						type: 'new',
 						props: {
@@ -402,6 +407,10 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bCreateCustomerStart: true,
+					loading: {
+						...state.loading,
+						bCreateCustomerStart: "",
+					},
 				}
 			}
 		case Actions.UPDATE_CUSTOMER:
@@ -410,6 +419,10 @@ const customers = function (state = initialState, action) {
 					...state,
 					updateCustomerResponse: action.payload,
 					bUpdateCustomerStart: false,
+					loading: {
+						...state.loading,
+						bUpdateCustomerStart: "",
+					},
 				}
 			}
 		case Actions.UPDATE_CUSTOMER_START:
@@ -417,6 +430,10 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bUpdateCustomerStart: true,
+					loading: {
+						...state.loading,
+						bUpdateCustomerStart: "Updating customer...",
+					},
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:
@@ -430,7 +447,11 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					bCustomerFetchStart: true
+					bCustomerFetchStart: true,
+					loading: {
+						...state.loading,
+						bCustomerFetchStart: "Fetching all customer data...",
+					},
 				};
 			}
 		case Actions.TOGGLE_FILTER_PANEL:
@@ -528,6 +549,10 @@ const customers = function (state = initialState, action) {
 					bOpenedFilterPanel: true,
 					bOpenedSummaryPanel: false,
 					bGetCustomerStart: false,
+					loading: {
+						...state.loading,
+						bGetCustomerStart: "",
+					},
 					customerForm: {
 						type: 'edit',
 						props: {
@@ -550,6 +575,10 @@ const customers = function (state = initialState, action) {
 					...state,
 					findersFees: action.payload,
 					bFindersFeesStart: false,
+					loading: {
+						...state.loading,
+						bFindersFeesStart: "",
+					},
 				};
 			}
 		case Actions.STOP_FINDERS_FEES_START:
@@ -557,6 +586,10 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bFindersFeesStart: true,
+					loading: {
+						...state.loading,
+						bFindersFeesStart: "Fetching finders fee data...",
+					},
 				};
 			}
 		case Actions.UPDATE_CUSTOMER:
@@ -577,6 +610,10 @@ const customers = function (state = initialState, action) {
 					activeCustomer: action.payload.customer,
 				},
 				bGetCustomerStart: false,
+				loading: {
+					...state.loading,
+					bGetCustomerStart: "",
+				},
 			};
 		case Actions.CLOSE_CUSTOMER_SERVICE_FORM:
 			{
@@ -594,6 +631,10 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bGetCustomerStart: true,
+					loading: {
+						...state.loading,
+						bGetCustomerStart: "Fetching customer data...",
+					},
 				}
 			}
 
@@ -604,6 +645,10 @@ const customers = function (state = initialState, action) {
 					bOpenedFilterPanel: true,
 					bOpenedSummaryPanel: false,
 					bGetCustomerStart: false,
+					loading: {
+						...state.loading,
+						bGetCustomerStart: "",
+					},
 					customerForm: {
 						...state.customerForm,
 						data: action.payload,
@@ -647,14 +692,22 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					finderFeesConfigs: action.payload,
-					isStartedFindersFeesConfigsFetching: false
+					isStartedFindersFeesConfigsFetching: false,
+					loading: {
+						...state.loading,
+						isStartedFindersFeesConfigsFetching: "",
+					},
 				};
 			}
 		case Actions.FINDERS_FEE_CONFIGS_START:
 			{
 				return {
 					...state,
-					isStartedFindersFeesConfigsFetching: true
+					isStartedFindersFeesConfigsFetching: true,
+					loading: {
+						...state.loading,
+						isStartedFindersFeesConfigsFetching: "Fetching finders fees configuration data...",
+					},
 				};
 			}
 		case Actions.SET_FINDERS_FEES_CALCULATION_METHOD:
@@ -674,7 +727,11 @@ const customers = function (state = initialState, action) {
 							data: action.payload,
 							isFetching: false
 						}
-					}
+					},
+					loading: {
+						...state.loading,
+						bFetchingServiceList: "",
+					},
 				};
 			}
 		case Actions.GET_CUSTOMER_SERVICE_LIST_START:
@@ -687,7 +744,11 @@ const customers = function (state = initialState, action) {
 							...state.customerServiceForm.serviceList,
 							isFetching: true
 						}
-					}
+					},
+					loading: {
+						...state.loading,
+						bFetchingServiceList: "Fetching customer service list...",
+					},
 				};
 			}
 		case Actions.GET_CUSTOMER_COLLECTION_LIST:
@@ -700,7 +761,11 @@ const customers = function (state = initialState, action) {
 							data: action.payload,
 							isFetching: false
 						}
-					}
+					},
+					loading: {
+						...state.loading,
+						bFetchingCollectionList: "",
+					},
 				};
 			}
 		case Actions.GET_CUSTOMER_COLLECTION_LIST_START:
@@ -713,7 +778,11 @@ const customers = function (state = initialState, action) {
 							...state.customerServiceForm.collectionList,
 							isFetching: true
 						}
-					}
+					},
+					loading: {
+						...state.loading,
+						bFetchingCollectionList: "Fetching collection list...",
+					},
 				};
 			}
 		case Actions.GET_CUSTOMER_BILLING_LIST:
@@ -726,7 +795,11 @@ const customers = function (state = initialState, action) {
 							data: action.payload,
 							isFetching: false
 						}
-					}
+					},
+					loading: {
+						...state.loading,
+						bFetchingBillingList: "",
+					},
 				};
 			}
 		case Actions.GET_CUSTOMER_BILLING_LIST_START:
@@ -739,7 +812,11 @@ const customers = function (state = initialState, action) {
 							...state.customerServiceForm.billingList,
 							isFetching: true
 						}
-					}
+					},
+					loading: {
+						...state.loading,
+						bFetchingBillingList: "Fetching billing list...",
+					},
 				};
 			}
 		case Actions.SHOW_LOG_CALL_MODAL_FORM:
@@ -830,7 +907,11 @@ const customers = function (state = initialState, action) {
 				flags: {
 					...state.flags,
 					isCustomerServiceCreate: false
-				}
+				},
+				loading: {
+					...state.loading,
+					bCustomerServiceCreate: "",
+				},
 			};
 		case Actions.CUSTOMER_SERVICE_CREATE_START:
 			return {
@@ -838,7 +919,11 @@ const customers = function (state = initialState, action) {
 				flags: {
 					...state.flags,
 					isCustomerServiceCreate: true
-				}
+				},
+				loading: {
+					...state.loading,
+					bCustomerServiceCreate: "Creating customer service...",
+				},
 			};
 
 		case Actions.CUSTOMER_COLLECTION_CREATE:
@@ -847,7 +932,11 @@ const customers = function (state = initialState, action) {
 				flags: {
 					...state.flags,
 					isCustomerCollectionCreate: false
-				}
+				},
+				loading: {
+					...state.loading,
+					bCustomerCollectionCreate: "",
+				},
 			};
 		case Actions.CUSTOMER_COLLECTION_CREATE_START:
 			return {
@@ -855,7 +944,11 @@ const customers = function (state = initialState, action) {
 				flags: {
 					...state.flags,
 					isCustomerCollectionCreate: true
-				}
+				},
+				loading: {
+					...state.loading,
+					bCustomerCollectionCreate: "Creating customer collection...",
+				},
 			};
 		case Actions.SET_FRANCHIEESES_TO_OFFER:
 			return {
@@ -958,17 +1051,39 @@ const customers = function (state = initialState, action) {
 					}
 				}
 			};
+		case Actions.SAVE_CANCEL_CONTRACT_START:
+			return {
+				...state,
+				loading: {
+					...state.loading,
+					bSaveCancelContract: "Canceling contract...",
+				},
+			};
 		case Actions.SAVE_CANCEL_CONTRACT:
 			return {
 				...state,
 				activeCustomer: action.payload,
-				bGetCustomerStart: false,
+				loading: {
+					...state.loading,
+					bSaveCancelContract: "",
+				},
+			};
+		case Actions.SAVE_SUSPEND_CONTRACT_START:
+			return {
+				...state,
+				loading: {
+					...state.loading,
+					bSaveSuspendContract: "Suspending contract...",
+				},
 			};
 		case Actions.SAVE_SUSPEND_CONTRACT:
 			return {
 				...state,
 				activeCustomer: action.payload,
-				bGetCustomerStart: false,
+				loading: {
+					...state.loading,
+					bSaveSuspendContract: "",
+				},
 			};
 		case Actions.GET_COMPUTED_FINDER_FEE:
 			return {

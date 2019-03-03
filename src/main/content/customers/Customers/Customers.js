@@ -729,6 +729,13 @@ class Customers extends Component {
 
 		console.log('customerForm.props.open =', customerForm.props.open);
 
+		let loadings = Object.keys(this.props.loading).filter(x => this.props.loading[x])
+		if (loadings && loadings.length > 0) {
+			loadings = loadings.map(x => {
+				return this.props.loading[x]
+			})
+		}
+
 		return (
 			<React.Fragment >
 				<FusePageCustomSidebarScroll
@@ -1009,48 +1016,17 @@ assign at least one franchisee.</DialogContentText>
 					}}
 				>
 				</FusePageCustomSidebarScroll>
-				{(this.props.bCustomerFetchStart) && (
+				
+				{loadings && loadings.length > 0 &&
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Fetching all customers...</Typography>
+						{loadings.map((x, index) =>
+							<Typography key={index} variant="body2" color="primary">{x}</Typography>
+						)}
+
 					</div>
-				)}
-				{(this.props.bCreateCustomerStart) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Creating customer data...</Typography>
-					</div>
-				)}
-				{(this.props.bUpdateCustomerStart) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Updating customer...</Typography>
-					</div>
-				)}
-				{(this.props.bGetCustomerStart) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Fetching the customer data...</Typography>
-					</div>
-				)}
-				{(this.props.bFindersFeesStart) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Updating Finders Fee...</Typography>
-					</div>
-				)}
-				{(this.props.bSuggestCustomersFetchStart) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Fetching Suggest Customer List...</Typography>
-					</div>
-				)}
-				{/* {(this.props.isStartedFindersFeesFetching) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Fetching Finders Fees data...</Typography>
-					</div>
-				)} */}
+				}
+
 			</React.Fragment >
 		);
 	}
@@ -1118,6 +1094,8 @@ function mapStateToProps({ customers, auth, franchisees, invoices }) {
 		snack: customers.snack,
 
 		bSuggestCustomersFetchStart: invoices.bSuggestCustomersFetchStart,
+
+		loading: customers.loading,
 	}
 }
 

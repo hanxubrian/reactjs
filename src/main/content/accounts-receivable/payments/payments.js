@@ -562,6 +562,14 @@ class Payments extends Component {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
 			openNewInvoiceForm, invoiceForm } = this.props;
 		const { selection } = this.state;
+
+		let loadings = Object.keys(this.props.loading).filter(x => this.props.loading[x])
+		if (loadings && loadings.length > 0) {
+			loadings = loadings.map(x => {
+				return this.props.loading[x]
+			})
+		}
+
 		return (
 			<React.Fragment>
 				<FusePageCustomSidebarScroll
@@ -756,24 +764,16 @@ class Payments extends Component {
 					}}
 				>
 				</FusePageCustomSidebarScroll>
-				{(this.props.bACC_fechStart) && (
+				
+				{loadings && loadings.length > 0 &&
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Fetching payments info...</Typography>
+						{loadings.map((x, index) =>
+							<Typography key={index} variant="body2" color="primary">{x}</Typography>
+						)}
+
 					</div>
-				)}
-				{(this.props.isStartedPaymentsCreated) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Saving payments for invoices...</Typography>
-					</div>
-				)}
-				{(this.props.startPaymentHistory) && (
-					<div className={classNames(classes.overlay, "flex-col")}>
-						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Fetching payments history...</Typography>
-					</div>
-				)}
+				}
 			</React.Fragment>
 		);
 	}
@@ -804,7 +804,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({ invoices, auth, customers, franchisees, accountReceivablePayments }) {
 	return {
-		bACC_fechStart: accountReceivablePayments.bACC_fechStart,
 		invoices: invoices.invoicesDB,
 		invoiceDetail: invoices.invoiceDetail,
 		bLoadedInvoices: invoices.bLoadedInvoices,
@@ -841,7 +840,6 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 		bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
 
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
-		isStartedPaymentsCreated: accountReceivablePayments.isStartedPaymentsCreated,
 
 		errorInfo: accountReceivablePayments.errorInfo,
 		payments: accountReceivablePayments.ACC_payments,
@@ -851,7 +849,7 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 		filterParam: accountReceivablePayments.filterParam,
 		searchText: accountReceivablePayments.searchText,
 
-		startPaymentHistory: accountReceivablePayments.startPaymentHistory,
+		loading: accountReceivablePayments.loading,
 	}
 }
 

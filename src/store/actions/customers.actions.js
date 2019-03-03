@@ -89,6 +89,8 @@ export const UPDATE_NEW_CUSTOMER_PARAM = "[CUSTOMERS APP] UPDATE_NEW_CUSTOMER_PA
 
 export const SAVE_CANCEL_CONTRACT = "[CUSTOMERS APP] SAVE_CANCEL_CONTRACT";
 export const SAVE_SUSPEND_CONTRACT = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT";
+export const SAVE_CANCEL_CONTRACT_START = "[CUSTOMERS APP] SAVE_CANCEL_CONTRACT_START";
+export const SAVE_SUSPEND_CONTRACT_START = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT_START";
 
 export const STOP_FINDERS_FEES = "[CUSTOMERS APP] STOP_FINDERS_FEES";
 export const STOP_FINDERS_FEES_START = "[CUSTOMERS APP] STOP_FINDERS_FEES_START";
@@ -766,7 +768,7 @@ export function updateNewCustomerParam(name, value) {
 export function saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee, customerId) {
 	return (dispatch) => {
 		dispatch({
-			type: GET_CUSTOMER_START,
+			type: SAVE_CANCEL_CONTRACT_START,
 			payload: true
 		});
 
@@ -781,10 +783,9 @@ export function saveCancelContract(regionId, cust_no, cancel_date, reason_id, re
 	}
 }
 export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date, customerId) {
-	console.log('saveSuspendContract', customerId)
 	return (dispatch) => {
 		dispatch({
-			type: GET_CUSTOMER_START,
+			type: SAVE_SUSPEND_CONTRACT_START,
 			payload: true
 		});
 

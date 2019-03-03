@@ -48,6 +48,7 @@ const initialState = {
 	startPaymentHistory: false,
 	bLoadedPaymentHistory: false,
 	paymentHistory: [],
+	loading: {},
 
 };
 
@@ -65,17 +66,29 @@ const accountReceivablePayments = function (state = initialState, action) {
 				bACC_fechStart: false,
 				bLoadedPayments: true,
 				activePaymentRows: [],
+				loading: {
+					...state.loading,
+					bACC_fechStart: "",
+				},
 			}
 		case Actions.GET_ALL_RECEIVABLE_PAYMENTS_START:
 			return {
 				...state,
-				bACC_fechStart: true
+				bACC_fechStart: true,
+				loading: {
+					...state.loading,
+					bACC_fechStart: "Fetching all payments data...",
+				},
 			}
 		case Actions.FAILED_GET_ALL_RECEIVABLE_PAYMENTS:
 			return {
 				...state,
 				NoDataString: action.payload,
 				bACC_fechStart: false,
+				loading: {
+					...state.loading,
+					bACC_fechStart: "",
+				},
 			}
 		//
 		// GET PAYMENT HISTORY
@@ -86,17 +99,29 @@ const accountReceivablePayments = function (state = initialState, action) {
 				paymentHistory: action.payload,
 				startPaymentHistory: false,
 				bLoadedPaymentHistory: true,
+				loading: {
+					...state.loading,
+					startPaymentHistory: "",
+				},
 			}
 		case Actions.GET_PAYMENT_HISTORY_START:
 			return {
 				...state,
-				startPaymentHistory: true
+				startPaymentHistory: true,
+				loading: {
+					...state.loading,
+					startPaymentHistory: "Fetching payments history data...",
+				},
 			}
 		case Actions.GET_PAYMENT_HISTORY_FAILED:
 			return {
 				...state,
 				NoDataString: action.payload,
-				startPaymentHistory: false
+				startPaymentHistory: false,
+				loading: {
+					...state.loading,
+					startPaymentHistory: "",
+				},
 			}
 		//
 		// PAYMENT CREATE
@@ -106,11 +131,19 @@ const accountReceivablePayments = function (state = initialState, action) {
 				...state,
 				paymentsCreated: action.payload,
 				isStartedPaymentsCreated: false,
+				loading: {
+					...state.loading,
+					isStartedPaymentsCreated: "",
+				},
 			}
 		case Actions.CREATE_AR_PAYMENTS_START:
 			return {
 				...state,
 				isStartedPaymentsCreated: true,
+				loading: {
+					...state.loading,
+					isStartedPaymentsCreated: "Creating payment...",
+				},
 			}
 		//
 		// TOGGLE SIDE PANELS
