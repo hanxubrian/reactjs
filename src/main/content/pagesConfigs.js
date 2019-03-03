@@ -29,6 +29,7 @@ import {PaymentsConfig} from "./accounts-receivable/payments/paymentsConfig";
 import {BillRunConfig} from "./accounts-receivable/bill-run/bill-runConfig";
 import {InvoiceConfig} from "./accounts-receivable/Invoice/invoiceConfig";
 import {ArLogConfig} from "./accounts-receivable/arlog/arLogConfig";
+import {AgingReportConfig} from "./accounts-receivable/aging/agingReportConfig";
 import {ReportsConfig} from "./franchisees/reports/reportsConfig";
 import {FindersFeesConfig} from "./franchisees/findersfees/findersFeesConfig";
 import {PaymentListConfig} from "./payments/payment-list/payment-listConfig";
@@ -49,7 +50,7 @@ export const pagesConfigs = [
     RegionsConfig,
     TerritoriesConfig,
     FranchiseesConfig,
-    ChargebacksConfig,    
+    ChargebacksConfig,
     LeasesConfig,
     EndofmonthConfig,
     DistributionsConfig,
@@ -69,6 +70,7 @@ export const pagesConfigs = [
     InvoiceConfig,
     PaymentsConfig,
     ArLogConfig,
+    AgingReportConfig,
     PrintChecksConfig,
     BillRunConfig,
     AccountsReceivableConfig,
