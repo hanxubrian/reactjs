@@ -1046,24 +1046,24 @@ class FranchiseeDistributionPage extends React.Component {
 
 		return (
 			<>
-				<div className={classNames("flex mt-12 justify-between")}>
+				{/* <div className={classNames("flex mt-12 justify-between")}>
 					<Typography variant="h6">Franchisee Distribution</Typography>
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						{this.props.activeStep === 1 &&
 							<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						}
+						} */}
 
-						{/* {this.props.bTransferFranchiseeFtate && this.props.activeStep === 2 &&
+				{/* {this.props.bTransferFranchiseeFtate && this.props.activeStep === 2 &&
 							<Button variant="contained" onClick={this.transferFranchiseeComplete} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Complete Transfer</Button>
 						} */}
 
-						{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
-					</div>
-				</div>
+				{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
+				{/* </div>
+				</div> */}
 
-				<div className={classNames("flex mt-12 justify-between ")}>
-					<TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
+				<div className={classNames("flex mt-12 justify-between items-center")}>
+					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
 						style={{ minWidth: 220 }}
 						className={classNames(classes.textField, "pr-6 mb-24")}
@@ -1084,11 +1084,16 @@ class FranchiseeDistributionPage extends React.Component {
 						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.saveAssignedFranchiseeDistributions()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div> */}
+					{this.props.activeStep === 1 &&
+						<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
+					}
+
+
 				</div>
 
 				<Typography className="mb-12 mt-12 hidden" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
 				<div className={classNames("flex flex-col w-full")}>
-					<div className={classNames("flex w-full pt-12 pb-12 items-center")} style={{ background: '#3c93ec' }}>
+					<div className={classNames("flex w-full pt-12 pb-12 pl-6 items-center")} style={{ background: '#3c93ec' }}>
 						{franHeaders.map((f, findex) => {
 							if (findex === 4) return false;
 							return (
@@ -1102,17 +1107,23 @@ class FranchiseeDistributionPage extends React.Component {
 
 					{franchieesesToOffer && franchieesesToOffer.map((x, index) => (
 						<div key={index} className={classNames("flex flex-col w-full")} style={{ alignItems: 'bottom' }}>
-							<div className={classNames("flex w-full items-center pt-6 pb-6")} style={{ alignItems: 'bottom', background: 'rgba(175, 175, 175, 0.2)' }}>
+							<div className={classNames("flex w-full items-center pt-6 pb-6 pl-6")} style={{ alignItems: 'bottom', background: 'rgba(175, 175, 175, 0.2)' }}>
 								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption"><strong>{x.Number || x.FranchiseeNumber}</strong></Typography>
 								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption"><strong>{x.Name || x.FranchiseeName}</strong></Typography>
 
 								<div style={{ width: franHeaders[2].width + franHeaders[3].width + '%', alignSelf: 'center' }} >
 									{this.props.customerForm.type === 'edit' && this.props.activeStep === 2 &&
-										<Button variant="contained" onClick={() => this.transferFranchisee(index)}
-											color="primary" className={classNames('')}>
-											<Icon fontSize="small">swap_horiz</Icon>&nbsp;
-											Transfer
-										</Button>
+										<>
+											{!x.new &&
+												<Button variant="contained" onClick={() => this.transferFranchisee(index)}
+													color="primary" className={classNames('')}>
+													<Icon fontSize="small">swap_horiz</Icon>&nbsp;Transfer
+											</Button>
+											}
+											{x.new &&
+												<Typography style={{ alignSelf: 'center' }} variant="caption"><strong>Recently Assigned</strong></Typography>
+											}
+										</>
 									}
 								</div>
 								<div style={{ width: franHeaders[4].width + '%', alignSelf: 'center' }} />

@@ -1063,35 +1063,12 @@ class TransferSummaryPage extends React.Component {
 		const oldFranchiseeSumAmount = this.getMonthlyBillingTotal(oldFranchisee)
 		return (
 			<>
-				<div className={classNames("flex mt-12 justify-between")}>
+				{/* <div className={classNames("flex mt-12 justify-between")}>
 					<Typography variant="h6">Transfer Franchisee Distribution</Typography>
-
-					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button
-							variant="contained"
-							onClick={this.transferFranchiseeComplete}
-							color="primary"
-							className={classNames("pl-24 pr-24")}>
-							Complete Transfer</Button>
-
-						<Button
-							variant="contained"
-							className={classNames(classes.button, "pr-24 pl-24 ml-24")}
-							onClick={this.backToTransferFranchiseeList}
-						> <Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						<Button
-							variant="contained"
-							className={classNames(classes.button, "pr-24 pl-24 ml-6")}
-							onClick={this.cancelTransfer}
-						> <Icon fontSize="small">close</Icon>Cancel Transfer </Button>
-
-
-						{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
-					</div>
-				</div>
+				</div> */}
 
 				<div className={classNames("flex mt-12 justify-between ")}>
-					<TextField margin="dense" id="Amount" label="Amount"
+					<TextField margin="dense" id="Amount" label="Distribution Amount"
 						InputLabelProps={{ shrink: true }}
 						style={{ minWidth: 220 }}
 						className={classNames(classes.textField, "pr-6 mb-24")}
@@ -1112,11 +1089,33 @@ class TransferSummaryPage extends React.Component {
 						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.saveAssignedFranchiseeDistributions()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div> */}
+
+					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+						<Button
+							variant="contained"
+							className={classNames(classes.button, "pr-24 pl-24")}
+							onClick={this.backToTransferFranchiseeList}
+						> <Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
+						<Button
+							variant="contained"
+							className={classNames(classes.button, "pr-24 pl-24 ml-6")}
+							onClick={this.cancelTransfer}
+						> <Icon fontSize="small">close</Icon>Cancel Transfer </Button>
+
+						<Button
+							variant="contained"
+							onClick={this.transferFranchiseeComplete}
+							color="primary"
+							className={classNames("pl-24 pr-24 ml-24")}>
+							Complete Transfer</Button>
+
+						{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
+					</div>
 				</div>
 
 				{/* <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography> */}
 				<div className={classNames("flex flex-col w-full")}>
-					<Typography style={{ width: '10%' }} variant="caption">(Original)</Typography>
+					<Typography style={{ width: '10%' }} variant="caption">Current:</Typography>
 					<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 
 						<Typography style={{ width: '10%', alignSelf: 'center' }} variant="caption">{oldFranchisee.FranchiseeNumber}</Typography>
@@ -1125,7 +1124,7 @@ class TransferSummaryPage extends React.Component {
 
 					<Divider variant="middle" className='m-6 w-full' style={{ alignSelf: 'center', height: 2 }} />
 
-					<Typography style={{ width: '10%' }} variant="caption">(New)</Typography>
+					<Typography style={{ width: '10%' }} variant="caption">New:</Typography>
 					<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 						<Typography style={{ width: '10%', alignSelf: 'center' }} variant="caption">{newFranchisee.Number}</Typography>
 						<Typography style={{ width: '30%', alignSelf: 'center' }} variant="subtitle2"><strong>{newFranchisee.Name}</strong></Typography>
@@ -1187,7 +1186,7 @@ class TransferSummaryPage extends React.Component {
 
 						<div className="flex items-center" style={{ background: 'lemonchiffon', border: '2px #ffb6b6 solid', padding: 6 }}>
 							<Icon style={{ color: '#c56161' }}>warning</Icon>
-							<Typography variant="h6" style={{ color: '#c56161' }}>Transfering franchisee...</Typography>
+							<Typography variant="h6" style={{ color: '#c56161' }}>Transfer Summary</Typography>
 						</div>
 
 						{step === 0 && this.getFranchiseeAssignmentForm()}
