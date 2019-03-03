@@ -13,7 +13,7 @@ class AgingService {
      * @param params, JSON Object
      * @returns {Promise<any>}
      */
-    getAgingReport = (regionId, params) => {
+    getAgingReports = (regionId, params) => {
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/AgingReport`, params)
                 .then(res => {

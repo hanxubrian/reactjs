@@ -1,4 +1,3 @@
-import axios from "axios";
 import {invoiceService} from "../../services"
 
 export const GET_ALL_INVOICES = "[INVOICES] GETS ALL";
@@ -147,19 +146,6 @@ export function updateInvoiceStatus(newStatus){
         type: UPDATE_INVOICE_STATUS,
         payload: newStatus
     }
-}
-
-export function deleteInvoices(keys, invoices) {
-    return dispatch => {
-        const request = axios.post("/api/invoices/delete", { ids: keys, invoices: invoices });
-
-        return request.then(response => {
-            return dispatch({
-                type: DELETE_SELECTED_INVOICES,
-                payload: response.data
-            });
-        });
-    };
 }
 
 export function removeInvoice(regionId, id) {
