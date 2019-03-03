@@ -21,6 +21,8 @@ class initialService {
         }
             switch(url) {
                 case "localhost":
+                case "gink.dev":
+                case "gink.app":
                 case "fmsplusplus.jkdev.com":
                     return new Promise((resolve, reject) => {
                         // axios_instance.get(`${BASE_API_URL}/v1/apps/get?appid=${urlObj["localhost"]}&env=local&device=web`)
@@ -51,6 +53,8 @@ class initialService {
                     });
                 break
                 case "franport.local":
+                case "hub.gink.dev":
+                case "hub.gink.app":
                 case "franport.jkdev.com":
                 return new Promise((resolve, reject) => {
                     // axios_instance.get(`${BASE_API_URL}/v1/apps/get?appid=${urlObj["franport.local"]}&env=local&device=web`)
