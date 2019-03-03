@@ -36,12 +36,12 @@ class ContactsHeader extends Component {
                             <Icon className="text-32 mr-12">account_box</Icon>
                         </FuseAnimate>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                            <Typography variant="h6" className="hidden sm:flex">Contacts</Typography>
+                            <Typography variant="h6" className="hidden sm:flex">Company Contacts</Typography>
                         </FuseAnimate>
                     </div>
                 </div>
 
-                <div className="flex flex-1 items-center justify-center pr-8 sm:px-12">
+                <div className="flex flex-1 items-center justify-center pr-8 sm:px-12" >
 
                     <MuiThemeProvider theme={FuseSelectedTheme}>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>

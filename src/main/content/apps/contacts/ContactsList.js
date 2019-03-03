@@ -9,17 +9,87 @@ import * as Actions from './store/actions';
 import * as ChatActions from '../../../chatPanel/store/actions';
 import ReactTable from "react-table";
 import classNames from 'classnames';
-
+import JanikingPagination from 'Commons/JanikingPagination';
 // import withReducer from 'store/withReducer';
 // import reducer from './store/reducers';
 import IndividualChat from '../../../chatPanel/individualChat';
 import "../../../chatPanel/individualChat.css";
+import _ from 'lodash';
+
+
+const hexToRgb = (hex) =>{
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
 
 const styles = theme => ({
     // react-bootstrap-table:{
     //     height: '500px',
     //     overflow: 'auto',
     // },
+    reacttableheader:{
+        fontSize: '1.6rem',
+        fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+        fontWeight: 400,
+        lineHeight: 1.75,
+        color: 'white',
+        background:theme.palette.secondary.main,
+        border:'1px solid rgba(255,255,255,.6)',
+    },
+    layoutRoot: {
+        flexDirection: 'row',
+        '& .z-9999': {
+            height: 64
+        },
+        '& .-pageSizeOptions': {
+            display: 'none'
+        },
+        '& .ReactTable .rt-noData': {
+            top: '250px',
+            border: '1px solid coral',
+            display: 'none'
+        },
+        '& .ReactTable .rt-thead.-headerGroups': {
+            paddingLeft: '0!important',
+            paddingRight: '0!important',
+            minWidth: 'inherit!important'
+        },
+        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
+            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
+            color: 'white!important'
+        },
+        '& .openFilter':{
+            width: 'inherit'
+        },
+        '& .openSummary':{
+            width: 300
+        },
+        '& .ReactTable .rt-tbody': {
+            overflowY: 'scroll',
+            overflowX: 'hidden'
+        },
+        '& .ReactTable .rt-tr-group':{
+            flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+            justifyContent: 'center'
+        },
+        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
+            width:'inherit!important',
+            minWidth:'inherit!important',
+        },
+        '& .ReactTable .rt-thead .rt-th:last-child': {
+            justifyContent: 'flex-start'
+        },
+        '& .p-12-impor': {
+            paddingLeft: '1.2rem!important',
+            paddingRight: '1.2rem!important',
+        }
+    },
     mailList: {
         padding: 0
     },
@@ -40,7 +110,7 @@ const styles = theme => ({
     }
 
 });
-
+const defaultavatar ='https://res.cloudinary.com/janiking/image/upload/v1547085033/apps/users/generic.jpg';
 class ContactsList extends Component {
 
     state = {
@@ -208,10 +278,58 @@ class ContactsList extends Component {
         }
 
         return (
-            <div >
-            <FuseAnimate animation="transition.slideUpIn" delay={300}>
+            <div className="flex-1 flex-col absolute w-full h-full">
+            <FuseAnimate
+                animation="transition.slideUpIn" delay={300}
+            >
                 <ReactTable
                     className={classNames(classes.root, "-striped -highlight border-0")}
+                    minRows = {0}
+                    PaginationComponent={JanikingPagination}
+                    getTheadGroupProps={(state, rowInfo, column, instance) =>{
+                        return {
+                            style:{
+                                // padding: "10px 10px",
+                                fontSize: 16,
+                                fontWeight: 700
+                            },
+                        }
+                    }}
+                    // getTheadGroupThProps={(state, rowInfo, column, instance) => {
+                    //     return {
+                    //         style:{
+                    //             // padding: "10px 10px",
+                    //             fontSize: 18,
+                    //             fontWeight: 700,
+                    //         },
+                    //         className: classNames("flex items-center justify-start")
+                    //     }
+                    // }}
+                    getTheadThProps={(state, rowInfo, column, instance) =>{
+                        let border = '1px solid rgba(255,255,255,.6)';
+                        if(column.Header==='Actions') border = 'none';
+                        return {
+                            className: classes.reacttableheader
+                        }
+                    }}
+                    // getTheadProps={(state, rowInfo, column, instance) =>{
+                    //     return {
+                    //         style:{
+                    //             fontSize: 13,
+                    //         },
+                    //         className: classes.tableTheadRow
+                    //     }
+                    // }}
+                    // getTdProps={(state, rowInfo, column, instance) =>{
+                    //     return {
+                    //         style:{
+                    //             textAlign: 'center',
+                    //             flexDirection: 'row',
+                    //             fontSize: 13,
+                    //             padding: "0",
+                    //         },
+                    //     }
+                    // }}
                     getTrProps={(state, rowInfo, column) => {
                         return {
                             onClick: (e)=>{
@@ -313,26 +431,28 @@ class ContactsList extends Component {
                             ),
                             accessor : "avatar",
                             Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value}/>
+                                <Avatar className="mr-8" alt={row.original.name} src={row.value?row.value:defaultavatar}/>
                             ),
                             className: "justify-center",
                             width    : 64,
                             sortable : false
                         },
                         {
-                            Header    : "First Name",
+                            Header    : "Name",
                             accessor  : "firstName",
-
-                            className : "font-bold",
+                            Cell      : row=>(
+                               <div>{row.original.firstName}  {row.original.lastName}</div>
+                            ),
+                            className : "font-bold justify-center",
                             width    : 200,
                         },
-                        {
-                            Header    : "Last Name",
-                            accessor  : "lastName",
-                            // filterable: true,
-                            className : "font-bold",
-                            width    : 150,
-                        },
+                        // {
+                        //     Header    : "Last Name",
+                        //     accessor  : "lastName",
+                        //     // filterable: true,
+                        //     className : "font-bold",
+                        //     width    : 150,
+                        // },
                      /*    {
                             Header    : "Company",
                             accessor  : "company",
@@ -346,12 +466,34 @@ class ContactsList extends Component {
                         {
                             Header    : "Email",
                             accessor  : "email",
+                            className: "justify-center",
                             // filterable: true,
                             width    : 300,
                         },
                         {
                             Header    : "Phone",
                             accessor  : "phone",
+                            className: "justify-center",
+                            // filterable: true
+                        },
+                        {
+                            Header    : "DepartMent",
+                            accessor  : "company",
+                            className : "justify-center",
+                            width     : 150,
+                            // filterable: true
+                        },
+                        {
+                            Header    : "Region",
+                            accessor  : "defaultRegion",
+                            className : "font-bold justify-center",
+                            Cell      : row=>{
+                                let re =_.find(row.original.region,{RegionId:row.original.defaultRegion});
+                                return(
+                                    <div>{re?re.Name:''}</div>
+                                )
+                            },
+                            width     : 150,
                             // filterable: true
                         },
                         {
@@ -372,16 +514,16 @@ class ContactsList extends Component {
                                             <Icon>star_border</Icon>
                                         )}
                                     </IconButton>
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            removeContact(row.original.id);
-                                        }}
-                                        className={classes.chatIcon}
-                                    >
-                                        <Icon>delete</Icon>
-                                       
-                                    </IconButton>
+                                    {/*<IconButton*/}
+                                        {/*onClick={(ev) => {*/}
+                                            {/*ev.stopPropagation();*/}
+                                            {/*removeContact(row.original.id);*/}
+                                        {/*}}*/}
+                                        {/*className={classes.chatIcon}*/}
+                                    {/*>*/}
+                                        {/*<Icon>delete</Icon>*/}
+                                       {/**/}
+                                    {/*</IconButton>*/}
 
                                     <IconButton
                                         onClick={(ev) => {
@@ -398,6 +540,12 @@ class ContactsList extends Component {
                     ]}
                     defaultPageSize={10}
                     noDataText="No contacts found"
+                    style={{
+                        height: '100%',
+
+                    }}
+                    totalRecords = {data.length}
+
                 />
 
             </FuseAnimate>
@@ -459,6 +607,7 @@ function mapStateToProps({contactsApp,chatPanel})
         state                      : chatPanel.state,
         chatDetail                 : chatPanel.chat,
         chatUser                   : chatPanel.user,
+
         currentRoom                : chatPanel.chat.currentRoom,
     }
 }

@@ -19,7 +19,10 @@ const styles = theme => ({
         bottom  : 90,
         zIndex  : 99,
         display : 'none',
-    }
+    },
+    content:{
+        position: ''
+    },
 });
 
 class ContactsApp extends Component {
@@ -49,7 +52,8 @@ class ContactsApp extends Component {
                     classes={{
                         contentCardWrapper: "p-16 sm:p-24 pb-80",
                         leftSidebar       : "w-256",
-                        header            : "min-h-60 h-60 "
+                        header            : "min-h-60 h-60 ",
+                        // content           : classes.content
                     }}
                     header={
                         <ContactsHeader pageLayout={() => this.pageLayout}/>

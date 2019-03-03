@@ -39,6 +39,7 @@ export function getContacts(routeParams)
                 // let response = await contactService.getRegisteredGroupUserList();
                 let response = await chatService.getUserListforcontacts(data);
                 let contacts = [];
+                console.log('response.Data===',response.Data);
                 response.Data.map((item)=>{
                     contacts= [...contacts,
                         {
@@ -53,8 +54,21 @@ export function getContacts(routeParams)
                             email : item.Email,
                             phone: item.Phone,
                             address : item.Address1 +' '+ item.Address2,
+                            city : item.City,
+                            state: item.State,
+                            zipcode: item.Zipcode,
+                            title: item.Title,
+                            userType: item.UserType,
+                            userTypeValue: item.UserTypeValue,
+                            userValueNo: item.UserValueNo,
                             birthday: undefined,
-                            notes: ''
+                            notes: '',
+                            region: item.Regions,
+                            defaultRegion:item.DefaultRegionId,
+                            outlookUsername: item.OutlookUsername,
+                            roles: item.Roles,
+                            groups: item.Groups,
+
 
 
                         } ]
