@@ -9,24 +9,7 @@ export function getContacts()
     return  (dispatch, getState) => {
         const userId = getState().auth.login.Username;
 
-        const regionId = getState().auth.login.defaultRegionId;
-        const data = {
-            regionId: regionId,
-            Groups: [],
-            Roles: [],
-            searchText: ""
-        };
         (async () => {
-            // let contacts = await chatService.getUserListforcontacts(data);
-            // console.log("contacts.actons==",contacts);
-            // if (contacts.IsSuccess)
-            // {
-            //     dispatch({
-            //         type   : GET_CONTACTS,
-            //         payload: contacts.Data
-            //     });
-            // }
-
             let contacts = await chatService.getContactList(userId);
             if (contacts)
             {
@@ -63,11 +46,10 @@ export function updateContactsPresense(user, state)
     return (dispatch, getState) => {
         const contacts = getState().chatPanel.contacts.entities;
 
-        contacts.map((item, i) => {
+        contacts.forEach((item, i) => {
             if (item.id === user.id)
             {
                 item.status = state.current;
-                return
             }
         });
 
@@ -86,7 +68,7 @@ export function addUnread(userId)
     return (dispatch, getState) => {
         const contacts = getState().chatPanel.contacts.entities;
 
-        contacts.map((item, i) => {
+        contacts.forEach((item, i) => {
             if (item.id === userId)
             {
 
@@ -111,7 +93,7 @@ export function initUnread(userId)
     return (dispatch, getState) => {
         const contacts = getState().chatPanel.contacts.entities;
 
-        contacts.map((item, i) => {
+        contacts.forEach((item, i) => {
             if (item.id === userId)
             {
                 item.unread = 0;

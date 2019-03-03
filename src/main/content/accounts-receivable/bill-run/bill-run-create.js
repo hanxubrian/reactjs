@@ -149,11 +149,6 @@ class BillRunDialog extends Component {
         labelWidth: 0,
     };
 
-    constructor(props){
-        super(props);
-
-    }
-
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
             this.setState({billruns: this.props.billruns});
@@ -275,7 +270,7 @@ class BillRunDialog extends Component {
             let checkflag = true;
 
             if(billrunDB && billrunDB !== null){
-                billrunDB.map((item)=>{
+                billrunDB.forEach(item=>{
                     if(item.Month === month && item.Year === year && item.Status !== "Deleted"){
                         checkflag = false;
                     }

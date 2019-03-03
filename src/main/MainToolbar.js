@@ -6,15 +6,10 @@ import {withRouter} from 'react-router-dom';
 
 
 import classNames from 'classnames';
-// import {Avatar, Button,Fab,Tabs,Tab,Icon, AppBar,ClickAwayListener, IconButton,Divider, Paper,List, ListItem , ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
 import {
     Avatar,
     Button,
-    Fab,
-    Tabs,
-    Tab,
     Icon,
-    AppBar,
     ClickAwayListener,
     IconButton,
     Divider,
@@ -26,7 +21,6 @@ import {
     Popover,
     MenuItem,
     Typography,
-    Hidden,
     TextField
 } from '@material-ui/core';
 import * as quickPanelActions from 'main/quickPanel/store/actions';
@@ -38,12 +32,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Pusher from 'pusher-js';
 import moment from 'moment/moment';
-import ImageIcon from '@material-ui/icons/Image';
+
 import * as Actions from "./chatPanel/store/actions";
 
 import * as MainActions from 'store/actions';
 import ReactPlayer from 'react-player';
-import SystemNotification from './content/notifications/SystemNotification';
+
 import VersionUpgradeDialog from '../main/content/admin/AdminDialog/VersionUpgradeDialog';
 
 
@@ -842,7 +836,7 @@ class MainToolbar extends Component {
                                                                         this.state.contacts.map((contact,i)=>{
                                                                             if(contact && contact != null && contact.id ==item.who){
                                                                                 return(
-                                                                                    <div key={i} style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
+                                                                                    <div key={i} style ={{height:'40px',textAlign: '-webkit-center'}}>
                                                                                         <Avatar className={classes.avatarresize} alt={contact.name} src ={contact.avatar} />
                                                                                         <span style={{fontSize:'12px'}}>{contact.name}</span>
                                                                                     </div>
@@ -873,7 +867,7 @@ class MainToolbar extends Component {
                                                 <div key={index} >
                                                     <ListItem button key={item._id} onClick={()=>{this.setState({sysnotificationSeletedID:item.id});this.systemitemnotification(item.id)}} style ={{height:'55px'}} >
                                                         <React.Fragment>
-                                                            <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
+                                                            <div style ={{height:'40px',textAlign: '-webkit-center'}}>
                                                                 <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
                                                                 <span style={{fontSize:'12px'}}>{item.subject}</span>
                                                             </div>

@@ -164,8 +164,8 @@ class Report extends Component {
     downloadPDF=(input, imgURL)=> {
         console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
         console.log('image=',imgURL,top_left_margin, top_left_margin, HTML_Width, HTML_Height);
-        let cardlen = document.getElementsByClassName("pdfcardcontent").length;
-        let img = null;
+        // let cardlen = document.getElementsByClassName("pdfcardcontent").length;
+        let img;
 
         if (input != null && imgURL != null) {
             this.getDataUri(imgURL, function (dataUri) {
@@ -199,8 +199,6 @@ class Report extends Component {
     };
 
     renderHeader = ()=>{
-        const { all_regions} = this.props;
-        const {regionid} = this.props.match.params;
         let period = this.props.reportPeriod.split('/');
 
         let month = period[0];
@@ -208,8 +206,6 @@ class Report extends Component {
 
         const months = ["January","February","March","April","May","June","July",
             "August","September","October","November","December"];
-
-        let region = all_regions.filter(r=>r.regionid===parseInt(regionid));
 
         return (
             <tr className="report-header">
