@@ -172,7 +172,7 @@ const TableHeadComponentBase = ({ classes, ...restProps }) => (
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 
-class PaymentLogDetail extends Component {
+class AgingReportList extends Component {
     state={
         data: []
     };
@@ -363,4 +363,4 @@ function mapStateToProps({auth, paymentLog})
     }
 }
 
-export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentLogDetail)));
+export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(AgingReportList)));

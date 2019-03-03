@@ -15,8 +15,8 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import classNames from 'classnames';
 
-import ArLogDetail from './arLogDetail';
-import FilterPanel from "./arFilterPanel";
+import AgingReportList from './arLogDetail';
+import FilterPanel from "./agingReportFilterPanel";
 
 const headerHeight = 80;
 
@@ -195,7 +195,7 @@ const styles = theme => ({
     },
 });
 
-class PaymentLogLayout extends Component {
+class AgingReportLayout extends Component {
     constructor(props) {
         super(props);
         props.getPaymentLogList(props.regionId, props.logDate);
@@ -286,7 +286,7 @@ class PaymentLogLayout extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             <Fragment>
                                 <div id ="payment-log-print">
-                                    <ArLogDetail onRef={ref => (this.child = ref)}/>
+                                    <AgingReportList onRef={ref => (this.child = ref)}/>
                                 </div>
                             </Fragment>
                         </div>
@@ -323,4 +323,4 @@ function mapStateToProps({auth, paymentLog}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentLogLayout)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(AgingReportLayout)));
