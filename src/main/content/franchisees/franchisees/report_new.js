@@ -165,11 +165,11 @@ class Report extends Component {
         console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
         console.log('image=',imgURL,top_left_margin, top_left_margin, HTML_Width, HTML_Height);
         // let cardlen = document.getElementsByClassName("pdfcardcontent").length;
-        let img;
+        // let img;
 
         if (input != null && imgURL != null) {
             this.getDataUri(imgURL, function (dataUri) {
-                img = dataUri;
+                // img = dataUri;
             });
             html2canvas(input)
                 .then((canvas) => {

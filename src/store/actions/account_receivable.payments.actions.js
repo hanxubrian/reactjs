@@ -168,9 +168,9 @@ export function createAccountReceivablePayment(
 		})();
 	}
 }
-const sleep = (milliseconds) => {
-	return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
+// const sleep = (milliseconds) => {
+// 	return new Promise(resolve => setTimeout(resolve, milliseconds))
+// }
 
 export function toggleFilterPanelAccountReceivablePayments() {
 	return {
