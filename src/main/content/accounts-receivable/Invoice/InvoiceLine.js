@@ -438,17 +438,12 @@ class InvoiceLineTable extends React.Component {
             value: b._id, label: b.Name})),
         serviceSuggestions: this.props.serviceLists.map(s=>({
             BillingTypeId: s.BillingTypeId, label: s.Name, value: s._id
-        }))
+        })),
+        bTaxEdited: false,
     };
 
     constructor(props) {
         super(props);
-        this.keyPress = this.keyPress.bind(this);
-    }
-
-    keyPress(e){
-        // if(e.target.name==='x')
-            console.log('fired key edit event', e.target.name);
     }
 
     componentWillMount() {
@@ -458,11 +453,11 @@ class InvoiceLineTable extends React.Component {
         // document.removeEventListener("keydown", this.addInvoiceLineFunction, false);
     }
 
-    addInvoiceLineFunction(event){
-        if(keycode(event)==='enter' || keycode(event)==='down'){
-            // this.addLineData();
-        }
-    }
+    // addInvoiceLineFunction(event){
+    //     if(keycode(event)==='enter' || keycode(event)==='down'){
+    //         // this.addLineData();
+    //     }
+    // }
 
     componentDidMount(){
         if(this.props.invoiceForm.type === 'new') {
@@ -666,13 +661,13 @@ class InvoiceLineTable extends React.Component {
 
     handleTaxAlertClose = () => {
         this.setState({ bTaxAlert: false });
-        this.setState({ bAllowNeverAlertTaxZero: true });
+        this.setState({ bTaxEdited: false });
 
     };
 
     handleTaxAlertReductionClose = () => {
         this.setState({ bTaxAlertReduction: false });
-        this.setState({ bAllowNeverAlertReduction: true });
+        this.setState({ bTaxEdited: false });
     };
 
     showVendorDialogBox = (row) =>{
@@ -844,18 +839,10 @@ class InvoiceLineTable extends React.Component {
     handleChangeInvoiceLine =  (row, name) => event => {
         const data = [...this.state.data];
         let value = event.target.value;
-        if (name==='amount')  value = parseFloat(value);
-        if (name==='quantity')  value = parseInt(value);
-        if (name==='markup')  value = parseFloat(value);
-        if (name==='commission')  value = parseFloat(value);
-
-        // if(name==='commission') data[row.id]['markup'] = 0.00;
-        // if(name==='markup') data[row.id]['commission'] = 0.00;
+        if (name==='amount' || name==='quantity' || name==='markup' || name==='commission')  value = parseFloat(value);
 
         data[row.id][name] = value;
         this.setState({data: data});
-        // if(name==='tax')
-        //     this.setState({customerTaxAmountLine: {...this.state.customerTaxAmountLine, TotalTaxAmount: parseFloat(event.target.value)}})
     };
 
     handleChangeInvoiceLineOnBlur = (row, name) => event => {
@@ -870,36 +857,30 @@ class InvoiceLineTable extends React.Component {
             this.getInvoiceLineTaxAmount(row)
     };
 
-    handleChangeInvoiceTaxLine = (row, name) => event => {
+    handleBlurInvoiceTaxLine = (row, name) => event => {
         if(this.props.invoiceForm.customer===null) return;
 
-        if(!this.state.bAllowNeverAlertTaxZero && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)===0) {
+        //Tax 0 is only allowed
+        if(this.state.bTaxEdited && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)===0) {
             this.setState({bTaxAlert: true});
             return;
         }
-        if(!this.state.bAllowNeverAlertReduction && this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
-            parseFloat(row.tax)!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount)
+        //Tax except for 0 is not allowed
+        if(this.state.bTaxEdited && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0
+            && parseFloat(row.tax)!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount
+        )
         {
             this.setState({bTaxAlertReduction: true});
-            // this.setState({bAllowNeverAlertReduction: true});
             const data = [...this.state.data];
             data[row.id].tax = this.props.customerTaxAmountLine[row.id].TotalTaxAmount;
             this.setState({data: data});
         }
+    };
 
-        if(name==='tax' &&
-            !this.state.bAllowAlertReduction &&
-            this.props.invoiceForm.customer.TaxExempt==='N' &&
-            parseFloat(row.tax)!==0 &&
-            parseFloat(row.tax)!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount) {
-            setTimeout(() => {this.setState({bAllowAlertReduction: true})}, 1000);
-        }
-
-        if(name==='tax' &&
-            !this.state.bAllowAlertTaxZero &&
-            this.props.invoiceForm.customer.TaxExempt==='N' &&
-            parseFloat(row.tax)===0) {
-            setTimeout(() => {this.setState({bAllowAlertTaxZero: true})}, 1000);
+    keyPress = e =>{
+        if(e.keyCode>=46 && e.keyCode<=57){
+            console.log('value=', e.target.value, keycode(e), e.keyCode);
+            this.setState({bTaxEdited: true});
         }
     };
 
@@ -1232,7 +1213,7 @@ class InvoiceLineTable extends React.Component {
                                                     placeholder="Tax"
                                                     value={row.original.tax}
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'tax')}
-                                                    onBlur={this.handleChangeInvoiceTaxLine(row.original, 'tax')}
+                                                    onBlur={this.handleBlurInvoiceTaxLine(row.original, 'tax')}
                                                     onKeyDown={this.keyPress}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom,

@@ -1217,7 +1217,7 @@ class InvoiceForm extends Component {
                                                         control={
                                                             <Checkbox
                                                                 name="taxExempt"
-                                                                checked={this.state.selectedCustomer.TaxExempt==='Y'}
+                                                                checked={this.state.selectedCustomer.TaxExempt!=='N'}
                                                                 onChange={this.handleChange}
                                                                 value="checkedB"
                                                                 color="primary"
