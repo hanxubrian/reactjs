@@ -39,7 +39,7 @@ const styles = theme => ({
         display: 'flex'
     }
 });
-
+let locationUrl = "";
 class SigninPage extends Component {
     state = {
         email   : '',
@@ -48,7 +48,7 @@ class SigninPage extends Component {
         alertOpen: false,
         commandKeyPressed: false,
         url: window.location.host.split(':')[0],
-        hidden: null
+        hidden: null,
     };
 
     componentDidMount() {
@@ -66,12 +66,19 @@ class SigninPage extends Component {
         let urlGetParam = new URLSearchParams(window.location.search);
         let code = "";
         let state = "";
+
+        if(window.location.port !== ""){
+            locationUrl = window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/auth/signin/";
+        }else{
+            locationUrl = window.location.protocol+"//"+window.location.hostname+"/auth/signin/";
+        }
+
         if(urlGetParam.has("code") && urlGetParam.has("state")){
             code = urlGetParam.get("code");
             state = urlGetParam.get("state");
 
             if( code!==""&&state!==""){
-                this.props.microsoftLoginVerify(code,state,this.state.url);
+                this.props.microsoftLoginVerify(code,state,locationUrl,this.state.url);
             }
         }
     }
@@ -264,8 +271,7 @@ class SigninPage extends Component {
                                     </Button>
 
                                     <Button variant="contained" color="primary" className="w-224 mx-auto mt-16 w-full" aria-label="LOG IN"
-                                        // disabled={!this.canBeSubmitted()}
-                                            onClick={()=> this.props.microsoftLogin()}
+                                            onClick={()=> this.props.microsoftLogin(locationUrl)}
                                             hidden={this.props.app.hidden}
                                     >
                                       MICROSOFT SIGN IN

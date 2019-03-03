@@ -15,10 +15,10 @@ export const CHANGE_DEFAULT_PERIOD = '[AUTH-LOGIN] CHANGE_DEFAULT_PERIOD';
 
 export const MICROSOFT_USER_LOGIN = '[AUTH-LOGIN] MICROSOFT USER LOGIN';
 
-export function microsoftLogin(){
+export function microsoftLogin(url){
     return(dispatch) =>{
         (async () => {
-            let res = await authService.microsoftAuthSignin();
+            let res = await authService.microsoftAuthSignin(url);
             if(res.IsSuccess){
                 dispatch({
                     type: MICROSOFT_USER_LOGIN,
@@ -29,10 +29,10 @@ export function microsoftLogin(){
     }
 }
 
-export function microsoftLoginVerify(code,state,url){
+export function microsoftLoginVerify(code,state,hostUrl,url){
     return(dispatch) =>{
         (async () => {
-            let res = await authService.microsoftLoginVerify(code,state ,url);
+            let res = await authService.microsoftLoginVerify(code,state ,hostUrl);
             if(res.IsSuccess){
                 let regions = await authService.getRegions(res.Data.UserId);
                 res.Data.Regions = regions;

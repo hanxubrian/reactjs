@@ -34,9 +34,9 @@ class authService {
         });
     };
 
-    microsoftAuthSignin = () => {
+    microsoftAuthSignin = (url) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/v1/authentication/getAzureUrl`)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/authentication/getAzureUrl?hostUrl=${url}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
@@ -51,10 +51,11 @@ class authService {
         });
     }
 
-    microsoftLoginVerify = (code, state) => {
+    microsoftLoginVerify = (code, state,hostUrl) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/v1/authentication/azureLogin?code=${code}&state=${state}`)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/authentication/azureLogin?code=${code}&state=${state}&hostUrl=${hostUrl}`)
                 .then( res => {
+                    console.log("rest========>",res);
                     if(res.status===200) {
                         resolve(res.data);
                     }
