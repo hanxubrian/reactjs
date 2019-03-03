@@ -142,8 +142,7 @@ class SummaryTransactons extends Component {
         ];
 
         let aBillings3 = [];
-        let aDeductions0 = [];
-        let summaryRoyalty = [];
+        let summaryRoyalty = null;
         let summarytech = [];
         let summaryAcct = [];
         let summaryAddtl= [];
@@ -176,8 +175,9 @@ class SummaryTransactons extends Component {
         if(SummaryPages[0].FranNotePymt!== null && SummaryPages[0].FranNotePymt.length>0){
             summaryFranNote = SummaryPages[0].FranNotePymt[0];
         }
-        aDeductions0 = [summaryRoyalty,summaryAcct,summarytech,summaryAddtl,summaryFranNote];
-        const aDeductions1 = [ "FinderFee", "Supplies"];
+
+        const aDeductions0 = [summaryRoyalty,summaryAcct,summarytech,summaryAddtl,summaryFranNote];
+        const aDeductions1 = [ "FinderFee"];
         const aDeductions2 =["FRAN_NOTE_PYMT2", "AcctFeeRebCur", "AcctFeeRebBal"];
         const aDeductions3 =["SubtotalReg"];
         const aDeductions4 =["AdvertisingFee", "TotalLeases", "BusinessProt", "BppAdmin", "ClientSalesTaxBot",
@@ -238,11 +238,37 @@ class SummaryTransactons extends Component {
                 </table>
 
                 <h2 className="pt-16" >FRANCHISEE DEDUCTIONS:</h2>
+                {summaryRoyalty && (
+                    <table className="">
+                        <thead>
+                        <tr>
+                            <th width="250"/>
+                            <th width="200"/>
+                            <th width="150"/>
+                            <th className="text-right"/>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td> <Typography variant="subtitle1">{summaryRoyalty.BaseRoyaltyLabel}</Typography></td>
+                            <td className="text-right">${parseFloat(summaryRoyalty.BaseRoyaltyAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td> <Typography variant="subtitle1">{summaryRoyalty.MinRoyaltyLabel}</Typography></td>
+                            <td className="text-right">${parseFloat(summaryRoyalty.MinRoyaltyAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        </tbody>
+                    </table>
+                )}
 
                 <table className="">
                     <thead>
                     <tr>
-                        <th width="250"></th>
+                        <th width="250"/>
                         <th width="350">
                         </th>
                         <th className="text-right">
@@ -308,6 +334,7 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions2 !=null && (aDeductions2.map((b, index)=>{
+                        if (SummaryPages[0][b])
                             return (
                                 <tr key={index}>
                                     <td>
