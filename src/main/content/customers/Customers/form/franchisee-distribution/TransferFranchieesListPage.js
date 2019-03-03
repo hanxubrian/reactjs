@@ -383,6 +383,26 @@ const MapWithAMarkerClusterer2 = compose(
 	</GoogleMap>
 );
 
+class PatchedTableSelection extends React.PureComponent {
+	render() {
+		const { rowSelectionEnabled, ...restProps } = this.props;
+		return (
+			<TableSelection
+				cellComponent={props =>
+					this.props.rowSelectionEnabled(props.tableRow.row) ? (
+						<TableSelection.Cell {...props} />
+					) : (
+							<Table.StubCell {...props}>
+							Assigned
+							</Table.StubCell>
+						)
+				}
+				{...restProps}
+			/>
+		);
+	}
+}
+
 
 class TransferFranchieesListPage extends Component {
 
@@ -612,7 +632,7 @@ class TransferFranchieesListPage extends Component {
 			console.log('franchieesesToOffer', rows.filter(x => x.Number === fNumber))
 			const selectedRows = rows.filter(x => x.Number === fNumber)
 			this.setState({
-				selection: selectedRows.map(x => rows.indexOf(x))
+				selection: selectedRows.map(x => rows.indexOf(x)),
 			})
 		}
 	};
@@ -746,6 +766,10 @@ class TransferFranchieesListPage extends Component {
 		// this.props.showFranchieesAssignModalForm(true)
 		this.props.handleStep(0)
 	}
+
+	rowSelectionEnabled = row => {
+		return this.props.activeCustomer.Data.AssignedFranchisees.filter(x => x.FranchiseeNumber === row.Number).length < 1
+	};
 
 	render() {
 		const {
@@ -993,7 +1017,12 @@ class TransferFranchieesListPage extends Component {
 
 								<TableColumnResizing defaultColumnWidths={columns} />
 
-								<TableSelection selectByRowClick highlightRow />
+								{/* <TableSelection selectByRowClick highlightRow /> */}
+								<PatchedTableSelection
+									highlightRow
+									rowSelectionEnabled={this.rowSelectionEnabled}
+								/>
+
 								<TableHeaderRow showSortingControls />
 								{/* <TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent} /> */}
 								<Toolbar rootComponent={this.ToolbarRoot} />

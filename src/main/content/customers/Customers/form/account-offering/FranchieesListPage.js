@@ -383,6 +383,25 @@ const MapWithAMarkerClusterer2 = compose(
 	</GoogleMap>
 );
 
+class PatchedTableSelection extends React.PureComponent {
+	render() {
+		const { rowSelectionEnabled, ...restProps } = this.props;
+		return (
+			<TableSelection
+				cellComponent={props =>
+					this.props.rowSelectionEnabled(props.tableRow.row) ? (
+						<TableSelection.Cell {...props} />
+					) : (
+							<Table.StubCell {...props}>
+							Assigned
+							</Table.StubCell>
+						)
+				}
+				{...restProps}
+			/>
+		);
+	}
+}
 
 class FranchieesListPage extends Component {
 
@@ -732,7 +751,9 @@ class FranchieesListPage extends Component {
 		// this.props.showFranchieesAssignModalForm(true)
 		this.props.setStep(3)
 	}
-
+	rowSelectionEnabled = row => {
+		return this.props.activeCustomer.Data.AssignedFranchisees.filter(x => x.FranchiseeNumber === row.Number).length < 1
+	};
 	render() {
 		const {
 			classes,
@@ -969,7 +990,12 @@ class FranchieesListPage extends Component {
 
 								<TableColumnResizing defaultColumnWidths={columns} />
 
-								<TableSelection showSelectAll selectByRowClick highlightRow />
+								{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
+								<PatchedTableSelection
+									highlightRow
+									rowSelectionEnabled={this.rowSelectionEnabled}
+								/>
+
 								<TableHeaderRow showSortingControls />
 								<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent} />
 								<Toolbar rootComponent={this.ToolbarRoot} />
@@ -1170,6 +1196,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 
 		franchieesesToOffer: customers.franchieesesToOffer,
 		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 
