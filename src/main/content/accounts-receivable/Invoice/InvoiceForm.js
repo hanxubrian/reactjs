@@ -478,7 +478,7 @@ class InvoiceForm extends Component {
             commissionTotal += parseFloat(n.commissionAmount)
         });
 
-        if(this.state.selectedCustomer.TaxExempt!=='N') tax = 0;
+        if(this.state.selectedCustomer.TaxExempt==='Y') tax = 0;
 
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
@@ -1217,7 +1217,7 @@ class InvoiceForm extends Component {
                                                         control={
                                                             <Checkbox
                                                                 name="taxExempt"
-                                                                checked={this.state.selectedCustomer.TaxExempt!=='N'}
+                                                                checked={this.state.selectedCustomer.TaxExempt==='Y'}
                                                                 onChange={this.handleChange}
                                                                 value="checkedB"
                                                                 color="primary"

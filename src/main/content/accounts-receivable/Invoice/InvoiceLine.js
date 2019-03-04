@@ -861,12 +861,12 @@ class InvoiceLineTable extends React.Component {
         if(this.props.invoiceForm.customer===null) return;
 
         //Tax 0 is only allowed
-        if(this.state.bTaxEdited && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)===0) {
+        if(this.state.bTaxEdited && this.props.invoiceForm.customer.TaxExempt!=='Y' && name==='tax' && parseFloat(row.tax)===0) {
             this.setState({bTaxAlert: true});
             return;
         }
         //Tax except for 0 is not allowed
-        if(this.state.bTaxEdited && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0
+        if(this.state.bTaxEdited && this.props.invoiceForm.customer.TaxExempt!=='Y' && name==='tax' && parseFloat(row.tax)!==0
             && parseFloat(row.tax)!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount
         )
         {
@@ -971,7 +971,7 @@ class InvoiceLineTable extends React.Component {
 
         let bReadonly = false;
 
-        if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.customer.TaxExempt!=='N')
+        if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.customer.TaxExempt==='Y')
             bReadonly = true;
 
         return (
