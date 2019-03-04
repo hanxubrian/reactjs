@@ -292,24 +292,6 @@ class FranchiseeReportTable extends React.Component {
 
         const headers = [
             {
-                id: 'FranchiseeNo',
-                numeric: false,
-                disablePadding: false,
-                label: 'Franchisee#'
-            },
-            {
-                id: 'FranchiseeName',
-                numeric: false,
-                disablePadding: false,
-                label: 'Franchisee Name'
-            },
-            {
-                id: 'ff_desc',
-                numeric: false,
-                disablePadding: false,
-                label: 'Description'
-            },
-            {
                 id: 'BillMonth',
                 numeric: false,
                 disablePadding: false,
@@ -320,6 +302,12 @@ class FranchiseeReportTable extends React.Component {
                 numeric: false,
                 disablePadding: false,
                 label: 'Bill Year'
+            },
+            {
+                id: 'TotalRevenue',
+                numeric: false,
+                disablePadding: false,
+                label: 'Total Revenue'
             },
             {
                 id: 'TotalDeductions',
@@ -360,12 +348,6 @@ class FranchiseeReportTable extends React.Component {
                                     .map((n,index) => {
                                             return (
                                                 <TableRow hover key={index} >
-                                                    <TableCell>
-                                                        {n.FranchiseeNo}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {n.FranchiseeName}
-                                                    </TableCell>
                                                     <TableCell >
                                                         {n.BillMonth}
                                                     </TableCell>
