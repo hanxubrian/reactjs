@@ -67,7 +67,7 @@ const styles = theme => ({
 
 
 function getSteps() {
-    return ["Company Information", "Plan", "Documents","Customers","Finders Fees"];
+    return ["Company Information", "Plan", "Documents","Customers","Finders Fees","Franchisee Reports"];
 }
 
 function getStepContent(franchiseeForm, step) {
@@ -661,7 +661,13 @@ function getStepContent(franchiseeForm, step) {
                 <Fragment>
                     <FindersFeesTable/>
                 </Fragment>
-            ); 
+            );
+        case 5:
+            return (
+              <Fragment>
+
+              </Fragment>
+            );
         default:
             return 'Unknown step';
     }
@@ -1060,7 +1066,10 @@ class FranchiseesCreateForm extends Component {
                         )}
                         {this.props.franchiseesForm.type ==="edit" &&(
                          <Tab label="Finders Fees" />  
-                        )} 
+                        )}
+                        {this.props.franchiseesForm.type ==="edit" &&(
+                            <Tab label="Franchisee Reports" />
+                        )}
                     </Tabs>
                 </AppBar>
                 <div
