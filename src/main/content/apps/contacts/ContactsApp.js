@@ -43,6 +43,7 @@ const styles = theme => ({
     layoutHeader       : {
         height   : 80,
         minHeight: 80,
+        zIndex      : 99999,
         backgroundColor: theme.palette.secondary.main
     },
 });
@@ -78,18 +79,12 @@ class ContactsApp extends Component {
                 <FusePageCustom
                     classes={{
                         root: classes.layoutRoot,
-                        // contentCardWrapper: "p-16 sm:p-24 pb-80",
                         header: classes.layoutHeader,
                         leftSidebar       : "w-256 mt-64",
-                        // header            : "min-h-60 h-60 ",
-                        // content           : classes.content
+
                     }}
                     header={
-                        <div>
                             <ContactsHeader pageLayout={() => this.pageLayout}/>
-
-                        </div>
-
                     }
                     content={
                         <ContactsList/>
