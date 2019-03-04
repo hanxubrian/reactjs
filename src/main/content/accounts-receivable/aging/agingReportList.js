@@ -14,7 +14,7 @@ import * as Actions from 'store/actions';
 
 import {
     DataTypeProvider,
-    GroupingState, IntegratedGrouping, TableColumnVisibility,
+    GroupingState, IntegratedGrouping, IntegratedSummary, SummaryState, TableColumnVisibility,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -22,7 +22,7 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableGroupRow
+    TableGroupRow, TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 import NumberFormat from "react-number-format";
@@ -41,44 +41,34 @@ const styles = theme => ({
         flexGrow: 1,
         '& table '    : {
             '& th:first-child, & td:first-child': {
-                paddingLeft: 0 + '!important'
+                paddingLeft: '3.2em!important'
             },
             '& th:last-child, & td:last-child'  : {
-                paddingRight: 0 + '!important'
+                paddingRight: '3.2em!important'
             }
         },
-        '& .report-header h1':{
-            fontSize: 36,
-            fontWeight: 700,
-            lineHeight: 1.5,
-        },
-        '& .report-header h2':{
-            fontSize: 24,
-            fontWeight: 700,
-            lineHeight: 1.5,
-        },
-        '& .report-header h3':{
-            fontSize: 20,
-            fontWeight: 700,
-            lineHeight: 1.5,
-        },
-        '& .report-header td:nth-child(2), & .report-header td:nth-child(3)':{
-            verticalAlign: 'top',
-            paddingTop: 20
-        },
-        '& .report-header td:nth-child(3)':{
-            paddingLeft: 30
-        }
-
     },
     tableTheadRow: {
+        '& tr':{
+            height: 36,
+        },
         '& th':{
             color: theme.palette.text.primary,
-            fontWeight: 700
+            fontWeight: 700,
+            backgroundColor: 'rgba(0,128,0,.4)'
         }
     },
     tableStriped: {
-        marginBottom: '0!important'
+        marginBottom: '0!important',
+        '& tr':{
+            height: 36,
+        },
+    },
+    tableFootRow:{
+            height: 36,
+    },
+    tableSummaryCell:{
+        color: theme.palette.text.primary,
     },
 });
 
@@ -111,8 +101,52 @@ const TableHeadComponentBase = ({ classes, ...restProps }) => (
         className={classes.tableTheadRow}
     />
 );
+
+const TableSummaryComponentBase = ({ classes, ...restProps }) => (
+    <Table.Row
+        {...restProps}
+        className={classes.tableFootRow}
+    />
+);
+
+const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
+    if(restProps.column.name==='customer'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={4}
+                className={classNames(classes.tableSummaryCell,"text-right")}>
+                <strong>Customer Totals: </strong>
+            </Table.Cell>
+        );
+    }
+
+    else if(restProps.column.name==='current' || restProps.column.name==='value30'|| restProps.column.name==='value60'
+        || restProps.column.name==='value90'|| restProps.column.name==='value91'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
+
+    }
+    else
+        return (
+            <Table.Cell
+                {...restProps}
+                className={classNames(classes.tableSummaryCell, 'hidden')}
+            />
+        );
+};
+
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
+export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
+
 
 class AgingReportList extends Component {
     state={
@@ -222,17 +256,20 @@ class AgingReportList extends Component {
             { columnName: 'value91', width: 120,  align: 'right'},
         ];
 
-        let totalSummaryItems = [
-            { columnName: 'Amount', type: 'sum'},
-        ];
-
         console.log('data=', this.state.data);
         if(this.state.data===null)
             return <div/>;
 
+        let totalSummaryItems = [
+            { columnName: 'current',  type: 'sum'},
+            { columnName: 'value30',  type: 'sum'},
+            { columnName: 'value60',  type: 'sum'},
+            { columnName: 'value90',  type: 'sum'},
+            { columnName: 'value91',  type: 'sum'},
+        ];
 
         return (
-            <div className={classNames(classes.root, "p-0 sm:p-32  flex flex-col h-full")} id ="wholediv">
+            <div className={classNames(classes.root, "p-0  flex flex-col h-full")} id ="wholediv">
                 <div className={classNames("flex flex-col")}>
                     {this.state.data.map((aging, index)=>{
                         return (
@@ -243,12 +280,18 @@ class AgingReportList extends Component {
                                 <CurrencyTypeProvider
                                     for={['current', 'value30', 'value60', 'value90', 'value91']}
                                 />
+                                    <SummaryState totalItems={totalSummaryItems} />
+
+                                <IntegratedSummary />
                                 <VirtualTable height="auto"
                                               tableComponent={TableComponent}
                                               headComponent = {TableHeadComponent}
                                               columnExtensions={tableColumnExtensions}
                                 />
                                 <TableHeaderRow/>
+                                <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                                  totalCellComponent = {TableSummaryCellComponent}
+                                />
                             </Grid>
                         )
                     })}
