@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography } from '@material-ui/core';
+import { Icon, IconButton, Paper, Button } from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -13,17 +13,10 @@ import * as Actions from 'store/actions';
 
 
 import {
-	SelectionState,
 	PagingState,
 	IntegratedPaging,
-	IntegratedSelection,
 	SortingState,
 	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
 	IntegratedFiltering,
 	SearchState,
 } from '@devexpress/dx-react-grid';
@@ -32,27 +25,15 @@ import {
 	Grid,
 	Table,
 	TableHeaderRow,
-	TableSelection,
 	PagingPanel,
-	TableEditRow,
 	TableEditColumn,
-	GroupingPanel,
 	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
 	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
 	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
 import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -67,7 +48,7 @@ import {
 	Marker,
 } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers, lifecycle } from "recompose";
+import { compose, withProps, withHandlers } from "recompose";
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

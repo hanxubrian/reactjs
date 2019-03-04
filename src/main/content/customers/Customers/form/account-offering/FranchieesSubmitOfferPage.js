@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography } from '@material-ui/core';
+import { Icon, Paper, Button, TextField, MenuItem, InputAdornment, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -9,53 +9,6 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-
-
-
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-
-import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
 
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
@@ -67,7 +20,7 @@ import {
 	Marker,
 } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers, lifecycle } from "recompose";
+import { compose, withProps, withHandlers } from "recompose";
 
 
 const hexToRgb = (hex) => {
@@ -323,84 +276,6 @@ const account_offering_franchisee_columns = [
 	},
 
 ];
-
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		{/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-		<IconButton onClick={onExecute} title="Add New">
-			<NewIcon />
-		</IconButton>
-	</div>
-);
-
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-
-	// <IconButton onClick={onExecute} title="Delete">
-	<IconButton onClick={onExecute} title="Offer">
-		<Icon>call_missed_outgoing</Icon>
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	add: AddButton,
-	edit: EditButton,
-	delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
-
-
-const editing_cell_styles = theme => ({
-	cell: {
-		padding: 0,
-	}
-});
-const EditingHeaderCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}
-
-	/>);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingHeaderCellComponentBase
-);
-
 
 //
 // Google Map
@@ -661,19 +536,6 @@ class FranchieesSubmitOfferPage extends Component {
 			showMapView: !this.state.showMapView
 		})
 	}
-	ToolbarRootBase = ({ children, classes, className, ...restProps }) => (
-		<Toolbar.Root
-			className={classNames(className, classes.franchiseeGridToolbar)}
-			{...restProps}
-
-		>
-			{/* <IconButton onClick={this.toggleSideBar}>
-				<Icon>menu</Icon>
-			</IconButton> */}
-			{children}
-		</Toolbar.Root>
-	);
-	ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
 
 	getLocation() {
 		console.log("getLocation");

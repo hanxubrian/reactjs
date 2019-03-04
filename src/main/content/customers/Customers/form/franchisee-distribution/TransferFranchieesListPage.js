@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
-import moment from 'moment';
-import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography, Switch } from '@material-ui/core';
+import { Icon, IconButton, Paper, Button, TextField, MenuItem, FormControlLabel, RadioGroup, Radio, Typography, Switch } from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -20,11 +19,6 @@ import {
 	IntegratedSelection,
 	SortingState,
 	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
 	IntegratedFiltering,
 	SearchState,
 } from '@devexpress/dx-react-grid';
@@ -35,31 +29,18 @@ import {
 	TableHeaderRow,
 	TableSelection,
 	PagingPanel,
-	TableEditRow,
 	TableEditColumn,
-	GroupingPanel,
 	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
 	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
 	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
 	VirtualTable,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
 import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-
-import GridContainer from "Commons/Grid/GridContainer";
-import GridItem from "Commons/Grid/GridItem";
 
 import {
 	withScriptjs,
@@ -68,7 +49,7 @@ import {
 	Marker,
 } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers, lifecycle } from "recompose";
+import { compose, withProps, withHandlers } from "recompose";
 import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
 
 const hexToRgb = (hex) => {

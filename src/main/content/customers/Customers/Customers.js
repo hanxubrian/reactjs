@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button, Snackbar, SnackbarContent, } from '@material-ui/core';
+import { Icon, IconButton, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button, Snackbar, SnackbarContent, } from '@material-ui/core';
 // theme components
-import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
+import { FusePageCustomSidebarScroll } from '@fuse';
 
 
 import { bindActionCreators } from "redux";

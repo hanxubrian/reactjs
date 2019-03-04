@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom, Checkbox } from '@material-ui/core';
+import { IconButton, Input, Button } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -22,10 +22,8 @@ import {
 } from '@devexpress/dx-react-core';
 
 import {
-	SelectionState,
 	PagingState,
 	IntegratedPaging,
-	IntegratedSelection,
 	SortingState,
 	GroupingState,
 	IntegratedGrouping,
@@ -44,9 +42,6 @@ import {
 	Table,
 	VirtualTable,
 	TableHeaderRow,
-	TableSelection,
-	GroupingPanel,
-	Toolbar,
 	TableGroupRow,
 	PagingPanel,
 	TableFilterRow,
@@ -68,8 +63,6 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
-
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
