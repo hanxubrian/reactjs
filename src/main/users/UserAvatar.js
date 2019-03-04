@@ -59,14 +59,14 @@ class UserAvatar extends React.Component {
 
     getDataUri=(url, cb)=>
     {
-        var image = new Image();
-        var log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        let image = new Image();
+        let log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
         image.setAttribute('crossOrigin', 'anonymous');
         image.onload = function () {
-            var canvas = document.createElement('canvas');
+            let canvas = document.createElement('canvas');
             canvas.width = this.naturalWidth;
             canvas.height = this.naturalHeight;
-            var ctx = canvas.getContext('2d');
+            let ctx = canvas.getContext('2d');
             ctx.fillStyle = '#fff';  /// set white fill style
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             canvas.getContext('2d').drawImage(this, 0, 0);
