@@ -355,13 +355,13 @@ class FranchiseeReportTable extends React.Component {
                                                         {n.BillYear}
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
-                                                        ${n.TotalRevenue}
+                                                        ${parseFloat(n.TotalRevenue).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
-                                                        ${n.TotalDeductions}
+                                                        ${parseFloat(n.TotalDeductions).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
-                                                        ${n.TotalPayment}
+                                                        ${parseFloat(n.TotalPayment).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                                     </TableCell>
                                                     <TableCell>
                                                         <IconButton
