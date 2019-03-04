@@ -443,13 +443,13 @@ class ContactsList extends Component {
                             Cell      : row=>(
                                <div>{row.original.firstName}  {row.original.lastName}</div>
                             ),
-                            className : "font-bold justify-center",
-                            width    : 200,
+                            className : "font-bold",
+                            width    : 300,
                         },
                         {
                             Header    : "Email",
                             accessor  : "email",
-                            className: "justify-center",
+
                             Cell      : row=>(
                                 <div onClick={(event)=>{event.stopPropagation();;this.goprofile(row.original.id)}}>{row.original.email}</div>
                             ),
@@ -460,19 +460,21 @@ class ContactsList extends Component {
                             Header    : "Phone",
                             accessor  : "phone",
                             className: "justify-center",
+                            width     : 150,
                             // filterable: true
                         },
+
                         {
-                            Header    : "DepartMent",
+                            Header    : "Department",
                             accessor  : "company",
                             className : "justify-center",
-                            width     : 150,
+                            width     : 250,
                             // filterable: true
                         },
                         {
                             Header    : "Region",
                             accessor  : "defaultRegion",
-                            className : "font-bold justify-center",
+                            className : "font-bold",
                             Cell      : row=>{
                                 let re =_.find(row.original.region,{RegionId:row.original.defaultRegion});
                                 return(
@@ -484,7 +486,7 @@ class ContactsList extends Component {
                         },
                         {
                             Header: "",
-                            width : 128,
+                            // width : 128,
                             Cell  : row => (
                                 <div className="flex items-center">
                                     <IconButton
