@@ -1,25 +1,20 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom';
 
-import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
-import moment from 'moment';
 
 // core components
-import {Typography} from '@material-ui/core';
-import Grid1 from '@material-ui/core/Grid';
+
 import {withStyles} from '@material-ui/core/styles/index';
 
-//Theme component
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 //Store
+import connect from "react-redux/es/connect/connect";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
 import {
     DataTypeProvider,
-    SummaryState, IntegratedSummary,
+    GroupingState, IntegratedGrouping, TableColumnVisibility,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -27,8 +22,9 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow
+    TableGroupRow
 } from '@devexpress/dx-react-grid-material-ui';
+
 import NumberFormat from "react-number-format";
 
 
@@ -168,14 +164,13 @@ export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent
 
 class AgingReportList extends Component {
     state={
-        data: []
+        data: null
     };
 
     componentDidMount()
     {
         this.props.onRef(this);
         if (this.props.agingReports!==null) {
-            this.setState({data: this.props.agingReports});
 
             if(this.props.agingReports.length)
                 this.onProcessData();
@@ -188,7 +183,6 @@ class AgingReportList extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.agingReports!==null && (this.props.agingReports !== prevProps.agingReports)) {
-            this.setState({data: this.props.agingReports});
 
             if(this.props.agingReports.length)
                 this.onProcessData();
@@ -197,13 +191,23 @@ class AgingReportList extends Component {
 
     onProcessData = () =>{
         let temp = this.props.agingReports;
-        let inv=[];
+        let agings=[];
         temp.forEach(x => {
-            x.customer = `${x.CustomerNo} ${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`;
+            let customer = `${x.CustomerNo} ${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`;
+            if(x.Invoices.length){
+                x.Invoices.forEach(inv=>{
+                    agings.push({customer: customer, ...inv})
+                })
+            }
         });
 
+        this.setState({data: agings,
+            expandedGroups: [...new Set(agings.map(x => x.customer))]});
     };
 
+    expandedGroupsChange = (expandedGroups) => {
+        this.setState({expandedGroups});
+    };
 
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
         return (
@@ -213,32 +217,51 @@ class AgingReportList extends Component {
         );
     };
 
+    GroupCellContent = ({column, row}) => (
+        <span>
+            <strong>{row.value}</strong>
+		</span>
+    );
+
+    emptyMessageContent = ({column, row}) => (
+        <span>
+            <strong>{row.value}</strong>
+		</span>
+    );
 
     render()
     {
         const { classes} = this.props;
+        const {expandedGroups} = this.state;
         const columns = [
-            {name: "Customer", title: "Customer",},
-            {name: "CustomerNo", title: "Cust. #"},
-            {name: "ReferenceNo", title: "Check #/Descr."},
-            {name: "Description", title: "Description"},
-            {name: "FranchiseeNo", title: "Fran. #"},
+            {name: "customer", title: "Customer"},
+            {name: "InvDate", title: "Inv. Date"},
+            {name: "DueDate", title: "DueDate"},
             {name: "InvoiceNo", title: "Invoice #"},
-            {name: "Amount", title: "Amount"},
+            {name: "current", title: "Current"},
+            {name: "value30", title: "1-30"},
+            {name: "value60", title: "31-60"},
+            {name: "value90", title: "61-90"},
+            {name: "value91", title: "91+"},
         ];
         let  tableColumnExtensions = [
-            { columnName: 'Customer', width: -1, },
-            { columnName: 'CustomerNo', width: 100},
-            { columnName: 'ReferenceNo', width: 150,},
-            { columnName: 'Description', width: 120,},
-            { columnName: 'FranchiseeNo', width: 120},
-            { columnName: 'Amount', width: 120,  align: 'right'},
+            { columnName: 'InvDate', width: 120, },
+            { columnName: 'DueDate', width: 120},
+            { columnName: 'InvoiceNo', width: -1},
+            { columnName: 'current', width: 120,  align: 'right'},
+            { columnName: 'value30', width: 120,  align: 'right'},
+            { columnName: 'value60', width: 120,  align: 'right'},
+            { columnName: 'value90', width: 120,  align: 'right'},
+            { columnName: 'value91', width: 120,  align: 'right'},
         ];
-        console.log('data=', this.state.data);
 
         let totalSummaryItems = [
             { columnName: 'Amount', type: 'sum'},
         ];
+
+        console.log('data=', this.state.data);
+        if(this.state.data===null)
+            return <div/>;
 
 
         return (
@@ -248,27 +271,30 @@ class AgingReportList extends Component {
                         rows={this.state.data}
                         columns={columns}
                     >
-                        {this.state.data.length>0 && (
-                            <CurrencyTypeProvider
-                                for={['Amount']}
-                            />
-                        )}
-
-                        {this.state.data.length>0 && (
-                            <SummaryState totalItems={totalSummaryItems} />
-                        )}
-                        {this.state.data.length>0 && (<IntegratedSummary /> )}
-
-
+                        <CurrencyTypeProvider
+                            for={['current', 'value30', 'value60', 'value90', 'value91']}
+                        />
+                        <GroupingState
+                            grouping={[
+                                {columnName: 'customer'},
+                            ]}
+                            expandedGroups={expandedGroups}
+                            onExpandedGroupsChange={this.expandedGroupsChange}
+                        />
+                        <IntegratedGrouping/>
                         <VirtualTable height="auto"
                                       tableComponent={TableComponent}
                                       headComponent = {TableHeadComponent}
                                       columnExtensions={tableColumnExtensions}
                         />
                         <TableHeaderRow/>
-                        {this.state.data.length>0 && (
-                            <TableSummaryRow />
-                        )}
+                        <TableGroupRow
+                            showColumnsWhenGrouped contentComponent={this.GroupCellContent}
+                        />
+                        <TableColumnVisibility
+                            hiddenColumnNames={['customer']}
+                            emptyMessageComponent={this.emptyMessageContent}
+                        />
                     </Grid>
                 </div>
             </div>
