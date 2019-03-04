@@ -743,7 +743,6 @@ class TransferFranchieesListPage extends Component {
 		this.props.handleStep(3)
 	}
 	cancelTransfer = () => {
-		this.props.setTransferFranchiseeState(false)
 		this.props.handleStep(0)
 	}
 
@@ -777,7 +776,7 @@ class TransferFranchieesListPage extends Component {
 
 		return (
 			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-				{this.props.bTransferFranchiseeFtate &&
+				
 					<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
 						<TextField
 							type="date"
@@ -816,7 +815,7 @@ class TransferFranchieesListPage extends Component {
 						// style={{ width: '40%' }}
 						/>
 					</div>
-				}
+				
 
 				<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
 					<Typography variant="h6">Active Franchisees (To Transfer)</Typography>
@@ -832,10 +831,6 @@ class TransferFranchieesListPage extends Component {
 								<Icon>location_on</Icon>
 							</IconButton>
 						</Tooltip> */}
-
-						{!this.props.bTransferFranchiseeFtate &&
-							<Button variant="contained" onClick={this.backToAccountOfferingHome} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						}
 
 						{/* <Button
 							variant="contained"
@@ -1184,7 +1179,6 @@ function mapDispatchToProps(dispatch) {
 		getFranchisees: Actions.getFranchisees,
 
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
-		setTransferFranchiseeState: Actions.setTransferFranchiseeState,
 
 		setFranchiseeToTransfer: Actions.setFranchiseeToTransfer,
 		openSnackbar: Actions.openSnackbar,
@@ -1205,7 +1199,6 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		SearchText: franchisees.SearchText,
 
 		franchieesesToOffer: customers.franchieesesToOffer,
-		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 
 		snack: customers.snack,
 		activeCustomer: customers.activeCustomer,

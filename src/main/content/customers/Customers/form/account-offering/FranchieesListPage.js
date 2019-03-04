@@ -532,12 +532,13 @@ class FranchieesListPage extends Component {
 		// "CreatedById": 6
 		let newFranchieesesToOffer = _.cloneDeep(franchieesesToOffer)
 		newFranchieesesToOffer.forEach(x => {
+			x.FranchiseeId = x.Id
 			x.FranchiseeNumber = x.Number
 			x.FranchiseeName = x.Name
 			// Id= ""
 			x.Status = "Assigned"
 			x.AssignedDate = moment().format('YYYY-MM-DD')
-			// CreatedById= 0
+			x.CreatedById= 0
 			x.MonthlyBilling = []
 			x.FinderFee = {}
 			x.new = true // to indentify newly added

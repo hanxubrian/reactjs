@@ -111,6 +111,9 @@ export const SET_FRANCHISEE_TO_TRANSFER = "[CUSTOMERS APP] SET_FRANCHISEE_TO_TRA
 export const OPEN_SNACK_BAR = "[CUSTOMERS APP] OPEN_SNACK_BAR";
 export const CLOSE_SNACK_BAR = "[CUSTOMERS APP] CLOSE_SNACK_BAR";
 
+export const TRANSFER_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE";
+export const TRANSFER_ASSIGNED_FRANCHISEE_START = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE_START";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -205,10 +208,10 @@ export function createCustomer(regionId, param) {
 		});
 
 		(async () => {
-			let response = await customersService.createCustomer(regionId, param);
+			let newCustomer = await customersService.createCustomer(regionId, param);
 			dispatch({
 				type: CREATE_CUSTOMER,
-				payload: response
+				payload: {regionId, newCustomer}
 			});
 		})();
 	}
@@ -221,10 +224,10 @@ export function updateCustomer(regionId, param) {
 		});
 
 		(async () => {
-			let response = await customersService.updateCustomer(regionId, param);
+			let activeCustomer = await customersService.updateCustomer(regionId, param);
 			dispatch({
 				type: UPDATE_CUSTOMER,
-				payload: response
+				payload: activeCustomer
 			});
 		})();
 	}
@@ -794,6 +797,21 @@ export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend
 			const activeCustomer = await customersService.getCustomer(regionId, customerId);
 			dispatch({
 				type: SAVE_SUSPEND_CONTRACT,
+				payload: activeCustomer
+			});
+		})();
+	}
+}
+export function transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, franchisee) {
+	return (dispatch) => {
+		dispatch({
+			type: TRANSFER_ASSIGNED_FRANCHISEE_START,
+		});
+
+		(async () => {
+			let activeCustomer = await customersService.transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, franchisee);
+			dispatch({
+				type: TRANSFER_ASSIGNED_FRANCHISEE,
 				payload: activeCustomer
 			});
 		})();

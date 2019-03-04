@@ -551,42 +551,42 @@ class Customers extends Component {
 				nextProps.searchText);
 		}
 
-		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false ||
-			nextProps.bUpdateCustomerStart !== this.props.bUpdateCustomerStart && nextProps.bUpdateCustomerStart === false
-		) {
-			this.props.getCustomers(
-				this.props.regionId,
-				this.props.statusId,
-				this.props.filters.StatusNames,
-				this.props.filters.AccountTypeListName,
-				this.props.location,
-				this.props.latitude,
-				this.props.longitude,
-				this.props.searchText);
-			this.props.getSuggestCustomersList(
-				this.props.regionId,
-				this.props.statusId,
-				this.props.location,
-				this.props.latitude,
-				this.props.longitude,
-				this.props.searchText);
+		// if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false ||
+		// 	nextProps.bUpdateCustomerStart !== this.props.bUpdateCustomerStart && nextProps.bUpdateCustomerStart === false
+		// ) {
+		// 	this.props.getCustomers(
+		// 		this.props.regionId,
+		// 		this.props.statusId,
+		// 		this.props.filters.StatusNames,
+		// 		this.props.filters.AccountTypeListName,
+		// 		this.props.location,
+		// 		this.props.latitude,
+		// 		this.props.longitude,
+		// 		this.props.searchText);
+		// 	this.props.getSuggestCustomersList(
+		// 		this.props.regionId,
+		// 		this.props.statusId,
+		// 		this.props.location,
+		// 		this.props.latitude,
+		// 		this.props.longitude,
+		// 		this.props.searchText);
 
-		}
+		// }
 
-		if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
-			this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.flag &&
-			nextProps.activeCustomer.Data.flag !== this.props.activeCustomer.Data.flag) {
-			console.log('componentWillReceiveProps', nextProps.activeCustomer, this.props.activeCustomer.Data)
-			this.props.getCustomers(
-				nextProps.regionId,
-				nextProps.statusId,
-				nextProps.filters.StatusNames,
-				nextProps.filters.AccountTypeListName,
-				nextProps.location,
-				nextProps.latitude,
-				nextProps.longitude,
-				nextProps.searchText);
-		}
+		// if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
+		// 	this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.flag &&
+		// 	nextProps.activeCustomer.Data.flag !== this.props.activeCustomer.Data.flag) {
+		// 	console.log('componentWillReceiveProps', nextProps.activeCustomer, this.props.activeCustomer.Data)
+		// 	this.props.getCustomers(
+		// 		nextProps.regionId,
+		// 		nextProps.statusId,
+		// 		nextProps.filters.StatusNames,
+		// 		nextProps.filters.AccountTypeListName,
+		// 		nextProps.location,
+		// 		nextProps.latitude,
+		// 		nextProps.longitude,
+		// 		nextProps.searchText);
+		// }
 	}
 
 
