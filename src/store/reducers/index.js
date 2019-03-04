@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import fuse from './fuse';
 import invoices from './invoice.reducer';
+import agings from './aging.reducer';
 import billruns from './billrun.reducer';
 import auth from 'auth/store/reducers';
 import quickPanel from 'main/quickPanel/store/reducers';
@@ -47,6 +48,7 @@ const createReducer =
 				auth,
 				fuse,
 				invoices,
+				agings,
 				billruns,
 				quickPanel,
 				calendarApp,

@@ -307,41 +307,35 @@ class AgingReportList extends Component {
 
 
         return (
-            <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
-                <div id ="testdiv" className="cardname">
-                    <div className="w-full pb-16" style={{borderBottom: '4px double'}}>
-                        {this.renderHeader()}
-                    </div>
-                    <div className={classNames("flex flex-col")}>
-                        <Grid
-                            rows={this.state.data}
-                            columns={columns}
-                        >
-                            {this.state.data.length>0 && (
+            <div className={classNames(classes.root, "p-0 sm:p-32  flex flex-col h-full")} id ="wholediv">
+                <div className={classNames("flex flex-col")}>
+                    <Grid
+                        rows={this.state.data}
+                        columns={columns}
+                    >
+                        {this.state.data.length>0 && (
                             <CurrencyTypeProvider
                                 for={['Amount']}
                             />
-                            )}
+                        )}
 
-                            {this.state.data.length>0 && (
-                                <SummaryState totalItems={totalSummaryItems} />
-                            )}
-                            {this.state.data.length>0 && (<IntegratedSummary /> )}
+                        {this.state.data.length>0 && (
+                            <SummaryState totalItems={totalSummaryItems} />
+                        )}
+                        {this.state.data.length>0 && (<IntegratedSummary /> )}
 
 
-                            <VirtualTable height="auto"
-                                          tableComponent={TableComponent}
-                                          headComponent = {TableHeadComponent}
-                                          columnExtensions={tableColumnExtensions}
-                            />
-                            <TableHeaderRow/>
-                            {this.state.data.length>0 && (
-                                <TableSummaryRow />
-                            )}
-                        </Grid>
-                    </div>
+                        <VirtualTable height="auto"
+                                      tableComponent={TableComponent}
+                                      headComponent = {TableHeadComponent}
+                                      columnExtensions={tableColumnExtensions}
+                        />
+                        <TableHeaderRow/>
+                        {this.state.data.length>0 && (
+                            <TableSummaryRow />
+                        )}
+                    </Grid>
                 </div>
-
             </div>
         )
     }

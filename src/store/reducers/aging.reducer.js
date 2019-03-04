@@ -5,6 +5,7 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import _ from 'lodash';
+import {TOGGLE_AGING_FILTER_PANEL} from "../actions/";
 
 const initialState = {
     agingReports: null,
@@ -19,7 +20,8 @@ const initialState = {
         OrderBy: "",
         BalanceRestriction: 0,
         ChargeBackOn: true,
-    }
+    },
+    bAgingFilterPanel: false,
 };
 
 const agings = function(state = initialState, action) {
@@ -31,6 +33,8 @@ const agings = function(state = initialState, action) {
             return {...state, agingReports: action.payload, bFetchingAging: false};
         case Actions.GET_AGING_REPORTS_ERROR:
             return {...state, agingReports: null, bFetchingAging: false, errorMsg: action.payload};
+        case Actions.TOGGLE_AGING_FILTER_PANEL:
+            return {...state, bAgingFilterPanel: !state.bAgingFilterPanel};
         case UserActions.USER_LOGGED_OUT:
             return {...initialState};
         default:

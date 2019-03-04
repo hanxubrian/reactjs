@@ -3,6 +3,7 @@ import {agingService} from "../../services"
 export const GET_AGING_REPORTS_SUCCESS = "[AGING] GETS REPORTS SUCCESS";
 export const GET_AGING_REPORTS_ERROR = "[AGING] GETS REPORTS ERROR";
 export const GET_STARTED_AGINGS_FETCH = "[AGING] GET STARTED FETCH";
+export const TOGGLE_AGING_FILTER_PANEL = "[AGING] TOGGLE FILTER PANEL";
 
 export function getAgingReports(regionId, params) {
     return (dispatch) => {
@@ -27,4 +28,11 @@ export function getAgingReports(regionId, params) {
             }
         })();
     };
+}
+
+
+export function toggleAgingFilterPanel(){
+    return {
+        type: TOGGLE_AGING_FILTER_PANEL
+    }
 }
