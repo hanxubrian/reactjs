@@ -27,8 +27,14 @@ import {
 
 import NumberFormat from "react-number-format";
 
-
-//Child components
+const hexToRgb = (hex) => {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+};
 
 const styles = theme => ({
     root: {
@@ -66,11 +72,13 @@ const styles = theme => ({
 
     },
     tableTheadRow: {
-
+        '& th':{
+            color: theme.palette.text.primary,
+            fontWeight: 700
+        }
     },
     tableStriped: {
         marginBottom: '0!important'
-
     },
 });
 
