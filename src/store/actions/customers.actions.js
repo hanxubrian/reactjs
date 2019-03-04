@@ -129,9 +129,10 @@ export function getCustomers(regionId, statusId, StatusNames, AccountTypeListNam
 			let allCustomers = await customersService.getCustomersList(regionId, statusId, StatusNames, AccountTypeListName, location, latitude, longitude, searchText);
 			const cancelReasons = await customersService.getCancelReason();
 			const suspendReasons = await customersService.getSuspendReason();
+			const transferReasons = await customersService.getReasonList('franchisee_transfer')
 			dispatch({
 				type: GET_ALL_CUSTOMERS,
-				payload: { allCustomers, cancelReasons, suspendReasons }
+				payload: { allCustomers, cancelReasons, suspendReasons, transferReasons }
 			});
 		})();
 	}

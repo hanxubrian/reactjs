@@ -307,6 +307,7 @@ const initialState = {
 
 	cancelReasons: [],
 	suspendReasons: [],
+	transferReasons: [],
 
 	computedFinderFee: {},
 	finderFee: {},
@@ -338,6 +339,7 @@ const customers = function (state = initialState, action) {
 					customersDB: action.payload.allCustomers,
 					cancelReasons: action.payload.cancelReasons,
 					suspendReasons: action.payload.suspendReasons,
+					transferReasons: action.payload.transferReasons,
 					bLoadedCustomers: true,
 					bCustomerFetchStart: false,
 					loading: {

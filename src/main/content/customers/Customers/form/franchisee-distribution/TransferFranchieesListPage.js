@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
-import { Icon, IconButton, Paper, Button, TextField, MenuItem, FormControlLabel, RadioGroup, Radio, Typography, Switch } from '@material-ui/core';
+import { Icon, IconButton, Paper, Button, TextField, MenuItem, FormControlLabel, RadioGroup, Radio, Typography, Switch, FormControl, InputLabel, Select, Checkbox } from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -660,6 +660,9 @@ class TransferFranchieesListPage extends Component {
 		this.setState({
 			[name]: event.target.checked
 		});
+		if (name === "enabled_cancelation_fee") {
+			this.setState({ canc_fee: event.target.checked ? 50 : '' })
+		}
 	};
 
 	toggleSideBar = () => {
@@ -776,46 +779,196 @@ class TransferFranchieesListPage extends Component {
 
 		return (
 			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-				
-					<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
-						<TextField
-							type="date"
-							id="TransferEffectiveDate"
-							label="Transfer Effective Date *"
-							className={classNames(classes.textField, "mr-6")}
-							InputLabelProps={{ shrink: true }}
-							value={this.state.TransferEffectiveDate || ''}
-							onChange={this.handleChange('TransferEffectiveDate')}
-							margin="dense"
-							// variant="outlined"
-							style={{ width: "20%", minWidth: "180px" }}
-						/>
 
-						<TextField
-							id="Reason"
-							label="Reason"
-							className={classNames(classes.textField, "mr-6")}
-							InputLabelProps={{ shrink: true }}
+				<div className={classNames("flex items-center mt-12 mb-12")}>
+					<TextField
+						type="date"
+						id="TransferEffectiveDate"
+						label="Transfer Effective Date *"
+						className={classNames(classes.textField, "mr-6")}
+						InputLabelProps={{ shrink: true }}
+						value={this.state.TransferEffectiveDate || ''}
+						onChange={this.handleChange('TransferEffectiveDate')}
+						margin="dense"
+						// variant="outlined"
+						style={{ width: "20%", minWidth: "180px" }}
+					/>
+
+					{/* <TextField
+						select
+						id="Reason"
+						label="Reason"
+						className={classNames(classes.textField, "mr-6")}
+						InputLabelProps={{ shrink: true }}
+						value={this.state.Reason || ''}
+						onChange={this.handleChange('Reason')}
+						margin="dense"
+						// variant="outlined"
+						style={{ width: "50%", minWidth: "180px" }}
+					/> */}
+
+					<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, width: "23%", minWidth: "180px" }}>
+						<InputLabel shrink htmlFor="Reason">Reason</InputLabel>
+						<Select
+							native
 							value={this.state.Reason || ''}
 							onChange={this.handleChange('Reason')}
+							inputProps={{
+								name: 'Reason',
+								id: 'Reason',
+							}}
+						>
+							{this.props.transferReasons.Data && this.props.transferReasons.Data.map((x, index) => (
+								<option key={index} value={x.ReasonNumber}>{x.name}</option>
+							))}
+						</Select>
+					</FormControl>
+
+					<Checkbox
+						checked={this.state.enabled_cancelation_fee || false}
+						onChange={this.handleChangeChecked('enabled_cancelation_fee')}
+						style={{ marginTop: 14 }}
+					/>
+					<TextField
+						disabled={!this.state.enabled_cancelation_fee}
+						id="canc_fee"
+						label="Cancelation Fee"
+						placeholder="Amount Fee"
+						type="number"
+						value={this.state.enabled_cancelation_fee ? (this.state.canc_fee || '') : ''}
+						onChange={this.handleChange('canc_fee')}
+						className={classNames(classes.textField, '')}
+						InputLabelProps={{ shrink: this.state.enabled_cancelation_fee }}
+						margin="dense"
+					/>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={this.state.continue_findersfee || false}
+								onChange={this.handleChangeChecked('continue_findersfee')}
+								value="continue_findersfee"
+							/>
+						}
+						label="Stop Finders Fee"
+					// style={{ width: '40%' }}
+					/>
+
+					{this.state.continue_findersfee &&
+						<TextField
+							type="date"
+							id="stop_finders_fee"
+							label="Stop Date"
+							className={classNames(classes.textField, "ml-12")}
+							InputLabelProps={{ shrink: true }}
+							value={this.state.stop_finders_fee}
+							onChange={this.handleChange('stop_finders_fee')}
 							margin="dense"
 							// variant="outlined"
-							style={{ width: "50%", minWidth: "180px" }}
+							style={{ minWidth: "180px" }}
 						/>
+					}
 
-						<FormControlLabel
-							control={
-								<Switch
-									checked={this.state.StopFindersFee || false}
-									onChange={this.handleChangeChecked('StopFindersFee')}
-									value="StopFindersFee"
+
+				</div>
+
+				<div className={classNames("flex justify-start w-full mt-12")}>
+					<div className={classNames("flex flex-col justify-start w-full")}>
+						<div className={classNames("flex justify-start w-full")}>
+							<TextField
+								type="number"
+								id="CleanTimes"
+								label="Clean Times *"
+								className={classNames(classes.textField, "mr-6")}
+								value={this.state.cleantimes || ''}
+								onChange={this.handleChange('cleantimes')}
+								InputLabelProps={{ shrink: true }}
+								margin="dense"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+							<TextField
+								select
+
+								id="CleanFrequency"
+								label="Clean Frequency *"
+								className={classNames(classes.textField, "ml-6")}
+								InputLabelProps={{ shrink: true }}
+								value={this.state.cleanper || ''}
+								onChange={this.handleChange('cleanper')}
+								margin="dense"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							>
+								{["Month", "Week", "Event"].map((x, index) => (
+									<MenuItem key={index} value={x}>{x}</MenuItem>
+								))}
+							</TextField>
+						</div>
+
+						<div className={classNames("flex justify-start w-full mt-6")}>
+							{[
+								{ label: 'Mon', value: 'mon' },
+								{ label: 'Tue', value: 'tue' },
+								{ label: 'Wed', value: 'wed' },
+								{ label: 'Thu', value: 'thu' },
+								{ label: 'Fri', value: 'fri' },
+								{ label: 'Sat', value: 'sat' },
+								{ label: 'Sun', value: 'sun' },
+								{ label: 'Weekends', value: 'wkndTF' },
+							].map((x, index) =>
+								<FormControlLabel key={index}
+									control={<Checkbox onChange={this.handleChangeChecked(x.value)} checked={this.state[x.value] || false} className="pr-0" />}
+									label={x.label}
+									className="mr-6"
 								/>
-							}
-							label="Stop Finders Fee"
-						// style={{ width: '40%' }}
+							)}
+						</div>
+
+						<TextField
+							id="DetailedCleaningInstructions"
+							label="Detailed Cleaning Instructions"
+							multiline
+							rows="3"
+							rowsMax="3"
+							className={classes.textField}
+							value={this.state.detailed_cleaning_instructions}
+							onChange={this.handleChange('detailed_cleaning_instructions')}
+							InputLabelProps={{ shrink: true }}
+							margin="dense"
+							// variant="outlined"
+							style={{ width: '100%' }}
 						/>
 					</div>
-				
+					<div className={classNames("flex flex-col mt-12 justify-start w-full ml-12")}>
+						<TextField
+							id="note"
+							name="note"
+							label="Note"
+							className={classes.textField}
+							value={this.state.note || ''}
+							onChange={this.handleChange('note')}
+							margin="dense"
+							variant="outlined"
+							fullWidth
+							multiline
+							InputLabelProps={{
+								shrink: true,
+								classes: { outlined: classes.label }
+							}}
+							InputProps={{
+								classes: {
+									input: classes.input, multiline: classes.input
+								},
+							}}
+							rows={3}
+						/>
+					</div>
+				</div>
+
+
+				<div className={classNames("flex mt-12 justify-start w-full")}>
+
+				</div>
 
 				<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
 					<Typography variant="h6">Active Franchisees (To Transfer)</Typography>
@@ -1203,6 +1356,8 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		snack: customers.snack,
 		activeCustomer: customers.activeCustomer,
 		franchiseeToTransfer: customers.franchiseeToTransfer,
+
+		transferReasons: customers.transferReasons,
 	}
 }
 
