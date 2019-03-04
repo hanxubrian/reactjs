@@ -53,7 +53,9 @@ const styles = theme => ({
         '& .customer-summary':{
             height: 36,
             backgroundColor: 'rgba(0,128,0,.6)',
-            color: 'white'
+            '& p': {
+                color: 'white',
+            }
         }
     },
     tableTheadRow: {
