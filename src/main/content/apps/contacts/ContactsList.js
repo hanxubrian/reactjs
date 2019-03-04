@@ -195,7 +195,6 @@ class ContactsList extends Component {
         }
         if(!this.state.isOpen && this.state.chatId && this.state.chatId !==null){
             this.openChat();
-            // console.log("chatID=============",this.state.chatId);
         }
         if(this.props !== prevProps && this.state.chatId && this.state.chatId !== null){
                 let msg = this.state.chatDetail.messages;
@@ -203,10 +202,6 @@ class ContactsList extends Component {
                     individualchatDetail:msg[this.state.chatId],
                 })
         }
-        // console.log("==1==rooms",this.state.chatDetail.rooms);
-        // console.log("==1==chatID",this.state.chatId);
-        // console.log("==1==isOpen",this.state.isOpen);
-        // console.log("==1==currentRoom",this.state.currentRoom);
         if(this.state.currentRoom === null || this.state.chatId !== prevState.chatId){
                 this.state.chatDetail.rooms.map((item, index)=>{
                    if(item.id === this.state.chatId){
@@ -270,18 +265,6 @@ class ContactsList extends Component {
                     chatId : userId,
                 });
             }
-            // if(chatlist  && chatlist != null){
-            //     chatlist.map((item)=>{
-            //         if(item['contactId']==userId){
-            //             this.setState({
-            //                 chatId : item['chatId'],
-            //             });
-            //
-            //
-            //         }
-            //     });
-            // }
-
         }
     }
     render()
@@ -289,9 +272,7 @@ class ContactsList extends Component {
         const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
         let midcontact = this.mgetFilteredArray(contacts);
         const data = this.getFilteredArray(midcontact, searchText);
-        // console.log("searchText===========",searchText);
         const {selectedContactsMenu} = this.state;
-        // console.log("chatDetal====",this.state.chatDetail);
         if ( !data && data.length === 0 )
         {
             return (
@@ -447,23 +428,6 @@ class ContactsList extends Component {
                             className : "font-bold justify-center",
                             width    : 200,
                         },
-                        // {
-                        //     Header    : "Last Name",
-                        //     accessor  : "lastName",
-                        //     // filterable: true,
-                        //     className : "font-bold",
-                        //     width    : 150,
-                        // },
-                     /*    {
-                            Header    : "Company",
-                            accessor  : "company",
-                            filterable: true
-                        }, */
-                        /* {
-                            Header    : "Job Title",
-                            accessor  : "jobTitle",
-                            filterable: true
-                        }, */
                         {
                             Header    : "Email",
                             accessor  : "email",
@@ -515,17 +479,6 @@ class ContactsList extends Component {
                                             <Icon>star_border</Icon>
                                         )}
                                     </IconButton>
-                                    {/*<IconButton*/}
-                                        {/*onClick={(ev) => {*/}
-                                            {/*ev.stopPropagation();*/}
-                                            {/*removeContact(row.original.id);*/}
-                                        {/*}}*/}
-                                        {/*className={classes.chatIcon}*/}
-                                    {/*>*/}
-                                        {/*<Icon>delete</Icon>*/}
-                                       {/**/}
-                                    {/*</IconButton>*/}
-
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();

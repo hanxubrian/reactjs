@@ -1,4 +1,5 @@
 import axios from 'axios/index';
+import _ from 'lodash';
 import {getUserData} from 'main/content/apps/contacts/store/actions/user.actions';
 import {getChatUserData} from 'main/chatPanel//store/actions/user.actions';
 import {getChatContacts} from 'main/chatPanel//store/actions/contacts.actions';
@@ -29,7 +30,6 @@ export const OPEN_CHAT_PANEL_END = '[CONTACTS APP] OPEN CHAT PANEL END';
 
 export function getContacts(routeParams)
 {
-  
         return  (dispatch, getState) => {
             const userId = getState().auth.login.Username;
             const regionId = getState().auth.login.defaultRegionId;
@@ -43,7 +43,6 @@ export function getContacts(routeParams)
                 // let response = await contactService.getRegisteredGroupUserList();
                 let response = await chatService.getUserListforcontacts(data);
                 let contacts = [];
-                console.log('response.Data===',response.Data);
                 response.Data.map((item)=>{
                     contacts= [...contacts,
                         {
@@ -72,17 +71,30 @@ export function getContacts(routeParams)
                             outlookUsername: item.OutlookUsername,
                             roles: item.Roles,
                             groups: item.Groups,
-
-
-
                         } ]
-                    
+                });
+                if(routeParams && routeParams.id==='starred'){
+                    let starredid = getState().contactsApp.user.starred;
+                    let midcontacts = [];
+                    starredid.map((staritem)=>{
+                        let m = _.find(contacts,{id:staritem});
+                        if(m){
+                            midcontacts.push(m);
+                        }
+                    });
 
-                });
-                dispatch({
-                    type   : GET_CONTACTS,
-                    payload: contacts
-                });
+                    dispatch({
+                        type   : GET_CONTACTS,
+                        payload: midcontacts
+                    });
+                }
+                else{
+                    dispatch({
+                        type   : GET_CONTACTS,
+                        payload: contacts
+                    });
+                }
+
             })();
         }
 

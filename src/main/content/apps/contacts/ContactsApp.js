@@ -60,7 +60,6 @@ class ContactsApp extends Component {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
             this.props.getContacts(this.props.match.params);
-
         }
     }
 
