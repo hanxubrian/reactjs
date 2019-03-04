@@ -311,7 +311,6 @@ const initialState = {
 	computedFinderFee: {},
 	finderFee: {},
 
-	updateCustomerResponse: null,
 	bUpdateCustomerStart: false,
 
 	bTransferFranchiseeFtate: false,
@@ -384,8 +383,59 @@ const customers = function (state = initialState, action) {
 			}
 		case Actions.CREATE_CUSTOMER:
 			{
+				const regionId = action.payload.regionId
+				let newCustomer = action.payload.newCustomer.Data
+					// newCustomer.AccountTypeListId= ""
+					// newCustomer.AccountTypeListName= ""
+					newCustomer.Address= newCustomer.cus_addr
+					newCustomer.Amount= newCustomer.cont_bill
+					newCustomer.Atrisk= "Normal"
+					newCustomer.City= newCustomer.cus_city
+					newCustomer.CreatedBy= null
+					newCustomer.CustomerId= newCustomer._id
+					newCustomer.CustomerName= newCustomer.cus_name
+					newCustomer.CustomerNo= newCustomer.cust_no
+					// newCustomer.InvoiceDayPreference= "BOM"
+					// newCustomer.Latitude= 37.4855107
+					// newCustomer.LogMessage= null
+					// newCustomer.Longitude= -122.1822702
+					// newCustomer.OverPayment= 0
+					// newCustomer.PaymentTerm= 30
+					newCustomer.Phone= newCustomer.cus_phone
+					newCustomer.PostalCode= newCustomer.cus_zip
+					// newCustomer.Radius= 0
+					newCustomer.RegionName= "BUF"
+					newCustomer.StateName= newCustomer.cus_state
+					newCustomer.StatusName= "A"
+
+
+
+				const oldRegions = state.customersDB.Data.Regions
+
+				const regions = oldRegions.filter(x => x.Id == regionId)
+				let curRegionIndex = 0
+				if (regions && regions.length > 0) {
+					curRegionIndex = oldRegions.indexOf(regions[0])
+				}
+				const curRegion = oldRegions[curRegionIndex]
+
+				const newRegion = {
+					...curRegion,
+					CustomerList: [newCustomer, ...curRegion.CustomerList]
+				}
+
+				oldRegions[curRegionIndex] = newRegion
+
 				return {
 					...state,
+					customersDB: {
+						...state.customersDB,
+						Data: {
+							...state.customersDB.Data,
+							Regions: oldRegions
+						}
+					},
+
 					createCustomerResponse: action.payload,
 					bCreateCustomerStart: false,
 					loading: {
@@ -409,7 +459,7 @@ const customers = function (state = initialState, action) {
 					bCreateCustomerStart: true,
 					loading: {
 						...state.loading,
-						bCreateCustomerStart: "",
+						bCreateCustomerStart: "Creating new customer...",
 					},
 				}
 			}
@@ -417,7 +467,7 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					updateCustomerResponse: action.payload,
+					activeCustomer: action.payload,
 					bUpdateCustomerStart: false,
 					loading: {
 						...state.loading,
@@ -1067,6 +1117,7 @@ const customers = function (state = initialState, action) {
 					...state.loading,
 					bSaveCancelContract: "",
 				},
+				activeCustomer: action.payload,
 			};
 		case Actions.SAVE_SUSPEND_CONTRACT_START:
 			return {
@@ -1084,6 +1135,7 @@ const customers = function (state = initialState, action) {
 					...state.loading,
 					bSaveSuspendContract: "",
 				},
+				activeCustomer: action.payload,
 			};
 		case Actions.GET_COMPUTED_FINDER_FEE:
 			return {
@@ -1139,6 +1191,23 @@ const customers = function (state = initialState, action) {
 					...state.snack,
 					open: false,
 				}
+			};
+		case Actions.TRANSFER_ASSIGNED_FRANCHISEE_START:
+			return {
+				...state,
+				loading: {
+					...state.loading,
+					bTransferAssignedFranchiseeStart: "Transfering franchisee...",
+				},
+			};
+		case Actions.TRANSFER_ASSIGNED_FRANCHISEE:
+			return {
+				...state,
+				loading: {
+					...state.loading,
+					bTransferAssignedFranchiseeStart: "",
+				},
+				activeCustomer: action.payload,
 			};
 		default:
 			{

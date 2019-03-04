@@ -960,7 +960,6 @@ class TransferSummaryPage extends React.Component {
 		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	}
 	transferFranchisee = (fId) => {
-		this.props.setTransferFranchiseeState(true)
 		// if (this.props.activeStep === 1) {
 		// 	this.props.setStep(0)
 		// } else {
@@ -969,7 +968,24 @@ class TransferSummaryPage extends React.Component {
 		this.handleStep(2)
 	}
 	transferFranchiseeComplete = (fId) => {
-		this.props.setTransferFranchiseeState(false)
+
+		const oldFranchisee = this.props.franchiseeToTransfer.old
+
+		const newFranchisee = this.props.franchiseeToTransfer.new
+		const newFranchiseeParam = {
+			...newFranchisee,
+			FranchiseeNumber: newFranchisee.Number,
+			FranchiseeName: newFranchisee.Name,
+
+			FinderFee: newFranchisee.FinderFee,
+			MonthlyBilling: newFranchisee.MonthlyBilling,
+
+			AssignedDate: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().substr(0, 10),
+			Status: "Assigned",
+			CreatedById: 0,
+		}
+
+		this.props.transferAssignedFranchisee(this.props.regionId, this.props.activeCustomer.Data.cust_no, oldFranchisee.FranchiseeNumber, newFranchiseeParam)
 
 		this.props.setFranchiseeToTransfer('old', null)
 		this.props.setFranchiseeToTransfer('new', null)
@@ -983,13 +999,7 @@ class TransferSummaryPage extends React.Component {
 
 		}
 	}
-	backToFranchiseeList = () => {
-		if (!this.props.bTransferFranchiseeFtate) {
-			this.props.setStep(1)
-		} else {
-			this.props.setStep(0)
-		}
-	}
+	
 	addMonthlyBilling = (fIndex) => {
 		const { franchieesesToOffer } = this.state
 		let newMonthlyBilling = {
@@ -1021,7 +1031,6 @@ class TransferSummaryPage extends React.Component {
 		return franchisee.MonthlyBilling && franchisee.MonthlyBilling.length > 0 && franchisee.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0
 	}
 	cancelTransfer = () => {
-		this.props.setTransferFranchiseeState(false)
 		this.props.handleStep(0)
 	}
 	backToTransferFranchiseeList = () => {
@@ -1265,8 +1274,8 @@ function mapDispatchToProps(dispatch) {
 		updateNewCustomerParam: Actions.updateNewCustomerParam,
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 
-		setTransferFranchiseeState: Actions.setTransferFranchiseeState,
 		setFranchiseeToTransfer: Actions.setFranchiseeToTransfer,
+		transferAssignedFranchisee: Actions.transferAssignedFranchisee,
 
 		openSnackbar: Actions.openSnackbar,
 		closeSnackbar: Actions.closeSnackbar,
@@ -1311,7 +1320,6 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 
 		activeFranchisee: customers.activeFranchisee,
 		findersFeeParams: customers.findersFeeParams,
-		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 		findersFeeTypes: customers.findersFeeTypes,
 
 		franchiseeToTransfer: customers.franchiseeToTransfer,

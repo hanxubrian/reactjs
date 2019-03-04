@@ -140,8 +140,6 @@ class franchiseesService {
     };
     /**
      * @method GET
-     *
-     * @param RegionId
      * @returns {Promise<any>}
      */
     getFranchiseeStateList = () => {
@@ -223,7 +221,6 @@ class franchiseesService {
      *
      * @param  regionId
      * @param id
-     * @param data
      *
      * @returns {Promise<any>}
      *
@@ -303,7 +300,7 @@ class franchiseesService {
             })
         });
     };
-    
+
 
     /**
      * @method GET
@@ -311,7 +308,6 @@ class franchiseesService {
      * @param regionId
      * @param year
      * @param month
-     * @param franchiseeNum
      * @returns {Promise<any>}
      */
     getFranchiseesReportsList = (regionId, year, month) => {
@@ -331,7 +327,7 @@ class franchiseesService {
                     resolve(error);
                 })
         });
-    }
+    };
 
     getFranchiseeReportByFranchiseeNum = (RegionId,FranchiseeNo) => {
         return new Promise((resolve, reject) => {
@@ -392,8 +388,8 @@ class franchiseesService {
      * get Transaction Lists
      *
      * @method POST
-     * @param RegionId
      * @returns {Promise<any>}
+     * @param regionId
      */
     getFranchiseesTransactionList =  (regionId ) => {
         return new Promise((resolve, reject) => {

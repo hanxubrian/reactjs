@@ -214,7 +214,7 @@ export const TableComponent = withStyles(styles, { name: 'TableComponent' })(Tab
 //
 // table cell currency formatter
 //
-const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const CurrencyFormatter = ({ value }) => (<span>$ {value ? value.toLocaleString(undefined, { minimumFractionDigits: 2 }) : ''}</span>);
 const CurrencyTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={CurrencyFormatter}

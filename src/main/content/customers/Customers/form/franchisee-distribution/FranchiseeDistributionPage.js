@@ -474,9 +474,9 @@ class FranchiseeDistributionPage extends React.Component {
 		// 	this.props.getFranchiseeServiceTypes(nextProps.regionId)
 		// 	this.props.getFranchiseeBillingTypes(nextProps.regionId)
 		// }
-		// if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-		// 	this.initCustomerInfo(nextProps.activeCustomer)
-		// }
+		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
+			this.updateFranchiseesToOffer(this.props.franchieesesToOffer, nextProps.activeCustomer)
+		}
 		// if (!_.isEqual(nextProps.franchieesesToOffer, this.props.franchieesesToOffer)) {
 		// 	this.updateFranchiseesToOffer(nextProps.franchieesesToOffer)
 		// }
@@ -484,8 +484,8 @@ class FranchiseeDistributionPage extends React.Component {
 		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
 		// }
 	}
-	updateFranchiseesToOffer(selectedFrans = this.props.franchieesesToOffer) {
-		const activeCustomerFranchisees = this.props.activeCustomer.Data.AssignedFranchisees
+	updateFranchiseesToOffer(selectedFrans = this.props.franchieesesToOffer, activeCustomer = this.props.activeCustomer) {
+		const activeCustomerFranchisees = activeCustomer.Data.AssignedFranchisees
 		// all selected numbers in grid
 		const selectedNumners = selectedFrans.map(x => x.Number)
 		// numbers to be remained
@@ -962,7 +962,6 @@ class FranchiseeDistributionPage extends React.Component {
 	}
 	transferFranchisee = (fId) => {
 		this.props.setFranchiseeToTransfer('old', this.props.activeCustomer.Data.AssignedFranchisees[fId])
-		this.props.setTransferFranchiseeState(true)
 		// if (this.props.activeStep === 1) {
 		// 	this.props.setStep(0)
 		// } else {
@@ -970,20 +969,9 @@ class FranchiseeDistributionPage extends React.Component {
 		// }
 		this.handleStep(2)
 	}
-	transferFranchiseeComplete = (fId) => {
-		this.props.setTransferFranchiseeState(false)
-		if (this.props.activeStep === 1) {
 
-		} else {
-
-		}
-	}
 	backToFranchiseeList = () => {
-		if (!this.props.bTransferFranchiseeFtate) {
-			this.props.setStep(1)
-		} else {
-			this.props.setStep(0)
-		}
+		this.props.setStep(1)
 	}
 	addMonthlyBilling = (fIndex) => {
 		const { franchieesesToOffer } = this.state
@@ -1046,22 +1034,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 		return (
 			<>
-				{/* <div className={classNames("flex mt-12 justify-between")}>
-					<Typography variant="h6">Franchisee Distribution</Typography>
-
-					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						{this.props.activeStep === 1 &&
-							<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
-						} */}
-
-				{/* {this.props.bTransferFranchiseeFtate && this.props.activeStep === 2 &&
-							<Button variant="contained" onClick={this.transferFranchiseeComplete} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Complete Transfer</Button>
-						} */}
-
-				{/* <Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button> */}
-				{/* </div>
-				</div> */}
-
+			
 				<div className={classNames("flex mt-12 justify-between items-center")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
@@ -1080,15 +1053,9 @@ class FranchiseeDistributionPage extends React.Component {
 						value={this.props.activeCustomer.Data.cont_bill}
 					/>
 
-					{/* <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.saveAssignedFranchiseeDistributions()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-					</div> */}
 					{this.props.activeStep === 1 &&
 						<Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 					}
-
-
 				</div>
 
 				<Typography className="mb-12 mt-12 hidden" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
@@ -1381,7 +1348,6 @@ function mapDispatchToProps(dispatch) {
 		updateNewCustomerParam: Actions.updateNewCustomerParam,
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 
-		setTransferFranchiseeState: Actions.setTransferFranchiseeState,
 		setFranchiseeToTransfer: Actions.setFranchiseeToTransfer,
 
 	}, dispatch);
@@ -1424,7 +1390,6 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 
 		activeFranchisee: customers.activeFranchisee,
 		findersFeeParams: customers.findersFeeParams,
-		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 		findersFeeTypes: customers.findersFeeTypes,
 
 	}

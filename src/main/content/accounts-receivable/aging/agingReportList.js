@@ -1,25 +1,20 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom';
 
-import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
-import moment from 'moment';
 
 // core components
-import {Typography} from '@material-ui/core';
-import Grid1 from '@material-ui/core/Grid';
+
 import {withStyles} from '@material-ui/core/styles/index';
 
-//Theme component
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 //Store
+import connect from "react-redux/es/connect/connect";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
 import {
     DataTypeProvider,
-    SummaryState, IntegratedSummary,
+    GroupingState, IntegratedGrouping, TableColumnVisibility,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -27,12 +22,19 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow
+    TableGroupRow
 } from '@devexpress/dx-react-grid-material-ui';
+
 import NumberFormat from "react-number-format";
 
-
-//Child components
+const hexToRgb = (hex) => {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+};
 
 const styles = theme => ({
     root: {
@@ -69,76 +71,16 @@ const styles = theme => ({
         }
 
     },
-    paper: {
-        padding: theme.spacing.unit * 1,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-    card       : {
-        width         : 1020,
-        '@media print': {
-            width    : '100%!important',
-            boxShadow: 'none'
+    tableTheadRow: {
+        '& th':{
+            color: theme.palette.text.primary,
+            fontWeight: 700
         }
     },
-    cardContent: {
-        '& .page': {
-            // borderBottom: `1px solid ${theme.palette.text.primary}`
-        },
-        '& .page1': {
-            paddingTop: 12,
-            borderTop: `1px solid ${theme.palette.text.primary}`,
-            // borderBottom: `1px solid ${theme.palette.text.primary}`
-        }
-    },
-    divider    : {
-        width          : 1,
-        backgroundColor: theme.palette.divider,
-        height         : 144
-    },
-    seller     : {
-        backgroundColor: theme.palette.primary.dark,
-        color          : theme.palette.getContrastText(theme.palette.primary.dark),
-        marginRight    : -88,
-        paddingRight   : 66,
-        width          : 480,
-        '& .divider'   : {
-            backgroundColor: theme.palette.getContrastText(theme.palette.primary.dark),
-            opacity        : .5
-        }
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200
-    },
-    longerTextField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 835
-    },
-    overlay: {
-        position: 'absolute',
-        top: -104,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0, .6)',
-        zIndex: 1000,
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex'
-    },
-    progress: {
-        margin: theme.spacing.unit * 2,
+    tableStriped: {
+        marginBottom: '0!important'
     },
 });
-
-let pdf                             = 0;
-let page_section                    = 0;
-let HTML_Width                      = 0;
-let HTML_Height                     = 0;
-let top_left_margin                 = 0;
 
 const CurrencyFormatter = ({value}) => (
     <NumberFormat value={value}
@@ -174,12 +116,17 @@ export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent
 
 class AgingReportList extends Component {
     state={
-        data: []
+        data: null
     };
 
     componentDidMount()
     {
         this.props.onRef(this);
+        if (this.props.agingReports!==null) {
+
+            if(this.props.agingReports.length)
+                this.onProcessData();
+        }
     }
     componentWillUnmount() {
 
@@ -187,10 +134,47 @@ class AgingReportList extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.paymentLogList !== prevProps.paymentLogList)
-            this.setState({data: this.props.paymentLogList})
+        if (this.props.agingReports!==null && (this.props.agingReports !== prevProps.agingReports)) {
+
+            if(this.props.agingReports.length)
+                this.onProcessData();
+        }
     }
 
+    onProcessData = () =>{
+        let temp = this.props.agingReports;
+        let agings=[];
+        temp.forEach(x => {
+            let customers = [];
+            // customers.push(
+            //     {
+            //         customer: x.CustomerNo,
+            //         DueDate:  `${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`,
+            //         InvDate: "",
+            //         InvoiceNo: "",
+            //         current: 0,
+            //         value30: 0,
+            //         value60: 0,
+            //         value90: 0,
+            //         value91: 0,
+            //         balance: 0,
+            //         type: 'customer'
+            //     });
+            if(x.Invoices.length){
+                x.Invoices.forEach(inv=>{
+                    customers.push({customer: '', ...inv, type:'invoice'})
+                })
+            }
+            agings.push(customers);
+        });
+
+        this.setState({data: agings,
+            expandedGroups: [...new Set(agings.map(x => x.customer))]});
+    };
+
+    expandedGroupsChange = (expandedGroups) => {
+        this.setState({expandedGroups});
+    };
 
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
         return (
@@ -200,148 +184,76 @@ class AgingReportList extends Component {
         );
     };
 
-    getDataUri=(url, cb)=>
-    {
-        let image = new Image();
-        let log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        image.setAttribute('crossOrigin', 'anonymous');
-        image.onload = function () {
-            let canvas = document.createElement('canvas');
-            canvas.width = this.naturalWidth;
-            canvas.height = 2500;
-            let ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fff';  /// set white fill style
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            canvas.getContext('2d').drawImage(this, 0, 0);
-            cb(canvas.toDataURL('image/png'));
-        };
-        image.src = log_url;
-    };
+    GroupCellContent = ({column, row}) => (
+        <span>
+            <strong>{row.value}</strong>
+		</span>
+    );
 
-    downloadPDF=(input, imgURL)=> {
-        console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
-        console.log('image=',imgURL,top_left_margin, top_left_margin, HTML_Width, HTML_Height);
-        let cardlen = document.getElementsByClassName("pdfcardcontent").length;
-        let img = null;
+    emptyMessageContent = ({column, row}) => (
+        <span>
+            <strong>{row.value}</strong>
+		</span>
+    );
 
-        if (input != null && imgURL != null) {
-            this.getDataUri(imgURL, function (dataUri) {
-                img = dataUri;
-            });
-            html2canvas(input)
-                .then((canvas) => {
-
-                    const imgData = canvas.toDataURL('image/jpeg',1.0);
-                    this.calculatePDF_height_width("whole",0);
-
-                    pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
-                    pdf.addImage(imgData, 'jpeg', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
-
-                    pdf.save("download.pdf");
-                })
-            ;
-        }
-    };
-
-    calculatePDF_height_width=(selector,index)=>{
-
-        page_section = document.getElementsByClassName(selector)[index];
-        HTML_Width = page_section.offsetWidth;
-        HTML_Height = page_section.offsetHeight ;
-        top_left_margin = 15;
-    };
-
-    renderHeader = ()=>{
-        let region = this.props.all_regions.filter(r=>r.regionid===this.props.regionId);
-
-        return (
-            <Grid1 container className="flex flex-row items-center report-header">
-                <Grid1 item sm={3} className="text-left" >
-                    <Typography color="inherit" >{moment().format('MM/DD/YYYY')}</Typography>
-                    <Typography color="inherit" >{moment().format('HH:mm:ss')}</Typography>
-                    <Typography className="mt-16" color="inherit" >* <i>Indicates invoice applied</i></Typography>
-                    <Typography color="inherit" ><i>to non-default franchisee.</i></Typography>
-                </Grid1>
-                <Grid1 item sm={6} className="text-center">
-                    <Typography variant={"h1"} color="inherit">Janiking of {region[0].regionname}, Inc.</Typography>
-                    <Typography color="inherit" variant={"h2"}>
-                        Accounts Receivable Log
-                    </Typography>
-                    <Typography color="inherit" variant={"h3"}>Deposit Date: {moment(this.props.logDate).format('MM/DD/YYYY')} </Typography>
-                </Grid1>
-                <Grid1 item sm={3} className="text-right" width='200'>
-                    <Typography color="inherit">
-                        {/*<img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>*/}
-                    </Typography>
-                </Grid1>
-            </Grid1>
-        )
-    };
     render()
     {
         const { classes} = this.props;
+        const {expandedGroups} = this.state;
         const columns = [
-            {name: "Customer", title: "Customer",},
-            {name: "CustomerNo", title: "Cust. #"},
-            {name: "ReferenceNo", title: "Check #/Descr."},
-            {name: "Description", title: "Description"},
-            {name: "FranchiseeNo", title: "Fran. #"},
+            {name: "customer", title: "Customer"},
+            {name: "InvDate", title: "Inv. Date"},
+            {name: "DueDate", title: "DueDate"},
             {name: "InvoiceNo", title: "Invoice #"},
-            {name: "Amount", title: "Amount"},
+            {name: "current", title: "Current"},
+            {name: "value30", title: "1-30"},
+            {name: "value60", title: "31-60"},
+            {name: "value90", title: "61-90"},
+            {name: "value91", title: "91+"},
         ];
         let  tableColumnExtensions = [
-            { columnName: 'Customer', width: -1, },
-            { columnName: 'CustomerNo', width: 100},
-            { columnName: 'ReferenceNo', width: 150,},
-            { columnName: 'Description', width: 120,},
-            { columnName: 'FranchiseeNo', width: 120},
-            { columnName: 'Amount', width: 120,  align: 'right'},
+            { columnName: 'InvDate', width: 120, },
+            { columnName: 'DueDate', width: 120},
+            { columnName: 'InvoiceNo', width: -1},
+            { columnName: 'current', width: 120,  align: 'right'},
+            { columnName: 'value30', width: 120,  align: 'right'},
+            { columnName: 'value60', width: 120,  align: 'right'},
+            { columnName: 'value90', width: 120,  align: 'right'},
+            { columnName: 'value91', width: 120,  align: 'right'},
         ];
-        console.log('data=', this.state.data);
-        // if(!this.state.data.length)
-        //     return (<div/>);
 
         let totalSummaryItems = [
             { columnName: 'Amount', type: 'sum'},
         ];
 
+        console.log('data=', this.state.data);
+        if(this.state.data===null)
+            return <div/>;
+
 
         return (
-            <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
-                <div id ="testdiv" className="cardname">
-                    <div className="w-full pb-16" style={{borderBottom: '4px double'}}>
-                        {this.renderHeader()}
-                    </div>
-                    <div className={classNames("flex flex-col")}>
-                        <Grid
-                            rows={this.state.data}
-                            columns={columns}
-                        >
-                            {this.state.data.length>0 && (
-                            <CurrencyTypeProvider
-                                for={['Amount']}
-                            />
-                            )}
+            <div className={classNames(classes.root, "p-0 sm:p-32  flex flex-col h-full")} id ="wholediv">
+                <div className={classNames("flex flex-col")}>
+                    {this.state.data.map((aging, index)=>{
+                        return (
+                            <Grid key={index}
+                                rows={aging}
+                                columns={columns}
+                            >
+                                <CurrencyTypeProvider
+                                    for={['current', 'value30', 'value60', 'value90', 'value91']}
+                                />
+                                <VirtualTable height="auto"
+                                              tableComponent={TableComponent}
+                                              headComponent = {TableHeadComponent}
+                                              columnExtensions={tableColumnExtensions}
+                                />
+                                <TableHeaderRow/>
+                            </Grid>
+                        )
+                    })}
 
-                            {this.state.data.length>0 && (
-                                <SummaryState totalItems={totalSummaryItems} />
-                            )}
-                            {this.state.data.length>0 && (<IntegratedSummary /> )}
-
-
-                            <VirtualTable height="auto"
-                                          tableComponent={TableComponent}
-                                          headComponent = {TableHeadComponent}
-                                          columnExtensions={tableColumnExtensions}
-                            />
-                            <TableHeaderRow/>
-                            {this.state.data.length>0 && (
-                                <TableSummaryRow />
-                            )}
-                        </Grid>
-                    </div>
                 </div>
-
             </div>
         )
     }
@@ -349,17 +261,14 @@ class AgingReportList extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createReport: Actions.createReport,
     }, dispatch);
 }
 
-function mapStateToProps({auth, paymentLog})
+function mapStateToProps({auth, agings})
 {
     return {
-        paymentLogList: paymentLog.paymentLogList,
+        agingReports: agings.agingReports,
         regionId: auth.login.defaultRegionId,
-        logDate: paymentLog.logDate,
-        all_regions: auth.login.all_regions,
     }
 }
 

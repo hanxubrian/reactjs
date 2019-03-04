@@ -240,7 +240,7 @@ class ReportLayout extends Component {
     };
     render() {
 
-        const {classes, filterState, summaryState, filterStateFranchisees} = this.props;
+        const {classes, summaryState, filterStateFranchisees} = this.props;
 
         return (
             <React.Fragment>
@@ -258,7 +258,7 @@ class ReportLayout extends Component {
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
 
-                                    <div className="flex flex-shrink items-center" onClick={this.goBackList} style={{
+                                    <div className="flex flex-shrink items-center justify-between" style={{
                                         cursor: "pointer",
                                     }}>
 
@@ -271,6 +271,11 @@ class ReportLayout extends Component {
                                     </div>
 
                                     <div className="flex flex-shrink items-center">
+                                        <Button variant="contained" color="primary"
+                                                className={classNames(classes.btntop) } onClick={this.goBackList}>
+                                            Close
+                                            <Icon className={classes.rightIcon}>close</Icon>
+                                        </Button>
                                         <Button variant="contained" color="primary"
                                                 className={classNames(classes.btntop) } onClick={this.print}>
                                             Print

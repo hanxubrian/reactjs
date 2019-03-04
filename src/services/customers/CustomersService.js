@@ -648,6 +648,23 @@ fullbill: 0
 				})
 		});
 	}
+	transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, franchisee) {
+
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/TransferAssignedFranchisee?CustomerNo=${CustomerNo}&FromFranchiseeNo=${FromFranchiseeNo}`, franchisee)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 
