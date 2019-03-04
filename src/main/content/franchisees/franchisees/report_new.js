@@ -234,14 +234,16 @@ class Report extends Component {
     };
     render()
     {
-        const { classes, franchiseeReport, all_regions} = this.props;
+        const { classes, franchiseeReport} = this.props;
 
-        if(franchiseeReport===null || all_regions.length===0)
+        if(this.props.bFetchingFranchiseeReport)
             return (
                 <div className={classNames(classes.overlay, 'flex items-center w-full')}>
                     <CircularProgress className={classes.progress} color="secondary"  />
                 </div>
             );
+        if(franchiseeReport===null)
+            return <div/>;
 
         const {FranchiseeNumber, SummaryPages}  = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0];
 
@@ -694,6 +696,7 @@ function mapStateToProps({auth, franchiseeReports, franchisees})
 {
     return {
         franchiseeReport: franchiseeReports.franchiseeReport1,
+        bFetchingFranchiseeReport: franchiseeReports.bFetchingFranchiseeReport,
         all_regions: auth.login.all_regions,
         reportPeriod: franchisees.reportPeriod,
     }
