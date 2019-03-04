@@ -372,12 +372,13 @@ class PatchedTableSelection extends React.PureComponent {
 		return (
 			<TableSelection
 				cellComponent={props =>
-					this.props.rowSelectionEnabled(props.tableRow.row) ? (
-						<TableSelection.Cell {...props} />
-					) : (
-							<Table.StubCell {...props}>
-							Assigned
-							</Table.StubCell>
+					this.props.rowSelectionEnabled(props.tableRow.row) ?
+						(
+							<TableSelection.Cell {...props} />
+						) : (
+							<Table.StubCell {...props} style={{ paddingLeft: 8, textAlign: 'center', fontSize: '1.8em', color: '#00000082' }}>
+								&#9745;
+							</Table.StubCell >
 						)
 				}
 				{...restProps}
