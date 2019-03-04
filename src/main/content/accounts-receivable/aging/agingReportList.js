@@ -25,7 +25,7 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableGroupRow, TableSummaryRow
+    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 import NumberFormat from "react-number-format";
@@ -45,9 +45,9 @@ const styles = theme => ({
         },
         '& .customer-summary':{
             height: 36,
-            backgroundColor: `rgba(${r},${g},${b},.6)`,
+            // backgroundColor: `rgba(${r},${g},${b},.6)`,
             '& p': {
-                color: 'white',
+                color: theme.palette.text.primary,
             }
         }
     },
@@ -58,7 +58,7 @@ const styles = theme => ({
         '& th':{
             color: theme.palette.text.primary,
             fontWeight: 700,
-            backgroundColor: `rgba(${r},${g},${b},.4)`,
+            // backgroundColor: `rgba(${r},${g},${b},.4)`,
         },
         '& th:first-child span':{
             display: 'none'
@@ -75,7 +75,7 @@ const styles = theme => ({
     },
     tableSummaryCell:{
         color: theme.palette.text.primary,
-        backgroundColor: `rgba(${r},${g},${b},.6)`,
+        // backgroundColor: `rgba(${r},${g},${b},.6)`,
     },
 });
 
