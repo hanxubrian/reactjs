@@ -75,7 +75,6 @@ import { compose, withProps, withHandlers, lifecycle } from "recompose";
 import FranchieesSubmitOfferPage from './FranchieesSubmitOfferPage';
 import FranchieesListPage from './FranchieesListPage';
 import FranchieesOfferedListPage from './FranchieesOfferedListPage';
-import FranchieesAssignModal from './FranchieesAssignModal';
 
 import FranchiseeDistributionPage from '../franchisee-distribution/FranchiseeDistributionPage'
 
@@ -808,8 +807,6 @@ class AccountOfferingPage extends Component {
 				{step === 3 &&
 					<FranchiseeDistributionPage setStep={this.setStep} />
 				}
-
-				<FranchieesAssignModal />
 			</div>
 		)
 	}

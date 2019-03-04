@@ -4,8 +4,8 @@ import { withStyles } from '@material-ui/core/styles/index';
 import { withRouter } from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
 
-import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button, ListItemIcon } from '@material-ui/core';
+import { FusePageCustomSidebarScroll } from '@fuse';
+import { Icon, IconButton, Typography, CircularProgress, Menu, MenuItem, Tooltip, Button, ListItemIcon } from '@material-ui/core';
 import classNames from 'classnames';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
@@ -28,7 +28,6 @@ import "react-table/react-table.css";
 //table pagination
 // import JanikingPagination from './../../../../Commons/JanikingPagination';
 
-import SummaryPanel from './SummaryPanel';
 import FilterPanel from './FilterPanel';
 import CustomerForm from './CustomerForm';
 import CustomerListContent from './CustomerListContent';
@@ -312,30 +311,6 @@ class CustomerServices extends Component {
 		this.setState({
 			isSubmittingForApproval: false
 		})
-
-		let payload = {
-			CustomerId: "vaaa4v5432v34b235", agreeused: "sample string 5", arstatdate: "sample string 6", arstatus: "sample string 7", atrisk: "sample string 8", bill_addr: "sample string 9", bill_addr2: "sample string 10", bill_city: "sample string 11", bill_ext: "sample string 12", bill_fax: "sample string 13", bill_name: "sample string 14", bill_name2: "sample string 15", bill_phone: "sample string 16", bill_state: "sample string 17", bill_zip: "sample string 18", business: "sample string 19", callbdate: "sample string 20", canc_date: "sample string 21", candescr: "sample string 22", canentdat: "sample string 23", canreason: "sample string 24", claimstat: "sample string 25", class_type: "sample string 26", coll_rep: "sample string 27", company_no: "sample string 28", cleantimes: "sample string 29", cleanper: "sample string 30", cont_1: "sample string 31", cont_2: "sample string 32", cont_bill: "sample string 33", cont_tax: "sample string 34", cpiadj: "sample string 35", crteinv: "sample string 36", cs_rep: "sample string 37", cscallbdat: "sample string 38", cus_addr: "sample string 39", cus_addr2: "sample string 40", cus_city: "sample string 41", cus_county: "sample string 42", cus_ext: "sample string 43", cus_fax: "sample string 44", cus_name: "sample string 45", cus_name2: "sample string 46", cus_phone: "sample string 47", cus_state: "sample string 48", cus_zip: "sample string 49", CustomerNo: "sample string 50", date_offer: "sample string 51", date_sign: "2019-01-18T03:12:26.1440384-06:00", date_start: "2019-01-18T03:12:26.1440384-06:00", dlr_code: "sample string 54", Ebilling: "sample string 55", email1: "sample string 56", email2: "sample string 57", exp_date: "2019-01-18T03:12:26.1450367-06:00", firstdate: "2019-01-18T03:12:26.1450367-06:00", firstfran: "sample string 60", flag: "sample string 61", fri: "sample string 62", inv_msg: "sample string 63", masteracct: "sample string 64", misc_info: "sample string 65", misc_info2: "sample string 66", mon: "sample string 67", natacct: "sample string 68", notes: "sample string 69", ops_mgr: "sample string 70", parent: "sample string 71", po_1: "sample string 72", prntinv: "sample string 73", prntpd: "sample string 74", resume_d: "sample string 75", royalty: "sample string 76", sales_tax: "sample string 77", sat: "sample string 78", seconddate: "sample string 79", secondfran: "sample string 80", slsmn_no: "sample string 81", SquareFootage: "sample string 82", sun: "sample string 83", sys_cust: "sample string 84", tax_exempt: "sample string 85", tech_pct: "sample string 86", thu: "sample string 87", tue: "sample string 88", wed: "sample string 89", xregionid: "sample string 90", xsys_cust: "sample string 91",
-			Addresses: [
-				{ Type: "sample string 1", AttentionTo: "sample string 2", AddressLine1: "sample string 3", AddressLine2: "sample string 4", City: "sample string 5", State: "sample string 6", Zip: "sample string 7", Country: "sample string 8", Latitude: 9.1, Longitude: 10.1, IsServiceLocation: 11 },
-				{ Type: "sample string 1", AttentionTo: "sample string 2", AddressLine1: "sample string 3", AddressLine2: "sample string 4", City: "sample string 5", State: "sample string 6", Zip: "sample string 7", Country: "sample string 8", Latitude: 9.1, Longitude: 10.1, IsServiceLocation: 11 }
-			],
-			Contacts: [
-				{ FirstName: "sample string 1", LastName: "sample string 2", Phone: "sample string 3", MobilePhone: "sample string 4", Email: "sample string 5" },
-				{ FirstName: "sample string 1", LastName: "sample string 2", Phone: "sample string 3", MobilePhone: "sample string 4", Email: "sample string 5" }
-			],
-			Agreement: [
-				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" },
-				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" }
-			]
-		}
-		// switch (this.props.customerForm.type) {
-		// 	case "new":
-		// 		this.props.createCustomer(this.props.regionId, payload)
-		// 		break;
-		// 	case "edit":
-		// 		this.props.createCustomer(this.props.regionId, payload)
-		// 		break;
-		// }
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -482,8 +457,8 @@ class CustomerServices extends Component {
 	}
 
 	render() {
-		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerServiceForm, mapViewState, toggleMapView } = this.props;
-		const { selection, anchorEl, anchorContactMenu } = this.state;
+		const { classes, customerServiceForm } = this.props;
+		const {  anchorContactMenu } = this.state;
 
 		console.log('props=', this.props);
 		return (

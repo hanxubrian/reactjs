@@ -4,10 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import moment from "moment"
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Slide, Paper, InputAdornment, MenuItem } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -17,52 +15,6 @@ import { withRouter } from 'react-router-dom';
 import * as Actions from 'store/actions';
 
 import classNames from 'classnames';
-
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-import { Getter } from '@devexpress/dx-react-core';
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-
-import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-
 import ReactDataGrid from "react-data-grid";
 import _ from "lodash";
 
@@ -90,121 +42,6 @@ const styles = theme => ({
 function Transition(props) {
 	return <Slide direction="up" {...props} />;
 }
-
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		{/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-		<IconButton onClick={onExecute} title="Add New">
-			<NewIcon />
-		</IconButton>
-	</div>
-);
-
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit Payment Amount">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	// add: AddButton,
-	edit: EditButton,
-	// delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
-
-const editing_cell_styles = theme => ({
-	cell: {
-		background: "#989898",
-		color: "white",
-		padding: 0,
-	}
-});
-const EditingHeaderCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}
-
-	/>);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingHeaderCellComponentBase
-);
-
-const EditingCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}>
-		{React.Children.toArray(props.children)
-			.filter((child) => {
-				if (child.props.id === 'delete') {
-					// if (props.tableRow.row.id < 2) {
-					// return true;
-					// }
-					return false;
-				}
-				return true;
-			})}
-	</TableEditColumn.Cell>)
-};
-
-//
-// header cell style
-//
-const header_cell_styles = theme => ({
-	cell: {
-		background: "#989898",
-		color: "white",
-	}
-});
-const tableHeaderCellComponentBase = props => {
-	return (<TableHeaderRow.Cell {...props}
-
-	/>);
-};
-const tableHeaderCellComponent = withStyles(header_cell_styles)(
-	tableHeaderCellComponentBase
-);
-
-
-const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingCellComponentBase
-);
-const getRowId = row => row.id;
 
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');

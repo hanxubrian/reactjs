@@ -1022,7 +1022,6 @@ class TransferSummaryPage extends React.Component {
 	}
 	cancelTransfer = () => {
 		this.props.setTransferFranchiseeState(false)
-		// this.props.showFranchieesAssignModalForm(true)
 		this.props.handleStep(0)
 	}
 	backToTransferFranchiseeList = () => {

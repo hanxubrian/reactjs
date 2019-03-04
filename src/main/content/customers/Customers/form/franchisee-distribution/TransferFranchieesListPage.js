@@ -740,7 +740,6 @@ class TransferFranchieesListPage extends Component {
 	}
 
 	onClickAssign = () => {
-		// this.props.showFranchieesAssignModalForm(true)
 		this.props.setStep(3)
 	}
 	gotoTransferSummary = () => {
@@ -763,7 +762,6 @@ class TransferFranchieesListPage extends Component {
 	}
 	cancelTransfer = () => {
 		this.props.setTransferFranchiseeState(false)
-		// this.props.showFranchieesAssignModalForm(true)
 		this.props.handleStep(0)
 	}
 
@@ -1203,7 +1201,6 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getFranchisees: Actions.getFranchisees,
 
-		showFranchieesAssignModalForm: Actions.showFranchieesAssignModalForm,
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 		setTransferFranchiseeState: Actions.setTransferFranchiseeState,
 

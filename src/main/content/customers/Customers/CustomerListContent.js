@@ -2,15 +2,9 @@ import React, { Component, Fragment } from 'react';
 // import ReactDOM from 'react-dom';
 
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
+import { Icon, IconButton, Input, Button } from '@material-ui/core';
 
-//Janiking
-import JanikingPagination from 'Commons/JanikingPagination';
-
-// theme components
-// import {FuseAnimate} from '@fuse';
-
-import { withStyles, Checkbox } from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
 
@@ -19,16 +13,10 @@ import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
-// third party
-// import moment from 'moment'
-import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
 
-
-import { Tooltip } from '@material-ui/core';
-// import GoogleMap from 'google-map-react';
 import {
 	withScriptjs,
 	withGoogleMap,
@@ -36,10 +24,10 @@ import {
 	Marker,
 } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers, lifecycle } from "recompose";
+import { compose, withProps, withHandlers } from "recompose";
 
 import {
-	Getter, Template, TemplateConnector
+	Template, TemplateConnector
 } from '@devexpress/dx-react-core';
 import {
 	SelectionState,
@@ -49,8 +37,6 @@ import {
 	SortingState,
 	IntegratedSorting,
 	EditingState,
-	GroupingState,
-	IntegratedGrouping,
 	DataTypeProvider,
 	FilteringState,
 	IntegratedFiltering,
@@ -65,19 +51,9 @@ import {
 	TableHeaderRow,
 	TableSelection,
 	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
 	TableFilterRow,
-	SearchPanel,
 	DragDropProvider,
-	TableColumnReordering,
 	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
 	VirtualTable,
 
 } from '@devexpress/dx-react-grid-material-ui';
@@ -88,16 +64,10 @@ import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
-
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-
-import Spinner from 'react-spinner-material';
-import { getOverlappingDaysInIntervals } from 'date-fns';
-import CustomerSearchBar from './CustomerSearchBar';
 
 // function Marker({ text }) {
 // 	return (

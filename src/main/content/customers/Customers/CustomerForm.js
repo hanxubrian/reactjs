@@ -2,20 +2,11 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
-import {
-	TextField, Button, MenuItem, Divider, FormControlLabel,
-	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment, SnackbarContent, Snackbar, IconButton, Icon,
-} from '@material-ui/core';
-
-// theme components
-import { FuseAnimate } from '@fuse';
+import { Divider, AppBar, Tabs, Tab, SnackbarContent } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
-//Custom components
-import GridContainer from "Commons/Grid/GridContainer";
-import GridItem from "Commons/Grid/GridItem";
 
 // for store
 import { bindActionCreators } from "redux";
@@ -40,7 +31,6 @@ import amber from "@material-ui/core/colors/amber";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
-import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
 import PropTypes from 'prop-types';
 

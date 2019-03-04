@@ -723,7 +723,6 @@ class TransferFranchiseePage extends Component {
 	}
 
 	onClickAssign = () => {
-		// this.props.showFranchieesAssignModalForm(true)
 		this.props.setStep(3)
 	}
 
@@ -1101,7 +1100,6 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getFranchisees: Actions.getFranchisees,
 
-		showFranchieesAssignModalForm: Actions.showFranchieesAssignModalForm,
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 	}, dispatch);
 }

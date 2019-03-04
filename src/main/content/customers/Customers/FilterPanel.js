@@ -3,7 +3,7 @@ import _ from "lodash";
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Snackbar, SnackbarContent, Select } from '@material-ui/core';
+import {  withStyles, TextField, Divider, Select } from '@material-ui/core';
 
 import keycode from 'keycode';
 
@@ -25,61 +25,11 @@ import GridItem from "Commons/Grid/GridItem";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
-import Autosuggest from "react-autosuggest"
-import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
-import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
-
 import FuseUtils from '@fuse/FuseUtils';
 
 import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
-import { Input, InputLabel, FormControl, InputAdornment } from '@material-ui/core';
-
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-import { Getter } from '@devexpress/dx-react-core';
-import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-import { Filter } from 'konva';
+import { InputLabel, FormControl, InputAdornment } from '@material-ui/core';
 
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
@@ -285,92 +235,6 @@ function TextMaskPhone(props) {
 TextMaskPhone.propTypes = {
 	inputRef: PropTypes.func.isRequired,
 };
-
-
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		{/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-		<IconButton onClick={onExecute} title="Add New">
-			<NewIcon />
-		</IconButton>
-	</div>
-);
-
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	add: AddButton,
-	edit: EditButton,
-	delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
-
-
-const editing_cell_styles = theme => ({
-	cell: {
-		padding: 0,
-	}
-});
-const EditingHeaderCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}
-
-	/>);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingHeaderCellComponentBase
-);
-
-const EditingCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}
-
-	/>);
-};
-
-const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingCellComponentBase
-);
 
 const CUSTOMER_STATUS_LIST = [
 	"Active",
@@ -881,49 +745,6 @@ class FilterPanel extends Component {
 		return suggestion.CustomerName;
 	}
 
-	// renderSuggestion(suggestion, { query }) {
-	// 	const matches = AutosuggestHighlightMatch(suggestion.CustomerName, query);
-	// 	const parts = AutosuggestHighlightParse(suggestion.CustomerName, matches);
-
-	// 	return (
-	// 		<span>
-	// 			{parts.map((part, index) => {
-	// 				const className = part.highlight ? 'autosuggest__suggestion_match' : null;
-
-	// 				return (
-	// 					<span className={className} key={index}>
-	// 						{part.text}
-	// 					</span>
-	// 				);
-	// 			})}
-	// 		</span>
-	// 	);
-	// }
-
-	renderSuggestion(suggestion, { query, isHighlighted }) {
-		const matches = AutosuggestHighlightMatch(suggestion.CustomerName, query);
-		const parts = AutosuggestHighlightParse(suggestion.CustomerName, matches);
-
-		return (
-			<MenuItem selected={isHighlighted} component="div">
-				<div>
-					{parts.map((part, index) => {
-						return part.highlight ? (
-							<span key={String(index)} style={{ fontWeight: 700 }}>
-								{part.text}
-							</span>
-						) : (
-								<strong key={String(index)} style={{ fontWeight: 300 }}>
-									{part.text}
-								</strong>
-							);
-					})}
-				</div>
-			</MenuItem>
-		);
-	}
-
-
 	onChange = (event, { newValue, method }) => {
 		this.setState({
 			childCustomerName: newValue
@@ -1270,117 +1091,6 @@ class FilterPanel extends Component {
 								</FormControl>
 							</GridItem>
 
-							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<div className="flex justify-around">
-											<FormControlLabel
-												control={
-													<Checkbox
-														checked={this.state.NationalAccount}
-													// onChange={this.handleChangeChecked('NationalAccount')}
-													// value="NationalAccount"
-													/>
-												}
-												label="National Account"
-											/>
-											<FormControlLabel
-												control={
-													<Checkbox
-														checked={this.state.ChildAccount}
-														// onChange={this.handleChangeChecked('ChildAccount')}
-														// value="ChildAccount"
-													/>
-												}
-												label="Child Account"
-											/>
-										</div>
-
-										{this.state.ChildAccount && (
-											<div className="flex flex-col">
-												<Autosuggest
-													style={{ width: "100%" }}
-													className={classNames(classes.textfield)}
-													theme={{
-														container: classNames(classes.container),
-														suggestionsContainerOpen: classes.suggestionsContainerOpen,
-														suggestionsList: classes.suggestionsList,
-														suggestion: classes.suggestion,
-													}}
-													renderSuggestionsContainer={options => (
-														<Paper {...options.containerProps} square>
-															{options.children}
-														</Paper>
-													)}
-													renderInputComponent={this.renderInputComponent}
-
-													suggestions={suggestions}
-													onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-													onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-													getSuggestionValue={this.getSuggestionValue}
-													renderSuggestion={this.renderSuggestion}
-													inputProps={inputProps}
-												/>
-
-												<TextField
-													id="StoreNumber"
-													label="Store Number"
-													className={classes.textField}
-													onChange={this.handleChange('StoreNumber')}
-													margin="dense"
-													variant="outlined"
-													fullWidth />
-											</div>
-										)}
-									</GridItem> */}
-
-							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<h3 className="mt-24 mb-12">Addresses</h3>
-										<Paper>
-											<Grid
-												rows={addressRows}
-												columns={addressColumns}
-											>
-												<EditingState
-													onCommitChanges={this.commitChanges}
-												/>
-												<Table />
-												<TableHeaderRow />
-												<TableEditRow />
-												<TableEditColumn
-													width={110}
-													cellComponent={EditingCellComponent}
-													headerCellComponent={EditingHeaderCellComponent}
-													showAddCommand
-													showEditCommand
-													showDeleteCommand
-													commandComponent={Command}
-												/>
-											</Grid>
-										</Paper>
-
-										<h3 className="mt-24 mb-12">Contacts</h3>
-										<Paper>
-											<Grid
-												rows={contactsRows}
-												columns={contactsColumns}
-											>
-												<EditingState
-													onCommitChanges={this.commitChanges}
-												/>
-												<Table />
-												<TableHeaderRow />
-												<TableEditRow />
-												<TableEditColumn
-													width={110}
-													cellComponent={EditingCellComponent}
-													headerCellComponent={EditingHeaderCellComponent}
-													showAddCommand
-													showEditCommand
-													showDeleteCommand
-													commandComponent={Command}
-												/>
-											</Grid>
-										</Paper>
-									</GridItem> */}
 							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
 								<h3 className="mt-24 mb-12">Contacts</h3>
 								<div className='flex w-full'>

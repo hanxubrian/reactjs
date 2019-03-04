@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom, Checkbox } from '@material-ui/core';
+import { Icon, Button, Checkbox } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -46,30 +46,15 @@ import {
 	VirtualTable,
 	TableHeaderRow,
 	TableSelection,
-	GroupingPanel,
-	Toolbar,
 	TableGroupRow,
 	PagingPanel,
-	TableFilterRow,
 	DragDropProvider,
 	TableColumnResizing,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
-import * as PropTypes from 'prop-types';
-
-import Chip from '@material-ui/core/Chip';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-
 import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 // import InvoiceReport from './../Invoice/invoiceReport'
 import InvoiceReport from './invoiceReport'
 
@@ -233,126 +218,6 @@ const DateTypeProvider = props => (
 		{...props}
 	/>
 );
-//
-// table cell boolean edit formatter
-//
-const BooleanFormatter = ({ value }) => <Chip label={value ? 'Yes' : 'No'} />;
-const BooleanEditor = ({ value, onValueChange }) => (
-	<Select
-		input={<Input />}
-		value={value ? 'Yes' : 'No'}
-		onChange={event => onValueChange(event.target.value === 'Yes')}
-		style={{ width: '100%' }}
-	>
-		<MenuItem value="Yes">Yes</MenuItem>
-		<MenuItem value="No">No</MenuItem>
-	</Select>
-);
-const BooleanTypeProvider = props => (
-	<DataTypeProvider
-		formatterComponent={BooleanFormatter}
-		editorComponent={BooleanEditor}
-		{...props}
-	/>
-);
-//
-// filter icon
-//
-const FilterIcon = ({ type, ...restProps }) => {
-	return <TableFilterRow.Icon type={type} {...restProps} />;
-};
-
-//
-// amount filter editor component
-//
-const AmountEditorBase = ({ value, onValueChange, classes }) => {
-	const handleChange = (event) => {
-		const { value: targetValue } = event.target;
-		if (targetValue.trim() === '') {
-			onValueChange();
-			return;
-		}
-		onValueChange(parseFloat(targetValue));
-	};
-	return (
-		<Input
-			type="number"
-			classes={{
-				input: classes.numericInput,
-			}}
-			fullWidth
-			value={value === undefined ? '' : value}
-			inputProps={{
-				min: 0,
-				placeholder: 'Filter...',
-			}}
-			onChange={handleChange}
-		/>
-	);
-};
-AmountEditorBase.propTypes = {
-	value: PropTypes.number,
-	onValueChange: PropTypes.func.isRequired,
-	classes: PropTypes.object.isRequired,
-};
-AmountEditorBase.defaultProps = { value: undefined, };
-const AmountEditor = withStyles(styles)(AmountEditorBase);
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		<Button
-			color="primary"
-			onClick={onExecute}
-			title="Create new row"
-		>
-			New
-        </Button>
-	</div>
-);
-
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit row">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete row">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save changes">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel changes">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	add: AddButton,
-	edit: EditButton,
-	delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
-const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
 class PaymentsListContent extends Component {
 

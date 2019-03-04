@@ -2,42 +2,10 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
-import {
-	Paper,
-	TextField,
-	Button,
-	Typography,
-	MenuItem,
-	// FormControl,
-	// InputLabel,
-	// Select,
-	// OutlinedInput,
-	// Card,
-	// CardHeader,
-	// CardContent,
-	Divider,
-	// Radio,
-	// RadioGroup,
-	FormControlLabel,
-	IconButton,
-	Icon
-	// GridList
-} from '@material-ui/core';
-
-
-// theme components
-import {
-	// FusePageCustom,
-	FuseAnimate,
-	// FuseSearch
-} from '@fuse';
+import { Button, Divider, Icon } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
-
-//Custom components
-import GridContainer from "Commons/Grid/GridContainer";
-import GridItem from "Commons/Grid/GridItem";
 
 // for store
 import { bindActionCreators } from "redux";
@@ -52,80 +20,9 @@ import classNames from 'classnames';
 // import match from "autosuggest-highlight/match";
 // import parse from "autosuggest-highlight/parse";
 
-
-
-// import PropTypes from 'prop-types';
-// import { withStyles } from '@material-ui/core/styles';
-// import Stepper from '@material-ui/core/Stepper';
-// import Step from '@material-ui/core/Step';
-// import StepButton from '@material-ui/core/StepButton';
-// import Button from '@material-ui/core/Button';
-// import Typography from '@material-ui/core/Typography';
-
-import FormLabel from '@material-ui/core/FormLabel';
-// import FormControl from '@material-ui/core/FormControl';
-// import FormGroup from '@material-ui/core/FormGroup';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import FormHelperText from '@material-ui/core/FormHelperText';
-import Checkbox from '@material-ui/core/Checkbox';
-// import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-
-
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
-import Switch from '@material-ui/core/Switch';
-
-import ReactTable from "react-table";
-import JanikingPagination from 'Commons/JanikingPagination';
-
-import CustomersDocumentUploadTable from "./documentUploadTable";
-
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
 
 import ContactHistoryPage from './form/ContactHistoryPage.js';
 import CollectionsPage from './form/CollectionsPage.js';

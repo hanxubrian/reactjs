@@ -3,10 +3,7 @@ import _ from "lodash";
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import {
-	Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Card, CardHeader, CardContent, Icon,
-	Typography
-} from '@material-ui/core';
+import { Paper, withStyles, Checkbox, TextField, Divider, Card, CardHeader, CardContent } from '@material-ui/core';
 
 import keycode from 'keycode';
 
@@ -36,52 +33,7 @@ import FuseUtils from '@fuse/FuseUtils';
 
 import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
-import { Input, InputLabel, FormControl, InputAdornment } from '@material-ui/core';
-
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-import { Getter } from '@devexpress/dx-react-core';
-import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
+import { InputAdornment } from '@material-ui/core';
 
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
@@ -234,60 +186,6 @@ const styles = theme => ({
 	},
 });
 
-const stateNames = [
-	{ Value: "AL", Text: "Alabama" },
-	{ Value: "AK", Text: "Alaska" },
-	{ Value: "AZ", Text: "Arizona" },
-	{ Value: "AR", Text: "Arkansas" },
-	{ Value: "CA", Text: "California" },
-	{ Value: "CO", Text: "Colorado" },
-	{ Value: "CT", Text: "Connecticut" },
-	{ Value: "DE", Text: "Delaware" },
-	{ Value: "FL", Text: "Florida" },
-	{ Value: "GA", Text: "Georgia" },
-	{ Value: "HI", Text: "Hawaii" },
-	{ Value: "ID", Text: "Idaho" },
-	{ Value: "IL", Text: "Illinois" },
-	{ Value: "IN", Text: "Indiana" },
-	{ Value: "IA", Text: "Iowa" },
-	{ Value: "KS", Text: "Kansas" },
-	{ Value: "KY", Text: "Kentucky" },
-	{ Value: "LA", Text: "Louisiana" },
-	{ Value: "ME", Text: "Maine" },
-	{ Value: "MD", Text: "Maryland" },
-	{ Value: "MA", Text: "Massachusetts" },
-	{ Value: "MI", Text: "Michigan" },
-	{ Value: "MN", Text: "Minnesota" },
-	{ Value: "MS", Text: "Mississippi" },
-	{ Value: "MO", Text: "Missouri" },
-	{ Value: "MT", Text: "Montana" },
-	{ Value: "NE", Text: "Nebraska" },
-	{ Value: "NV", Text: "Nevada" },
-	{ Value: "NH", Text: "New Hampshire" },
-	{ Value: "NJ", Text: "New Jersey" },
-	{ Value: "NM", Text: "New Mexico" },
-	{ Value: "NY", Text: "New York" },
-	{ Value: "NC", Text: "North Carolina" },
-	{ Value: "ND", Text: "North Dakota" },
-	{ Value: "OH", Text: "Ohio" },
-	{ Value: "OK", Text: "Oklahoma" },
-	{ Value: "OR", Text: "Oregon" },
-	{ Value: "PA", Text: "Pennsylvania" },
-	{ Value: "RI", Text: "Rhode Island" },
-	{ Value: "SC", Text: "South Carolina" },
-	{ Value: "SD", Text: "South Dakota" },
-	{ Value: "TN", Text: "Tennessee" },
-	{ Value: "TX", Text: "Texas" },
-	{ Value: "UT", Text: "Utah" },
-	{ Value: "VT", Text: "Vermont" },
-	{ Value: "VA", Text: "Virginia" },
-	{ Value: "WA", Text: "Washington" },
-	{ Value: "DC", Text: "Washington D.C." },
-	{ Value: "WV", Text: "West Virginia" },
-	{ Value: "WI", Text: "Wisconsin" },
-	{ Value: "WY", Text: "Wyoming" }
-];
-
 function TextMaskPhone(props) {
 	const { inputRef, ...other } = props;
 
@@ -310,92 +208,6 @@ TextMaskPhone.propTypes = {
 	inputRef: PropTypes.func.isRequired,
 };
 
-
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		{/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-		<IconButton onClick={onExecute} title="Add New">
-			<NewIcon />
-		</IconButton>
-	</div>
-);
-
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	add: AddButton,
-	edit: EditButton,
-	delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
-
-
-const editing_cell_styles = theme => ({
-	cell: {
-		padding: 0,
-	}
-});
-const EditingHeaderCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}
-
-	/>);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingHeaderCellComponentBase
-);
-
-const EditingCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}
-
-	/>);
-};
-
-const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingCellComponentBase
-);
-
 const CUSTOMER_STATUS_LIST = [
 	"Active",
 	"Cancelled",
@@ -406,7 +218,6 @@ const CUSTOMER_STATUS_LIST = [
 ]
 
 const WAIT_INTERVAL = 1000
-const ENTER_KEY = 13
 
 class FilterPanel extends Component {
 
@@ -694,7 +505,7 @@ class FilterPanel extends Component {
 							this.state.AddressZipcodeRadius :
 							this.props.locationFilterValue.miles),
 				}
-				if (value != "locationNearSpecificAddress") {
+				if (value !== "locationNearSpecificAddress") {
 
 				} else {
 					Geocode.fromAddress(this.state.SpecificAddress).then(
@@ -815,7 +626,7 @@ class FilterPanel extends Component {
 		}
 
 		const regex = new RegExp('^' + escapedValue, 'i');
-		if (this.state.rows == undefined) return [];
+		if (!this.state.rows) return [];
 		return this.state.rows.filter(x => regex.test(x.CustomerName));
 	}
 
@@ -933,9 +744,7 @@ class FilterPanel extends Component {
 	}
 
 	render() {
-		const { classes, customerServiceForm, customers } = this.props;
-
-		const { addressRows, addressColumns, contactsRows, contactsColumns } = this.state;
+		const { classes, customerServiceForm } = this.props;
 
 		const { childCustomerName, suggestions, activeCustomer } = this.state;
 		// Autosuggest will pass through all these props to the input.
@@ -945,22 +754,6 @@ class FilterPanel extends Component {
 			value: childCustomerName,
 			onChange: this.onChange
 		};
-
-
-		let regionCustomers = [];
-
-		// if (customers) { // to avoid error
-		// 	customers.Data.Regions.filter(x => {
-		// 		return this.props.regionId === 0 || x.Id === this.props.regionId;
-		// 	}).forEach(x => {
-		// 		regionCustomers = [...regionCustomers, ...x.CustomerList];
-		// 	});
-		// }
-
-		// let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
-		// let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
-
-		// return (<MenuItem key={index} value={index}>{x.Title}</MenuItem>)
 
 		let customerStatusListTexts = []
 		if (this.props.customerStatusList !== null && this.props.customerStatusList.Data !== undefined) {
