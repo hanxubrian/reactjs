@@ -114,6 +114,8 @@ export const CLOSE_SNACK_BAR = "[CUSTOMERS APP] CLOSE_SNACK_BAR";
 export const TRANSFER_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE";
 export const TRANSFER_ASSIGNED_FRANCHISEE_START = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE_START";
 
+export const SET_TRANSFER_PARAM = "[CUSTOMERS APP] SET_TRANSFER_PARAM";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -212,7 +214,7 @@ export function createCustomer(regionId, param) {
 			let newCustomer = await customersService.createCustomer(regionId, param);
 			dispatch({
 				type: CREATE_CUSTOMER,
-				payload: {regionId, newCustomer}
+				payload: { regionId, newCustomer }
 			});
 		})();
 	}
@@ -803,14 +805,14 @@ export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend
 		})();
 	}
 }
-export function transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, franchisee) {
+export function transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, reason, notes, transfer_fee, franchisee) {
 	return (dispatch) => {
 		dispatch({
 			type: TRANSFER_ASSIGNED_FRANCHISEE_START,
 		});
 
 		(async () => {
-			let activeCustomer = await customersService.transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, franchisee);
+			let activeCustomer = await customersService.transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, reason, notes, transfer_fee, franchisee);
 			dispatch({
 				type: TRANSFER_ASSIGNED_FRANCHISEE,
 				payload: activeCustomer
@@ -828,6 +830,12 @@ export function setTransferFranchiseeState(f) {
 export function setFranchiseeToTransfer(key, value) {
 	return {
 		type: SET_FRANCHISEE_TO_TRANSFER,
+		payload: { key, value }
+	}
+}
+export function setTransferParam(key, value) {
+	return {
+		type: SET_TRANSFER_PARAM,
 		payload: { key, value }
 	}
 }

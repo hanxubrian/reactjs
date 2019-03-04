@@ -660,8 +660,8 @@ class TransferFranchieesListPage extends Component {
 		this.setState({
 			[name]: event.target.checked
 		});
-		if (name === "enabled_cancelation_fee") {
-			this.setState({ canc_fee: event.target.checked ? 50 : '' })
+		if (name === "enabled_transfer_fee") {
+			this.setState({ transfer_fee: event.target.checked ? 50 : '' })
 		}
 	};
 
@@ -742,6 +742,10 @@ class TransferFranchieesListPage extends Component {
 			return
 		}
 
+		this.props.setTransferParam('reason', this.state.transferReason)
+		this.props.setTransferParam('notes', this.state.transferNote)
+		this.props.setTransferParam('transfer_fee', this.state.transfer_fee)
+
 		this.props.setFranchiseeToTransfer('new', newFranchisee)
 		this.props.handleStep(3)
 	}
@@ -796,14 +800,14 @@ class TransferFranchieesListPage extends Component {
 						/>
 
 						<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, width: "23%", minWidth: "180px" }}>
-							<InputLabel shrink htmlFor="Reason">Reason</InputLabel>
+							<InputLabel shrink htmlFor="transferReason">Reason</InputLabel>
 							<Select
 								native
-								value={this.state.Reason || ''}
-								onChange={this.handleChange('Reason')}
+								value={this.state.transferReason || ''}
+								onChange={this.handleChange('transferReason')}
 								inputProps={{
-									name: 'Reason',
-									id: 'Reason',
+									name: 'transferReason',
+									id: 'transferReason',
 								}}
 							>
 								{this.props.transferReasons.Data && this.props.transferReasons.Data.map((x, index) => (
@@ -813,20 +817,20 @@ class TransferFranchieesListPage extends Component {
 						</FormControl>
 
 						<Checkbox
-							checked={this.state.enabled_cancelation_fee || false}
-							onChange={this.handleChangeChecked('enabled_cancelation_fee')}
+							checked={this.state.enabled_transfer_fee || false}
+							onChange={this.handleChangeChecked('enabled_transfer_fee')}
 							style={{ marginTop: 14 }}
 						/>
 						<TextField
-							disabled={!this.state.enabled_cancelation_fee}
-							id="canc_fee"
-							label="Cancelation Fee"
+							disabled={!this.state.enabled_transfer_fee}
+							id="transfer_fee"
+							label="Transfer Fee"
 							placeholder="Amount Fee"
 							type="number"
-							value={this.state.enabled_cancelation_fee ? (this.state.canc_fee || '') : ''}
-							onChange={this.handleChange('canc_fee')}
+							value={this.state.enabled_transfer_fee ? (this.state.transfer_fee || '') : ''}
+							onChange={this.handleChange('transfer_fee')}
 							className={classNames(classes.textField, '')}
-							InputLabelProps={{ shrink: this.state.enabled_cancelation_fee }}
+							InputLabelProps={{ shrink: this.state.enabled_transfer_fee }}
 							margin="dense"
 						/>
 						<FormControlLabel
@@ -844,12 +848,12 @@ class TransferFranchieesListPage extends Component {
 						{this.state.continue_findersfee &&
 							<TextField
 								type="date"
-								id="stop_finders_fee"
+								id="stop_finders_fee_date"
 								label="Stop Date"
 								className={classNames(classes.textField, "ml-12")}
 								InputLabelProps={{ shrink: true }}
-								value={this.state.stop_finders_fee}
-								onChange={this.handleChange('stop_finders_fee')}
+								value={this.state.stop_finders_fee_date}
+								onChange={this.handleChange('stop_finders_fee_date')}
 								margin="dense"
 								// variant="outlined"
 								style={{ minWidth: "180px" }}
@@ -928,12 +932,12 @@ class TransferFranchieesListPage extends Component {
 						</div>
 
 						<TextField
-							id="note"
-							name="note"
+							id="transferNote"
+							name="transferNote"
 							label="Note"
 							className={classes.textField}
-							value={this.state.note || ''}
-							onChange={this.handleChange('note')}
+							value={this.state.transferNote || ''}
+							onChange={this.handleChange('transferNote')}
 							margin="dense"
 							variant="outlined"
 							fullWidth
@@ -1020,6 +1024,7 @@ function mapDispatchToProps(dispatch) {
 
 		setFranchiseeToTransfer: Actions.setFranchiseeToTransfer,
 		openSnackbar: Actions.openSnackbar,
+		setTransferParam: Actions.setTransferParam,
 	}, dispatch);
 }
 

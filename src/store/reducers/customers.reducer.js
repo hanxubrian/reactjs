@@ -326,6 +326,11 @@ const initialState = {
 		vertical: "bottom",
 		horizontal: 'center',
 		duration: 3000,
+	},
+	transferParam: {
+		reason: '',
+		notes: '',
+		transfer_fee: ''
 	}
 };
 
@@ -387,28 +392,28 @@ const customers = function (state = initialState, action) {
 			{
 				const regionId = action.payload.regionId
 				let newCustomer = action.payload.newCustomer.Data
-					// newCustomer.AccountTypeListId= ""
-					// newCustomer.AccountTypeListName= ""
-					newCustomer.Address= newCustomer.cus_addr
-					newCustomer.Amount= newCustomer.cont_bill
-					newCustomer.Atrisk= "Normal"
-					newCustomer.City= newCustomer.cus_city
-					newCustomer.CreatedBy= null
-					newCustomer.CustomerId= newCustomer._id
-					newCustomer.CustomerName= newCustomer.cus_name
-					newCustomer.CustomerNo= newCustomer.cust_no
-					// newCustomer.InvoiceDayPreference= "BOM"
-					// newCustomer.Latitude= 37.4855107
-					// newCustomer.LogMessage= null
-					// newCustomer.Longitude= -122.1822702
-					// newCustomer.OverPayment= 0
-					// newCustomer.PaymentTerm= 30
-					newCustomer.Phone= newCustomer.cus_phone
-					newCustomer.PostalCode= newCustomer.cus_zip
-					// newCustomer.Radius= 0
-					newCustomer.RegionName= "BUF"
-					newCustomer.StateName= newCustomer.cus_state
-					newCustomer.StatusName= "A"
+				// newCustomer.AccountTypeListId= ""
+				// newCustomer.AccountTypeListName= ""
+				newCustomer.Address = newCustomer.cus_addr
+				newCustomer.Amount = newCustomer.cont_bill
+				newCustomer.Atrisk = "Normal"
+				newCustomer.City = newCustomer.cus_city
+				newCustomer.CreatedBy = null
+				newCustomer.CustomerId = newCustomer._id
+				newCustomer.CustomerName = newCustomer.cus_name
+				newCustomer.CustomerNo = newCustomer.cust_no
+				// newCustomer.InvoiceDayPreference= "BOM"
+				// newCustomer.Latitude= 37.4855107
+				// newCustomer.LogMessage= null
+				// newCustomer.Longitude= -122.1822702
+				// newCustomer.OverPayment= 0
+				// newCustomer.PaymentTerm= 30
+				newCustomer.Phone = newCustomer.cus_phone
+				newCustomer.PostalCode = newCustomer.cus_zip
+				// newCustomer.Radius= 0
+				newCustomer.RegionName = "BUF"
+				newCustomer.StateName = newCustomer.cus_state
+				newCustomer.StatusName = "A"
 
 
 
@@ -1208,6 +1213,15 @@ const customers = function (state = initialState, action) {
 				loading: {
 					...state.loading,
 					bTransferAssignedFranchiseeStart: "",
+				},
+				activeCustomer: action.payload,
+			};
+		case Actions.SET_TRANSFER_PARAM:
+			return {
+				...state,
+				transferParam: {
+					...state.transferParam,
+					[action.payload.key]: action.payload.value,
 				},
 				activeCustomer: action.payload,
 			};

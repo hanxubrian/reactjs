@@ -985,7 +985,14 @@ class TransferSummaryPage extends React.Component {
 			CreatedById: 0,
 		}
 
-		this.props.transferAssignedFranchisee(this.props.regionId, this.props.activeCustomer.Data.cust_no, oldFranchisee.FranchiseeNumber, newFranchiseeParam)
+		this.props.transferAssignedFranchisee(
+			this.props.regionId,
+			this.props.activeCustomer.Data.cust_no,
+			oldFranchisee.FranchiseeNumber,
+			this.props.transferParam.reason,
+			this.props.transferParam.notes,
+			this.props.transferParam.transfer_fee,
+			newFranchiseeParam)
 
 		this.props.setFranchiseeToTransfer('old', null)
 		this.props.setFranchiseeToTransfer('new', null)
@@ -999,7 +1006,7 @@ class TransferSummaryPage extends React.Component {
 
 		}
 	}
-	
+
 	addMonthlyBilling = (fIndex) => {
 		const { franchieesesToOffer } = this.state
 		let newMonthlyBilling = {
@@ -1325,6 +1332,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		franchiseeToTransfer: customers.franchiseeToTransfer,
 
 		snack: customers.snack,
+		transferParam: customers.transferParam,
 	}
 }
 
