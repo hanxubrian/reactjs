@@ -4,7 +4,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import _ from 'lodash';
+
 
 const initialState = {
     agingReports: null,
@@ -12,7 +12,7 @@ const initialState = {
     errorMsg: '',
     agingParams: {
         CustomerNoList: [],
-        AgingDate: moment().format('MM/DD/YYYY'),
+        AgingDate: '01/01/2018',
         PaymentDate: moment().format('MM/DD/YYYY'),
         IncludeMonth: 12,
         CalculateMethod: "Bill Month",
@@ -34,6 +34,8 @@ const agings = function(state = initialState, action) {
             return {...state, agingReports: null, bFetchingAging: false, errorMsg: action.payload};
         case Actions.TOGGLE_AGING_FILTER_PANEL:
             return {...state, bAgingFilterPanel: !state.bAgingFilterPanel};
+        case Actions.UPDATE_AGING_FILTER_PARAMETERS:
+            return {...state, agingParams: action.payload};
         case UserActions.USER_LOGGED_OUT:
             return {...initialState};
         default:

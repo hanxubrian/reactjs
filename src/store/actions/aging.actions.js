@@ -4,6 +4,7 @@ export const GET_AGING_REPORTS_SUCCESS = "[AGING] GETS REPORTS SUCCESS";
 export const GET_AGING_REPORTS_ERROR = "[AGING] GETS REPORTS ERROR";
 export const GET_STARTED_AGINGS_FETCH = "[AGING] GET STARTED FETCH";
 export const TOGGLE_AGING_FILTER_PANEL = "[AGING] TOGGLE FILTER PANEL";
+export const UPDATE_AGING_FILTER_PARAMETERS = "[AGING] UPDATE FILTER PARAMETERS";
 
 export function getAgingReports(regionId, params) {
     return (dispatch) => {
@@ -34,5 +35,12 @@ export function getAgingReports(regionId, params) {
 export function toggleAgingFilterPanel(){
     return {
         type: TOGGLE_AGING_FILTER_PANEL
+    }
+}
+
+export function updateAgingParameters(params) {
+    return {
+        type: UPDATE_AGING_FILTER_PARAMETERS,
+        payload: params
     }
 }

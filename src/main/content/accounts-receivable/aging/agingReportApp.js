@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {
     Icon,
     Typography,
-    Button, Hidden, Paper, Input
+    Button, Hidden, Paper, Input, CircularProgress
 } from '@material-ui/core';
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
 import {bindActionCreators} from "redux";
@@ -203,14 +203,12 @@ class AgingReportLayout extends Component {
 
     constructor(props) {
         super(props);
-        props.getPaymentLogList(props.regionId, props.logDate);
+
+        if(props.agingReports===null)
+            props.getAgingReports(props.regionId, props.agingParams);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.props.regionId!== prevProps.regionId ||
-        this.props.logDate!==prevProps.logDate){
-            this.props.getPaymentLogList(this.props.regionId, this.props.logDate);
-        }
     }
 
     componentWillMount() {
@@ -230,11 +228,12 @@ class AgingReportLayout extends Component {
 
     print = () => {
         let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        const input = document.getElementById('wholediv');
-        this.child.downloadPDF(input, imgUrl);
+        // const input = document.getElementById('wholediv');
+        // this.child.downloadPDF(input, imgUrl);
     };
+
     email = () => {
-        alert("Email");
+
     };
 
     handleSearchChange = prop => event => {
@@ -347,6 +346,11 @@ class AgingReportLayout extends Component {
                     }}
                 >
                 </FusePageCustomSidebarScroll>
+                {(this.props.bFetchingAging) && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
             </React.Fragment>
         );
     }
@@ -354,16 +358,18 @@ class AgingReportLayout extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getPaymentLogList: Actions.getPaymentLogList,
+        getAgingReports: Actions.getAgingReports,
         toggleFilterPanel: Actions.toggleAgingFilterPanel,
     }, dispatch);
 }
 
-function mapStateToProps({auth, paymentLog, agings}) {
+function mapStateToProps({auth, agings}) {
     return {
         regionId: auth.login.defaultRegionId,
-        logDate: paymentLog.logDate,
+        agingReports: agings.agingReports,
+        agingParams: agings.agingParams,
         bAgingFilterPanel: agings.bAgingFilterPanel,
+        bFetchingAging: agings.bFetchingAging,
     }
 }
 

@@ -134,12 +134,6 @@ const styles = theme => ({
     },
 });
 
-let pdf                             = 0;
-let page_section                    = 0;
-let HTML_Width                      = 0;
-let HTML_Height                     = 0;
-let top_left_margin                 = 0;
-
 const CurrencyFormatter = ({value}) => (
     <NumberFormat value={value}
                   displayType={'text'}
@@ -180,6 +174,12 @@ class AgingReportList extends Component {
     componentDidMount()
     {
         this.props.onRef(this);
+        if (this.props.agingReports!==null) {
+            this.setState({data: this.props.agingReports});
+
+            if(this.props.agingReports.length)
+                this.onProcessData();
+        }
     }
     componentWillUnmount() {
 
@@ -187,9 +187,22 @@ class AgingReportList extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.paymentLogList !== prevProps.paymentLogList)
-            this.setState({data: this.props.paymentLogList})
+        if (this.props.agingReports!==null && (this.props.agingReports !== prevProps.agingReports)) {
+            this.setState({data: this.props.agingReports});
+
+            if(this.props.agingReports.length)
+                this.onProcessData();
+        }
     }
+
+    onProcessData = () =>{
+        let temp = this.props.agingReports;
+        let inv=[];
+        temp.forEach(x => {
+            x.customer = `${x.CustomerNo} ${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`;
+        });
+
+    };
 
 
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
@@ -200,83 +213,7 @@ class AgingReportList extends Component {
         );
     };
 
-    getDataUri=(url, cb)=>
-    {
-        let image = new Image();
-        let log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        image.setAttribute('crossOrigin', 'anonymous');
-        image.onload = function () {
-            let canvas = document.createElement('canvas');
-            canvas.width = this.naturalWidth;
-            canvas.height = 2500;
-            let ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fff';  /// set white fill style
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            canvas.getContext('2d').drawImage(this, 0, 0);
-            cb(canvas.toDataURL('image/png'));
-        };
-        image.src = log_url;
-    };
 
-    downloadPDF=(input, imgURL)=> {
-        console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
-        console.log('image=',imgURL,top_left_margin, top_left_margin, HTML_Width, HTML_Height);
-        let cardlen = document.getElementsByClassName("pdfcardcontent").length;
-        let img = null;
-
-        if (input != null && imgURL != null) {
-            this.getDataUri(imgURL, function (dataUri) {
-                img = dataUri;
-            });
-            html2canvas(input)
-                .then((canvas) => {
-
-                    const imgData = canvas.toDataURL('image/jpeg',1.0);
-                    this.calculatePDF_height_width("whole",0);
-
-                    pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
-                    pdf.addImage(imgData, 'jpeg', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
-
-                    pdf.save("download.pdf");
-                })
-            ;
-        }
-    };
-
-    calculatePDF_height_width=(selector,index)=>{
-
-        page_section = document.getElementsByClassName(selector)[index];
-        HTML_Width = page_section.offsetWidth;
-        HTML_Height = page_section.offsetHeight ;
-        top_left_margin = 15;
-    };
-
-    renderHeader = ()=>{
-        let region = this.props.all_regions.filter(r=>r.regionid===this.props.regionId);
-
-        return (
-            <Grid1 container className="flex flex-row items-center report-header">
-                <Grid1 item sm={3} className="text-left" >
-                    <Typography color="inherit" >{moment().format('MM/DD/YYYY')}</Typography>
-                    <Typography color="inherit" >{moment().format('HH:mm:ss')}</Typography>
-                    <Typography className="mt-16" color="inherit" >* <i>Indicates invoice applied</i></Typography>
-                    <Typography color="inherit" ><i>to non-default franchisee.</i></Typography>
-                </Grid1>
-                <Grid1 item sm={6} className="text-center">
-                    <Typography variant={"h1"} color="inherit">Janiking of {region[0].regionname}, Inc.</Typography>
-                    <Typography color="inherit" variant={"h2"}>
-                        Accounts Receivable Log
-                    </Typography>
-                    <Typography color="inherit" variant={"h3"}>Deposit Date: {moment(this.props.logDate).format('MM/DD/YYYY')} </Typography>
-                </Grid1>
-                <Grid1 item sm={3} className="text-right" width='200'>
-                    <Typography color="inherit">
-                        {/*<img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>*/}
-                    </Typography>
-                </Grid1>
-            </Grid1>
-        )
-    };
     render()
     {
         const { classes} = this.props;
@@ -298,8 +235,6 @@ class AgingReportList extends Component {
             { columnName: 'Amount', width: 120,  align: 'right'},
         ];
         console.log('data=', this.state.data);
-        // if(!this.state.data.length)
-        //     return (<div/>);
 
         let totalSummaryItems = [
             { columnName: 'Amount', type: 'sum'},
@@ -343,17 +278,14 @@ class AgingReportList extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createReport: Actions.createReport,
     }, dispatch);
 }
 
-function mapStateToProps({auth, paymentLog})
+function mapStateToProps({auth, agings})
 {
     return {
-        paymentLogList: paymentLog.paymentLogList,
+        agingReports: agings.agingReports,
         regionId: auth.login.defaultRegionId,
-        logDate: paymentLog.logDate,
-        all_regions: auth.login.all_regions,
     }
 }
 

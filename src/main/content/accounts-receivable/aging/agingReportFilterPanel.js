@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {MenuItem, Paper, TextField, Switch, FormControlLabel, withStyles} from '@material-ui/core';
+import {MenuItem, Paper, TextField, Switch, FormControlLabel, withStyles, Button, Icon} from '@material-ui/core';
 
 import * as Actions from 'store/actions';
 
@@ -51,9 +51,6 @@ class FilterPanel extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
-        if(prevState.logDate!==this.state.logDate) {
-            this.props.updateLogDate(this.state.logDate);
-        }
     }
 
     componentWillUnmount()
@@ -64,13 +61,14 @@ class FilterPanel extends Component {
         let params = this.state.agingParams;
         params.AgingDate = moment(date).format("MM/DD/YYYY");
         this.setState({agingParams: params});
-        // this.props.updateLogDate(logDate);
+        this.props.updateAgingParameters(params);
     };
+
     handlePaymentDateChange = date =>{
         let params = this.state.agingParams;
         params.PaymentDate = moment(date).format("MM/DD/YYYY");
         this.setState({agingParams: params});
-        // this.props.updateLogDate(logDate);
+        this.props.updateAgingParameters(params);
     };
 
 
@@ -82,6 +80,10 @@ class FilterPanel extends Component {
             params[prop] = event.target.value;
 
         this.setState({agingParams: params});
+        this.props.updateAgingParameters(params);
+    };
+    onFetch=()=>{
+        this.props.getAgingReports(this.props.regionId, this.state.agingParams);
     };
 
     render()
@@ -220,6 +222,14 @@ class FilterPanel extends Component {
                                 }
                                 label="ChargeBack"
                             />
+                            <br/>
+                            <br/>
+                            <Button variant="contained" color="primary"
+                                    className={classNames(classes.btntop) } onClick={this.onFetch}>
+                                Re-fetch
+                                <Icon className={classes.rightIcon}>autorenew</Icon>
+                            </Button>
+
 
                         </div>
                     </Paper>
@@ -232,9 +242,9 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createReport: Actions.createReport,
-        updateLogDate: Actions.updateLogDate,
-        nullifyFranchiseeNewReport: Actions.nullifyFranchiseeNewReport,
+        getAgingReports: Actions.getAgingReports,
+        updateAgingParameters: Actions.updateAgingParameters,
+
     }, dispatch);
 }
 
