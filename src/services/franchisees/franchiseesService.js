@@ -333,9 +333,9 @@ class franchiseesService {
         });
     }
 
-    getFranchiseeReportByFranchiseeNum = (regionId,year,month,franchiseeNum) => {
+    getFranchiseeReportByFranchiseeNum = (RegionId,FranchiseeNo) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/api/FranchiseeReport?regionid=${regionId}&year=${year}&month=${month}&franchiseenumber=${franchiseeNum}`)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/FranchiseReport/GetListByFranchisee?regionId=${RegionId}&franchiseeNo=${FranchiseeNo}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
