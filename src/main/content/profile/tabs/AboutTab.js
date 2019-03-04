@@ -23,10 +23,12 @@ class AboutTab extends Component {
 
     componentDidMount()
     {
+
         axios.get('/api/profile/about').then(res => {
             this.setState(res.data);
+
         });
-        console.log("about tab user",this.props.user);
+
     }
     RegionHeader(){
         let region_name = '';
@@ -463,7 +465,7 @@ class AboutTab extends Component {
     }
 }
 AboutTab.propTypes = {
-    user            : PropTypes,
+    user            : PropTypes.object,
 };
 
 function mapStateToProps({auth})

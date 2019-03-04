@@ -90,9 +90,6 @@ class ProfilePage extends Component {
                 this.setState({user: userdetail});
             }
         }
-        // if(this.state.contacts ===null && this.props.contacts !==null){
-        //     this.setState({contacts:this.props.contacts});
-        // }
         if(this.props.contacts && this.props.contacts !== null &&  JSON.stringify(this.props.contacts) !== JSON.stringify(prevProps.contacts)){
             this.setState({contacts: this.props.contacts});
 
@@ -101,28 +98,6 @@ class ProfilePage extends Component {
             if(userdetail && userdetail !== null){
                 this.setState({user: userdetail});
             }
-            // console.log('this.props.contacts',this.props.contacts);
-            // console.log('this.state.id',this.state.id);
-            // console.log('userdetail',userdetail);
-            // let con = this.props.contacts;
-            // const arr = Object.keys(con).map((id) => con[id]);
-            // console.log('con.length',con.length);
-            // console.log('arr.length',arr.length);
-            // console.log('arr',arr);
-            // if(arr && arr.length && arr !== null){
-            //     let mid = null;
-            //     arr.map((item)=>{
-            //         console.log('item',item);
-            //         console.log('item.id',item.id);
-            //         console.log('this.state.id',this.state.id);
-            //
-            //         if(item.id === this.state.id){
-            //             mid =item;
-            //         }
-            //     });
-            //     console.log("mapg",mid);
-            // }
-
         }
     }
     render()
@@ -190,7 +165,7 @@ class ProfilePage extends Component {
                     content={
                         <div className="p-16 sm:p-24">
                             {value === 0 && (
-                                <AboutTab user={miduser}/>
+                                <AboutTab/>
                             )}
                             {value === 1 &&
                             (
@@ -285,7 +260,7 @@ class ProfilePage extends Component {
             )
         }
         else{
-            return(<div>test{user}</div>)
+            return(<div>Loading Data</div>)
         }
 
     };
