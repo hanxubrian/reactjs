@@ -480,6 +480,7 @@ class Franchisees extends Component {
     };
 
     componentDidMount(){
+        this.props.updateReportPeriod(this.props.defaultPeriod)
         document.addEventListener("keydown", this.escFunction, false);
         this.getLocation();
     }
@@ -1311,6 +1312,7 @@ function mapDispatchToProps(dispatch)
         getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
         getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
         createFranchisee : Actions.createFranchisees,
+        updateReportPeriod: Actions.updateReportPeriod,
     }, dispatch);
 }
 
@@ -1337,6 +1339,7 @@ function mapStateToProps({franchisees,auth, invoices, transactions})
         detailPayload: franchisees.detailPayload,
         createPayload: franchisees.createPayload,
         reportPeriod: franchisees.reportPeriod,
+        defaultPeriod: auth.login.defaultPeriod,
         billingLists: invoices.billingLists,
         transactionTypeList: transactions.transactionTypeList,
         insertPayload: franchisees.insertPayload
