@@ -74,11 +74,13 @@ const styles = theme => ({
         }
     },
     notificationroot: {
+        zIndex:99999,
         width: '100%',
         maxWidth: 600,
         backgroundColor: theme.palette.background.paper,
     },
     notificationbody:{
+        zIndex:99999,
         position: 'absolute',
         top: '70px',
         right: '10px',
@@ -756,7 +758,7 @@ class MainToolbar extends Component {
                                     <Button className={classes.mainnotificationbtns} onClick={()=>{this.shownotification()}}>Close</Button>
                                 </div>
                             </div>
-                            <Paper style={{maxHeight: 350, overflow: 'auto'}}>
+                            <Paper style={{maxHeight: 350, overflow: 'auto',zIndex:99999,}}>
 
                                     <List component="nav" className={classes.notificationroot} >
 

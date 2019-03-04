@@ -129,7 +129,7 @@ class ChatPanel extends Component {
             });
         }
 
-        if(this.state.individualcurrentRoom && this.state.individualcurrentRoom != null && !this.state.isOpen ){
+        if(this.state.individualcurrentRoom && this.state.individualcurrentRoom !== null && !this.state.isOpen ){
             this.setState({
                 isOpen : true,
             });

@@ -1,11 +1,12 @@
 import axios from 'axios/index';
 import _ from 'lodash';
 import {getUserData} from 'main/content/apps/contacts/store/actions/user.actions';
-import {getChatUserData} from 'main/chatPanel//store/actions/user.actions';
-import {getChatContacts} from 'main/chatPanel//store/actions/contacts.actions';
-import {setselectedContactId} from 'main/chatPanel//store/actions/contacts.actions';
-import {chatService} from 'services'
-import {contactService} from 'services'
+import {getChatUserData} from 'main/chatPanel/store/actions/user.actions';
+import {getChatContacts} from 'main/chatPanel/store/actions/contacts.actions';
+import {setselectedContactId} from 'main/chatPanel/store/actions/contacts.actions';
+import {getChat} from "../../../chat/store/actions";
+import {chatService} from 'services';
+import {contactService} from 'services';
 
 export const GET_CONTACTS = '[CONTACTS APP] GET CONTACTS';
 export const SET_SEARCH_TEXT = '[CONTACTS APP] SET SEARCH TEXT';
@@ -251,6 +252,8 @@ export function openChat(contactId)
                         dispatch({
                             type:OPEN_CHAT_PANEL_END,
                         });
+                }).then(()=>{
+                    // dispatch(getChat());
                 })
                 }
             )();

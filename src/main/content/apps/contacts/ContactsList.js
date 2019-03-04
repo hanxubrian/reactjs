@@ -250,6 +250,20 @@ class ContactsList extends Component {
                 isOpen: !this.state.isOpen
             });
     };
+    openchatpaneldetail=(row)=>{
+        console.log("row",row);
+        let chatlist = this.props.chatUser.chatList;
+        let contact = row.name;
+        let chatid = null;
+        chatid =_.find(chatlist,{contactId:contact});
+        console.log(chatlist);
+        console.log(chatid, contact);
+        if(chatid && chatid !== null && contact && contact !== null && chatid.chatId){
+            this.props.openChatPanel();
+            this.props.getChat(chatid.chatId,contact);
+        }
+
+    }
     getMsgInfo=(userId,userInfo)=>{
         if(userId && userId !=null){
             this.setState({
@@ -482,8 +496,9 @@ class ContactsList extends Component {
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            openChat(row.original.id);
-                                            this.getMsgInfo(row.original.name,row.original);
+                                            // openChat(row.original.id);
+                                            this.openchatpaneldetail(row.original);
+                                            // this.getMsgInfo(row.original.name,row.original);
                                         }}
                                         className={classes.chatIcon}
                                     >
@@ -505,21 +520,7 @@ class ContactsList extends Component {
 
             {/*</FuseAnimate>*/}
 
-                {this.state.isOpen && !1 && (
-                    <div className={classNames(classes.individualChat, {'closeIndvidualchat': !state})}>
-                        {
 
-                            <IndividualChat show ={this.state.isOpen} onClose={this.toggleChat}
-                            message ={this.state.individualchatDetail} userdetail = {this.state.selectedUserDetail}
-                                            currentUser ={this.state.chatDetail.currentUser}
-                                            contacts ={this.state.contacts} user={this.state.chatUser}
-                                            currentRoom={this.state.currentRoom}
-                            />
-
-                        }
-
-                    </div>
-                )}
 
 
             </div>
@@ -546,6 +547,7 @@ function mapDispatchToProps(dispatch)
         setContactsUnstarred    : Actions.setContactsUnstarred,
         individualcurrentChat   : ChatActions.IndividualsetCurrentRoom,
         openChatPanel           : ChatActions.openChatPanel,
+        getChat                 : ChatActions.getChat,
         closeChatPanel          : ChatActions.closeChatPanel
     }, dispatch);
 }

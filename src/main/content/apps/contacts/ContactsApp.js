@@ -43,7 +43,7 @@ const styles = theme => ({
     layoutHeader       : {
         height   : 80,
         minHeight: 80,
-        zIndex      : 99999,
+        zIndex      : 1,
         backgroundColor: theme.palette.secondary.main
     },
 });

@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
 import ReactPlayer from 'react-player'
+import _ from 'lodash';
 
 const styles = theme => ({
     root         : {
@@ -88,7 +89,9 @@ class ContactList extends Component {
         super();
         this.state = {
             flage       : false,
+            individualcurrentRoom: null,
         }
+
     }
     componentDidMount(){
         this.props.initChat();
@@ -111,6 +114,23 @@ class ContactList extends Component {
                 }
             });
         }
+        if(this.props.individualcurrentRoom && this.props.individualcurrentRoom !== null && JSON.stringify(this.props.individualcurrentRoom) !== JSON.stringify(prevProps.individualcurrentRoom)){
+            this.openindividual(this.props.individualcurrentRoom);
+        }
+    }
+    openindividual=(val)=>{
+        let currentroom = val;
+        let id = val.id;
+        let userIds = val.userIds;
+        let me = this.props.login.username;
+        let contacts =null;
+        userIds.map((item)=>{
+            if(item !== me){
+                contacts = item;
+                return;
+            }
+        });
+
     }
     messagenotification=()=>{
         this.setState({flage: !this.state.flage});
@@ -121,7 +141,6 @@ class ContactList extends Component {
     };
 
     handleContactClick = (chatId, contactId) => {
-
         this.props.openChatPanel();
         this.props.getChat(chatId, contactId);
         this.scrollToTop();
@@ -232,14 +251,16 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({chatPanel,contactsApp})
+function mapStateToProps({chatPanel,contactsApp,auth})
 {
     return {
         chat             : chatPanel.chat,
         contacts         : chatPanel.contacts.entities,
         selectedContactId: chatPanel.contacts.selectedContactId,
         user             : chatPanel.user,
+        login                   : auth.login,
         contactuserList             : contactsApp.contacts.entities,
+        individualcurrentRoom       : chatPanel.IndividualChat.individualChatcurrentRoom,
     }
 }
 
