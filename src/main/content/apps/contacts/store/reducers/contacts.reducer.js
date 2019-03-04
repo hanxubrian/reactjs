@@ -1,5 +1,6 @@
 import * as Actions from '../actions';
 import _ from '@lodash';
+import {OPEN_CHAT_PANEL_START} from "../actions/contacts.actions";
 
 const initialState = {
     entities          : [],
@@ -12,7 +13,8 @@ const initialState = {
             open: false
         },
         data : null
-    }
+    },
+    openchatpanelstatus:false,
 };
 
 const contactsReducer = function (state = initialState, action) {
@@ -124,7 +126,20 @@ const contactsReducer = function (state = initialState, action) {
                 }
             };
         }
-      
+        case Actions.OPEN_CHAT_PANEL_START:
+        {
+            return {
+                ...state,
+                openchatpanelstatus:true,
+            }
+        }
+        case Actions.OPEN_CHAT_PANEL_END:
+        {
+            return {
+                ...state,
+                openchatpanelstatus:false,
+            }
+        }
         default:
         {
             return state;

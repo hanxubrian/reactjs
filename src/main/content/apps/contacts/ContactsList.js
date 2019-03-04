@@ -3,7 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {FuseUtils, FuseAnimate} from '@fuse';
-import {Avatar, Checkbox, Icon, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Typography} from '@material-ui/core';
+import {CircularProgress,Avatar, Checkbox, Icon, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Typography} from '@material-ui/core';
 import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
 import * as ChatActions from '../../../chatPanel/store/actions';
@@ -107,6 +107,25 @@ const styles = theme => ({
         right: 360,
         zIndex: 10,
         display: 'flex'
+    },
+    overlay: {
+        position: 'absolute',
+        top: -104,
+        left: -65,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .6)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex'
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
+    cwidth:{
+        marginTop: '8%',
+        height:'90%',
     }
 
 });
@@ -210,6 +229,12 @@ class ContactsList extends Component {
         }
         return FuseUtils.filterArrayByString(arr, searchText);
     };
+    mgetFilteredArray = (entities) => {
+
+        let userid = this.props.login.UserId;
+        let mid = _.filter(entities, function(o) { return o.id!==userid; });
+        return mid;
+    };
 
     openSelectedContactMenu = (event) => {
         this.setState({selectedContactsMenu: event.currentTarget});
@@ -262,7 +287,8 @@ class ContactsList extends Component {
     render()
     {
         const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
-        const data = this.getFilteredArray(contacts, searchText);
+        let midcontact = this.mgetFilteredArray(contacts);
+        const data = this.getFilteredArray(midcontact, searchText);
         // console.log("searchText===========",searchText);
         const {selectedContactsMenu} = this.state;
         // console.log("chatDetal====",this.state.chatDetail);
@@ -278,12 +304,13 @@ class ContactsList extends Component {
         }
 
         return (
-            <div className="flex-1 flex-col absolute w-full h-full">
-            <FuseAnimate
-                animation="transition.slideUpIn" delay={300}
-            >
+            <div className="flex-1 flex-col cwidth absolute" style={{marginTop:'80px',height:window.innerHeight-150,width: '-webkit-fill-available',}}>
+
+            {/*<FuseAnimate*/}
+                {/*animation="transition.slideUpIn" delay={300}*/}
+            {/*>*/}
                 <ReactTable
-                    className={classNames(classes.root, "-striped -highlight border-0")}
+                    // className={classNames(classes.root, "-striped -highlight border-0")}
                     minRows = {0}
                     PaginationComponent={JanikingPagination}
                     getTheadGroupProps={(state, rowInfo, column, instance) =>{
@@ -295,16 +322,7 @@ class ContactsList extends Component {
                             },
                         }
                     }}
-                    // getTheadGroupThProps={(state, rowInfo, column, instance) => {
-                    //     return {
-                    //         style:{
-                    //             // padding: "10px 10px",
-                    //             fontSize: 18,
-                    //             fontWeight: 700,
-                    //         },
-                    //         className: classNames("flex items-center justify-start")
-                    //     }
-                    // }}
+
                     getTheadThProps={(state, rowInfo, column, instance) =>{
                         let border = '1px solid rgba(255,255,255,.6)';
                         if(column.Header==='Actions') border = 'none';
@@ -312,24 +330,7 @@ class ContactsList extends Component {
                             className: classes.reacttableheader
                         }
                     }}
-                    // getTheadProps={(state, rowInfo, column, instance) =>{
-                    //     return {
-                    //         style:{
-                    //             fontSize: 13,
-                    //         },
-                    //         className: classes.tableTheadRow
-                    //     }
-                    // }}
-                    // getTdProps={(state, rowInfo, column, instance) =>{
-                    //     return {
-                    //         style:{
-                    //             textAlign: 'center',
-                    //             flexDirection: 'row',
-                    //             fontSize: 13,
-                    //             padding: "0",
-                    //         },
-                    //     }
-                    // }}
+
                     getTrProps={(state, rowInfo, column) => {
                         return {
                             onClick: (e)=>{
@@ -529,6 +530,7 @@ class ContactsList extends Component {
                                         onClick={(ev) => {
                                             ev.stopPropagation();
                                             openChat(row.original.id);
+                                            this.getMsgInfo(row.original.name,row.original);
                                         }}
                                         className={classes.chatIcon}
                                     >
@@ -538,7 +540,7 @@ class ContactsList extends Component {
                             )
                         }
                     ]}
-                    defaultPageSize={10}
+                    defaultPageSize={50}
                     noDataText="No contacts found"
                     style={{
                         height: '100%',
@@ -548,7 +550,7 @@ class ContactsList extends Component {
 
                 />
 
-            </FuseAnimate>
+            {/*</FuseAnimate>*/}
 
                 {this.state.isOpen && !1 && (
                     <div className={classNames(classes.individualChat, {'closeIndvidualchat': !state})}>
@@ -595,19 +597,20 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({contactsApp,chatPanel})
+function mapStateToProps({contactsApp,chatPanel,auth})
 {
     return {
         contacts                   : contactsApp.contacts.entities,
         selectedContactIds         : contactsApp.contacts.selectedContactIds,
         searchText                 : contactsApp.contacts.searchText,
         user                       : contactsApp.user,
+        openchatpanelstatus        : contactsApp.openchatpanelstatus,
         // contacts                : chatPanel.contacts.entities,
         selectedContactId          : chatPanel.contacts.selectedContactId,
         state                      : chatPanel.state,
         chatDetail                 : chatPanel.chat,
         chatUser                   : chatPanel.user,
-
+        login                      : auth.login,
         currentRoom                : chatPanel.chat.currentRoom,
     }
 }

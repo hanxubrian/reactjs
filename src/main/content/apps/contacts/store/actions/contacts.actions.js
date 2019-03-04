@@ -23,6 +23,10 @@ export const TOGGLE_STARRED_CONTACT = '[CONTACTS APP] TOGGLE STARRED CONTACT';
 export const TOGGLE_STARRED_CONTACTS = '[CONTACTS APP] TOGGLE STARRED CONTACTS';
 export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
 
+
+export const OPEN_CHAT_PANEL_START = '[CONTACTS APP] OPEN CHAT PANEL STARTED';
+export const OPEN_CHAT_PANEL_END = '[CONTACTS APP] OPEN CHAT PANEL END';
+
 export function getContacts(routeParams)
 {
   
@@ -221,10 +225,21 @@ export function openChat(contactId)
         const contact = getState().contactsApp.contacts.entities[contactId];
         const id = getState().auth.login.Username;
         // const id = getState().auth.login.UserId;
-
+        dispatch({
+            type:OPEN_CHAT_PANEL_START,
+        });
         (async () => {
-                chatService.openChat(id, contact.name, contact.lastName, contact.avatar).then(()=>{
-                    dispatch(getChatUserData())}).then(()=>{dispatch(getChatContacts())})
+                chatService.openChat(id, contact.name, contact.lastName, contact.avatar)
+                    .then(()=>{
+                        dispatch(getChatUserData())
+                    })
+                    .then(()=>{
+                        dispatch(getChatContacts())
+                    }).then(()=>{
+                        dispatch({
+                            type:OPEN_CHAT_PANEL_END,
+                        });
+                })
                 }
             )();
            

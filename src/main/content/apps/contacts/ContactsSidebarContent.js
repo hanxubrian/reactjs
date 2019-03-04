@@ -25,19 +25,19 @@ const styles = theme => ({
         }
     }
 });
-
+const defaultavatar ='https://res.cloudinary.com/janiking/image/upload/v1547085033/apps/users/generic.jpg';
 class ContactsSidebarContent extends Component {
 
     render()
     {
         const {classes, user} = this.props;
         return (
-            <div className="p-16 lg:p-24 lg:pr-4">
+            <div className="p-16 lg:p-24 lg:pr-4" style={{maginTop:'80px'}}>
                 <FuseAnimate animation="transition.slideLeftIn" delay={200}>
                     <Paper elevation={1} className="rounded-8">
                         <div className="p-24 flex items-center">
-                            <Avatar className="mr-12" alt={user.name} src={user.avatar}/>
-                            <Typography>{user.name}</Typography>
+                            <Avatar className="mr-12" alt={this.props.login.firstName+''+this.props.login.lastName} src={this.props.login.profilePhoto?this.props.login.profilePhoto:defaultavatar}/>
+                            <Typography>{this.props.login.firstName+'  '+this.props.login.lastName}</Typography>
                         </div>
                         <Divider/>
                         <List>
@@ -84,10 +84,11 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({}, dispatch);
 }
 
-function mapStateToProps({contactsApp})
+function mapStateToProps({contactsApp,auth})
 {
     return {
-        user: contactsApp.user
+        user: contactsApp.user,
+        login: auth.login
     }
 }
 
