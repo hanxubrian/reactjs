@@ -29,7 +29,6 @@ import InvoiceForm from "./paymentsForm"
 import SummaryPanel from './summaryPanel';
 import FilterPanel from './filterPanel';
 import PaymentFormModal from './PaymentFormModal';
-import PaymentFormModalCredit from './PaymentFormModalCredit';
 
 // for store
 import { bindActionCreators } from "redux";
