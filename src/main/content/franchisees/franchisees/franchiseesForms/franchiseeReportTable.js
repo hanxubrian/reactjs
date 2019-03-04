@@ -7,7 +7,8 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Button, IconButton, Tooltip,TablePagination} from '@material-ui/core'
+    Toolbar, Typography, Paper, Button, IconButton, Tooltip, TablePagination, Icon
+} from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -16,7 +17,7 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 // third party
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 import FindersFeesStopModal from './findersFeesStopModal';
 
@@ -54,6 +55,7 @@ class FranchiseeReprotTableHead extends React.Component {
         this.setState({
             docSendModal: this.props.docSendModal
         });
+        console.log("franchiseeReports",this.props.franchiseeReports);
     }
 
     createSortHandler = property => event => {
@@ -285,21 +287,21 @@ class FranchiseeReportTable extends React.Component {
     };
 
     render() {
-        const { classes,findersFees } = this.props;
+        const { classes,franchiseeReports } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
 
         const headers = [
             {
-                id: 'cust_no',
+                id: 'FranchiseeNo',
                 numeric: false,
                 disablePadding: false,
-                label: 'Customer #'
+                label: 'Franchisee#'
             },
             {
-                id: 'cust_name',
+                id: 'FranchiseeName',
                 numeric: false,
                 disablePadding: false,
-                label: 'Customer Name'
+                label: 'Franchisee Name'
             },
             {
                 id: 'ff_desc',
@@ -308,16 +310,28 @@ class FranchiseeReportTable extends React.Component {
                 label: 'Description'
             },
             {
-                id: 'ff_tot',
+                id: 'BillMonth',
                 numeric: false,
                 disablePadding: false,
-                label: 'Monthly Payment'
+                label: 'Month'
             },
             {
-                id: 'ff_pytotl',
+                id: 'BillYear',
                 numeric: false,
                 disablePadding: false,
-                label: 'Payment'
+                label: 'Bill Year'
+            },
+            {
+                id: 'TotalDeductions',
+                numeric: false,
+                disablePadding: false,
+                label: 'Total Deductions'
+            },
+            {
+                id: 'TotalPayment',
+                numeric: false,
+                disablePadding: false,
+                label: 'Total Payment'
             },
             {
                 id: 'action',
@@ -336,41 +350,44 @@ class FranchiseeReportTable extends React.Component {
                             numSelected={selected.length}
                             order={order}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={findersFees.length}
+                            rowCount={franchiseeReports.length}
                             headers={headers}
                         />
                         <TableBody>
-                            {findersFees.length > 0 && (
-                                stableSort(findersFees, getSorting(order, orderBy))
+                            {franchiseeReports.length > 0 && (
+                                stableSort(franchiseeReports, getSorting(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((n,index) => {
                                             return (
                                                 <TableRow hover key={index} >
-                                                    <TableCell style={{width: 150}}>
-                                                        {n.cust_no}
-                                                    </TableCell>
-                                                    <TableCell style={{width: 550}}>
-                                                        {n.cust_name}
-                                                    </TableCell>
-                                                    <TableCell style={{width: 450}}>
-                                                        {n.ff_desc}
-                                                    </TableCell>
-                                                    <TableCell style={{width: 150,textAlign:"right"}}>
-                                                        ${n.ff_tot}
-                                                    </TableCell>
-                                                    <TableCell style={{width: 250}}>
-                                                        {n.ff_pybill*1}&nbsp;of&nbsp;{n.ff_pytotl*1}
+                                                    <TableCell>
+                                                        {n.FranchiseeNo}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Button
-                                                            size="small"
-                                                            variant="outlined"
-                                                            color="primary"
-                                                            className={classNames(classes.button, "mr-12")}
-                                                            onClick={()=> this.props.openCloseStopReasonDialog(true)}
+                                                        {n.FranchiseeName}
+                                                    </TableCell>
+                                                    <TableCell >
+                                                        {n.BillMonth}
+                                                    </TableCell>
+                                                    <TableCell >
+                                                        {n.BillYear}
+                                                    </TableCell>
+                                                    <TableCell style={{textAlign:'right'}}>
+                                                        ${n.TotalRevenue}
+                                                    </TableCell>
+                                                    <TableCell style={{textAlign:'right'}}>
+                                                        ${n.TotalDeductions}
+                                                    </TableCell>
+                                                    <TableCell style={{textAlign:'right'}}>
+                                                        ${n.TotalPayment}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <IconButton
+                                                            //onClick={}
+                                                            //component={Link}
                                                         >
-                                                            Stop
-                                                        </Button>
+                                                            <Icon>visibility</Icon>
+                                                        </IconButton>
                                                     </TableCell>
                                                 </TableRow>
                                             )
@@ -382,7 +399,7 @@ class FranchiseeReportTable extends React.Component {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={findersFees.length}
+                    count={franchiseeReports.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     backIconButtonProps={{
@@ -401,14 +418,13 @@ class FranchiseeReportTable extends React.Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo,
         openCloseStopReasonDialog: Actions.openCloseStopReasonDialog
     }, dispatch);
 }
 
 function mapStateToProps({ franchisees, auth }) {
     return {
-        findersFees: franchisees.findersFees,
+        franchiseeReports: franchisees.franchiseeReports,
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         insertPayload: franchisees.insertPayload,

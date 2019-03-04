@@ -32,6 +32,7 @@ import moment from "moment";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
+import FranchiseeReportTable from "./franchiseeReportTable";
 import CustomersTable from "./customersTable";
 import FindersFeesTable from "./findersFeesTable";
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -665,7 +666,7 @@ function getStepContent(franchiseeForm, step) {
         case 5:
             return (
               <Fragment>
-
+                <FranchiseeReportTable/>
               </Fragment>
             );
         default:
@@ -770,6 +771,7 @@ class FranchiseesCreateForm extends Component {
         props.getFranchiseeFormPlanType(props.regionId);
         if(props.franchiseesForm.type === 'edit'){
             props.getFinderfeesByFranchiseeNo(props.regionId,props.insertPayload.dlr_code);
+            props.getFranchiseeReportByFranchiseeNum(props.regionId,props.insertPayload.dlr_code);
         }
     }
 
@@ -1155,7 +1157,8 @@ function mapDispatchToProps(dispatch) {
         franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
         createFranchisee : Actions.createFranchisees,
         updateFranchisees: Actions.updateFranchisees,
-        getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo
+        getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo,
+        getFranchiseeReportByFranchiseeNum: Actions.getFranchiseeReportByFranchiseeNum,
     }, dispatch);
 }
 

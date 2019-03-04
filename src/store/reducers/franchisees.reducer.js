@@ -3,6 +3,7 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import moment from "moment";
+import {GET_FRANCHISEE_REPORT_BY_FRANCHISEENO} from "../actions/";
 
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
     documentsList: [],
     franchiseeFees: [],
     findersFees: [],
+    franchiseeReports: [],
     Location: "all",
     detailPayload: null,
     eidtPayload: null,
@@ -436,6 +438,12 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 stopReasonModal: action.payload
+            }
+        }
+        case Actions.GET_FRANCHISEE_REPORT_BY_FRANCHISEENO: {
+            return{
+                ...state,
+                franchiseeReports: action.payload
             }
         }
         default:
