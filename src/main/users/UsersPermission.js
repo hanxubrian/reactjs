@@ -79,7 +79,7 @@ class UsersPermission extends React.Component {
             OutlookPassword: "",
             Apps: [],
             Groups: [],
-            UserId: 6,
+            // UserId: 6,
             UserName: "",
             FirstName: "",
             LastName: "",

@@ -234,7 +234,7 @@ class UsersForm extends React.Component {
             OutlookPassword: "",
             Apps: [],
             Groups: [],
-            UserId: 6,
+            // UserId: 6,
             UserName: "",
             FirstName: "",
             LastName: "",
@@ -272,10 +272,6 @@ class UsersForm extends React.Component {
         this.props.getUserStateList();
         this.props.getUserDepartmentList(this.props.regionId);
         this.props.getFranchisees(this.props.regionId);
-        if(this.props.payload.UserId !== this.props.userId){
-            this.updateUserFormPayload("UserId", this.props.userId);
-        }
-
         if(this.props.bNewForm){
             this.setState({ payload: this.props.payload} );
         }
@@ -345,13 +341,31 @@ class UsersForm extends React.Component {
                     x.RoleName
                 );
             });
-            details.Regions = details.Regions.forEach(x=>{
-                RoleList.push(
-                    x.Name
-                );
+
+            this.setState({
+                UserId: details.UserId,
+                Address1: details.Address1,
+                Address2: details.Address2,
+                City: details.City,
+                DefaultRegionId: details.DefaultRegionId,
+                DepartmentId: details.DepartmentId,
+                Email: details.Email,
+                FirstName: details.FirstName,
+                LastName: details.LastName,
+                Phone: details.Phone,
+                ProfilePhoto: details.ProfilePhoto,
+                State: details.State,
+                Title: details.Title,
+                UserName: details.Username,
+                UserType: details.UserType,
+                UserTypeValue: details.UserTypeValue,
+                Zipcode: details.Zipcode
             });
 
-            this.setState({...details})
+            this.setState({payload:details});
+
+
+            console.log("state",this.state);
         }
     }
 
@@ -734,7 +748,7 @@ class UsersForm extends React.Component {
                                 id="userName"
                                 label="User Name"
                                 className={classes.textField}
-                                value={this.state.UserName}
+                                value={this.state.UserName === null ? this.state.UserName : ""}
                                 onChange={this.handleChange("UserName")}
                                 style={{marginRight:'1%'}}
                                 margin="dense"
