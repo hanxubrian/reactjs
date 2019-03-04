@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {MenuItem, Paper, TextField, withStyles} from '@material-ui/core';
+import {MenuItem, Paper, TextField, Switch, FormControlLabel, withStyles} from '@material-ui/core';
 
 import * as Actions from 'store/actions';
 
@@ -12,7 +12,6 @@ import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 
 import moment from "moment";
-import _ from "lodash";
 
 
 const styles = theme => ({
@@ -77,7 +76,11 @@ class FilterPanel extends Component {
 
     handleChange = prop => event => {
         let params = this.state.agingParams;
-        params[prop] = event.target.value;
+        if(prop==='ChargeBackOn')
+            params[prop] = event.target.checked;
+        else
+            params[prop] = event.target.value;
+
         this.setState({agingParams: params});
     };
 
@@ -172,6 +175,52 @@ class FilterPanel extends Component {
                                     return (<MenuItem key={index} value={p}>{p}</MenuItem>)
                                 })}
                             </TextField>
+                            <br/>
+                            <TextField
+                                select
+                                margin="none"
+                                label="Balance Restriction"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.input,
+                                    },
+                                }}
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                name="BalanceRestriction"
+                                variant="outlined"
+                                value={this.state.agingParams.BalanceRestriction}
+                                onChange={this.handleChange('BalanceRestriction')}
+                                required
+                                fullWidth
+                                style={{paddingRight: 4}}
+                            >
+                                {[
+                                    {label: 'No Restriction', value:0},
+                                    {label: '1,000', value:1000},
+                                    {label: '5,000', value:5000},
+                                    {label: '10,000', value:10000},
+                                    {label: '15,000', value:15000},
+                                    {label: '20,000', value:20000},
+                                    {label: '25,000', value:25000},
+                                ].map((p, index)=>{
+                                    return (<MenuItem key={index} value={p.value}>{p.label}</MenuItem>)
+                                })}
+                            </TextField>
+                            <br/>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.agingParams.ChargeBackOn}
+                                        onChange={this.handleChange('ChargeBackOn')}
+                                        value="ChargeBackOn"
+                                    />
+                                }
+                                label="ChargeBack"
+                            />
+
                         </div>
                     </Paper>
                 </div>

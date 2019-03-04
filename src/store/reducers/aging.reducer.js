@@ -5,7 +5,6 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import _ from 'lodash';
-import {TOGGLE_AGING_FILTER_PANEL} from "../actions/";
 
 const initialState = {
     agingReports: null,
