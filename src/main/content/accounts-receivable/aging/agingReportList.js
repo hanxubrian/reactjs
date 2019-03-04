@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom';
+import {
+    Typography,
+} from '@material-ui/core';
 
 import classNames from 'classnames';
 
@@ -14,7 +17,7 @@ import * as Actions from 'store/actions';
 
 import {
     DataTypeProvider,
-    GroupingState, IntegratedGrouping, IntegratedSummary, SummaryState, TableColumnVisibility,
+    IntegratedSummary, SummaryState,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -47,6 +50,11 @@ const styles = theme => ({
                 paddingRight: '3.2em!important'
             }
         },
+        '& .customer-summary':{
+            height: 36,
+            backgroundColor: 'rgba(0,128,0,.6)',
+            color: 'white'
+        }
     },
     tableTheadRow: {
         '& tr':{
@@ -56,6 +64,9 @@ const styles = theme => ({
             color: theme.palette.text.primary,
             fontWeight: 700,
             backgroundColor: 'rgba(0,128,0,.4)'
+        },
+        '& th:first-child span':{
+            display: 'none'
         }
     },
     tableStriped: {
@@ -69,6 +80,7 @@ const styles = theme => ({
     },
     tableSummaryCell:{
         color: theme.palette.text.primary,
+        backgroundColor: 'rgba(0,128,0,.6)'
     },
 });
 
@@ -131,7 +143,6 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
                 {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
             </Table.Cell>
         );
-
     }
     else
         return (
@@ -180,25 +191,22 @@ class AgingReportList extends Component {
         let agings=[];
         temp.forEach(x => {
             let customers = [];
-            // customers.push(
-            //     {
-            //         customer: x.CustomerNo,
-            //         DueDate:  `${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`,
-            //         InvDate: "",
-            //         InvoiceNo: "",
-            //         current: 0,
-            //         value30: 0,
-            //         value60: 0,
-            //         value90: 0,
-            //         value91: 0,
-            //         balance: 0,
-            //         type: 'customer'
-            //     });
+            customers.push(
+                {
+                    customer: x.CustomerNo,
+                    customerInfo:  `${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`,
+                    type: 'customer'
+                });
+
+            let invoices=[];
+
             if(x.Invoices.length){
                 x.Invoices.forEach(inv=>{
-                    customers.push({customer: '', ...inv, type:'invoice'})
-                })
+                    invoices.push({customer: '', ...inv, type:'invoice'})
+                });
+                customers.push({invoices: invoices})
             }
+
             agings.push(customers);
         });
 
@@ -272,27 +280,34 @@ class AgingReportList extends Component {
             <div className={classNames(classes.root, "p-0  flex flex-col h-full")} id ="wholediv">
                 <div className={classNames("flex flex-col")}>
                     {this.state.data.map((aging, index)=>{
+                        console.log('aging=',index, aging);
                         return (
-                            <Grid key={index}
-                                rows={aging}
-                                columns={columns}
-                            >
-                                <CurrencyTypeProvider
-                                    for={['current', 'value30', 'value60', 'value90', 'value91']}
-                                />
+                            <div key={index} className={classNames("flex flex-col")}>
+                                <div className={classNames("w-full flex flex-row flex-start customer-summary items-center")}>
+                                    <Typography className="pl-24">{aging[0].customer}</Typography>
+                                    <Typography className="pl-24">{aging[0].customerInfo}</Typography>
+                                </div>
+                                <Grid
+                                      rows={aging[1].invoices}
+                                      columns={columns}
+                                >
+                                    <CurrencyTypeProvider
+                                        for={['current', 'value30', 'value60', 'value90', 'value91']}
+                                    />
                                     <SummaryState totalItems={totalSummaryItems} />
 
-                                <IntegratedSummary />
-                                <VirtualTable height="auto"
-                                              tableComponent={TableComponent}
-                                              headComponent = {TableHeadComponent}
-                                              columnExtensions={tableColumnExtensions}
-                                />
-                                <TableHeaderRow/>
-                                <TableSummaryRow  totalRowComponent={TableSummaryComponent}
-                                                  totalCellComponent = {TableSummaryCellComponent}
-                                />
-                            </Grid>
+                                    <IntegratedSummary />
+                                    <VirtualTable height="auto"
+                                                  tableComponent={TableComponent}
+                                                  headComponent = {TableHeadComponent}
+                                                  columnExtensions={tableColumnExtensions}
+                                    />
+                                    <TableHeaderRow/>
+                                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                                      totalCellComponent = {TableSummaryCellComponent}
+                                    />
+                                </Grid>
+                            </div>
                         )
                     })}
 
