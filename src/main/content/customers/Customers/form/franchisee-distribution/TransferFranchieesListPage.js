@@ -778,101 +778,88 @@ class TransferFranchieesListPage extends Component {
 		} = this.state;
 
 		return (
-			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+			<div className={classNames(classes.layoutTable, "")}>
 
-				<div className={classNames("flex items-center mt-12 mb-12")}>
-					<TextField
-						type="date"
-						id="TransferEffectiveDate"
-						label="Transfer Effective Date *"
-						className={classNames(classes.textField, "mr-6")}
-						InputLabelProps={{ shrink: true }}
-						value={this.state.TransferEffectiveDate || ''}
-						onChange={this.handleChange('TransferEffectiveDate')}
-						margin="dense"
-						// variant="outlined"
-						style={{ width: "20%", minWidth: "180px" }}
-					/>
-
-					{/* <TextField
-						select
-						id="Reason"
-						label="Reason"
-						className={classNames(classes.textField, "mr-6")}
-						InputLabelProps={{ shrink: true }}
-						value={this.state.Reason || ''}
-						onChange={this.handleChange('Reason')}
-						margin="dense"
-						// variant="outlined"
-						style={{ width: "50%", minWidth: "180px" }}
-					/> */}
-
-					<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, width: "23%", minWidth: "180px" }}>
-						<InputLabel shrink htmlFor="Reason">Reason</InputLabel>
-						<Select
-							native
-							value={this.state.Reason || ''}
-							onChange={this.handleChange('Reason')}
-							inputProps={{
-								name: 'Reason',
-								id: 'Reason',
-							}}
-						>
-							{this.props.transferReasons.Data && this.props.transferReasons.Data.map((x, index) => (
-								<option key={index} value={x.ReasonNumber}>{x.name}</option>
-							))}
-						</Select>
-					</FormControl>
-
-					<Checkbox
-						checked={this.state.enabled_cancelation_fee || false}
-						onChange={this.handleChangeChecked('enabled_cancelation_fee')}
-						style={{ marginTop: 14 }}
-					/>
-					<TextField
-						disabled={!this.state.enabled_cancelation_fee}
-						id="canc_fee"
-						label="Cancelation Fee"
-						placeholder="Amount Fee"
-						type="number"
-						value={this.state.enabled_cancelation_fee ? (this.state.canc_fee || '') : ''}
-						onChange={this.handleChange('canc_fee')}
-						className={classNames(classes.textField, '')}
-						InputLabelProps={{ shrink: this.state.enabled_cancelation_fee }}
-						margin="dense"
-					/>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={this.state.continue_findersfee || false}
-								onChange={this.handleChangeChecked('continue_findersfee')}
-								value="continue_findersfee"
-							/>
-						}
-						label="Stop Finders Fee"
-					// style={{ width: '40%' }}
-					/>
-
-					{this.state.continue_findersfee &&
+				<div className={classNames("items-center mt-12 mb-12")}>
+					<div className={classNames("flex flex-row items-center")}>
 						<TextField
 							type="date"
-							id="stop_finders_fee"
-							label="Stop Date"
-							className={classNames(classes.textField, "ml-12")}
+							id="TransferEffectiveDate"
+							label="Transfer Effective Date *"
+							className={classNames(classes.textField, "mr-6")}
 							InputLabelProps={{ shrink: true }}
-							value={this.state.stop_finders_fee}
-							onChange={this.handleChange('stop_finders_fee')}
+							value={this.state.TransferEffectiveDate || ''}
+							onChange={this.handleChange('TransferEffectiveDate')}
 							margin="dense"
 							// variant="outlined"
-							style={{ minWidth: "180px" }}
+							style={{ width: "20%", minWidth: "180px" }}
 						/>
-					}
 
+						<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, width: "23%", minWidth: "180px" }}>
+							<InputLabel shrink htmlFor="Reason">Reason</InputLabel>
+							<Select
+								native
+								value={this.state.Reason || ''}
+								onChange={this.handleChange('Reason')}
+								inputProps={{
+									name: 'Reason',
+									id: 'Reason',
+								}}
+							>
+								{this.props.transferReasons.Data && this.props.transferReasons.Data.map((x, index) => (
+									<option key={index} value={x.ReasonNumber}>{x.name}</option>
+								))}
+							</Select>
+						</FormControl>
 
+						<Checkbox
+							checked={this.state.enabled_cancelation_fee || false}
+							onChange={this.handleChangeChecked('enabled_cancelation_fee')}
+							style={{ marginTop: 14 }}
+						/>
+						<TextField
+							disabled={!this.state.enabled_cancelation_fee}
+							id="canc_fee"
+							label="Cancelation Fee"
+							placeholder="Amount Fee"
+							type="number"
+							value={this.state.enabled_cancelation_fee ? (this.state.canc_fee || '') : ''}
+							onChange={this.handleChange('canc_fee')}
+							className={classNames(classes.textField, '')}
+							InputLabelProps={{ shrink: this.state.enabled_cancelation_fee }}
+							margin="dense"
+						/>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={this.state.continue_findersfee || false}
+									onChange={this.handleChangeChecked('continue_findersfee')}
+									value="continue_findersfee"
+								/>
+							}
+							label="Stop Finders Fee"
+						// style={{ width: '40%' }}
+						/>
+
+						{this.state.continue_findersfee &&
+							<TextField
+								type="date"
+								id="stop_finders_fee"
+								label="Stop Date"
+								className={classNames(classes.textField, "ml-12")}
+								InputLabelProps={{ shrink: true }}
+								value={this.state.stop_finders_fee}
+								onChange={this.handleChange('stop_finders_fee')}
+								margin="dense"
+								// variant="outlined"
+								style={{ minWidth: "180px" }}
+							/>
+						}
+					</div>
 				</div>
 
-				<div className={classNames("flex justify-start w-full mt-12")}>
-					<div className={classNames("flex flex-col justify-start w-full")}>
+				<div className={classNames("flex w-full")}>
+					<div className={classNames("flex flex-col w-full")}>
 						<div className={classNames("flex justify-start w-full")}>
 							<TextField
 								type="number"
@@ -905,7 +892,23 @@ class TransferFranchieesListPage extends Component {
 							</TextField>
 						</div>
 
-						<div className={classNames("flex justify-start w-full mt-6")}>
+						<TextField
+							id="DetailedCleaningInstructions"
+							label="Detailed Cleaning Instructions"
+							multiline
+							rows="2"
+							rowsMax="2"
+							className={classes.textField}
+							value={this.state.detailed_cleaning_instructions}
+							onChange={this.handleChange('detailed_cleaning_instructions')}
+							InputLabelProps={{ shrink: true }}
+							margin="dense"
+							style={{ width: '100%' }}
+						/>
+					</div>
+					<div className={classNames("flex flex-col w-full ml-12")}>
+
+						<div className={classNames("flex justify-between w-full mt-6")}>
 							{[
 								{ label: 'Mon', value: 'mon' },
 								{ label: 'Tue', value: 'tue' },
@@ -924,22 +927,6 @@ class TransferFranchieesListPage extends Component {
 							)}
 						</div>
 
-						<TextField
-							id="DetailedCleaningInstructions"
-							label="Detailed Cleaning Instructions"
-							multiline
-							rows="3"
-							rowsMax="3"
-							className={classes.textField}
-							value={this.state.detailed_cleaning_instructions}
-							onChange={this.handleChange('detailed_cleaning_instructions')}
-							InputLabelProps={{ shrink: true }}
-							margin="dense"
-							// variant="outlined"
-							style={{ width: '100%' }}
-						/>
-					</div>
-					<div className={classNames("flex flex-col mt-12 justify-start w-full ml-12")}>
 						<TextField
 							id="note"
 							name="note"
@@ -960,176 +947,34 @@ class TransferFranchieesListPage extends Component {
 									input: classes.input, multiline: classes.input
 								},
 							}}
-							rows={3}
+							rows={2}
 						/>
 					</div>
 				</div>
 
-
-				<div className={classNames("flex mt-12 justify-start w-full")}>
-
-				</div>
-
-				<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
-					<Typography variant="h6">Active Franchisees (To Transfer)</Typography>
-					<div>
-						{/* <Tooltip title="Location Filter">
-							<IconButton onClick={this.toggleSideBar}><Icon>menu</Icon></IconButton>
-						</Tooltip>
-
-						<Tooltip title={showMapView ? "Grid View" : "Map view"}>
-							<IconButton className={classNames(classes.button, "mr-12")}
-								onClick={this.toggleMapView}
-							>
-								<Icon>location_on</Icon>
-							</IconButton>
-						</Tooltip> */}
-
-						{/* <Button
-							variant="contained"
-							color="primary"
-							className={classNames(classes.button, "pr-24 pl-24")}
-							onClick={this.onClickAssign}
-						> <Icon fontSize="small">check</Icon>Assign </Button> */}
-						<Button
-							variant="contained"
-							className={classNames(classes.button, "pr-24 pl-24 mr-12")}
-							onClick={this.cancelTransfer}
-						> <Icon fontSize="small">close</Icon>Cancel Transfer </Button>
-						<Button
-							variant="contained"
-							color="primary"
-							className={classNames(classes.button, "pr-24 pl-24")}
-							onClick={this.gotoTransferSummary}
-						> <Icon fontSize="small">keyboard_arrow_right</Icon>Next </Button>
+				<div className={classNames("items-center w-full")}>
+					<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
+						<Typography variant="h6">Active Franchisees (To Transfer)</Typography>
+						<div>
+							<Button
+								variant="contained"
+								className={classNames(classes.button, "pr-24 pl-24 mr-12")}
+								onClick={this.cancelTransfer}
+							> <Icon fontSize="small">close</Icon>Cancel Transfer </Button>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classNames(classes.button, "pr-24 pl-24")}
+								onClick={this.gotoTransferSummary}
+							>Next <Icon fontSize="small">keyboard_arrow_right</Icon></Button>
+						</div>
 					</div>
 				</div>
 
-				{/* <div className="flex flex-col"> */}
+				<div className={classNames("items-center w-full")}>
+					<Paper className={classNames("p-6 w-full h-full")}>
+						<div className="items-center h-full" style={{ overflowX: 'auto' }}>
 
-
-				<Paper className={classNames("flex p-6 w-full h-full")}>
-					{this.state.openSideBar && <div className="flex flex-col p-12" style={{ minWidth: 200 }}>
-
-						<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
-						<RadioGroup
-							aria-label="Location"
-							name="Location"
-							className={classes.group}
-							value={this.state.Location || ""}
-						>
-							<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
-							<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
-							{this.state.Location === "locationNearResidingCustomer" && (
-								<TextField
-									select
-
-									id="locationNearResidingCustomerRadius"
-									label="Radius"
-									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-									onChange={this.handleChange('locationNearResidingCustomerRadius')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{
-										Array.from({ length: 15 })
-											.map((val, index) => (
-												<MenuItem key={index} value={(index + 1) * 5}>
-													{(index + 1) * 5} Miles
-													</MenuItem>
-											))
-									}
-								</TextField>)}
-
-							<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
-							{this.state.Location === "locationNearCleaningCustomer" && (
-								<TextField
-									select
-
-									id="locationNearCleaningCustomerRadius"
-									label="Radius"
-									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-									onChange={this.handleChange('locationNearCleaningCustomerRadius')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{
-										Array.from({ length: 15 })
-											.map((val, index) => (
-												<MenuItem key={index} value={(index + 1) * 5}>
-													{(index + 1) * 5} Miles
-													</MenuItem>
-											))
-									}
-								</TextField>)}
-
-							<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-							{this.state.Location === "locationNearSpecificAddress" && (
-								<Fragment>
-									<TextField
-										id="SpecificAddress"
-										label="Address"
-										className={classes.textField}
-										onChange={this.handleChange('SpecificAddress')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									/>
-									<TextField
-										select
-
-										id="AddressZipcodeRadius"
-										label="Radius"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-										onChange={this.handleChange('AddressZipcodeRadius')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									>
-										{
-											Array.from({ length: 15 })
-												.map((val, index) => (
-													<MenuItem key={index} value={(index + 1) * 5}>
-														{(index + 1) * 5} Miles
-																</MenuItem>
-												))
-										}
-									</TextField>
-								</Fragment>
-							)}
-						</RadioGroup>
-
-					</div>
-					}
-					<div className="flex flex-col" style={{ overflowX: 'scroll' }}>
-						{showMapView &&
-							<div className="flex flex-col w-full flex-1 h-full">
-								{gmapVisible && (<MapWithAMarkerClusterer
-									markers={pins}
-									center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-								/>)}
-
-								{!gmapVisible && (<MapWithAMarkerClusterer2
-									markers={pins2}
-									center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-								/>)}
-							</div>
-						}
-						{!showMapView &&
 							<Grid rows={rows} columns={columns}>
 								<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
 								<IntegratedFiltering />
@@ -1141,7 +986,7 @@ class TransferFranchieesListPage extends Component {
 								<IntegratedSorting />
 								<IntegratedPaging />
 								{/* <EditingState onCommitChanges={this.commitChanges} /> */}
-								<VirtualTable height="auto" />
+								<VirtualTable />
 
 								<TableColumnResizing defaultColumnWidths={columns} />
 
@@ -1157,170 +1002,10 @@ class TransferFranchieesListPage extends Component {
 								<SearchPanel />
 								<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 							</Grid>
-						}
-					</div>
-				</Paper>
 
-				{/* </div> */}
-
-
-
-				{/* <GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col", showMapView ? "h-full" : "")} style={{ backgroundColor: "" }}>
-					<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
-						{this.state.openSideBar && (
-							<Paper className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
-										<RadioGroup
-											aria-label="Location"
-											name="Location"
-											className={classes.group}
-											value={this.state.Location || ""}
-										>
-											<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
-											<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
-											{this.state.Location === "locationNearResidingCustomer" && (
-												<TextField
-													select
-
-													id="locationNearResidingCustomerRadius"
-													label="Radius"
-													className={classes.textField}
-													InputLabelProps={{
-														shrink: true
-													}}
-													value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-													onChange={this.handleChange('locationNearResidingCustomerRadius')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												>
-													{
-														Array.from({ length: 15 })
-															.map((val, index) => (
-																<MenuItem key={index} value={(index + 1) * 5}>
-																	{(index + 1) * 5} Miles
-													</MenuItem>
-															))
-													}
-												</TextField>)}
-
-											<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
-											{this.state.Location === "locationNearCleaningCustomer" && (
-												<TextField
-													select
-
-													id="locationNearCleaningCustomerRadius"
-													label="Radius"
-													className={classes.textField}
-													InputLabelProps={{
-														shrink: true
-													}}
-													value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-													onChange={this.handleChange('locationNearCleaningCustomerRadius')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												>
-													{
-														Array.from({ length: 15 })
-															.map((val, index) => (
-																<MenuItem key={index} value={(index + 1) * 5}>
-																	{(index + 1) * 5} Miles
-													</MenuItem>
-															))
-													}
-												</TextField>)}
-
-											<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-											{this.state.Location === "locationNearSpecificAddress" && (
-												<Fragment>
-													<TextField
-														id="SpecificAddress"
-														label="Address"
-														className={classes.textField}
-														onChange={this.handleChange('SpecificAddress')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													/>
-													<TextField
-														select
-
-														id="AddressZipcodeRadius"
-														label="Radius"
-														className={classes.textField}
-														InputLabelProps={{
-															shrink: true
-														}}
-														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-														onChange={this.handleChange('AddressZipcodeRadius')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													>
-														{
-															Array.from({ length: 15 })
-																.map((val, index) => (
-																	<MenuItem key={index} value={(index + 1) * 5}>
-																		{(index + 1) * 5} Miles
-																</MenuItem>
-																))
-														}
-													</TextField>
-												</Fragment>
-											)}
-										</RadioGroup>
-									</GridItem>
-								</GridContainer>
-							</Paper>
-						)}
-						<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
-
-							{showMapView ?
-								(<div className="w-full h-full">
-									{gmapVisible && (<MapWithAMarkerClusterer
-										markers={pins}
-										center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-									/>)}
-
-									{!gmapVisible && (<MapWithAMarkerClusterer2
-										markers={pins2}
-										center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-									/>)}
-								</div>
-								) :
-								(<div className="flex flex-col">
-									<Grid rows={rows} columns={columns}>
-										<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
-										<IntegratedFiltering />
-										<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
-										<PagingState defaultCurrentPage={0} defaultPageSize={20} />
-										<PagingPanel pageSizes={pageSizes} />
-										<IntegratedSelection />
-										<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
-										<IntegratedSorting />
-										<IntegratedPaging />
-										<EditingState
-											onCommitChanges={this.commitChanges} />
-										<VirtualTable height="auto" />
-
-										<TableColumnResizing defaultColumnWidths={columns} />
-
-										<TableSelection showSelectAll selectByRowClick highlightRow />
-										<TableHeaderRow showSortingControls />
-										<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
-										/>
-										<Toolbar rootComponent={this.ToolbarRoot} />
-										<SearchPanel />
-										<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
-									</Grid>
-								</div>
-								)}
-						</Paper>
-					</GridItem>
-				</GridContainer> */}
+						</div>
+					</Paper>
+				</div>
 			</div>
 		)
 
