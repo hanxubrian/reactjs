@@ -281,6 +281,9 @@ class ContactsList extends Component {
             }
         }
     }
+    goprofile=(id)=>{
+        this.props.history.push('/profile/'+id);
+    }
     render()
     {
         const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
@@ -330,7 +333,6 @@ class ContactsList extends Component {
                         return {
                             onClick: (e)=>{
                                 e.stopPropagation();
-                                // this.openChat();
                                 console.log("rowinfo",rowInfo);
                                 openChat(rowInfo.original.id);
                                 this.getMsgInfo(rowInfo.original.name,rowInfo.original);
@@ -427,7 +429,9 @@ class ContactsList extends Component {
                             ),
                             accessor : "avatar",
                             Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value?row.value:defaultavatar}/>
+                                <Avatar className="mr-8" alt={row.original.name} src={row.value?row.value:defaultavatar}
+                                        onClick={(event)=>{event.stopPropagation();this.goprofile(row.original.id)}}
+                                />
                             ),
                             className: "justify-center",
                             width    : 64,
@@ -446,6 +450,9 @@ class ContactsList extends Component {
                             Header    : "Email",
                             accessor  : "email",
                             className: "justify-center",
+                            Cell      : row=>(
+                                <div onClick={(event)=>{event.stopPropagation();;this.goprofile(row.original.id)}}>{row.original.email}</div>
+                            ),
                             // filterable: true,
                             width    : 300,
                         },
