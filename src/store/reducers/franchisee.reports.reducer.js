@@ -58,7 +58,7 @@ const franchiseeReports = function(state = initialState, action) {
             return {
                 ...state,
                 franchiseeReport1: null,
-                bFetchingFranchiseeReport: true
+                bFetchingFranchiseeReport: false
             }
         }
         case Actions.TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL:

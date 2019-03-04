@@ -42,7 +42,6 @@ export function getReports(regionId=2, year="2017", month="01") {
 
 export function getReport(params) {
     return (dispatch) => {
-
         (async () => {
             let res = await franchiseesService.getFranchiseeReport(params);
             if (res.IsSuccess) {
@@ -72,7 +71,10 @@ export function updateReportDate(date) {
 
 export function createReport(params) {
     return (dispatch) => {
-
+        dispatch({
+            type: GET_FRANCHISEE_REPORTS_FETCH_START,
+            payload: true
+        });
         (async () => {
             let res = await franchiseesService.createFranchiseeReport(params);
             if (res.IsSuccess) {
@@ -81,7 +83,10 @@ export function createReport(params) {
                     payload: res
                 });
             } else {
-
+                dispatch({
+                    type: CREATE_FRANCHISEE_REPORT_DETAIL_ERROR,
+                    payload: res.message
+                });
             }
         })();
     };

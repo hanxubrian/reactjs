@@ -198,7 +198,7 @@ class RegularMiscTransactons extends Component {
             d.TRX_TAX = parseFloat(d.TrxTax);
             d.TRX_TOT = parseFloat(d.TrxTot);
             if(type.length>0)
-                d.TYPE = type[0].Name;
+                d.Type = type[0].Name;
             return d;
         });
 
