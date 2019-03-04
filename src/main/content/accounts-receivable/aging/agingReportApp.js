@@ -286,7 +286,7 @@ class AgingReportLayout extends Component {
                         </div>
                     }
                     content={
-                        <div className="flex-1 flex-col absolute w-full h-full">
+                        <div className="flex-1 flex-col absolute w-full">
                             <div className={classNames("flex flex-col h-full")}>
                                 <div className="flex flex-row items-center p-12">
                                     <div className="flex justify-start items-center">

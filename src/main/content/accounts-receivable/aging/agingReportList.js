@@ -65,68 +65,12 @@ const styles = theme => ({
         }
 
     },
-    paper: {
-        padding: theme.spacing.unit * 1,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
+    tableTheadRow: {
+
     },
-    card       : {
-        width         : 1020,
-        '@media print': {
-            width    : '100%!important',
-            boxShadow: 'none'
-        }
-    },
-    cardContent: {
-        '& .page': {
-            // borderBottom: `1px solid ${theme.palette.text.primary}`
-        },
-        '& .page1': {
-            paddingTop: 12,
-            borderTop: `1px solid ${theme.palette.text.primary}`,
-            // borderBottom: `1px solid ${theme.palette.text.primary}`
-        }
-    },
-    divider    : {
-        width          : 1,
-        backgroundColor: theme.palette.divider,
-        height         : 144
-    },
-    seller     : {
-        backgroundColor: theme.palette.primary.dark,
-        color          : theme.palette.getContrastText(theme.palette.primary.dark),
-        marginRight    : -88,
-        paddingRight   : 66,
-        width          : 480,
-        '& .divider'   : {
-            backgroundColor: theme.palette.getContrastText(theme.palette.primary.dark),
-            opacity        : .5
-        }
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200
-    },
-    longerTextField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 835
-    },
-    overlay: {
-        position: 'absolute',
-        top: -104,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0, .6)',
-        zIndex: 1000,
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex'
-    },
-    progress: {
-        margin: theme.spacing.unit * 2,
+    tableStriped: {
+        marginBottom: '0!important'
+
     },
 });
 
@@ -193,12 +137,27 @@ class AgingReportList extends Component {
         let temp = this.props.agingReports;
         let agings=[];
         temp.forEach(x => {
-            let customer = `${x.CustomerNo} ${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`;
+            let customers = [];
+            // customers.push(
+            //     {
+            //         customer: x.CustomerNo,
+            //         DueDate:  `${x.CustomerName} | ${x.CustomerPhone} | AR Status: ${x.ARStatus} | Effective: ${x.Effective}`,
+            //         InvDate: "",
+            //         InvoiceNo: "",
+            //         current: 0,
+            //         value30: 0,
+            //         value60: 0,
+            //         value90: 0,
+            //         value91: 0,
+            //         balance: 0,
+            //         type: 'customer'
+            //     });
             if(x.Invoices.length){
                 x.Invoices.forEach(inv=>{
-                    agings.push({customer: customer, ...inv})
+                    customers.push({customer: '', ...inv, type:'invoice'})
                 })
             }
+            agings.push(customers);
         });
 
         this.setState({data: agings,
@@ -267,35 +226,25 @@ class AgingReportList extends Component {
         return (
             <div className={classNames(classes.root, "p-0 sm:p-32  flex flex-col h-full")} id ="wholediv">
                 <div className={classNames("flex flex-col")}>
-                    <Grid
-                        rows={this.state.data}
-                        columns={columns}
-                    >
-                        <CurrencyTypeProvider
-                            for={['current', 'value30', 'value60', 'value90', 'value91']}
-                        />
-                        <GroupingState
-                            grouping={[
-                                {columnName: 'customer'},
-                            ]}
-                            expandedGroups={expandedGroups}
-                            onExpandedGroupsChange={this.expandedGroupsChange}
-                        />
-                        <IntegratedGrouping/>
-                        <VirtualTable height="auto"
-                                      tableComponent={TableComponent}
-                                      headComponent = {TableHeadComponent}
-                                      columnExtensions={tableColumnExtensions}
-                        />
-                        <TableHeaderRow/>
-                        <TableGroupRow
-                            showColumnsWhenGrouped contentComponent={this.GroupCellContent}
-                        />
-                        <TableColumnVisibility
-                            hiddenColumnNames={['customer']}
-                            emptyMessageComponent={this.emptyMessageContent}
-                        />
-                    </Grid>
+                    {this.state.data.map((aging, index)=>{
+                        return (
+                            <Grid key={index}
+                                rows={aging}
+                                columns={columns}
+                            >
+                                <CurrencyTypeProvider
+                                    for={['current', 'value30', 'value60', 'value90', 'value91']}
+                                />
+                                <VirtualTable height="auto"
+                                              tableComponent={TableComponent}
+                                              headComponent = {TableHeadComponent}
+                                              columnExtensions={tableColumnExtensions}
+                                />
+                                <TableHeaderRow/>
+                            </Grid>
+                        )
+                    })}
+
                 </div>
             </div>
         )
