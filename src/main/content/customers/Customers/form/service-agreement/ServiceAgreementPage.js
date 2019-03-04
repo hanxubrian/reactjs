@@ -1062,6 +1062,11 @@ class ServiceAgreementPage extends React.Component {
 		switch (name) {
 			case "parent":
 				checked = checked ? 1 : 0
+			case "tax_exempt":
+				checked = checked ? "Y" : "N"
+				break
+			case "cpiadj":
+				checked = checked ? "T" : "F"
 				break
 		}
 		this.setState({ [name]: checked })
@@ -1376,7 +1381,7 @@ class ServiceAgreementPage extends React.Component {
 								<div className="flex flex-col justify-around">
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('cpiadj')} checked={this.state.cpiadj || false} />
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('cpiadj')} checked={this.state.cpiadj === "T"} />
 										}
 										label="CPI Increase"
 										style={{ marginRight: "30px" }}
@@ -1482,7 +1487,7 @@ class ServiceAgreementPage extends React.Component {
 									/>
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tax_exempt')} checked={this.state.tax_exempt || false} />
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tax_exempt')} checked={this.state.tax_exempt === "Y"} />
 										}
 										label="Tax Exempt"
 										className="mr-36"
