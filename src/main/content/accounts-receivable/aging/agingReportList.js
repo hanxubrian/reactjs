@@ -30,14 +30,7 @@ import {
 
 import NumberFormat from "react-number-format";
 
-const hexToRgb = (hex) => {
-    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
+const r=0,g=128, b=0;
 
 const styles = theme => ({
     root: {
@@ -52,7 +45,7 @@ const styles = theme => ({
         },
         '& .customer-summary':{
             height: 36,
-            backgroundColor: 'rgba(0,128,0,.6)',
+            backgroundColor: `rgba(${r},${g},${b},.6)`,
             '& p': {
                 color: 'white',
             }
@@ -65,7 +58,7 @@ const styles = theme => ({
         '& th':{
             color: theme.palette.text.primary,
             fontWeight: 700,
-            backgroundColor: 'rgba(0,128,0,.4)'
+            backgroundColor: `rgba(${r},${g},${b},.4)`,
         },
         '& th:first-child span':{
             display: 'none'
@@ -82,7 +75,7 @@ const styles = theme => ({
     },
     tableSummaryCell:{
         color: theme.palette.text.primary,
-        backgroundColor: 'rgba(0,128,0,.6)'
+        backgroundColor: `rgba(${r},${g},${b},.6)`,
     },
 });
 
