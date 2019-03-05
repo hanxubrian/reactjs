@@ -27,5 +27,6 @@ import './leads-db';
 import './notification-db';
 import './franchiseereport-db';
 import './admin-import-db';
+import './project-dashboard-db';
 
 mock.onAny().passThrough();

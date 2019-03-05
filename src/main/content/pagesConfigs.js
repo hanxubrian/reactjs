@@ -40,7 +40,7 @@ import {PaymentLockBoxReportConfig} from "./PaymentLockBoxReport/PaymentLockBoxR
 import {SystemNotificationConfig} from "./notifications/SystemNotificationConfig";
 import {AdminConfig} from "./admin/adminConfig";
 import {AdminImportConfig} from "./admin/imports/adminImportConfig";
-
+import {ProjectDashboardAppConfig} from "./dashboard/project/ProjectDashboardAppConfig";
 
 export const pagesConfigs = [
     VerificationsAppConfig,
@@ -86,4 +86,5 @@ export const pagesConfigs = [
     AdminConfig,
     AdminImportConfig,
     NegativeDueConfig,
+    ProjectDashboardAppConfig,
 ];
