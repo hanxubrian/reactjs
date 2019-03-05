@@ -907,7 +907,8 @@ class FranchiseesCreateForm extends Component {
             });
         }
         let period = this.props.defaultPeriod.split('/');
-        let month = parseInt(period[0]) - 1;
+        // let month = parseInt(period[0]) - 1;
+        let month = -1;
         let year = parseInt(period[1]);
         this.setState({month, year});
         this.props.updatePeriodForFranchiseeReport({year, month});
