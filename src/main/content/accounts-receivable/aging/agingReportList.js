@@ -13,7 +13,7 @@ import {withStyles} from '@material-ui/core/styles/index';
 //Store
 import connect from "react-redux/es/connect/connect";
 import {bindActionCreators} from "redux";
-import * as Actions from 'store/actions';
+// import * as Actions from 'store/actions';
 
 import {
     DataTypeProvider,
@@ -30,7 +30,7 @@ import {
 
 import NumberFormat from "react-number-format";
 
-const r=0,g=128, b=0;
+// const r=0,g=128, b=0;
 
 const styles = theme => ({
     root: {
@@ -236,7 +236,6 @@ class AgingReportList extends Component {
     render()
     {
         const { classes} = this.props;
-        const {expandedGroups} = this.state;
         const columns = [
             {name: "customer", title: "Customer"},
             {name: "InvDate", title: "Inv. Date"},

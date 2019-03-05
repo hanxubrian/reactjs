@@ -79,26 +79,10 @@ const styles = theme => ({
         backgroundColor: theme.palette.divider,
         height         : 144
     },
-    seller     : {
-        backgroundColor: theme.palette.primary.dark,
-        color          : theme.palette.getContrastText(theme.palette.primary.dark),
-        marginRight    : -88,
-        paddingRight   : 66,
-        width          : 480,
-        '& .divider'   : {
-            backgroundColor: theme.palette.getContrastText(theme.palette.primary.dark),
-            opacity        : .5
-        }
-    },
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
         width: 200
-    },
-    longerTextField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 835
     },
     overlay: {
         position: 'absolute',
@@ -136,7 +120,9 @@ class Report extends Component {
          * Get the Report Data
          */
         this.props.onRef(this);
-        this.props.createReport(this.props.match.params);
+        console.log('props=', this.props);
+        if(this.props.match.path !== '/franchisees/list')
+            this.props.createReport(this.props.match.params);
     }
     componentWillUnmount() {
 
@@ -692,12 +678,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({auth, franchiseeReports, franchisees})
+function mapStateToProps({franchiseeReports, franchisees})
 {
     return {
         franchiseeReport: franchiseeReports.franchiseeReport1,
         bFetchingFranchiseeReport: franchiseeReports.bFetchingFranchiseeReport,
-        all_regions: auth.login.all_regions,
         reportPeriod: franchisees.reportPeriod,
     }
 }

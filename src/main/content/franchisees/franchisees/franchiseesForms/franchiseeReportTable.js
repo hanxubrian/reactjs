@@ -7,20 +7,24 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Button, IconButton, Tooltip, TablePagination, Icon
+    Toolbar, Typography, Paper, IconButton, Tooltip, TablePagination, Icon
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
-// third party
+// store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
+
+// third party
+import NumberFormat from 'react-number-format';
 
 import FindersFeesStopModal from './findersFeesStopModal';
-import NumberFormat from 'react-number-format';
+import FranchiseeReportBigModal from './FranchiseeReportBigModal';
+
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -254,14 +258,10 @@ class FranchiseeReportTable extends React.Component {
         rowsPerPage: 10,
         labelWidth: 0,
         view: [],
-        stopReasonModal: false,
         periodForReport: this.props.periodForReport,
-        data: []
+        data: [],
+        bShowReportModal: false
     };
-
-    constructor (props){
-        super(props);
-    }
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -298,13 +298,9 @@ class FranchiseeReportTable extends React.Component {
     }
 
     componentWillMount() {
-        this.setState({stopReasonModal:this.props.stopReasonModal});
     }
 
     componentWillReceiveProps(nextProps){
-        if(nextProps.stopReasonModal !== this.props.stopReasonModal){
-            this.setState({stopReasonModal:nextProps.stopReasonModal});
-        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -326,14 +322,26 @@ class FranchiseeReportTable extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
+    showFranchiseeModal = async ()=>{
+        await this.props.createReport({
+            regionId: this.props.regionId,
+            // year: this.props.periodForReport.year,
+            // month: parseInt(this.props.periodForReport.month)+1,
+            year: 2019,
+            month: 1,
+            franchiseenumber: this.props.insertPayload.dlr_code
+        });
+        // console.log('params=', this.props.periodForReport, this.props.insertPayload.dlr_code);
+
+        await this.franchiseeComponent.onShowFranchiseeDialog();
+    };
+
     render() {
         const { classes,franchiseeReports } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
 
         if(!this.state.data.length)
             return <div/>;
-
-        console.log('data=', this.state.data);
 
         const headers = [
             {
@@ -402,7 +410,7 @@ class FranchiseeReportTable extends React.Component {
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
                                                         <IconButton
-                                                            //onClick={}
+                                                            onClick={this.showFranchiseeModal}
                                                             //component={Link}
                                                         >
                                                             <Icon>visibility</Icon>
@@ -432,13 +440,14 @@ class FranchiseeReportTable extends React.Component {
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 />
                 <FindersFeesStopModal />
+                <FranchiseeReportBigModal onRef={component=>{this.franchiseeComponent = component}}/>
             </Paper>
         );
     }
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openCloseStopReasonDialog: Actions.openCloseStopReasonDialog
+        createReport: Actions.createReport,
     }, dispatch);
 }
 
@@ -448,7 +457,6 @@ function mapStateToProps({ franchisees, auth }) {
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         insertPayload: franchisees.insertPayload,
-        stopReasonModal: franchisees.stopReason,
         periodForReport: franchisees.periodForReport,
         defaultPeriod: auth.login.defaultPeriod,
     }

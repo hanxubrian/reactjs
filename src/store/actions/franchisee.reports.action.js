@@ -70,6 +70,9 @@ export function updateReportDate(date) {
 }
 
 export function createReport(params) {
+    if(Object.keys(params).length===0) return;
+    console.log('params for action=', Object.keys(params).length)
+
     return (dispatch) => {
         dispatch({
             type: GET_FRANCHISEE_REPORTS_FETCH_START,

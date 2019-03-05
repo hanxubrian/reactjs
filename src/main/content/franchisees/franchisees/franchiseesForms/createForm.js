@@ -1,16 +1,19 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-// core components
+
+// Material-UI core components
 import {
-    TextField, Button, Typography, Divider, FormControlLabel, OutlinedInput
+    TextField, Button, Typography, Divider, FormControlLabel, Checkbox, AppBar, Tabs, Tab, Radio, MenuItem, InputAdornment
 } from '@material-ui/core';
 // theme components
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
+
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
+
 // for store
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -19,27 +22,18 @@ import * as Actions from 'store/actions';
 // third party
 import "react-table/react-table.css";
 import classNames from 'classnames';
-import Checkbox from '@material-ui/core/Checkbox';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import FranchiseesOwnerTable from './ownerTable'
-import Radio from '@material-ui/core/Radio';
 import 'date-fns';
 import MomentUtils from '@date-io/moment';
+import _ from "lodash";
+import moment from "moment";
 
 import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
-import moment from "moment";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
-import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
 import FranchiseeReportTable from "./franchiseeReportTable";
 import CustomersTable from "./customersTable";
 import FindersFeesTable from "./findersFeesTable";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import _ from "lodash";
-import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../../store/actions";
-
 
 
 const styles = theme => ({
@@ -767,7 +761,7 @@ class FranchiseesCreateForm extends Component {
             AgreementTerm: 0,
             LegalLabel: "LLC"
         });
-    }
+    };
 
     constructor (props){
         super(props);
@@ -949,7 +943,6 @@ class FranchiseesCreateForm extends Component {
             [name]: val,
         });
         if(name === 'defaultPlanType'){
-            //console.log(this.props.planType.Data);
             this.props.planType.Data.map( (x)=> {
                     if (val === x.plantype) {
                         this.setState({
