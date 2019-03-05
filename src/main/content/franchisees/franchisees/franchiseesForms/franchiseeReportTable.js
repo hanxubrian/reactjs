@@ -341,11 +341,11 @@ class FranchiseeReportTable extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
-    showFranchiseeModal = async ()=>{
+    showFranchiseeModal = async (row)=>{
         await this.props.createReport({
             regionId: this.props.regionId,
-            // year: this.props.periodForReport.year,
-            // month: parseInt(this.props.periodForReport.month)+1,
+            // year: row.BillYear,
+            // month: row.BillMonth,
             year: 2019,
             month: 1,
             franchiseenumber: this.props.insertPayload.dlr_code
@@ -429,7 +429,7 @@ class FranchiseeReportTable extends React.Component {
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
                                                         <IconButton
-                                                            onClick={this.showFranchiseeModal}
+                                                            onClick={()=>this.showFranchiseeModal(n)}
                                                             //component={Link}
                                                         >
                                                             <Icon>visibility</Icon>
