@@ -745,9 +745,12 @@ class PaymentLockBoxContentList extends Component {
             expandedGroups,
         } = this.state;
         let rows =[];
-        if(this.state.rows && this.state.rows!== null){
-            rows = this.state.rows;
+        if(this.state.rows && this.state.rows!== null && this.state.rows.FoundItems && this.state.rows.FoundItems !== null){
+            // rows = this.state.rows;
+            rows = this.state.rows.FoundItems;
+
         }
+        console.log('this.state.rows------------', this.state.rows);
         console.log('payments------------', rows);
         console.log('paymentlockbox------------', this.props.paymentlockbox);
         return (

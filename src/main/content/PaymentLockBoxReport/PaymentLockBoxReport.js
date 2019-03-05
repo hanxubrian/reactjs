@@ -13,7 +13,8 @@ import {
     CircularProgress,
     Button,
     Input,
-    Paper
+    Paper,
+    TextField
 } from '@material-ui/core';
 
 // theme components
@@ -31,7 +32,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-
+import moment from 'moment';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
@@ -190,7 +191,16 @@ const styles = theme => ({
     },
     lineprogresroot: {
         flexGrow: 1
-    }
+    },
+    containerdate: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textFielddate: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
 });
 class PaymentLockBoxReport extends Component {
 
@@ -202,6 +212,7 @@ class PaymentLockBoxReport extends Component {
         completed                       : 0,
         fileuploadstatus                : false,
         filestatus                      : false,
+        date                            : moment().format('YYYY-MM-DD'),
     };
     OpenLeftPanel=()=>{
         this.setState({OpenLeftPanelStatus: !this.state.OpenLeftPanelStatus});
@@ -283,6 +294,7 @@ class PaymentLockBoxReport extends Component {
             variant: 'error'//success error info warning null
         });
     }
+
     componentDidUpdate(prevProps,prevState){
 
         // console.log("this.state.selectedfile",this.state.selectedFile);
@@ -354,10 +366,26 @@ class PaymentLockBoxReport extends Component {
                                                 {/*{this.state.fileload !==null && this.state.fileload>0 && (*/}
                                                     {/*this.state.fileload +"%"*/}
                                                 {/*)}*/}
-                                                <Button variant="contained" color="primary"  onClick={() => {this.processlockbox()}}>
-                                                    <Icon className={classes.rightIcon}>done_all</Icon>
-                                                    Process Lockbox
-                                                </Button>
+                                                {/*<form className={classes.containerdate} noValidate>*/}
+                                                    {/*<TextField*/}
+                                                        {/*id="date"*/}
+                                                        {/*label="Date"*/}
+                                                        {/*type="date"*/}
+                                                        {/*variant="outlined"*/}
+                                                        {/*defaultValue={this.state.date}*/}
+                                                        {/*className={classes.textFielddate}*/}
+                                                        {/*InputLabelProps={{*/}
+                                                            {/*shrink: true,*/}
+                                                        {/*}}*/}
+                                                    {/*/>*/}
+                                                {/*</form>*/}
+
+                                                    <Button variant="contained" color="primary"  onClick={() => {this.processlockbox()}}>
+                                                        <Icon className={classes.rightIcon}>done_all</Icon>
+                                                        Process Lockbox
+                                                    </Button>
+
+
                                                 {/*<IconButton  variant="raised" disabled={!this.state.fileuploadstatus} aria-label="add" onClick={() => {this.fileuploadstart()}}>*/}
                                                      {/*<CloudUploadIcon  className={classes.rightIcon}/>*/}
                                                 {/*</IconButton>*/}

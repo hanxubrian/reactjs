@@ -1,5 +1,5 @@
 import {paymentlockboxservice} from "../../services";
-
+import moment from 'moment';
 export const PAYMENT_LOCKBOX_GET_ALL_DATA_START         = "[PAYMENT LOCKBOX] GET ALL DATA START";
 export const PAYMENT_LOCKBOX_GET_ALL_DATA_SUCCESS       = "[PAYMENT LOCKBOX] GET ALL DATA SUCCESS";
 export const PAYMENT_LOCKBOX_GET_ALL_DATA_FAILD         = "[PAYMENT LOCKBOX] GET ALL DATA FAILD";
@@ -17,13 +17,18 @@ export const PAYMENT_LOCKBOX_GET_ALL_FAILD         = "[PAYMENT LOCKBOX] GET ALL 
 export function paymentlockboxgetalldata() {
     return (dispatch,getState) => {
         let regionId = getState().auth.login.defaultRegionId;
-
+        let data={
+            'regionid':regionId,
+            'lockboxdate':moment(),
+            'filename':'BUF07.TXT',
+            'preview':true
+        };
         dispatch({
             type: PAYMENT_LOCKBOX_GET_ALL_DATA_START,
             payload: true
         });
         (async () => {
-            let res = await paymentlockboxservice.getallpaymentlockbox(regionId);
+            let res = await paymentlockboxservice.getallpaymentlockbox(data);
             if (res.IsSuccess) {
                 dispatch({
                     type: PAYMENT_LOCKBOX_GET_ALL_DATA_SUCCESS,
