@@ -68,9 +68,9 @@ class SigninPage extends Component {
         let state = "";
 
         if(window.location.port !== ""){
-            locationUrl = window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/";
+            locationUrl = window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/auth/signin/";
         }else{
-            locationUrl = window.location.protocol+"//"+window.location.hostname+"/";
+            locationUrl = window.location.protocol+"//"+window.location.hostname+"/auth/signin/";
         }
 
         if(urlGetParam.has("code") && urlGetParam.has("state")){

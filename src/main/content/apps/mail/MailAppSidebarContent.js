@@ -1,6 +1,6 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
-import {Icon, List, ListItem, ListItemText, ListSubheader} from '@material-ui/core';
+import {Button, Icon, List, ListItem, ListItemText, ListSubheader} from '@material-ui/core';
 import {NavLink, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import MailCompose from './MailCompose';
@@ -33,6 +33,9 @@ const styles = theme => ({
     listSubheader: {
         paddingRight: 24,
         paddingLeft : 24
+    },
+    composeButton     : {
+        width: '100%'
     }
 });
 
@@ -41,7 +44,16 @@ function MailAppSidebarContent({classes, folders, filters, labels})
     return (
         <FuseAnimate animation="transition.slideUpIn" delay={400}>
             <div>
-                <MailCompose/>
+                <div className="p-24">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.composeButton}
+                        //onClick={this.openComposeDialog}
+                    >
+                        COMPOSE
+                    </Button>
+                </div>
 
                 <div className={classes.listWrapper}>
 
