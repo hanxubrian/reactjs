@@ -1233,7 +1233,6 @@ const customers = function (state = initialState, action) {
 					...state.transferParam,
 					[action.payload.key]: action.payload.value,
 				},
-				activeCustomer: action.payload,
 			};
 		default:
 			{

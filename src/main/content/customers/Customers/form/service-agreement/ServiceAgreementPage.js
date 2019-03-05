@@ -1473,21 +1473,21 @@ class ServiceAgreementPage extends React.Component {
 								<div className="flex flex-col justify-between">
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('crteinv')} checked={this.state.crteinv || false} />
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('crteinv')} checked={FuseUtils.parseBoolean(this.state.crteinv)} />
 										}
 										label="Create Invoice"
 										className="mr-36"
 									/>
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('prntpd')} checked={this.state.prntpd === true || this.state.prntpd === "true" || false} />
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('prntpd')} checked={FuseUtils.parseBoolean(this.state.prntpd)} />
 										}
 										label="Print Past Due"
 										className="mr-36"
 									/>
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tax_exempt')} checked={this.state.tax_exempt === "Y"} />
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tax_exempt')} checked={FuseUtils.parseBoolean(this.state.tax_exempt)} />
 										}
 										label="Tax Exempt"
 										className="mr-36"
@@ -1703,48 +1703,48 @@ class ServiceAgreementPage extends React.Component {
 
 							<div xs={12} sm={12} md={12} className="flex flex-row justify-start">
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('mon')} checked={this.state.mon || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('mon')} checked={FuseUtils.parseBoolean(this.state.mon)} />}
 									label="Mon"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tue')} checked={this.state.tue || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tue')} checked={FuseUtils.parseBoolean(this.state.tue)} />}
 									label="Tue"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wed')} checked={this.state.wed || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wed')} checked={FuseUtils.parseBoolean(this.state.wed)} />}
 									label="Wed"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('thu')} checked={this.state.thu || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('thu')} checked={FuseUtils.parseBoolean(this.state.thu)} />}
 									label="Thu"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('fri')} checked={this.state.fri || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('fri')} checked={FuseUtils.parseBoolean(this.state.fri)} />}
 									label="Fri"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('sat')} checked={this.state.sat || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('sat')} checked={FuseUtils.parseBoolean(this.state.sat)} />}
 									label="Sat"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('sun')} checked={this.state.sun || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('sun')} checked={FuseUtils.parseBoolean(this.state.sun)} />}
 									label="Sun"
 									className="mr-36"
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wkndTF')} checked={this.state.wkndTF || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wkndTF')} checked={FuseUtils.parseBoolean(this.state.wkndTF)} />}
 									label="Weekends"
 								/>
 							</div>

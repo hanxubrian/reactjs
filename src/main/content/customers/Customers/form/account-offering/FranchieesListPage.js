@@ -1005,6 +1005,8 @@ class FranchieesListPage extends Component {
 						current_long: position.coords.longitude,
 						current_lat: 42.879593,
 						current_long: -78.798299,
+						current_lat: this.props.activeCustomer.Latitude,
+						current_long: this.props.activeCustomer.Longitude,
 					})
 
 					// this.setState({
@@ -1018,6 +1020,8 @@ class FranchieesListPage extends Component {
 							addrLng: position.coords.longitude,
 							addrLat: 42.879593,
 							addrLng: -78.798299,
+							addrLat: this.props.activeCustomer.Latitude,
+							addrLng: this.props.activeCustomer.Longitude,
 						})
 						// this.setState({
 						// 	addrLat: 42.910772,
