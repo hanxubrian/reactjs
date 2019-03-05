@@ -281,6 +281,9 @@ class ContactsList extends Component {
             }
         }
     }
+    goprofile=(id)=>{
+        this.props.history.push('/profile/'+id);
+    }
     render()
     {
         const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
@@ -330,7 +333,6 @@ class ContactsList extends Component {
                         return {
                             onClick: (e)=>{
                                 e.stopPropagation();
-                                // this.openChat();
                                 console.log("rowinfo",rowInfo);
                                 openChat(rowInfo.original.id);
                                 this.getMsgInfo(rowInfo.original.name,rowInfo.original);
@@ -427,7 +429,9 @@ class ContactsList extends Component {
                             ),
                             accessor : "avatar",
                             Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value?row.value:defaultavatar}/>
+                                <Avatar className="mr-8" alt={row.original.name} src={row.value?row.value:defaultavatar}
+                                        onClick={(event)=>{event.stopPropagation();this.goprofile(row.original.id)}}
+                                />
                             ),
                             className: "justify-center",
                             width    : 64,
@@ -439,13 +443,16 @@ class ContactsList extends Component {
                             Cell      : row=>(
                                <div>{row.original.firstName}  {row.original.lastName}</div>
                             ),
-                            className : "font-bold justify-center",
-                            width    : 200,
+                            className : "font-bold",
+                            width    : 300,
                         },
                         {
                             Header    : "Email",
                             accessor  : "email",
-                            className: "justify-center",
+
+                            Cell      : row=>(
+                                <div onClick={(event)=>{event.stopPropagation();;this.goprofile(row.original.id)}}>{row.original.email}</div>
+                            ),
                             // filterable: true,
                             width    : 300,
                         },
@@ -453,19 +460,21 @@ class ContactsList extends Component {
                             Header    : "Phone",
                             accessor  : "phone",
                             className: "justify-center",
+                            width     : 150,
                             // filterable: true
                         },
+
                         {
-                            Header    : "DepartMent",
+                            Header    : "Department",
                             accessor  : "company",
                             className : "justify-center",
-                            width     : 150,
+                            width     : 250,
                             // filterable: true
                         },
                         {
                             Header    : "Region",
                             accessor  : "defaultRegion",
-                            className : "font-bold justify-center",
+                            className : "font-bold",
                             Cell      : row=>{
                                 let re =_.find(row.original.region,{RegionId:row.original.defaultRegion});
                                 return(
@@ -477,7 +486,7 @@ class ContactsList extends Component {
                         },
                         {
                             Header: "",
-                            width : 128,
+                            // width : 128,
                             Cell  : row => (
                                 <div className="flex items-center">
                                     <IconButton

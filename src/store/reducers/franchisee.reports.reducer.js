@@ -1,11 +1,13 @@
 import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
+import {GET_FRANCHISEE_REPORTS_FETCH_START} from "../actions/";
 
 const initialState = {
     franchiseeReports: null,
     franchiseeReport: null,
     franchiseeReport1: null,
     bLoadedFranchiseeReports: false,
+    bFetchingFranchiseeReport: false,
     bOpenedFilterPanelFranchiseeReports: false,
     FranchiseesReportForm: {
         type : 'new',
@@ -36,11 +38,27 @@ const franchiseeReports = function(state = initialState, action) {
                 franchiseeReport: action.payload,
             }
         }
+        case Actions.GET_FRANCHISEE_REPORTS_FETCH_START:
+        {
+            return {
+                ...state,
+                bFetchingFranchiseeReport: true
+            }
+        }
         case Actions.CREATE_FRANCHISEE_REPORT_DETAIL:
         {
             return {
                 ...state,
                 franchiseeReport1: action.payload,
+                bFetchingFranchiseeReport: false
+            }
+        }
+        case Actions.CREATE_FRANCHISEE_REPORT_DETAIL_ERROR:
+        {
+            return {
+                ...state,
+                franchiseeReport1: null,
+                bFetchingFranchiseeReport: false
             }
         }
         case Actions.TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL:

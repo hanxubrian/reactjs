@@ -8,10 +8,17 @@ export const ProfilePageConfig = {
     },
     routes  : [
         {
-            path     : '/profile',
+            path     : '/profile/:id',
             component: FuseLoadable({
                 loader: () => import('./ProfilePage')
             })
-        }
+        },
+        {
+            path     : '/profile/',
+            component: FuseLoadable({
+                loader: () => import('./ProfilePage')
+            })
+        },
+
     ]
 };

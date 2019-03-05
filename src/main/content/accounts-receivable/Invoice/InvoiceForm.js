@@ -581,46 +581,20 @@ class InvoiceForm extends Component {
             }
         }
 
-        let year = moment().year();
-        let month = moment().month();
-        let invoiceDate = moment().subtract(1, 'month');
-        let dueDate = moment().year(year).month(month).subtract(1,'month').endOf('month');
+        let period = this.props.defaultPeriod.split('/');
+        let month = parseInt(period[0]) - 1;
+        let year = parseInt(period[1]);
+
+        let invoiceDate = moment().year(year).month(month);
+        let dueDate = moment().year(year).month(month).endOf('month');
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
         this.setState({ bShowInvoiceCloseBox: false });
 
-        if(this.props.all_regions!==null && this.props.all_regions.length){
-            let all_regions = this.props.all_regions;
-            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
-
-            if(region.length){
-                let periods = region[0].OpenPeriods;
-
-                let all_periods = [];
-
-                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
-                if (periods.current.month < 10)
-                    period = '0' + period;
-                if(periods.current.status==='Open')
-                    all_periods.push(period);
-                this.setState({period: period});
-
-
-                period = periods.next.month.toString() + '/' + periods.next.year.toString();
-                if (periods.next.month < 10)
-                    period = '0' + period;
-                if(periods.next.status==='Open')
-                    all_periods.push(period);
-                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
-                if (periods.previous.month < 10)
-                    period = '0' + period;
-                if(periods.previous.status==='Open')
-                    all_periods.push(period);
-
-                this.setState({periods: all_periods});
-            }
+        if(this.props.all_periods.length){
+                this.setState({period: this.props.all_periods[0]});
+                this.setState({periods: this.props.all_periods});
         }
-
     }
 
     handleChange = (event) => {
@@ -1532,13 +1506,17 @@ function mapStateToProps({invoices, auth, franchisees})
         invoiceForm: invoices.invoiceForm,
         invoices: invoices,
         newInvoice: invoices.newInvoice,
-        user: auth.login,
-        regionId: auth.login.defaultRegionId,
         bStartingSaveFormData: invoices.bStartingSaveFormData,
         franchisees: franchisees.franchiseesDB,
         all_regions: auth.login.all_regions,
         credit: invoices.credit,
         payment: invoices.payment,
+
+        user: auth.login,
+        regionId: auth.login.defaultRegionId,
+        defaultPeriod: auth.login.defaultPeriod,
+        all_periods: auth.login.all_periods,
+
     }
 }
 

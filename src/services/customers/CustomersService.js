@@ -616,6 +616,22 @@ fullbill: 0
 				})
 		});
 	}
+	getReasonList(type) {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/reasons?type=${type}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 	getCancelReason() {
 		return new Promise((resolve, reject) => {
 			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/reasons?type=account_cancellation`)
@@ -648,10 +664,10 @@ fullbill: 0
 				})
 		});
 	}
-	transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, franchisee) {
+	transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, reason, notes, transfer_fee, franchisee) {
 
 		return new Promise((resolve, reject) => {
-			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/TransferAssignedFranchisee?CustomerNo=${CustomerNo}&FromFranchiseeNo=${FromFranchiseeNo}`, franchisee)
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/TransferAssignedFranchisee?CustomerNo=${CustomerNo}&FromFranchiseeNo=${FromFranchiseeNo}&reason=${reason}&notes=${notes}&transfer_fee=${transfer_fee}`, franchisee)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);

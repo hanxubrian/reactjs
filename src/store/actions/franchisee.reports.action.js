@@ -4,6 +4,7 @@ import {franchiseesService} from "../../services"
 export const GET_FRANCHISEE_REPORTS = "[FRANCHISEE-REPORTS] GETS";
 export const GET_FRANCHISEE_REPORT_DETAIL = "[FRANCHISEE-REPORTS] GET A REPORT";
 export const CREATE_FRANCHISEE_REPORT_DETAIL = "[FRANCHISEE-REPORTS] CREATE A REPORT";
+export const CREATE_FRANCHISEE_REPORT_DETAIL_ERROR = "[FRANCHISEE-REPORTS] CREATE A REPORT ERROR";
 export const GET_FRANCHISEE_REPORTS_FETCH_START = "[FRANCHISEE-REPORTS] GETS FETCH START";
 export const TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL = "[FRANCHISEE-REPORT] TOGGLE REPORTS FILTER PANEL";
 export const UPDATE_REPORT_DATE = "[FRANCHISEE-REPORT] UPDATE DATE";
@@ -30,7 +31,10 @@ export function getReports(regionId=2, year="2017", month="01") {
                     payload: res
                 });
             } else {
-
+                dispatch({
+                    type: CREATE_FRANCHISEE_REPORT_DETAIL_ERROR,
+                    payload: res.message
+                });
             }
         })();
     };
@@ -38,7 +42,6 @@ export function getReports(regionId=2, year="2017", month="01") {
 
 export function getReport(params) {
     return (dispatch) => {
-
         (async () => {
             let res = await franchiseesService.getFranchiseeReport(params);
             if (res.IsSuccess) {
@@ -68,7 +71,10 @@ export function updateReportDate(date) {
 
 export function createReport(params) {
     return (dispatch) => {
-
+        dispatch({
+            type: GET_FRANCHISEE_REPORTS_FETCH_START,
+            payload: true
+        });
         (async () => {
             let res = await franchiseesService.createFranchiseeReport(params);
             if (res.IsSuccess) {
@@ -77,7 +83,10 @@ export function createReport(params) {
                     payload: res
                 });
             } else {
-
+                dispatch({
+                    type: CREATE_FRANCHISEE_REPORT_DETAIL_ERROR,
+                    payload: res.message
+                });
             }
         })();
     };

@@ -202,7 +202,7 @@ class SpecialMiscTransactons extends Component {
             return (<div />);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SpecMisc.map(d=>{
-            let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
+            let type = this.props.transactionTypeList.filter(t=>t._id===d.Type);
 
             d.DESCR = FuseUtils.capital_letter(d.Description);
             d.TRX_AMT = parseFloat(d.TrxAmt);
