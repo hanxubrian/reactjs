@@ -21,7 +21,8 @@ import {
     Popover,
     MenuItem,
     Typography,
-    TextField
+    TextField,
+    FormHelperText
 } from '@material-ui/core';
 import * as quickPanelActions from 'main/quickPanel/store/actions';
 import * as authActions from '../auth/store/actions/login.actions';
@@ -68,6 +69,27 @@ const styles = theme => ({
             minWidth: "120px",
             paddingRight: "15px",
             marginTop: "15px",
+        },
+        '& .period-select:before': {
+            borderBottom: "solid 0px transparent !important"
+        }
+    },
+    formControl1:{
+        display:'none',
+        '& .region-select': {
+            minWidth: "150px",
+            paddingRight: "15px",
+            marginTop: "4px",
+        },
+        '& .region-select:before': {
+            borderBottom: "solid 0px transparent !important"
+        },'.MuiInput-underline-538:after': {
+            borderBottom: "solid 0px transparent !important"
+        },
+        '& .period-select': {
+            minWidth: "120px",
+            paddingRight: "15px",
+            marginTop: "4px",
         },
         '& .period-select:before': {
             borderBottom: "solid 0px transparent !important"
@@ -224,8 +246,10 @@ const styles = theme => ({
 class MainToolbar extends Component {
     state = {
         userMenu                    : null,
+        userMenu1                   : null,
         region                      : -1,
         open                        : false,
+        open1                       : false,
         notification                : false,
         messages                    : null,
         contacts                    : null,
@@ -253,11 +277,15 @@ class MainToolbar extends Component {
     userMenuClick = event => {
         this.setState({userMenu: event.currentTarget});
     };
-
+    userMenuClick1 = event => {
+        this.setState({userMenu1: event.currentTarget});
+    };
     userMenuClose = () => {
         this.setState({userMenu: null});
     };
-
+    userMenuClose1 = () => {
+        this.setState({userMenu1: null});
+    };
     handleChange = event => {
         this.setState({[event.target.name]: event.target.value});
         if(event.target.name==='region')
@@ -270,11 +298,20 @@ class MainToolbar extends Component {
     handleClose = () => {
         this.setState({open: false});
     };
+    handleClose1 = () => {
+        this.setState({open1: false});
+    };
 
     handleOpen = () => {
         this.setState({open: true});
     };
-
+    handleOpen1 = () => {
+        this.setState({open1: true});
+    };
+    changeperiod=(p)=>{
+        this.setState({period:p});
+        this.setState({userMenu1: null});
+    };
     componentDidMount() {
         this.mainmsg();
 
@@ -541,6 +578,7 @@ class MainToolbar extends Component {
         this.props.changechatpanelshowstatus();
         this.props.closeChatPanel();
     }
+
     handleContactClick = (contactId) => {
         if(contactId && contactId != null){
             let contactid =contactId;
@@ -589,7 +627,7 @@ class MainToolbar extends Component {
     render()
     {
         const {classes, user, logout, openChatPanel} = this.props;
-        const {userMenu,value} = this.state;
+        const {userMenu,userMenu1,value} = this.state;
         return (
             <div className={classNames(classes.root, "flex flex-row")}>
                 {this.state.sysflage === true && (
@@ -650,7 +688,42 @@ class MainToolbar extends Component {
                                     })}
                                 </Select>
                             </FormControl>
-                            <FormControl className={classNames(classes.formControl) }>
+                            <FuseAnimate delay={300}>
+                                <Button className="h-64" onClick={this.userMenuClick1}>
+                                    <div className="hidden md:flex flex-col ml-12 items-start">
+                                        <Typography component="span" className="normal-case font-600 flex">
+                                            {this.state.period}
+                                        </Typography>
+                                        <Typography className="text-11 capitalize" color="textSecondary">
+                                            Period
+                                        </Typography>
+                                    </div>
+                                    <Icon className="text-16 ml-12 hidden sm:flex" variant="action">keyboard_arrow_down</Icon>
+                                </Button>
+                            </FuseAnimate>
+                            <Popover
+                                open={Boolean(userMenu1)}
+                                anchorEl={userMenu1}
+                                onClose={this.userMenuClose1}
+                                anchorOrigin={{
+                                    vertical  : 'bottom',
+                                    horizontal: 'center'
+                                }}
+                                transformOrigin={{
+                                    vertical  : 'top',
+                                    horizontal: 'center'
+                                }}
+                                classes={{
+                                    paper: "py-8"
+                                }}
+                            >
+                                <React.Fragment>
+                                    {this.props.all_periods.map((p, index)=>{
+                                        return (<MenuItem key={index} value={p} onClick={()=>{this.changeperiod(p)}}>{p}</MenuItem>)
+                                    })}
+                                </React.Fragment>
+                            </Popover>
+                            <FormControl className={classNames(classes.formControl1) } >
                                 <TextField
                                     select
                                     name="period"
@@ -669,6 +742,7 @@ class MainToolbar extends Component {
                                         return (<MenuItem key={index} value={p}>{p}</MenuItem>)
                                     })}
                                 </TextField>
+                                <FormHelperText>Period</FormHelperText>
                             </FormControl>
                         </form>
                     )}
