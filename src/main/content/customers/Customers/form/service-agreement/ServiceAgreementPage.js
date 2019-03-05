@@ -1480,7 +1480,7 @@ class ServiceAgreementPage extends React.Component {
 									/>
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('prntpd')} checked={this.state.prntpd || false} />
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('prntpd')} checked={this.state.prntpd === true || this.state.prntpd === "true" || false} />
 										}
 										label="Print Past Due"
 										className="mr-36"
