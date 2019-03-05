@@ -3,7 +3,7 @@ import _ from "lodash";
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import {  withStyles, TextField, Divider, Select } from '@material-ui/core';
+import { withStyles, TextField, Divider, Select } from '@material-ui/core';
 
 import keycode from 'keycode';
 
@@ -1155,7 +1155,7 @@ class FilterPanel extends Component {
 
 									<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
 									<FormControlLabel value="locationNearBy" control={<Radio onChange={this.handleChange('Location')} />} label="NearBy" />
-									{this.state.Location === "locationNearBy" && (
+									{this.state.Location === "locationNearBy" &&
 										<TextField
 											select
 
@@ -1171,57 +1171,56 @@ class FilterPanel extends Component {
 											// variant="outlined"
 											fullWidth
 										>
+											{Array.from({ length: 15 })
+												.map((val, index) => (
+													<MenuItem key={index} value={(index + 1) * 5}>
+														{(index + 1) * 5} Miles
+													</MenuItem>
+												))
+											}
+										</TextField>
+									}
+
+									<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
+
+									{this.state.Location === "locationNearSpecificAddress" &&
+										<TextField
+											id="SpecificAddress"
+											label="Address"
+											className={classes.textField}
+											onChange={this.handleChange('SpecificAddress')}
+											margin="dense"
+											// variant="outlined"
+											fullWidth
+										/>
+									}
+									{this.state.Location === "locationNearSpecificAddress" &&
+										<TextField
+											select
+
+											id="AddressZipcodeRadius"
+											label="Radius"
+											className={classes.textField}
+											InputLabelProps={{
+												shrink: true
+											}}
+											value={this.props.locationFilterValue.miles}
+											onChange={this.handleChange('AddressZipcodeRadius')}
+											margin="dense"
+											// variant="outlined"
+											fullWidth
+										>
 											{
 												Array.from({ length: 15 })
 													.map((val, index) => (
 														<MenuItem key={index} value={(index + 1) * 5}>
 															{(index + 1) * 5} Miles
-													</MenuItem>
+																</MenuItem>
 													))
 											}
-										</TextField>)}
-
-									<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-									{this.state.Location === "locationNearSpecificAddress" && (
-										<Fragment>
-											<TextField
-												id="SpecificAddress"
-												label="Address"
-												className={classes.textField}
-												onChange={this.handleChange('SpecificAddress')}
-												margin="dense"
-												// variant="outlined"
-												fullWidth
-											/>
-											<TextField
-												select
-
-												id="AddressZipcodeRadius"
-												label="Radius"
-												className={classes.textField}
-												InputLabelProps={{
-													shrink: true
-												}}
-												value={this.props.locationFilterValue.miles}
-												onChange={this.handleChange('AddressZipcodeRadius')}
-												margin="dense"
-												// variant="outlined"
-												fullWidth
-											>
-												{
-													Array.from({ length: 15 })
-														.map((val, index) => (
-															<MenuItem key={index} value={(index + 1) * 5}>
-																{(index + 1) * 5} Miles
-																</MenuItem>
-														))
-												}
-											</TextField>
-										</Fragment>
-									)}
+										</TextField>
+									}
 								</RadioGroup>
-
-
 							</div>
 
 							<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
