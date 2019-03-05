@@ -162,7 +162,6 @@ class FilterPanel extends Component {
     }
 
     componentWillMount(){
-        console.log('this.props.insertPayload=', this.props.insertPayload);
         this.setState({
            franchiseeStatus: this.props.franchiseeStatus,
            stateList: this.props.stateList,
@@ -250,7 +249,6 @@ class FilterPanel extends Component {
         });
 
         const iStatus = this.props.insertPayload;
-        console.log('insertPayload = ',iStatus);
         iStatus[name] = event.target.value;
         this.props.franchiseeUpdateInsertPayload(iStatus)
     };
@@ -287,10 +285,10 @@ class FilterPanel extends Component {
             [name]: event.target.value
         });
 
-        let val = event.target.value
-        let onLocationFilter = this.onLocationFilter
+        let val = event.target.value;
+        let onLocationFilter = this.onLocationFilter;
         if (name === "SpecificAddress") {
-            clearTimeout(this.timer)
+            clearTimeout(this.timer);
             this.timer = setTimeout(
                 function () {
                     onLocationFilter(name, val);
@@ -319,8 +317,8 @@ class FilterPanel extends Component {
             addrZipcode:
                 this.state.Location === "locationNearSpecificAddress" ?
                     this.state.SpecificAddress : undefined
-        }
-        console.log("payload", payload)
+        };
+
         switch (name) {
             case "Location":
                 payload = {
@@ -391,7 +389,6 @@ class FilterPanel extends Component {
                         return
                     },
                     error => {
-                        // console.error(error);
                         payload = {
                             ...payload,
                             addrZipcode: undefined

@@ -808,7 +808,7 @@ class Franchisees extends Component {
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, franchiseesForm, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
-        const { selection, anchorEl,pins, pins2,gmapVisible } = this.state;
+        const {  anchorEl,pins, pins2,gmapVisible } = this.state;
         let period = this.props.reportPeriod.split('/');
         return (
             <React.Fragment >

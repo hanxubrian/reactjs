@@ -330,6 +330,7 @@ class franchiseesService {
     };
 
     getFranchiseeReportByFranchiseeNum = (RegionId,FranchiseeNo) => {
+        console.log('qqqq=',RegionId,FranchiseeNo)
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/v1/FranchiseReport/GetListByFranchisee?regionId=${RegionId}&franchiseeNo=${FranchiseeNo}`)
                 .then( res => {

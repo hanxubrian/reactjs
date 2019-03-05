@@ -22,9 +22,13 @@ import {withRouter} from "react-router-dom";
 // third party
 import NumberFormat from 'react-number-format';
 
-import FindersFeesStopModal from './findersFeesStopModal';
+// theme components
+import {FuseAnimate} from '@fuse';
+
 import FranchiseeReportBigModal from './FranchiseeReportBigModal';
 
+//Child components
+import Report from './../report_new'
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -352,7 +356,7 @@ class FranchiseeReportTable extends React.Component {
         });
         // console.log('params=', this.props.periodForReport, this.props.insertPayload.dlr_code);
 
-        await this.franchiseeComponent.onShowFranchiseeDialog();
+        // await this.franchiseeComponent.onShowFranchiseeDialog();
     };
 
     render() {
@@ -397,69 +401,76 @@ class FranchiseeReportTable extends React.Component {
 
         return (
             <Paper className={classes.root}>
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
-                        <FranchiseeReportTableHead
-                            className={classNames(classes.HeadRoot)}
-                            numSelected={selected.length}
-                            order={order}
-                            onRequestSort={this.handleRequestSort}
-                            rowCount={this.state.data.length}
-                            headers={headers}
+                {this.props.franchiseeReport===null ? (
+                    <div className={classes.tableWrapper}>
+                        <Table className={classes.table} aria-labelledby="tableTitle">
+                            <FranchiseeReportTableHead
+                                className={classNames(classes.HeadRoot)}
+                                numSelected={selected.length}
+                                order={order}
+                                onRequestSort={this.handleRequestSort}
+                                rowCount={this.state.data.length}
+                                headers={headers}
+                            />
+                            {this.state.data.length && (
+                                <TableBody>
+                                    {this.state.data.length > 0 && (
+                                        stableSort(this.state.data, getSorting(order, orderBy))
+                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            .map((n,index) => {
+                                                    return (
+                                                        <TableRow hover key={index} >
+                                                            <TableCell >
+                                                                {n.period}
+                                                            </TableCell>
+                                                            <TableCell style={{textAlign:'right'}}>
+                                                                {CurrencyFormatter({value: n.TotalRevenue})}
+                                                            </TableCell>
+                                                            <TableCell style={{textAlign:'right'}}>
+                                                                {CurrencyFormatter({value: n.TotalDeductions})}
+                                                            </TableCell>
+                                                            <TableCell style={{textAlign:'right'}}>
+                                                                {CurrencyFormatter({value: n.TotalPayment})}
+                                                            </TableCell>
+                                                            <TableCell style={{textAlign:'right'}}>
+                                                                <IconButton
+                                                                    onClick={()=>this.showFranchiseeModal(n)}
+                                                                    //component={Link}
+                                                                >
+                                                                    <Icon>visibility</Icon>
+                                                                </IconButton>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                }
+                                            ))}
+                                </TableBody>
+                            )}
+                        </Table>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={franchiseeReports.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            backIconButtonProps={{
+                                'aria-label': 'Previous Page',
+                            }}
+                            nextIconButtonProps={{
+                                'aria-label': 'Next Page',
+                            }}
+                            onChangePage={this.handleChangePage}
+                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
                         />
-                        {this.state.data.length && (
-                            <TableBody>
-                            {this.state.data.length > 0 && (
-                                stableSort(this.state.data, getSorting(order, orderBy))
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((n,index) => {
-                                            return (
-                                                <TableRow hover key={index} >
-                                                    <TableCell >
-                                                        {n.period}
-                                                    </TableCell>
-                                                    <TableCell style={{textAlign:'right'}}>
-                                                        {CurrencyFormatter({value: n.TotalRevenue})}
-                                                    </TableCell>
-                                                    <TableCell style={{textAlign:'right'}}>
-                                                        {CurrencyFormatter({value: n.TotalDeductions})}
-                                                    </TableCell>
-                                                    <TableCell style={{textAlign:'right'}}>
-                                                        {CurrencyFormatter({value: n.TotalPayment})}
-                                                    </TableCell>
-                                                    <TableCell style={{textAlign:'right'}}>
-                                                        <IconButton
-                                                            onClick={()=>this.showFranchiseeModal(n)}
-                                                            //component={Link}
-                                                        >
-                                                            <Icon>visibility</Icon>
-                                                        </IconButton>
-                                                    </TableCell>
-                                                </TableRow>
-                                            )
-                                        }
-                                    ))}
-                        </TableBody>
-                        )}
-                    </Table>
-                </div>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={franchiseeReports.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
-                    onChangePage={this.handleChangePage}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
-                <FindersFeesStopModal />
-                <FranchiseeReportBigModal onRef={component=>{this.franchiseeComponent = component}}/>
+                    </div>
+
+                ) : (
+                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                        <Report onRef={ref => (this.child = ref)}/>
+                    </FuseAnimate>
+                )}
+
+                {/*<FranchiseeReportBigModal onRef={component=>{this.franchiseeComponent = component}}/>*/}
             </Paper>
         );
     }
@@ -473,6 +484,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ franchisees, auth, franchiseeReports }) {
     return {
         franchiseeReports: franchisees.franchiseeReports,
+        franchiseeReport: franchiseeReports.franchiseeReport1,
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         insertPayload: franchisees.insertPayload,

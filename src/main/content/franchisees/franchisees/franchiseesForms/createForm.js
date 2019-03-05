@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 
 // Material-UI core components
 import {
-    TextField, Button, Typography, Divider, FormControlLabel, Checkbox, AppBar, Tabs, Tab, Radio, MenuItem, InputAdornment
+    TextField, Button, Typography, Divider, FormControlLabel, Checkbox, AppBar, Tabs, Tab, Radio, MenuItem, InputAdornment,
+    IconButton, Icon
 } from '@material-ui/core';
 // theme components
 
@@ -53,6 +54,9 @@ const styles = theme => ({
             textTransform: 'none'
         },
         margin: theme.spacing.unit
+    },
+    iconButton: {
+
     },
     formControl: {
         marginBottom: 12,
@@ -1043,6 +1047,10 @@ class FranchiseesCreateForm extends Component {
         this.props.updatePeriodForFranchiseeReport({year, month});
     };
 
+    gotoFranchiseeReports = () => {
+        this.props.nullifyFranchiseeReport();
+    };
+
     //////////////////////
 
     render() {
@@ -1089,46 +1097,52 @@ class FranchiseesCreateForm extends Component {
                         <h2>{steps[activeStep]}</h2>
                         {activeStep===5 && (
                                <div className="flex flex-row">
-                                <TextField
-                                    margin={"none"}
-                                    name="month"
-                                    label="Billing Month"
-                                    variant="outlined"
-                                    select
-                                    value={this.state.month}
-                                    className="mr-24"
-                                    onChange={this.handlePeriodChange}
-                                    InputProps={{
-                                        classes: {
-                                            input: classes.input1,
-                                        },
-                                    }}
-                                    fullWidth
-                                >
-                                    <MenuItem value={-1}>All</MenuItem>
-                                    {mL.map((month, index)=>{
-                                        return (<MenuItem key={index} value={index}>{month}</MenuItem>)
-                                    })}
-                                </TextField>
-                                <TextField
-                                    margin={"none"}
-                                    name="year"
-                                    label="Billing Year"
-                                    variant="outlined"
-                                    select
-                                    value={this.state.year}
-                                    onChange={this.handlePeriodChange}
-                                    InputProps={{
-                                        classes: {
-                                            input: classes.input1,
-                                        },
-                                    }}
-                                    fullWidth
-                                >
-                                    {years.map((year, index)=>{
-                                        return (<MenuItem  className="text-right" key={index} value={year}>{year}</MenuItem>)
-                                    })}
-                                </TextField>
+                                   <TextField
+                                       margin={"none"}
+                                       name="month"
+                                       label="Billing Month"
+                                       variant="outlined"
+                                       select
+                                       value={this.state.month}
+                                       className="mr-24"
+                                       onChange={this.handlePeriodChange}
+                                       InputProps={{
+                                           classes: {
+                                               input: classes.input1,
+                                           },
+                                       }}
+                                       fullWidth
+                                   >
+                                       <MenuItem value={-1}>All</MenuItem>
+                                       {mL.map((month, index)=>{
+                                           return (<MenuItem key={index} value={index}>{month}</MenuItem>)
+                                       })}
+                                   </TextField>
+                                   <TextField
+                                       margin={"none"}
+                                       name="year"
+                                       label="Billing Year"
+                                       variant="outlined"
+                                       select
+                                       value={this.state.year}
+                                       onChange={this.handlePeriodChange}
+                                       InputProps={{
+                                           classes: {
+                                               input: classes.input1,
+                                           },
+                                       }}
+                                       fullWidth
+                                   >
+                                       {years.map((year, index)=>{
+                                           return (<MenuItem  className="text-right" key={index} value={year}>{year}</MenuItem>)
+                                       })}
+                                   </TextField>
+                                   {this.props.franchiseeReport!==null && (
+                                       <IconButton color="primary" onClick={()=>this.gotoFranchiseeReports()}
+                                                   className={classes.iconButton} aria-label="List">
+                                           <Icon>list</Icon>
+                                       </IconButton>
+                                   )}
                             </div>
                         )}
 
@@ -1173,10 +1187,11 @@ function mapDispatchToProps(dispatch) {
         getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo,
         getFranchiseeReportByFranchiseeNum: Actions.getFranchiseeReportByFranchiseeNum,
         updatePeriodForFranchiseeReport: Actions.updatePeriodForFranchiseeReport,
+        nullifyFranchiseeReport: Actions.nullifyFranchiseeReport,
     }, dispatch);
 }
 
-function mapStateToProps({ franchisees, auth }) {
+function mapStateToProps({ franchisees, auth, franchiseeReports }) {
     return {
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
@@ -1191,6 +1206,7 @@ function mapStateToProps({ franchisees, auth }) {
         insertPayload: franchisees.insertPayload,
         findersFees: franchisees.findersFees,
         defaultPeriod: auth.login.defaultPeriod,
+        franchiseeReport: franchiseeReports.franchiseeReport1,
     }
 }
 
