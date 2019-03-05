@@ -750,9 +750,9 @@ class PaymentLockBoxContentList extends Component {
             rows = this.state.rows.FoundItems;
 
         }
-        console.log('this.state.rows------------', this.state.rows);
-        console.log('payments------------', rows);
-        console.log('paymentlockbox------------', this.props.paymentlockbox);
+        // console.log('this.state.rows------------', this.state.rows);
+        // console.log('payments------------', rows);
+        // console.log('paymentlockbox------------', this.props.paymentlockbox);
         return (
             <Fragment>
                 <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>

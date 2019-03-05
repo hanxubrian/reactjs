@@ -19,7 +19,7 @@ export function paymentlockboxgetalldata() {
         let regionId = getState().auth.login.defaultRegionId;
         let data={
             'regionid':regionId,
-            'lockboxdate':moment(),
+            'lockboxdate':moment().format('MM/DD/YYYY'),
             'filename':'BUF07.TXT',
             'preview':true
         };
@@ -27,6 +27,7 @@ export function paymentlockboxgetalldata() {
             type: PAYMENT_LOCKBOX_GET_ALL_DATA_START,
             payload: true
         });
+
         (async () => {
             let res = await paymentlockboxservice.getallpaymentlockbox(data);
             if (res.IsSuccess) {
