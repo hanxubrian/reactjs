@@ -20,6 +20,7 @@ import connect from "react-redux/es/connect/connect";
 import {Link, withRouter} from "react-router-dom";
 
 import FindersFeesStopModal from './findersFeesStopModal';
+import NumberFormat from 'react-number-format';
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -45,17 +46,16 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-class FranchiseeReprotTableHead extends React.Component {
+class FranchiseeReportTableHead extends React.Component {
 
     state = {
         docSendModal: false
-    }
+    };
 
     componentWillMount(){
         this.setState({
             docSendModal: this.props.docSendModal
         });
-        console.log("franchiseeReports",this.props.franchiseeReports);
     }
 
     createSortHandler = property => event => {
@@ -101,7 +101,7 @@ class FranchiseeReprotTableHead extends React.Component {
 }
 
 
-FranchiseeReprotTableHead.propTypes = {
+FranchiseeReportTableHead.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
@@ -133,7 +133,7 @@ const toolbarStyles = theme => ({
     },
 });
 
-let FranchiseeReprotToolbar = props => {
+let FranchiseeReportToolbar = props => {
     const { numSelected, classes } = props;
 
     return (
@@ -173,12 +173,12 @@ let FranchiseeReprotToolbar = props => {
     );
 };
 
-FranchiseeReprotToolbar.propTypes = {
+FranchiseeReportToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired
 };
 
-FranchiseeReprotToolbar = withStyles(toolbarStyles)(FranchiseeReprotToolbar);
+FranchiseeReportToolbar = withStyles(toolbarStyles)(FranchiseeReportToolbar);
 
 const styles = theme => ({
     root: {
@@ -234,6 +234,16 @@ const styles = theme => ({
         }
     }
 });
+
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div>{value}</div>}/>
+);
+
 
 class FranchiseeReportTable extends React.Component {
 
@@ -295,45 +305,47 @@ class FranchiseeReportTable extends React.Component {
                 id: 'BillMonth',
                 numeric: false,
                 disablePadding: false,
-                label: 'Month'
-            },
-            {
-                id: 'BillYear',
-                numeric: false,
-                disablePadding: false,
-                label: 'Bill Year'
+                label: 'Period'
             },
             {
                 id: 'TotalRevenue',
-                numeric: false,
+                numeric: true,
                 disablePadding: false,
                 label: 'Total Revenue'
             },
             {
                 id: 'TotalDeductions',
-                numeric: false,
+                numeric: true,
                 disablePadding: false,
                 label: 'Total Deductions'
             },
             {
                 id: 'TotalPayment',
-                numeric: false,
+                numeric: true,
                 disablePadding: false,
                 label: 'Total Payment'
             },
             {
                 id: 'action',
-                numeric: false,
+                numeric: true,
                 disablePadding: false,
                 label: 'Action'
             }
         ];
+        let data;
 
+        if(franchiseeReports.length) {
+            data = franchiseeReports.map(r => {
+                let prefix='';
+                if(r.BillMonth<10) prefix='0';
+                r.period = `${prefix}${r.BillMonth}/${r.BillYear}`;
+            });
+        }
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
-                        <FranchiseeReprotTableHead
+                        <FranchiseeReportTableHead
                             className={classNames(classes.HeadRoot)}
                             numSelected={selected.length}
                             order={order}
@@ -341,29 +353,27 @@ class FranchiseeReportTable extends React.Component {
                             rowCount={franchiseeReports.length}
                             headers={headers}
                         />
-                        <TableBody>
-                            {franchiseeReports.length > 0 && (
+                        {franchiseeReports.length && (
+                            <TableBody>
+                            {data.length > 0 && (
                                 stableSort(franchiseeReports, getSorting(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((n,index) => {
                                             return (
                                                 <TableRow hover key={index} >
                                                     <TableCell >
-                                                        {n.BillMonth}
-                                                    </TableCell>
-                                                    <TableCell >
-                                                        {n.BillYear}
+                                                        {n.period}
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
-                                                        ${parseFloat(n.TotalRevenue).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                        {CurrencyFormatter({value: n.TotalRevenue})}
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
-                                                        ${parseFloat(n.TotalDeductions).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                        {CurrencyFormatter({value: n.TotalDeductions})}
                                                     </TableCell>
                                                     <TableCell style={{textAlign:'right'}}>
-                                                        ${parseFloat(n.TotalPayment).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                        {CurrencyFormatter({value: n.TotalPayment})}
                                                     </TableCell>
-                                                    <TableCell>
+                                                    <TableCell style={{textAlign:'right'}}>
                                                         <IconButton
                                                             //onClick={}
                                                             //component={Link}
@@ -376,6 +386,7 @@ class FranchiseeReportTable extends React.Component {
                                         }
                                     ))}
                         </TableBody>
+                        )}
                     </Table>
                 </div>
                 <TablePagination

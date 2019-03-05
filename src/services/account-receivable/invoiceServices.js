@@ -101,6 +101,7 @@ class invoiceService {
      * @returns {Promise<any>}
      */
 	getCustomerTaxAmount = (RegionId, CustomerId, Amount, Quantity, Markup, Commission, TaxTypeId) => {
+		console.log('params=', CustomerId, Amount, Quantity, Markup, Commission)
 		return new Promise((resolve, reject) => {
 			axios_instance.get(`${BASE_MONGO_API_URL}/api/Tax/GetCustomerTaxAmount`,
 				{ params: { RegionId, CustomerId, Amount, Quantity, Markup, TaxTypeId, Commission } }
