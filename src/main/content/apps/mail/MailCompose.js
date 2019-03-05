@@ -93,7 +93,6 @@ class MailCompose extends Component {
                     value={this.state.from}
                     margin={"dense"}
                     onChange={this.handleChange}
-                    variant="outlined"
                     fullWidth
                     disabled
                 />
@@ -107,7 +106,6 @@ class MailCompose extends Component {
                     value={this.state.to}
                     margin={"dense"}
                     onChange={this.handleChange}
-                    variant="outlined"
                     fullWidth
                     required
                 />
@@ -120,7 +118,6 @@ class MailCompose extends Component {
                     value={this.state.cc}
                     margin={"dense"}
                     onChange={this.handleChange}
-                    variant="outlined"
                     fullWidth
                 />
 
@@ -132,7 +129,6 @@ class MailCompose extends Component {
                     value={this.state.bcc}
                     margin={"dense"}
                     onChange={this.handleChange}
-                    variant="outlined"
                     fullWidth
                 />
 
@@ -142,9 +138,7 @@ class MailCompose extends Component {
                     id="subject"
                     name="subject"
                     value={this.state.subject}
-                    margin={"dense"}
                     onChange={this.handleChange}
-                    variant="outlined"
                     fullWidth
                 />
 
@@ -153,7 +147,6 @@ class MailCompose extends Component {
                     id="message"
                     name="message"
                     onChange={this.handleChange}
-                    margin={"dense"}
                     label="Message"
                     type="text"
                     multiline
