@@ -255,7 +255,8 @@ class FranchiseeReportTable extends React.Component {
         labelWidth: 0,
         view: [],
         stopReasonModal: false,
-        periodForReport: this.props.periodForReport
+        periodForReport: this.props.periodForReport,
+        data: []
     };
 
     constructor (props){
@@ -276,8 +277,24 @@ class FranchiseeReportTable extends React.Component {
         });
     };
 
-    componentDidMount() {
+    onFilterByPeriod = (month, year)=>{
+        let data = this.props.franchiseeReports.filter(f=>f.BillMonth===(month+1) && f.BillYear===year);
+        let filteredData = data.map(r => {
+            let prefix='';
+            if(r.BillMonth<10) prefix='0';
+            r.period = `${prefix}${r.BillMonth}/${r.BillYear}`;
+            return r;
+        });
 
+        this.setState({data: filteredData});
+    };
+
+    componentDidMount() {
+        if(this.props.franchiseeReports.length) {
+            let year = this.state.periodForReport.year;
+            let month = this.state.periodForReport.month;
+            this.onFilterByPeriod(month, year);
+        }
     }
 
     componentWillMount() {
@@ -292,7 +309,11 @@ class FranchiseeReportTable extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(this.props.periodForReport!==prevProps.periodForReport){
-            this.setState({periodForReport: this.props.periodForReport})
+            this.setState({periodForReport: this.props.periodForReport});
+
+            let year = this.props.periodForReport.year;
+            let month = this.props.periodForReport.month;
+            this.onFilterByPeriod(month, year);
         }
     }
 
@@ -309,7 +330,10 @@ class FranchiseeReportTable extends React.Component {
         const { classes,franchiseeReports } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
 
-        console.log('periodForReport=', this.state.periodForReport);
+        if(!this.state.data.length)
+            return <div/>;
+
+        console.log('data=', this.state.data);
 
         const headers = [
             {
@@ -343,15 +367,7 @@ class FranchiseeReportTable extends React.Component {
                 label: 'Action'
             }
         ];
-        let data;
 
-        if(franchiseeReports.length) {
-            data = franchiseeReports.map(r => {
-                let prefix='';
-                if(r.BillMonth<10) prefix='0';
-                r.period = `${prefix}${r.BillMonth}/${r.BillYear}`;
-            });
-        }
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
@@ -361,13 +377,13 @@ class FranchiseeReportTable extends React.Component {
                             numSelected={selected.length}
                             order={order}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={franchiseeReports.length}
+                            rowCount={this.state.data.length}
                             headers={headers}
                         />
-                        {franchiseeReports.length && (
+                        {this.state.data.length && (
                             <TableBody>
-                            {data.length > 0 && (
-                                stableSort(franchiseeReports, getSorting(order, orderBy))
+                            {this.state.data.length > 0 && (
+                                stableSort(this.state.data, getSorting(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((n,index) => {
                                             return (
@@ -434,6 +450,7 @@ function mapStateToProps({ franchisees, auth }) {
         insertPayload: franchisees.insertPayload,
         stopReasonModal: franchisees.stopReason,
         periodForReport: franchisees.periodForReport,
+        defaultPeriod: auth.login.defaultPeriod,
     }
 }
 
