@@ -19,6 +19,7 @@ export const ADD_CUSTOMER_CONTACT = '[CUSTOMERS APP] ADD CUSTOMER_CONTACT';
 export const UPDATE_CUSTOMER_CONTACT = '[CUSTOMERS APP] UPDATE CUSTOMER_CONTACT';
 
 export const SELECT_LOCATION_FILTER = '[CUSTOMERS APP] SELECT LOCATION FILTER';
+export const SELECT_LOCATION_FILTER_FRANCHISEE_LIST = '[CUSTOMERS APP] SELECT_LOCATION_FILTER_FRANCHISEE_LIST';
 export const APPLY_SEARCH_TEXT = '[CUSTOMERS APP] APPLY SEARCH TEXT';
 
 export const GET_CUSTOMERS_FETCH_START = "[CUSTOMERS APP] GET CUSTOMERS FETCH START";
@@ -291,6 +292,12 @@ export function toggleStatus(key, status) {
 export function selectLocationFilter(filter_value) {
 	return {
 		type: SELECT_LOCATION_FILTER,
+		payload: filter_value
+	}
+}
+export function selectLocationFilterForFranchiseeList(filter_value) {
+	return {
+		type: SELECT_LOCATION_FILTER_FRANCHISEE_LIST,
 		payload: filter_value
 	}
 }

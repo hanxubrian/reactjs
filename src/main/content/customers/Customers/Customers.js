@@ -573,6 +573,16 @@ class Customers extends Component {
 
 		// }
 
+		if (this.props.loading.bCreateCustomerStart === true && nextProps.loading.bCreateCustomerStart === false ||
+			this.props.loading.bUpdateCustomerStart === true && nextProps.loading.bUpdateCustomerStart === false) {
+			this.props.getSuggestCustomersList(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
+		}
 		// if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
 		// 	this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.flag &&
 		// 	nextProps.activeCustomer.Data.flag !== this.props.activeCustomer.Data.flag) {
@@ -1016,7 +1026,7 @@ assign at least one franchisee.</DialogContentText>
 					}}
 				>
 				</FusePageCustomSidebarScroll>
-				
+
 				{loadings && loadings.length > 0 &&
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />

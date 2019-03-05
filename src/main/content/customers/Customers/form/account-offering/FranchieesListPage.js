@@ -54,6 +54,9 @@ import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerC
 import { compose, withProps, withHandlers } from "recompose";
 import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
 
+import Geocode from "react-geocode";
+Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
+
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -387,6 +390,7 @@ class PatchedTableSelection extends React.PureComponent {
 	}
 }
 
+const WAIT_INTERVAL = 1000
 class FranchieesListPage extends Component {
 
 
@@ -503,6 +507,12 @@ class FranchieesListPage extends Component {
 
 			step: 0,
 
+			Location: this.props.locationFilterValueForFranchiseeList.id,
+			locationNearResidingCustomerRadius: this.props.locationFilterValueForFranchiseeList.miles,
+			locationNearCleaningCustomerRadius: this.props.locationFilterValueForFranchiseeList.miles,
+			AddressZipcodeRadius: this.props.locationFilterValueForFranchiseeList.miles,
+
+
 		};
 
 		console.log("props.bLoadedFranchisees", props.bLoadedFranchisees)
@@ -538,7 +548,7 @@ class FranchieesListPage extends Component {
 			// Id= ""
 			x.Status = "Assigned"
 			x.AssignedDate = moment().format('YYYY-MM-DD')
-			x.CreatedById= 0
+			x.CreatedById = 0
 			x.MonthlyBilling = []
 			x.FinderFee = {}
 			x.new = true // to indentify newly added
@@ -570,7 +580,7 @@ class FranchieesListPage extends Component {
 	componentWillMount() {
 		this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
 
-		this.getFranchiseesFromStatus();
+		this.initRowsFromRawJson();
 
 		this.getLocation();
 
@@ -582,11 +592,15 @@ class FranchieesListPage extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
-			this.getFranchiseesFromStatus(nextProps.franchisees);
+			this.initRowsFromRawJson(nextProps.franchisees);
+		}
+
+		if (this.props.locationFilterValueForFranchiseeList !== nextProps.locationFilterValueForFranchiseeList) {
+			this.filterPins(this.state.rows, nextProps.locationFilterValueForFranchiseeList);
 		}
 	}
-	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-		console.log("rawData-getFranchiseesFromStatus", rawData);
+	initRowsFromRawJson = (rawData = this.props.franchisees, locationFilterValueForFranchiseeList = this.props.locationFilterValueForFranchiseeList) => {
+		console.log("rawData-initRowsFromRawJson", rawData);
 
 		let rows = [];
 
@@ -608,7 +622,14 @@ class FranchieesListPage extends Component {
 		rawData.Data.Region.forEach((x, index) => {
 			rows = [...rows, ...(x.Franchisees.filter(f => f.StatusName === "Y"))]
 		})
+		rows.forEach(x => {
+			x.lat = x.Latitude || 0
+			x.lng = x.Longitude || 0
+			x.text = x.Name
+		})
 		this.setState({ rows })
+
+		this.filterPins(rows, locationFilterValueForFranchiseeList)
 
 		// this.setState({ temp: data });
 		// this.setState({ data: data });
@@ -629,6 +650,142 @@ class FranchieesListPage extends Component {
 			})
 		}
 	};
+
+	filterPins(pins, locationFilterValueForFranchiseeList) {
+		// this.setState({ gmapVisible: !this.state.gmapVisible });
+		let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
+		let b = 12.5 - k / 5
+
+		switch (locationFilterValueForFranchiseeList.id) {
+			case "locationAll":
+				if (!this.state.gmapVisible) {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: pins === undefined ? [] : [...pins],
+						pins2: []
+					})
+				} else {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [],
+						pins2: pins === undefined ? [] : [...pins]
+					})
+				}
+				map_zoom = DEFAULT_ZOOM
+				break;
+			case "locationNearResidingCustomer":
+			case "locationNearCleaningCustomer":
+				let _pins = []
+				this.setState({
+					addrLat: this.state.current_lat,
+					addrLng: this.state.current_long
+				})
+
+				_pins = this.nearbyLocations(
+					pins,
+					{
+						lat: this.state.current_lat,
+						lng: this.state.current_long
+					},
+					locationFilterValueForFranchiseeList.miles)
+
+				if (!this.state.gmapVisible) {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [..._pins],
+						pins2: []
+					})
+				} else {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [],
+						pins2: [..._pins]
+					})
+				}
+
+				map_zoom = locationFilterValueForFranchiseeList.miles !== undefined ? k / locationFilterValueForFranchiseeList.miles + b : DEFAULT_ZOOM
+				break;
+			case "locationNearSpecificAddress":
+
+				let _ = []
+				if (locationFilterValueForFranchiseeList.addrZipcode !== undefined) {
+					this.setState({
+						addrLat: locationFilterValueForFranchiseeList.addrZipcode.lat,
+						addrLng: locationFilterValueForFranchiseeList.addrZipcode.lng
+					})
+					_ = this.nearbyLocations(
+						pins,
+						{
+							lat: locationFilterValueForFranchiseeList.addrZipcode.lat,
+							lng: locationFilterValueForFranchiseeList.addrZipcode.lng
+						},
+						locationFilterValueForFranchiseeList.miles)
+				} else {
+					this.setState({
+						addrLat: this.state.current_lat,
+						addrLng: this.state.current_long
+					})
+					_ = this.nearbyLocations(
+						pins,
+						{
+							lat: this.state.current_lat,
+							lng: this.state.current_long
+						},
+						locationFilterValueForFranchiseeList.miles)
+				}
+
+				if (!this.state.gmapVisible) {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [..._],
+						pins2: []
+					})
+				} else {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [],
+						pins2: [..._]
+					})
+				}
+				map_zoom = locationFilterValueForFranchiseeList.miles !== undefined ? k / locationFilterValueForFranchiseeList.miles + b : DEFAULT_ZOOM
+				break;
+			default:
+				this.setState({ pins: pins })
+				break;
+		}
+
+	}
+	nearbyLocations(pins, center, miles = 5, addrZipcode = "") {
+		// let _nearbys = [];
+		// this.props.pins.forEach(x => {
+		// 	let dist = this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng);
+
+		// 	if (dist <= miles) {
+		// 		_nearbys = [..._nearbys, x]
+		// 	}
+
+		// });
+
+		return [...pins.filter(x => {
+			return (this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng) <= miles)
+		})];
+		// return _nearbys
+	}
+	Deg2Rad(deg) {
+		return deg * Math.PI / 180;
+	}
+
+	PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
+		lat1 = this.Deg2Rad(lat1);
+		lat2 = this.Deg2Rad(lat2);
+		lon1 = this.Deg2Rad(lon1);
+		lon2 = this.Deg2Rad(lon2);
+		var R = 6371; // km
+		var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+		var y = (lat2 - lat1);
+		var d = Math.sqrt(x * x + y * y) * R;
+		return d;
+	}
 	offerThisAccount = () => {
 		this.setState({ step: 1 })
 	}
@@ -662,11 +819,150 @@ class FranchieesListPage extends Component {
 	);
 
 	handleChange = name => event => {
+		const value = event.target.value
+		console.log('-------handleChange--------', name, value)
+		const checked = event.target.checked
+
+		let onLocationFilter = this.onLocationFilter
+
+		switch (name) {
+			case "SpecificAddress":
+				clearTimeout(this.timer)
+				this.timer = setTimeout(
+					function () {
+						onLocationFilter(name, value);
+					},
+					WAIT_INTERVAL)
+				break;
+
+			case "Location":
+			case "locationNearResidingCustomerRadius":
+			case "locationNearCleaningCustomerRadius":
+			case "AddressZipcodeRadius":
+				this.onLocationFilter(name, value)
+				break;
+		}
+
 		this.setState({
 			[name]: event.target.value
 		});
 	};
 
+	onLocationFilter = (name, value) => {
+
+		//
+		// init payload
+		//
+		let id = this.props.locationFilterValueForFranchiseeList.id
+		let miles = this.props.locationFilterValueForFranchiseeList.miles
+		let addrZipcode = this.props.locationFilterValueForFranchiseeList.addrZipcode
+
+		const locationValue = name === "Location" ? value : this.state.Location
+
+		switch (locationValue) {
+			case "locationAll":
+				miles = 0
+				break
+			case "locationNearResidingCustomer":
+				miles = this.state.locationNearResidingCustomerRadius
+				break
+			case "locationNearCleaningCustomer":
+				miles = this.state.locationNearCleaningCustomerRadius
+				break
+			case "locationNearSpecificAddress":
+				miles = this.state.AddressZipcodeRadius
+				break
+		}
+		//
+		// set payload
+		//
+		switch (name) {
+			case "Location":
+				id = value
+				break
+			case "locationNearResidingCustomerRadius":
+			case "locationNearCleaningCustomerRadius":
+			case "AddressZipcodeRadius":
+				miles = value
+				break
+			case "SpecificAddress":
+				addrZipcode = value
+				break
+		}
+
+		let payload = {
+			id,
+			miles,
+			addrZipcode,
+		}
+
+		switch (name) {
+			case "Location":
+
+				payload = {
+					...payload,
+					addrZipcode: {
+						lat: 42.879593,
+						lng: -78.798299,
+					}
+				}
+				this.props.selectLocationFilterForFranchiseeList(payload)
+
+				break;
+			case "locationNearResidingCustomerRadius":
+			case "locationNearCleaningCustomerRadius":
+
+				break;
+			case "SpecificAddress":
+
+				Geocode.fromAddress(value).then(
+					response => {
+						const { lat, lng } = response.results[0].geometry.location;
+						payload = {
+							...payload,
+							addrZipcode: { lat, lng, addr: value }
+						}
+						this.props.selectLocationFilterForFranchiseeList(payload)
+						return
+					},
+					error => {
+						payload = {
+							...payload,
+							addrZipcode: undefined
+						}
+						this.props.selectLocationFilterForFranchiseeList(payload)
+						return
+					}
+				);
+
+				return;
+			case "AddressZipcodeRadius":
+				Geocode.fromAddress(addrZipcode).then(
+					response => {
+						const { lat, lng } = response.results[0].geometry.location;
+						payload = {
+							...payload,
+							addrZipcode: { lat, lng, addr: value }
+						}
+						this.props.selectLocationFilterForFranchiseeList(payload)
+						return
+					},
+					error => {
+						// console.error(error);
+						payload = {
+							...payload,
+							addrZipcode: undefined
+						}
+						this.props.selectLocationFilterForFranchiseeList(payload)
+						return
+					}
+				);
+
+				return;
+		}
+		console.log(payload)
+		this.props.selectLocationFilterForFranchiseeList(payload)
+	}
 	handleChangeChecked = name => event => {
 		this.setState({
 			[name]: event.target.checked
@@ -706,7 +1002,9 @@ class FranchieesListPage extends Component {
 					console.log(position.coords);
 					this.setState({
 						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
+						current_long: position.coords.longitude,
+						current_lat: 42.879593,
+						current_long: -78.798299,
 					})
 
 					// this.setState({
@@ -717,14 +1015,16 @@ class FranchieesListPage extends Component {
 					if (this.state.addrLat == undefined) {
 						this.setState({
 							addrLat: position.coords.latitude,
-							addrLng: position.coords.longitude
+							addrLng: position.coords.longitude,
+							addrLat: 42.879593,
+							addrLng: -78.798299,
 						})
 						// this.setState({
 						// 	addrLat: 42.910772,
 						// 	addrLng: -78.74557
 						// })
 					}
-					if (this.props.locationFilterValue) {
+					if (this.props.locationFilterValueForFranchiseeList) {
 						this.initRowsFromRawJson();
 					}
 				}
@@ -817,7 +1117,7 @@ class FranchieesListPage extends Component {
 								onClick={this.toggleMapView}
 							>
 								{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
-								<Icon>location_on</Icon>
+								<Icon>{showMapView ? 'list_alt' : 'location_on'}</Icon>
 							</IconButton>
 						</Tooltip>
 
@@ -838,82 +1138,86 @@ class FranchieesListPage extends Component {
 
 
 				<Paper className={classNames("flex p-6 w-full h-full")}>
-					{this.state.openSideBar && <div className="flex flex-col p-12" style={{ minWidth: 200 }}>
+					{this.state.openSideBar &&
+						<div className="flex flex-col p-12" style={{ minWidth: 200 }}>
 
-						<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
-						<RadioGroup
-							aria-label="Location"
-							name="Location"
-							className={classes.group}
-							value={this.state.Location || ""}
-						>
-							<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
-							<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
-							{this.state.Location === "locationNearResidingCustomer" && (
-								<TextField
-									select
+							<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
+							<RadioGroup
+								aria-label="Location"
+								name="Location"
+								className={classes.group}
+								value={this.state.Location || ""}
+							>
+								<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
+								<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Residing Near Customer" />
+								{this.state.Location === "locationNearResidingCustomer" && (
+									<TextField
+										select
 
-									id="locationNearResidingCustomerRadius"
-									label="Radius"
-									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-									onChange={this.handleChange('locationNearResidingCustomerRadius')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{
-										Array.from({ length: 15 })
-											.map((val, index) => (
-												<MenuItem key={index} value={(index + 1) * 5}>
-													{(index + 1) * 5} Miles
+										id="locationNearResidingCustomerRadius"
+										label="Radius"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.props.locationFilterValueForFranchiseeList.miles}
+										onChange={this.handleChange('locationNearResidingCustomerRadius')}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+									>
+										{
+											Array.from({ length: 15 })
+												.map((val, index) => (
+													<MenuItem key={index} value={(index + 1) * 5}>
+														{(index + 1) * 5} Miles
 													</MenuItem>
-											))
-									}
-								</TextField>)}
+												))
+										}
+									</TextField>)}
 
-							<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
-							{this.state.Location === "locationNearCleaningCustomer" && (
-								<TextField
-									select
+								<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Cleaning Near Customer" />
+								{this.state.Location === "locationNearCleaningCustomer" && (
+									<TextField
+										select
 
-									id="locationNearCleaningCustomerRadius"
-									label="Radius"
-									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-									onChange={this.handleChange('locationNearCleaningCustomerRadius')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{
-										Array.from({ length: 15 })
-											.map((val, index) => (
-												<MenuItem key={index} value={(index + 1) * 5}>
-													{(index + 1) * 5} Miles
+										id="locationNearCleaningCustomerRadius"
+										label="Radius"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.props.locationFilterValueForFranchiseeList.miles}
+										onChange={this.handleChange('locationNearCleaningCustomerRadius')}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+									>
+										{
+											Array.from({ length: 15 })
+												.map((val, index) => (
+													<MenuItem key={index} value={(index + 1) * 5}>
+														{(index + 1) * 5} Miles
 													</MenuItem>
-											))
-									}
-								</TextField>)}
+												))
+										}
+									</TextField>)}
 
-							<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-							{this.state.Location === "locationNearSpecificAddress" && (
-								<Fragment>
+								<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
+
+								{this.state.Location === "locationNearSpecificAddress" &&
 									<TextField
 										id="SpecificAddress"
 										label="Address"
 										className={classes.textField}
+										value={this.props.locationFilterValueForFranchiseeList.addrZipcode && this.props.locationFilterValueForFranchiseeList.addrZipcode.addr || ''}
 										onChange={this.handleChange('SpecificAddress')}
 										margin="dense"
 										variant="outlined"
 										fullWidth
 									/>
+								}
+								{this.state.Location === "locationNearSpecificAddress" &&
 									<TextField
 										select
 
@@ -923,7 +1227,7 @@ class FranchieesListPage extends Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+										value={this.props.locationFilterValueForFranchiseeList.miles}
 										onChange={this.handleChange('AddressZipcodeRadius')}
 										margin="dense"
 										variant="outlined"
@@ -938,13 +1242,13 @@ class FranchieesListPage extends Component {
 												))
 										}
 									</TextField>
-								</Fragment>
-							)}
-						</RadioGroup>
+								}
 
-					</div>
+							</RadioGroup>
+
+						</div>
 					}
-					<div className="flex flex-col" style={{ overflowX: 'scroll' }}>
+					<div className="flex flex-col w-full" style={{ overflowX: 'scroll' }}>
 						{showMapView &&
 							<div className="flex flex-col w-full flex-1 h-full">
 								{gmapVisible && (<MapWithAMarkerClusterer
@@ -1161,6 +1465,7 @@ function mapDispatchToProps(dispatch) {
 		getFranchisees: Actions.getFranchisees,
 
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
+		selectLocationFilterForFranchiseeList: Actions.selectLocationFilterForFranchiseeList,
 	}, dispatch);
 }
 
@@ -1180,6 +1485,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		franchieesesToOffer: customers.franchieesesToOffer,
 		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 		activeCustomer: customers.activeCustomer,
+		locationFilterValueForFranchiseeList: customers.locationFilterValueForFranchiseeList,
 	}
 }
 

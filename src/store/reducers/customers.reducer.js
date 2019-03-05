@@ -145,6 +145,11 @@ const initialState = {
 		miles: 15,
 		addrZipcode: undefined
 	},
+	locationFilterValueForFranchiseeList: {
+		id: "locationAll",
+		miles: 15,
+		addrZipcode: undefined
+	},
 	searchText: "",
 
 	bCustomerFetchStart: false,
@@ -543,6 +548,11 @@ const customers = function (state = initialState, action) {
 		case Actions.SELECT_LOCATION_FILTER: {
 			return {
 				...state, locationFilterValue: action.payload
+			}
+		}
+		case Actions.SELECT_LOCATION_FILTER_FRANCHISEE_LIST: {
+			return {
+				...state, locationFilterValueForFranchiseeList: action.payload
 			}
 		}
 		case Actions.APPLY_SEARCH_TEXT: {
