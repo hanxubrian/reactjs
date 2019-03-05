@@ -25,6 +25,7 @@ import FinderFeePage from './form/finders-fees/NewFindersFeePage'
 import ServiceAgreementPage from './form/service-agreement/ServiceAgreementPage'
 import FranchiseeDistributionPage from './form/franchisee-distribution/FranchiseeDistributionPage'
 import WalkThruPage from './form/walk-thru/WalkThruPage'
+import TransactionsPage from './form/transactions/TransactionsPage'
 
 import green from "@material-ui/core/colors/green";
 import amber from "@material-ui/core/colors/amber";
@@ -287,7 +288,7 @@ class CustomerForm extends Component {
 		labelWidth: 0,
 		selectedWork: "",
 
-		activeStep: 0,
+		activeStep: 5,
 		completed: new Set(),
 		skipped: new Set(),
 
@@ -308,7 +309,7 @@ class CustomerForm extends Component {
 		if (this.props.customerForm.type === "new") {
 			return ['Service Agreement', 'Account Offering'];
 		}
-		return ['Service Agreement', "Account Offering", 'Franchisee Distribution', "Walk-Thru", "Account History"];
+		return ['Service Agreement', "Account Offering", 'Franchisee Distribution', "Walk-Thru", "Account History", "Transactions"];
 	}
 
 	//
@@ -382,6 +383,8 @@ class CustomerForm extends Component {
 				return (<Fragment></Fragment>)
 			case 'Finders Fees':
 				return (<FinderFeePage />)
+			case 'Transactions':
+				return <TransactionsPage />
 			default:
 				return 'Unknown step';
 		}

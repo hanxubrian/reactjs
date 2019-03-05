@@ -1,22 +1,9 @@
 import React, { Fragment } from 'react';
 import _ from "lodash";
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
-import moment from 'moment';
-
-import green from '@material-ui/core/colors/green';
-import amber from '@material-ui/core/colors/amber';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import InfoIcon from '@material-ui/icons/Info';
-import CloseIcon from '@material-ui/icons/Close';
-import WarningIcon from '@material-ui/icons/Warning';
 
 import {
-	Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider, Snackbar, SnackbarContent,
-	ListItemLink, Checkbox, Switch
+	FormControlLabel, Switch
 } from '@material-ui/core';
 
 // for store
@@ -24,9 +11,6 @@ import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
-import * as Actions from 'store/actions';
-
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 
