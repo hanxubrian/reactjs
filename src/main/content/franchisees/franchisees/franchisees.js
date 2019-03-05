@@ -1283,7 +1283,7 @@ class Franchisees extends Component {
                 }}
             >
             </FusePageCustomSidebarScroll>
-                {(this.props.bFranchiseesFetchStart) && (
+                {(this.props.bFranchiseesFetchStart || this.props.bFetchingFranchiseeReport) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary" />
                     </div>
@@ -1315,7 +1315,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({franchisees,auth, invoices, transactions})
+function mapStateToProps({franchisees,auth, invoices, transactions, franchiseeReports})
 {
     return {
         franchiseesForm: franchisees.createFranchisees,
@@ -1341,7 +1341,8 @@ function mapStateToProps({franchisees,auth, invoices, transactions})
         defaultPeriod: auth.login.defaultPeriod,
         billingLists: invoices.billingLists,
         transactionTypeList: transactions.transactionTypeList,
-        insertPayload: franchisees.insertPayload
+        insertPayload: franchisees.insertPayload,
+        bFetchingFranchiseeReport: franchiseeReports.bFetchingFranchiseeReport,
     }
 }
 

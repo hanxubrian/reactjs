@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, IconButton, Tooltip, TablePagination, Icon
+    Toolbar, Typography, Paper, IconButton, Tooltip, TablePagination, Icon, CircularProgress
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -236,7 +236,22 @@ const styles = theme => ({
         '&:hover': {
             backgroundColor: '#ff2a32',
         }
-    }
+    },
+    overlay: {
+        position: 'absolute',
+        top: -104,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .6)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex'
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
 });
 
 const CurrencyFormatter = ({value}) => (
@@ -451,7 +466,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({ franchisees, auth }) {
+function mapStateToProps({ franchisees, auth, franchiseeReports }) {
     return {
         franchiseeReports: franchisees.franchiseeReports,
         franchiseesForm: franchisees.createFranchisees,
@@ -459,6 +474,7 @@ function mapStateToProps({ franchisees, auth }) {
         insertPayload: franchisees.insertPayload,
         periodForReport: franchisees.periodForReport,
         defaultPeriod: auth.login.defaultPeriod,
+
     }
 }
 

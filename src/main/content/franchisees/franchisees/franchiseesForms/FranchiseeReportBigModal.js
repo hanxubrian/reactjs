@@ -11,7 +11,7 @@ import {withRouter} from "react-router-dom";
 import {bindActionCreators} from "redux";
 import AssignmentTurnedIn from '@material-ui/icons/AssignmentTurnedIn';
 
-import {Button, IconButton, MenuItem } from '@material-ui/core';
+import {IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -102,7 +102,7 @@ class FranchiseeReportBigModal extends React.Component {
         return (
             <div className={classes.root}>
                 <Dialog
-                    open={this.state.openFranchiseeReportDialog}
+                    open={this.props.franchiseeReport && this.state.openFranchiseeReportDialog}
                     onClose={this.handleClose }
                     aria-labelledby="form-dialog-title"
                     maxWidth={"lg"}
