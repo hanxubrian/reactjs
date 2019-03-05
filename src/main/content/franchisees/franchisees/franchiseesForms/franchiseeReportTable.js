@@ -294,6 +294,10 @@ class FranchiseeReportTable extends React.Component {
 
     onFilterByPeriod = (month, year)=>{
         let data = this.props.franchiseeReports.filter(f=>f.BillMonth===(month+1) && f.BillYear===year);
+
+        if(month===-1)
+            data = this.props.franchiseeReports.filter(f=>f.BillYear===year);
+
         let filteredData = data.map(r => {
             let prefix='';
             if(r.BillMonth<10) prefix='0';

@@ -1104,6 +1104,7 @@ class FranchiseesCreateForm extends Component {
                                     }}
                                     fullWidth
                                 >
+                                    <MenuItem value={-1}>All</MenuItem>
                                     {mL.map((month, index)=>{
                                         return (<MenuItem key={index} value={index}>{month}</MenuItem>)
                                     })}
