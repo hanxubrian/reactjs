@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Icon, List, ListItem, ListItemText, ListSubheader} from '@material-ui/core';
 import {NavLink, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import MailCompose from './MailCompose';
 import {FuseAnimate} from '@fuse';
+import {bindActionCreators} from "redux";
+import * as Actions from "./store/actions";
+import  { Redirect } from 'react-router-dom'
 
 const styles = theme => ({
     listWrapper  : {},
@@ -39,82 +41,99 @@ const styles = theme => ({
     }
 });
 
-function MailAppSidebarContent({classes, folders, filters, labels})
+class MailAppSidebarContent extends Component {
+
+
+    clickCompose = ()=>{
+        this.props.history.push('compose');
+    }
+
+    render(){
+        const {classes, folders, filters, labels} = this.props;
+
+        return (
+            <FuseAnimate animation="transition.slideUpIn" delay={400}>
+                <div>
+                    <div className="p-24">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.composeButton}
+                            onClick={this.clickCompose}
+                        >
+                            COMPOSE
+                        </Button>
+                    </div>
+
+                    <div className={classes.listWrapper}>
+
+                        <List>
+
+                            <ListSubheader className={classes.listSubheader} disableSticky>FOLDERS</ListSubheader>
+
+                            {folders.length > 0 && folders.map((folder) => (
+                                <ListItem
+                                    button
+                                    component={NavLink}
+                                    to={'/apps/mail/' + folder.handle} key={folder.id}
+                                    activeClassName="active"
+                                    className={classes.listItem}
+                                >
+                                    <Icon className="list-item-icon" color="action">{folder.icon}</Icon>
+                                    <ListItemText primary={folder.title} disableTypography={true}/>
+                                </ListItem>
+                            ))}
+                        </List>
+
+                        <List>
+
+                            <ListSubheader className={classes.listSubheader} disableSticky>FILTERS</ListSubheader>
+
+                            {filters.length > 0 && filters.map((filter) => (
+                                <ListItem
+                                    button
+                                    component={NavLink}
+                                    to={'/apps/mail/filter/' + filter.handle}
+                                    activeClassName="active"
+                                    className={classes.listItem}
+                                    key={filter.id}
+                                >
+                                    <Icon className="list-item-icon" color="action">{filter.icon}</Icon>
+                                    <ListItemText primary={filter.title} disableTypography={true}/>
+                                </ListItem>
+                            ))}
+                        </List>
+
+                        <List>
+
+                            <ListSubheader className={classes.listSubheader} disableSticky>LABELS</ListSubheader>
+
+                            {labels && labels.map((label) => (
+                                <ListItem
+                                    button
+                                    component={NavLink}
+                                    to={'/apps/mail/label/' + label.handle}
+                                    key={label.id}
+                                    className={classes.listItem}
+                                >
+                                    <Icon className="list-item-icon" style={{color: label.color}} color="action">label</Icon>
+                                    <ListItemText primary={label.title} disableTypography={true}/>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
+                </div>
+            </FuseAnimate>
+        );
+    }
+
+}
+
+function mapDispatchToProps(dispatch)
 {
-    return (
-        <FuseAnimate animation="transition.slideUpIn" delay={400}>
-            <div>
-                <div className="p-24">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.composeButton}
-                        //onClick={this.openComposeDialog}
-                    >
-                        COMPOSE
-                    </Button>
-                </div>
-
-                <div className={classes.listWrapper}>
-
-                    <List>
-
-                        <ListSubheader className={classes.listSubheader} disableSticky>FOLDERS</ListSubheader>
-
-                        {folders.length > 0 && folders.map((folder) => (
-                            <ListItem
-                                button
-                                component={NavLink}
-                                to={'/apps/mail/' + folder.handle} key={folder.id}
-                                activeClassName="active"
-                                className={classes.listItem}
-                            >
-                                <Icon className="list-item-icon" color="action">{folder.icon}</Icon>
-                                <ListItemText primary={folder.title} disableTypography={true}/>
-                            </ListItem>
-                        ))}
-                    </List>
-
-                    <List>
-
-                        <ListSubheader className={classes.listSubheader} disableSticky>FILTERS</ListSubheader>
-
-                        {filters.length > 0 && filters.map((filter) => (
-                            <ListItem
-                                button
-                                component={NavLink}
-                                to={'/apps/mail/filter/' + filter.handle}
-                                activeClassName="active"
-                                className={classes.listItem}
-                                key={filter.id}
-                            >
-                                <Icon className="list-item-icon" color="action">{filter.icon}</Icon>
-                                <ListItemText primary={filter.title} disableTypography={true}/>
-                            </ListItem>
-                        ))}
-                    </List>
-
-                    <List>
-
-                        <ListSubheader className={classes.listSubheader} disableSticky>LABELS</ListSubheader>
-
-                        {labels && labels.map((label) => (
-                            <ListItem
-                                button
-                                component={NavLink}
-                                to={'/apps/mail/label/' + label.handle}
-                                key={label.id}
-                                className={classes.listItem}
-                            >
-                                <Icon className="list-item-icon" style={{color: label.color}} color="action">label</Icon>
-                                <ListItemText primary={label.title} disableTypography={true}/>
-                            </ListItem>
-                        ))}
-                    </List>
-                </div>
-            </div>
-        </FuseAnimate>
-    );
+    return bindActionCreators({
+        toggleCompose: Actions.toggleCompose
+    }, dispatch);
 }
 
 function mapStateToProps({mailApp})
@@ -122,8 +141,9 @@ function mapStateToProps({mailApp})
     return {
         folders: mailApp.folders,
         labels : mailApp.labels,
-        filters: mailApp.filters
+        filters: mailApp.filters,
+        toggleCompose: mailApp.compose.toggleCompose
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps)(MailAppSidebarContent)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(MailAppSidebarContent)));

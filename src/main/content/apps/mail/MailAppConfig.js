@@ -28,6 +28,12 @@ export const MailAppConfig = {
         {
             path     : '/apps/mail',
             component: () => <Redirect to="/apps/mail/inbox"/>
+        },
+        {
+            path         : 'apps/mail/compose',
+            component: FuseLoadable({
+                loader: () => import('./MailApp')
+            })
         }
     ]
 };

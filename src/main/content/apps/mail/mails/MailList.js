@@ -31,7 +31,10 @@ class MailList extends Component {
     {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
-            this.props.getMails(this.props.match.params);
+            const path = window.location.pathname.split("/").pop();
+            if (path !== 'compose') {
+                this.props.getMails(this.props.match.params);
+            }
         }
     }
 

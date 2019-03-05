@@ -332,7 +332,7 @@ function mapStateToProps({auth,fuse})
         app         :      auth.app,
         mfLoginVerifyResult: auth.login.mfLoginVerifyResult,
         mfLoginStart: auth.login.mfLoginStart
-        }
+    }
 }
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SigninPage)));

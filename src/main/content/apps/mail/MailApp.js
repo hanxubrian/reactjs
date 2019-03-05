@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import MailList from './mails/MailList';
 import * as Actions from './store/actions';
@@ -11,10 +11,16 @@ import MailToolbar from './mail/MailToolbar';
 import MailAppHeader from './MailAppHeader';
 import MailAppSidebarHeader from './MailAppSidebarHeader';
 import MailAppSidebarContent from './MailAppSidebarContent';
+import MailCompose from './MailCompose';
+import {withRouter} from "react-router-dom";
+import _ from 'lodash';
 
 const styles = theme => ({});
 
 class MailApp extends Component {
+    state = {
+       openCompose: false
+    }
 
     componentDidMount()
     {
@@ -23,10 +29,43 @@ class MailApp extends Component {
         this.props.getLabels();
     }
 
+    componentWillMount() {
+
+        const path = window.location.pathname.split("/").pop();
+        if(path === 'compose'){
+            this.setState({
+                openCompose: true
+            })
+        }else{
+            this.setState({
+                openCompose: false
+            })
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if ( !_.isEqual(this.props.location, prevProps.location) ) {
+
+            const path = window.location.pathname.split("/").pop();
+            if (path === 'compose') {
+                this.setState({
+                    openCompose: true
+                });
+            } else {
+                this.setState({
+                    openCompose: false
+                })
+            }
+        }
+    }
+
     render()
     {
         const {match} = this.props;
+        const {openCompose} = this.state;
         const {params} = match;
+
+
 
         return (
             <FusePageCarded
@@ -46,10 +85,14 @@ class MailApp extends Component {
                     )
                 }
                 content={
-                    params.mailId ? (
-                        <MailDetails/>
+                    openCompose ? (
+                           <MailCompose/>
                     ) : (
-                        <MailList/>
+                        params.mailId ? (
+                            <MailDetails/>
+                        ) : (
+                            <MailList/>
+                        )
                     )
                 }
                 leftSidebarHeader={
@@ -76,4 +119,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-export default (withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(MailApp)));
+function mapStateToProps({auth,mailApp})
+{
+    return {
+        toggleCompose: mailApp.compose.toggleCompose
+    }
+}
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(MailApp)));
