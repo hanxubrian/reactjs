@@ -107,11 +107,11 @@ function getStepContent(franchiseeForm, step) {
         case 0:
             return (
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
+                    <div style={{ marginTop: '30px' }}/>
                     <h3>Financial</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">                            
+
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="financeName"
                                 label="Name"
@@ -262,7 +262,7 @@ function getStepContent(franchiseeForm, step) {
                             />
                         </GridItem>
                     </GridContainer>
-                    <div style={{ marginTop: '30px' }}></div>
+                    <div style={{ marginTop: '30px' }}/>
                     <h3>Company Type</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -338,7 +338,7 @@ function getStepContent(franchiseeForm, step) {
                             />
                         </GridItem>
                     </GridContainer>
-                    <div style={{ marginTop: '30px' }}></div>
+                    <div style={{ marginTop: '30px' }}/>
                     <h3>Owner</h3>
                     <div className="flex">
                      {franchiseeForm.props.insertPayload.Owners !== null && (
@@ -353,8 +353,8 @@ function getStepContent(franchiseeForm, step) {
         case 1:
             return (
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
-                    
+                    <div style={{ marginTop: '30px' }}/>
+
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -432,7 +432,7 @@ function getStepContent(franchiseeForm, step) {
                                 id="ibAmount"
                                 label="IB Amount"
                                 className={classes.textField}
-                                margin="dense"                                
+                                margin="dense"
                                 inputProps={{
                                     readOnly: true,
                                     type: "number",
@@ -459,9 +459,6 @@ function getStepContent(franchiseeForm, step) {
                                 inputProps={{
                                     maxLength: 60,
                                     readOnly: true,
-                                }}
-                                InputLabelProps={{
-                                    shrink: true
                                 }}
                                 style={{marginLeft: '1%'}}
                                 margin="dense"
@@ -534,7 +531,7 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="noOfPayments"
                                 label="No Of Payments"
-                                className={classes.textField}    
+                                className={classes.textField}
                                 margin="dense"
                                 inputProps={{
                                     readOnly: true,
@@ -587,7 +584,7 @@ function getStepContent(franchiseeForm, step) {
                             </MuiPickersUtilsProvider>
                         </GridItem>
                     </GridContainer>
-                    <div style={{ marginTop: '30px' }}></div>
+                    <div style={{ marginTop: '30px' }}/>
                     <h3>Billing Settings</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -625,7 +622,7 @@ function getStepContent(franchiseeForm, step) {
                             />
                         </GridItem>
                     </GridContainer>
-                    <div style={{ marginTop: '30px' }}></div>
+                    <div style={{ marginTop: '30px' }}/>
                     <h3>Fees</h3>
                     <Fragment>
                         {franchiseeForm.props.insertPayload.Fees !== null && (
@@ -640,7 +637,7 @@ function getStepContent(franchiseeForm, step) {
         case 2:
             return(
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
+                    <div style={{ marginTop: '30px' }}/>
                     <div className="flex">
                         {franchiseeForm.props.insertPayload.Documents !== null && (
                             <FranchiseesDocumentUploadTable/>
@@ -882,7 +879,7 @@ class FranchiseesCreateForm extends Component {
                 findersFees: nextProps.findersFees
             });
         }
-  
+
     }
 
 
@@ -892,10 +889,10 @@ class FranchiseesCreateForm extends Component {
 
 
         if(name === 'State' || name === 'AgreementTerm'){
-       
+
             this.setState({
                 [name]: event.target.value,
-            }); 
+            });
 
         }
         const iStatus = this.props.insertPayload;
@@ -1067,7 +1064,7 @@ class FranchiseesCreateForm extends Component {
                         <Tab label="Customers" />
                         )}
                         {this.props.franchiseesForm.type ==="edit" &&(
-                         <Tab label="Finders Fees" />  
+                         <Tab label="Finders Fees" />
                         )}
                         {this.props.franchiseesForm.type ==="edit" &&(
                             <Tab label="Franchisee Reports" />
@@ -1079,7 +1076,6 @@ class FranchiseesCreateForm extends Component {
                     style={{
                         overflowY: 'scroll',
                         width: '100%',
-                        height: 'calc(100% - 110px)'
                     }}>
                     <h2>{steps[activeStep]}</h2>
                     <Divider variant="middle" style={{ marginTop: 12, marginBottom: 12, height: 1 }} />

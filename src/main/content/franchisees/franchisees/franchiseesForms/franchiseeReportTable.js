@@ -183,7 +183,7 @@ FranchiseeReportToolbar = withStyles(toolbarStyles)(FranchiseeReportToolbar);
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing.unit * 3,
+        // marginTop: theme.spacing.unit * 3,
         overflow: 'auto',
         head: {
             color: 'black',
