@@ -1,6 +1,7 @@
 import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import {GET_FRANCHISEE_REPORTS_FETCH_START} from "../actions/";
+import {NULLIFY_FRANCHISEE_REPORT} from "../actions/";
 
 const initialState = {
     franchiseeReports: null,
@@ -43,6 +44,13 @@ const franchiseeReports = function(state = initialState, action) {
             return {
                 ...state,
                 bFetchingFranchiseeReport: true
+            }
+        }
+        case Actions.NULLIFY_FRANCHISEE_REPORT:
+        {
+            return {
+                ...state,
+                franchiseeReport1: null
             }
         }
         case Actions.CREATE_FRANCHISEE_REPORT_DETAIL:

@@ -89,6 +89,7 @@ class FranchiseeReportBigModal extends React.Component {
 
     handleClose = () => {
         this.setState({openFranchiseeReportDialog: false});
+        this.props.nullifyFranchiseeReport();
     };
 
     onShowFranchiseeDialog = ()=>{
@@ -102,7 +103,7 @@ class FranchiseeReportBigModal extends React.Component {
         return (
             <div className={classes.root}>
                 <Dialog
-                    open={this.props.franchiseeReport && this.state.openFranchiseeReportDialog}
+                    open={!!this.props.franchiseeReport && this.state.openFranchiseeReportDialog}
                     onClose={this.handleClose }
                     aria-labelledby="form-dialog-title"
                     maxWidth={"lg"}
@@ -126,6 +127,7 @@ class FranchiseeReportBigModal extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        nullifyFranchiseeReport: Actions.nullifyFranchiseeReport,
     }, dispatch);
 }
 

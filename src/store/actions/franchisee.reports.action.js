@@ -8,6 +8,7 @@ export const CREATE_FRANCHISEE_REPORT_DETAIL_ERROR = "[FRANCHISEE-REPORTS] CREAT
 export const GET_FRANCHISEE_REPORTS_FETCH_START = "[FRANCHISEE-REPORTS] GETS FETCH START";
 export const TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL = "[FRANCHISEE-REPORT] TOGGLE REPORTS FILTER PANEL";
 export const UPDATE_REPORT_DATE = "[FRANCHISEE-REPORT] UPDATE DATE";
+export const NULLIFY_FRANCHISEE_REPORT = "[FRANCHISEE-REPORT] NULLIFY FRANCHISEE REPORT";
 
 /**
  * @param regionId
@@ -68,10 +69,14 @@ export function updateReportDate(date) {
         payload: date
     }
 }
+export function nullifyFranchiseeReport() {
+    return {
+        type: NULLIFY_FRANCHISEE_REPORT,
+    }
+}
 
 export function createReport(params) {
     if(Object.keys(params).length===0) return;
-    console.log('params for action=', Object.keys(params).length)
 
     return (dispatch) => {
         dispatch({
