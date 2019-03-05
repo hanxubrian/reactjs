@@ -286,7 +286,7 @@ class FilterPanel extends Component {
                                 <MenuItem value={PERIOD}>Period</MenuItem>
                             </Select>
                         </FormControl>
-                        <br></br>
+                        <br/>
 
                         { this.state.invoiceDateOption===CUSTOM_DATE && (
                             <MuiPickersUtilsProvider utils={MomentUtils}>

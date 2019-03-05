@@ -330,7 +330,8 @@ class Franchisees extends Component {
         pins: [],
         pins2: [],
         gmapVisible: false,
-        insertPayload:[]
+        insertPayload:[],
+        labelWidth: 0,
     };
 
     toggleSelection = (key, shift, row) => {
@@ -348,7 +349,7 @@ class Franchisees extends Component {
     };
 
     toggleAll = (instance) => {
-        const selectAll = this.state.selectAll ? false : true;
+        const selectAll = !this.state.selectAll;
         const selection = [];
         if (selectAll) {
             let currentRecords = instance.data;
@@ -428,10 +429,8 @@ class Franchisees extends Component {
             this.initRowsFromRawJson(this.props.franchisees, nextProps.locationFilterValue);
         }
         if (this.props.detailPayload !== nextProps.detailPayload) {
-           console.log("detail",nextProps.detailPayload);
         }
         if (this.props.createPayload !== nextProps.createPayload) {
-            console.log("CreatePayload", nextProps.createPayload);
         }
         if(this.props.Active !== nextProps.Active){
             this.setState({
@@ -480,7 +479,7 @@ class Franchisees extends Component {
     };
 
     componentDidMount(){
-        this.props.updateReportPeriod(this.props.defaultPeriod)
+        this.props.updateReportPeriod(this.props.defaultPeriod);
         document.addEventListener("keydown", this.escFunction, false);
         this.getLocation();
     }

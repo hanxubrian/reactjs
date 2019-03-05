@@ -148,8 +148,11 @@ const initialState = {
         Documents: [],
     },
     reportPeriod: "01/2017" ,
-    stateList: []
-
+    stateList: [],
+    periodForReport:{
+        year: moment().year,
+        month: moment().month()
+    }
 };
 
 
@@ -217,6 +220,13 @@ const franchisees = function(state = initialState, action) {
                 ...state,
                 deletePayload: action.payload,
                 bFranchiseesFetchStart: false
+            };
+        }
+        case Actions.UPDATE_PERIOD_FOR_FRANCHISEE_REPORT:
+        {
+            return {
+                ...state,
+                periodForReport: action.payload,
             };
         }
         case Actions.GET_FILTER_LIST:

@@ -254,7 +254,8 @@ class FranchiseeReportTable extends React.Component {
         rowsPerPage: 10,
         labelWidth: 0,
         view: [],
-        stopReasonModal: false
+        stopReasonModal: false,
+        periodForReport: this.props.periodForReport
     };
 
     constructor (props){
@@ -278,12 +279,20 @@ class FranchiseeReportTable extends React.Component {
     componentDidMount() {
 
     }
+
     componentWillMount() {
         this.setState({stopReasonModal:this.props.stopReasonModal});
     }
+
     componentWillReceiveProps(nextProps){
         if(nextProps.stopReasonModal !== this.props.stopReasonModal){
             this.setState({stopReasonModal:nextProps.stopReasonModal});
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.periodForReport!==prevProps.periodForReport){
+            this.setState({periodForReport: this.props.periodForReport})
         }
     }
 
@@ -299,6 +308,8 @@ class FranchiseeReportTable extends React.Component {
     render() {
         const { classes,franchiseeReports } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
+
+        console.log('periodForReport=', this.state.periodForReport);
 
         const headers = [
             {
@@ -421,7 +432,8 @@ function mapStateToProps({ franchisees, auth }) {
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         insertPayload: franchisees.insertPayload,
-        stopReasonModal: franchisees.stopReason
+        stopReasonModal: franchisees.stopReason,
+        periodForReport: franchisees.periodForReport,
     }
 }
 

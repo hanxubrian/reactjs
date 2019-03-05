@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 // core components
 import {
-    TextField, Button, Typography, Divider, FormControlLabel} from '@material-ui/core';
+    TextField, Button, Typography, Divider, FormControlLabel, OutlinedInput
+} from '@material-ui/core';
 // theme components
 
 import { withStyles } from "@material-ui/core";
@@ -36,6 +37,8 @@ import FranchiseeReportTable from "./franchiseeReportTable";
 import CustomersTable from "./customersTable";
 import FindersFeesTable from "./findersFeesTable";
 import InputAdornment from '@material-ui/core/InputAdornment';
+import _ from "lodash";
+import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../../store/actions";
 
 
 
@@ -63,7 +66,11 @@ const styles = theme => ({
     },
     textField: {
         width: '100%'
-    }
+    },
+    input1: {
+        padding: '12px 6px',
+        minWidth: 160
+    },
 });
 
 
@@ -74,7 +81,6 @@ function getSteps() {
 function getStepContent(franchiseeForm, step) {
     const { classes} = franchiseeForm.props;
 
-    console.log('state=',franchiseeForm);
     const Owner_headers = [
         {
                 id: 'firstName',
@@ -663,7 +669,7 @@ function getStepContent(franchiseeForm, step) {
         case 5:
             return (
               <Fragment>
-                <FranchiseeReportTable/>
+                <FranchiseeReportTable />
               </Fragment>
             );
         default:
@@ -882,18 +888,11 @@ class FranchiseesCreateForm extends Component {
 
     }
 
-
-
     handleFormChange = (name) => event => {
-
-
-
         if(name === 'State' || name === 'AgreementTerm'){
-
             this.setState({
                 [name]: event.target.value,
             });
-
         }
         const iStatus = this.props.insertPayload;
         iStatus[name] = (name === "AgreementTerm") ? parseInt(event.target.value) : event.target.value;
@@ -913,6 +912,10 @@ class FranchiseesCreateForm extends Component {
                 labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
             });
         }
+        let period = this.props.defaultPeriod.split('/');
+        let month = parseInt(period[0]) - 1;
+        let year = parseInt(period[1]);
+        this.setState({month, year})
     }
 
     handleSignDateChange = date => {
@@ -1037,6 +1040,14 @@ class FranchiseesCreateForm extends Component {
         this.setState({ activeStep });
     };
 
+    handlePeriodChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+        let year = event.target.name==='year' ? event.target.value : this.state.year;
+        let month = event.target.name==='month' ? event.target.value : this.state.month;
+
+        this.props.updatePeriodForFranchiseeReport({year, month});
+    };
+
     //////////////////////
 
     render() {
@@ -1044,7 +1055,9 @@ class FranchiseesCreateForm extends Component {
 
         const steps = getSteps();
         const { activeStep} = this.state;
-        const today = new Date();
+
+        const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        let years = _.range(1999, moment().year()+1);
 
         return (
             <Fragment>
@@ -1077,7 +1090,53 @@ class FranchiseesCreateForm extends Component {
                         overflowY: 'scroll',
                         width: '100%',
                     }}>
-                    <h2>{steps[activeStep]}</h2>
+                    <div className="flex flex-row flex-1 justify-between items-center">
+                        <h2>{steps[activeStep]}</h2>
+                        {activeStep===5 && (
+                               <div className="flex flex-row">
+                                <TextField
+                                    margin={"none"}
+                                    name="month"
+                                    label="Billing Month"
+                                    variant="outlined"
+                                    select
+                                    value={this.state.month}
+                                    className="mr-24"
+                                    onChange={this.handlePeriodChange}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input1,
+                                        },
+                                    }}
+                                    fullWidth
+                                >
+                                    {mL.map((month, index)=>{
+                                        return (<MenuItem key={index} value={index}>{month}</MenuItem>)
+                                    })}
+                                </TextField>
+                                <TextField
+                                    margin={"none"}
+                                    name="year"
+                                    label="Billing Year"
+                                    variant="outlined"
+                                    select
+                                    value={this.state.year}
+                                    onChange={this.handlePeriodChange}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input1,
+                                        },
+                                    }}
+                                    fullWidth
+                                >
+                                    {years.map((year, index)=>{
+                                        return (<MenuItem  className="text-right" key={index} value={year}>{year}</MenuItem>)
+                                    })}
+                                </TextField>
+                            </div>
+                        )}
+
+                    </div>
                     <Divider variant="middle" style={{ marginTop: 12, marginBottom: 12, height: 1 }} />
 
                     <Fragment>
@@ -1095,44 +1154,6 @@ class FranchiseesCreateForm extends Component {
                         )}
                     </Fragment>
                 </div>
-                {/*<div className="flex flex-1 flex-row justify-between items-center">*/}
-                    {/*<div className="flex flex-row justify-start pl-24">*/}
-                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
-                            {/*<span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>*/}
-                        {/*</FuseAnimate>*/}
-                    {/*</div>*/}
-                    {/*<div className="flex flex-row flex-1 justify-end pr-24">*/}
-                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
-                            {/*<Button*/}
-                                {/*variant="contained"*/}
-                                {/*color="primary"*/}
-                                {/*className={classNames(classes.button, "mr-12")}*/}
-                                {/*onClick={() => {this.closeComposeForm();}}*/}
-                                {/*disabled={!this.canBeSubmitted()}*/}
-                            {/*> Discard </Button>*/}
-                        {/*</FuseAnimate>*/}
-                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
-                            {/*<Button*/}
-                                {/*variant="contained"*/}
-                                {/*color="primary"*/}
-                                {/*className={classNames(classes.button, "mr-12")}*/}
-                                {/*onClick={() => {this.createFranchiseeForm();}}*/}
-                                {/*disabled={!this.canBeSubmitted()}*/}
-                            {/*> Save </Button>*/}
-                        {/*</FuseAnimate>*/}
-                        {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
-                            {/*<Button*/}
-                                {/*variant="contained"*/}
-                                {/*color="primary"*/}
-                                {/*className={classes.button}*/}
-                                {/*onClick={() => {*/}
-                                    {/*this.closeComposeForm();*/}
-                                {/*}}*/}
-                                {/*disabled={!this.canBeSubmitted()}*/}
-                            {/*> Close </Button>*/}
-                        {/*</FuseAnimate>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
             </Fragment>
         );
     }
@@ -1155,6 +1176,7 @@ function mapDispatchToProps(dispatch) {
         updateFranchisees: Actions.updateFranchisees,
         getFinderfeesByFranchiseeNo: Actions.getFinderfeesByFranchiseeNo,
         getFranchiseeReportByFranchiseeNum: Actions.getFranchiseeReportByFranchiseeNum,
+        updatePeriodForFranchiseeReport: Actions.updatePeriodForFranchiseeReport,
     }, dispatch);
 }
 
@@ -1171,7 +1193,8 @@ function mapStateToProps({ franchisees, auth }) {
         selectedExpDate: franchisees.selectedExpDate,
         selectedRenewDate: franchisees.selectedRenewDate,
         insertPayload: franchisees.insertPayload,
-        findersFees: franchisees.findersFees
+        findersFees: franchisees.findersFees,
+        defaultPeriod: auth.login.defaultPeriod,
     }
 }
 

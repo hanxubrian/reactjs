@@ -37,7 +37,8 @@ export const OPEN_CLOSE_DOC_SEND_ACTION_DIALOG = '[FRANCHISEES] OPEN CLOSE DOC S
 export const OPEN_CLOSE_DOC_VIEW_ACTION_DIALOG = '[FRANCHISEES] OPEN CLOSE DOC VIEW ACTION DIALOG ';
 export const GET_FINDERS_FEES_BY_FRANCHISEENO = '[FRANCHISEES] GET_FINDERS_FEES_BY_FRANCHISEENO ';
 export const OPEN_CLOSE_STOP_REASON_DIALOG = '[FRANCHISEES] OPEN CLOSE STOP REASON DIALOG ';
-export const GET_FRANCHISEE_REPORT_BY_FRANCHISEENO = '[FRANCHISEES] GET FRANCHISEE REPORT BY FRANCHISEENO'
+export const GET_FRANCHISEE_REPORT_BY_FRANCHISEENO = '[FRANCHISEES] GET FRANCHISEE REPORT BY FRANCHISEENO';
+export const UPDATE_PERIOD_FOR_FRANCHISEE_REPORT = '[FRANCHISEES] UPDATE PERIOD FOR FRANCHISEE REPORT';
 
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
@@ -348,7 +349,7 @@ export function getFinderfeesByFranchiseeNo (RegionId,FranchiseeNo){
      return (dispatch) => {
         (async () => {
             let res = await franchiseesService.getFinderfeesByFranchiseeNo(RegionId,FranchiseeNo);
-            if (res.IsSuccess) {                
+            if (res.IsSuccess) {
                 dispatch({
                     type: GET_FINDERS_FEES_BY_FRANCHISEENO,
                     payload: res.Data
@@ -372,3 +373,10 @@ export function getFranchiseeReportByFranchiseeNum (RegionId, FranchiseeNo){
     }
 }
 
+export function updatePeriodForFranchiseeReport(period) {
+    return {
+        type: UPDATE_PERIOD_FOR_FRANCHISEE_REPORT,
+        payload: period
+    }
+
+}
