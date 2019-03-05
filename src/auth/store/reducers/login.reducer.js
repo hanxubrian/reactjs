@@ -19,6 +19,7 @@ export const initialState = {
     role: [],
     Username: '',
     Phone: '',
+    email: '',
     url: '',
     menuObj: null,
     defaultPeriod: -1,
@@ -79,7 +80,8 @@ const login = function (state = initialState, action) {
                 Phone: action.payload.Data.Phone,
                 profilePhoto: action.payload.Data.ProfilePhoto,
                 url: window.location.host.split(':')[0],
-                DepartmentId: action.payload.Data.DepartmentId
+                DepartmentId: action.payload.Data.DepartmentId,
+                email: action.payload.Data.Email
             };
             return {
                 ...initialState,

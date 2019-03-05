@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
-import {TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar} from '@material-ui/core';
+import {TextField, Button, Icon, IconButton, Typography} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
 import _ from '@lodash';
 import {bindActionCreators} from "redux";
 import * as Actions from "./store/actions";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
+import Avatar from '@material-ui/core/Avatar';
+// es modules
+import { Editor } from '@tinymce/tinymce-react';
+
 
 const styles = theme => ({
     composeButton     : {
@@ -39,6 +43,10 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
+    avatar: {
+        width: 25,
+        height: 25
+    }
 });
 
 class MailCompose extends Component {
@@ -49,20 +57,23 @@ class MailCompose extends Component {
         cc           : '',
         bcc          : '',
         subject      : '',
-        message      : ''
+        message      : '',
+        content      : ''
     };
 
-    openComposeDialog = () => {
-        this.setState({composeDialog: true});
-    };
-
-    closeComposeDialog = () => {
-        this.setState({composeDialog: false});
-    };
+    componentWillMount() {
+        this.setState({
+            from: this.props.user.email
+        })
+    }
 
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
+
+    handleEditorChange = (content) => {
+        this.setState({ content });
+    }
 
     render()
     {
@@ -85,9 +96,15 @@ class MailCompose extends Component {
 
         return (
             <div className="p-24">
+                <div className="flex align-middle" style={{alignItems: 'center'}}>
+                    <Typography className="flex">From:&nbsp;&nbsp;</Typography>
+                    <Avatar alt="Remy Sharp" src={this.props.profileUrl} className={classes.avatar} />
+                    <Typography className="flex">&nbsp;&nbsp;{this.props.user.firstName}&nbsp;{this.props.user.lastName}</Typography>
+                    <Typography className="flex bold">&nbsp;&nbsp;({this.props.user.email})</Typography>
+                </div>
                 <TextField
                     className={classes.formControl}
-                    label="From"
+                    type="hidden"
                     id="from"
                     name="from"
                     value={this.state.from}
@@ -99,6 +116,7 @@ class MailCompose extends Component {
 
                 <TextField
                     className={classes.formControl}
+                    InputLabelProps={{ shrink: true }}
                     label="To"
                     autoFocus
                     id="to"
@@ -110,30 +128,31 @@ class MailCompose extends Component {
                     required
                 />
 
-                <TextField
-                    className={classes.formControl}
-                    label="Cc"
-                    id="cc"
-                    name="cc"
-                    value={this.state.cc}
-                    margin={"dense"}
-                    onChange={this.handleChange}
-                    fullWidth
-                />
+                {/*<TextField*/}
+                    {/*className={classes.formControl}*/}
+                    {/*label="Cc"*/}
+                    {/*id="cc"*/}
+                    {/*name="cc"*/}
+                    {/*value={this.state.cc}*/}
+                    {/*margin={"dense"}*/}
+                    {/*onChange={this.handleChange}*/}
+                    {/*fullWidth*/}
+                {/*/>*/}
+
+                {/*<TextField*/}
+                    {/*className={classes.formControl}*/}
+                    {/*label="Bcc"*/}
+                    {/*id="bcc"*/}
+                    {/*name="bcc"*/}
+                    {/*value={this.state.bcc}*/}
+                    {/*margin={"dense"}*/}
+                    {/*onChange={this.handleChange}*/}
+                    {/*fullWidth*/}
+                {/*/>*/}
 
                 <TextField
                     className={classes.formControl}
-                    label="Bcc"
-                    id="bcc"
-                    name="bcc"
-                    value={this.state.bcc}
-                    margin={"dense"}
-                    onChange={this.handleChange}
-                    fullWidth
-                />
-
-                <TextField
-                    className={classes.formControl}
+                    InputLabelProps={{ shrink: true }}
                     label="Subject"
                     id="subject"
                     name="subject"
@@ -142,19 +161,20 @@ class MailCompose extends Component {
                     fullWidth
                 />
 
-                <TextField
-                    className={classes.formControl}
-                    id="message"
-                    name="message"
-                    onChange={this.handleChange}
-                    label="Message"
-                    type="text"
-                    multiline
-                    rows={5}
-                    variant="outlined"
-                    fullWidth
-                />
-                <div className="flex justify-end">
+                {/*<TextField*/}
+                    {/*className={classes.formControl}*/}
+                    {/*id="message"*/}
+                    {/*name="message"*/}
+                    {/*onChange={this.handleChange}*/}
+                    {/*label="Message"*/}
+                    {/*type="text"*/}
+                    {/*multiline*/}
+                    {/*rows={10}*/}
+                    {/*fullWidth*/}
+                {/*/>*/}
+                <p className="mb-6" >Message</p>
+                <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" value={this.state.content} onEditorChange={this.handleEditorChange} />
+                <div className="flex justify-start mt-24">
                     <Button variant="contained" color="primary" className={classes.button} onClick={()=>this.props.toggleCompose(false)}>
                         Send
                     </Button>
@@ -177,7 +197,9 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({auth,mailApp})
 {
     return {
-        toggleCompose: mailApp.compose.toggleCompose
+        toggleCompose: mailApp.compose.toggleCompose,
+        profileUrl: auth.login.profilePhoto,
+        user: auth.login
     }
 }
 
