@@ -403,6 +403,15 @@ class PaymentLockBoxContentList extends Component {
                     groupingEnabled: false,
                 },
                 {
+                    title: "Import Date",
+                    name: "importdate",
+                    columnName: "importdate",
+                    width: 150,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
                     title: "Credit Date",
                     name: "creditdate",
                     columnName: "creditdate",
@@ -745,11 +754,34 @@ class PaymentLockBoxContentList extends Component {
             expandedGroups,
         } = this.state;
         let rows =[];
-        if(this.state.rows && this.state.rows!== null && this.state.rows.FoundItems && this.state.rows.FoundItems !== null){
+        if(this.state.rows && this.state.rows!== null ){
+            if(this.state.rows.FoundItems && this.state.rows.FoundItems !== null){
+                let miditem =this.state.rows.FoundItems;
+                miditem.map((item)=>{
+                    let mitem ={};
+                    mitem = item;
+                    mitem.CustomerNameNo='FoundItems';
+                    rows.push(mitem);
+                });
+
+            }
+            if(this.state.rows.ExceptionItems && this.state.rows.ExceptionItems !== null){
+                let miditem =this.state.rows.ExceptionItems;
+                miditem.map((item)=>{
+                    let mitem ={};
+                    mitem = item;
+                    mitem.CustomerNameNo='ExceptionItems';
+                    rows.push(mitem);
+                });
+                // rows = this.state.rows.FoundItems;
+            }
+
+
             // rows = this.state.rows;
-            rows = this.state.rows.FoundItems;
+
 
         }
+
         // console.log('this.state.rows------------', this.state.rows);
         // console.log('payments------------', rows);
         // console.log('paymentlockbox------------', this.props.paymentlockbox);
