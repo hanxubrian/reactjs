@@ -1,6 +1,6 @@
 import axios from 'axios';
 import moment from "moment"
-import {BASE_MONGO_API_URL} from './../../services'
+import { BASE_MONGO_API_URL } from './../../services'
 
 const axios_instance = axios.create({
 	headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -409,9 +409,11 @@ fullbill: 0
 				})
 		});
 	}
-	getCustomerBillingList(regionId, CustomerNo) {
+	getCustomerBillingList(regionId, CustomerNo, BillYear, BillMonth) {
 		const data = {
 			CustomerNo: [CustomerNo],
+			BillYear,
+			BillMonth
 		}
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Payment/BillingsByCustNo`, data)

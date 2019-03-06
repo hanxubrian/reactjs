@@ -549,6 +549,20 @@ class TransactionsPage extends React.Component {
 		if (name === 'SearchText') {
 			this.changeSearchValue(value)
 		}
+		if (name === 'billing_month') {
+			this.props.getCustomerBillingList(
+				this.props.regionId,
+				this.props.activeCustomer.Data.cus_no,
+				this.state.billing_year,
+				value)
+		}
+		if (name === 'billing_year') {
+			this.props.getCustomerBillingList(
+				this.props.regionId,
+				this.props.activeCustomer.Data.cus_no,
+				value,
+				this.state.billing_month)
+		}
 	};
 	clearSearch = () => {
 		this.setState({
@@ -634,8 +648,8 @@ class TransactionsPage extends React.Component {
 										id: 'billing_month',
 									}}
 								>
-									{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, index) => (
-										<option key={index} value={x}>{x}</option>
+									{['All', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, index) => (
+										<option key={index} value={index}>{x}</option>
 									))}
 								</Select>
 							</FormControl>

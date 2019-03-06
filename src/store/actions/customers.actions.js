@@ -496,7 +496,7 @@ export function getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate
 		})();
 	}
 }
-export function getCustomerBillingList(regionId, CustomerNo) {
+export function getCustomerBillingList(regionId, CustomerNo, BillYear = new Date().getFullYear(), BillMonth = new Date().getMonth() + 1) {
 	return (dispatch) => {
 		dispatch({
 			type: GET_CUSTOMER_BILLING_LIST_START,
@@ -504,7 +504,7 @@ export function getCustomerBillingList(regionId, CustomerNo) {
 		});
 
 		(async () => {
-			let res = await customersService.getCustomerBillingList(regionId, CustomerNo);
+			let res = await customersService.getCustomerBillingList(regionId, CustomerNo, BillYear, BillMonth);
 			dispatch({
 				type: GET_CUSTOMER_BILLING_LIST,
 				payload: res
