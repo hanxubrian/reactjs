@@ -1,15 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import { NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
 import FuseUtils from '@fuse/FuseUtils';
 import {
-	Icon, Tooltip, Button, TextField, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider,
-	ListItemLink, Checkbox, Switch, Fab, Snackbar, SnackbarContent, IconButton, FormControl, Select,
+	Icon, Tooltip, Button, TextField, Typography, InputAdornment, MenuItem, Divider, Checkbox, Fab, FormControl, Select,
 } from '@material-ui/core';
 
 // for store
@@ -19,61 +13,10 @@ import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import * as Actions from 'store/actions';
 
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-import { Getter } from '@devexpress/dx-react-core';
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-
 
 // third party
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import _ from "lodash";
-import moment from 'moment';
-
-import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
-
-import green from "@material-ui/core/colors/green";
-import amber from "@material-ui/core/colors/amber";
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import InfoIcon from '@material-ui/icons/Info';
-import CloseIcon from '@material-ui/icons/Close';
-import WarningIcon from '@material-ui/icons/Warning';
 
 import NewFindersFeePage from '../finders-fees/NewFindersFeePage'
 import TransferFranchieesListPage from './TransferFranchieesListPage';
@@ -135,81 +78,6 @@ const styles = theme => ({
 
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
-
-//Snackbar
-const variantIcon = {
-	success: CheckCircleIcon,
-	warning: WarningIcon,
-	error: ErrorIcon,
-	info: InfoIcon,
-};
-
-const stylesSnackbar = theme => ({
-	success: {
-		backgroundColor: green[600],
-	},
-	error: {
-		backgroundColor: theme.palette.error.dark,
-	},
-	info: {
-		backgroundColor: theme.palette.primary.dark,
-	},
-	warning: {
-		backgroundColor: amber[700],
-	},
-	icon: {
-		fontSize: 20,
-	},
-	iconVariant: {
-		opacity: 0.9,
-		marginRight: theme.spacing.unit,
-	},
-	message: {
-		display: 'flex',
-		alignItems: 'center',
-	},
-});
-
-function MySnackbarContent(props) {
-	const { classes, className, message, onClose, variant, ...other } = props;
-	const Icon = variantIcon[variant];
-
-	return (
-		<SnackbarContent
-			className={classNames(classes[variant], className)}
-			aria-describedby="client-snackbar"
-			message={
-				<span id="client-snackbar" className={classes.message}>
-					<Icon className={classNames(classes.icon, classes.iconVariant)} />
-					{message}
-				</span>
-			}
-			action={[
-				<IconButton
-					key="close"
-					aria-label="Close"
-					color="inherit"
-					className={classes.close}
-					onClick={onClose}
-				>
-					<CloseIcon className={classes.icon} />
-				</IconButton>,
-			]}
-			{...other}
-		/>
-	);
-}
-
-MySnackbarContent.propTypes = {
-	classes: PropTypes.object.isRequired,
-	className: PropTypes.string,
-	message: PropTypes.node,
-	onClose: PropTypes.func,
-	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
-};
-
-const MySnackbarContentWrapper = withStyles(stylesSnackbar)(MySnackbarContent);
-
 
 class FranchiseeDistributionPage extends React.Component {
 
@@ -401,8 +269,6 @@ class FranchiseeDistributionPage extends React.Component {
 			bReasonForHigh: false,
 			reason: '',
 			NewAmount: this.props.NewAmount,
-			openSnack: false,
-			snackMessage: 'Updated Franchisee Revenue Distributions',
 
 			franchieesesToOffer: [],
 		};
@@ -510,14 +376,6 @@ class FranchiseeDistributionPage extends React.Component {
 
 	handleClose = () => {
 		this.props.showIncreaseDecreaseContractModalForm(false)
-	};
-
-	handleCloseSnackBar = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-
-		this.setState({ openSnack: false });
 	};
 
 	handleChangeChecked = name => event => {
@@ -961,6 +819,9 @@ class FranchiseeDistributionPage extends React.Component {
 		this.props.updateNewCustomerParam('AssignedFranchisees', newFranchieesesToOffer)
 	}
 	transferFranchisee = (fId) => {
+		if (!this.checkMonthlyBillingAmountValidation()) {
+			return
+		}
 		this.props.setFranchiseeToTransfer('old', this.props.activeCustomer.Data.AssignedFranchisees[fId])
 		// if (this.props.activeStep === 1) {
 		// 	this.props.setStep(0)
@@ -1003,6 +864,25 @@ class FranchiseeDistributionPage extends React.Component {
 	getMonthlyBillingTotal(franchisee) {
 		return franchisee.MonthlyBilling && franchisee.MonthlyBilling.length > 0 && franchisee.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0
 	}
+	checkMonthlyBillingAmountValidation() {
+		const franchisees = this.props.activeCustomer.Data.AssignedFranchisees
+		if (franchisees.length === 1) {
+			const total = this.getMonthlyBillingTotal(franchisees[0])
+			if (total == 0 || total !== this.props.activeCustomer.Data.cont_bill) {
+				this.props.openSnackbar("Monthly billing amount is invalid", "error")
+				return false
+			}
+
+		} else if (franchisees.length > 1) {
+
+			const sum_total = franchisees.map(x => this.getMonthlyBillingTotal(x)).reduce((sum, a) => sum + a)
+			if (sum_total == 0 || sum_total > this.props.activeCustomer.Data.cont_bill) {
+				this.props.openSnackbar("Monthly billing amount is invalid", "error")
+				return false
+			}
+		}
+		return true
+	}
 	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
 
@@ -1034,7 +914,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 		return (
 			<>
-			
+
 				<div className={classNames("flex mt-12 justify-between items-center")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
@@ -1349,6 +1229,7 @@ function mapDispatchToProps(dispatch) {
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 
 		setFranchiseeToTransfer: Actions.setFranchiseeToTransfer,
+		openSnackbar: Actions.openSnackbar,
 
 	}, dispatch);
 }
