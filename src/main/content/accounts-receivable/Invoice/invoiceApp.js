@@ -86,7 +86,7 @@ const styles = theme => ({
         }
     },
     layoutLeftSidebar : {
-        width: 0,
+        width:  0,
         [theme.breakpoints.down('sm')]: {
             width: 'inherit'
         }
@@ -266,7 +266,6 @@ class InvoiceApp extends Component {
             props.getFranchisees(props.regionId, props.fstatusId, props.fLocation, props.fLongitude, props.fLatitude, props.fSearchText);
         }
         this.escFunction = this.escFunction.bind(this);
-        this.listenScrollEvent = this.listenScrollEvent.bind(this);
     }
 
 
@@ -422,11 +421,6 @@ class InvoiceApp extends Component {
 
     componentWillUnmount(){
         document.removeEventListener("keydown", this.escFunction, false);
-        window.removeEventListener('scroll', this.listenScrollEvent);
-    }
-
-    listenScrollEvent(event) {
-        console.log(event);
     }
 
     escFunction(event){
@@ -716,15 +710,6 @@ class InvoiceApp extends Component {
                     leftSidebarHeader={
                         <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
                             <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
-                            {/*<FuseAnimate animation="transition.expandIn" delay={200}>*/}
-                                {/*<div>*/}
-                                    {/*<Hidden xsDown>*/}
-                                        {/*<IconButton onClick={(ev)=>toggleFilterPanel()}>*/}
-                                            {/*<Icon>close</Icon>*/}
-                                        {/*</IconButton>*/}
-                                    {/*</Hidden>*/}
-                                {/*</div>*/}
-                            {/*</FuseAnimate>*/}
                         </div>
                     }
                     leftSidebarContent={

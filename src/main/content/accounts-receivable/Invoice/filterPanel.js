@@ -304,7 +304,7 @@ class FilterPanel extends Component {
                                         required
                                         color="secondary"
                                     />
-                                    <br></br>
+                                    <br/>
                                     <DatePicker
                                         margin="none"
                                         label="To Date"
@@ -386,7 +386,7 @@ class FilterPanel extends Component {
                                     />
                                 )
                             })}
-                            <br></br>
+                            <br/>
                             <h3>Delivery Method</h3>
                             <FormControlLabel
                                 control={

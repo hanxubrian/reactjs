@@ -111,15 +111,18 @@ const styles = theme => ({
         backgroundColor: 'transparent',
         position       : 'absolute',
         '&.permanent'  : {
-            [theme.breakpoints.up('lg')]: {
+            [theme.breakpoints.up('xs')]: {
                 position: 'relative'
+            },
+            [theme.breakpoints.down('sm')]: {
+                width: 200
             }
         }
     },
     sidebar                       : {
         position     : 'absolute',
         '&.permanent': {
-            [theme.breakpoints.up('lg')]: {
+            [theme.breakpoints.up('xs')]: {
                 backgroundColor: 'transparent',
                 position       : 'relative',
                 border         : 'none'
@@ -240,7 +243,7 @@ class FusePageCustom extends React.Component {
                         </Drawer>
                     </Hidden>
                     {variant === 'permanent' && (
-                        <Hidden mdDown>
+                        <Hidden xsDown>
                             <Drawer
                                 variant="permanent"
                                 className={classNames(classes.sidebarWrapper, variant)}
