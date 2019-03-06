@@ -387,19 +387,22 @@ class InvoiceListContent extends Component {
                                     Header: "Customer #",
                                     accessor: "CustomerNo",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                    sortable: false,
                                     width: 100
                                 },
                                 {
                                     Header: "Customer Name",
                                     accessor: "CustomerName",
                                     width: 240,
+                                    sortable: false,
                                     className: classNames("flex items-center  justify-start pl-12-impor")
                                 },
                                 {
                                     Header: "Description",
                                     accessor: "InvoiceDescription",
                                     className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
-                                    width: '100%'
+                                    width: '100%',
+                                    sortable: false,
                                 },
                                 {
                                     Header: "Amount",
@@ -408,7 +411,8 @@ class InvoiceListContent extends Component {
                                         return '$'+parseFloat(row.original.InvoiceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                    width: 100
+                                    width: 100,
+                                    sortable: false,
                                 },
                                 {
                                     Header: "Tax",
@@ -417,7 +421,8 @@ class InvoiceListContent extends Component {
                                         return '$'+parseFloat(row.original.InvoiceTax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                    width: 80
+                                    width: 80,
+                                    sortable: false,
                                 },
                                 {
                                     Header: "Total",
@@ -426,25 +431,29 @@ class InvoiceListContent extends Component {
                                     },
                                     accessor: "InvoiceTotal",
                                     className: classNames("flex items-center  justify-end p-12-impor"),
-                                    width: 100
+                                    width: 100,
+                                    sortable: false,
                                 },
                                 {
                                     Header: "Invoice Date",
                                     id: "InvoiceDate",
                                     accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 100
+                                    width: 100,
+                                    sortable: false,
                                 },
                                 {
                                     Header: "Due Date",
                                     id: "DueDate",
                                     accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
                                     className: classNames("flex items-center  justify-center"),
-                                    width: 100
+                                    width: 100,
+                                    sortable: false,
                                 },
                                 {
                                     Header: "Actions",
                                     width : 90,
+                                    sortable: false,
                                     Cell  : row => (
                                         <div className="flex items-center actions justify-center w-full">
                                             {row.original.InvoiceNo==='PENDING' && (
