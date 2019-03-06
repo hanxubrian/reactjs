@@ -1,11 +1,11 @@
 import axios from 'axios';
+import {BASE_MONGO_API_URL} from './../../services'
 
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
     withCredentials: false
 });
 
-const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
 
 class BillrunService {
 

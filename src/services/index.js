@@ -25,6 +25,7 @@ import _userService from './users/userService';
 import _adminImportNotificationService from  './admin/adminImportNotificationService';
 import _mailService from './mail/mailService'
 
+export const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 export const authService = _authService;
 export const menuService = _menuService;
 export const franchiseesService = _franchiseesService;
