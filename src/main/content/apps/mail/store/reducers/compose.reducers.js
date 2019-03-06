@@ -7,9 +7,7 @@ const initialState = {
         Subject: '',
         ContentBody: '',
         Recipients: ''
-    },
-    sendResultSuccess: false,
-    sendResultError: false
+    }
 };
 
 const compose = function (state = initialState, action) {
@@ -20,21 +18,6 @@ const compose = function (state = initialState, action) {
             return {
                 ...state,
                 toggleCompose: action.payload
-            };
-        }
-        case Actions.SEND_MAIL:
-        {
-            let tempSuccess = false;
-            let tempError = false;
-            if(action.payload.IsSuccess){
-                tempSuccess = true;
-            }else{
-                tempError = true;
-            }
-            return {
-                ...state,
-                sendResultSuccess: tempSuccess,
-                sendResultError: tempError
             };
         }
         case Actions.UPDATE_MAIL_PAYLOAD:

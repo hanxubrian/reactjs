@@ -12,6 +12,8 @@ import Avatar from '@material-ui/core/Avatar';
 import { Editor } from '@tinymce/tinymce-react';
 import classNames from 'classnames';
 import SendIcon from '@material-ui/icons/Send';
+import {mailService} from "../../../../services";
+import {SEND_MAIL} from "./store/actions";
 
 
 const styles = theme => ({
@@ -80,24 +82,6 @@ class MailCompose extends Component {
         if (JSON.stringify(this.state.sendMail) !== JSON.stringify(prevState.sendMail)){
             this.props.updatePayload(this.state.sendMail);
         }
-        console.log("sendResultSuccess",this.props.sendResultSuccess);
-        console.log("sendResultError",this.props.sendResultError);
-        if(this.props.sendResultSuccess !== prevProps.sendResultSuccess){
-           if(this.props.sendResultSuccess){
-               this.successmesssage();
-               this.setState({
-                   ...this.state,
-                   sendMail: {
-                       Subject: '',
-                       ContentBody: '',
-                       Recipients: ''
-                   }
-               });
-           }
-       }
-       if(this.props.sendResultError !== prevProps.sendResultError){
-           this.errormessage();
-       }
     }
 
     handleChange = (name) => (event) => {
@@ -120,13 +104,29 @@ class MailCompose extends Component {
         }
     };
 
-    sendMail = () =>{
-        this.props.sendMail(this.state.sendMail,this.props.user.UserId);
+    sendMail = async() =>{
+
+        let res = await mailService.sendEmail(this.state.sendMail,this.props.user.UserId);
+
+        if(res.IsSuccess){
+            this.successmesssage(res.Message);
+            this.setState({
+                ...this.state,
+                sendMail: {
+                    Subject: '',
+                    ContentBody: '',
+                    Recipients: ''
+                }
+            });
+        }else{
+            this.errormessage(res.Message);
+        }
+
     }
 
-    successmesssage=()=>{
+    successmesssage=(mg)=>{
         this.props.showMessage({
-            message     : "Email Sent Successfully!!!",//text or html
+            message     : mg,
             autoHideDuration: 6000,//ms
             anchorOrigin: {
                 vertical  : 'top',//top bottom
@@ -135,9 +135,9 @@ class MailCompose extends Component {
             variant: 'success'//success error info warning null
         });
     }
-    errormessage=()=>{
+    errormessage=(mg)=>{
         this.props.showMessage({
-            message     : "File Upload Faild!!!",//text or html
+            message     : mg,//text or html
             autoHideDuration: 6000,//ms
             anchorOrigin: {
                 vertical  : 'top',//top bottom
@@ -243,8 +243,6 @@ function mapStateToProps({auth,mailApp})
         profileUrl: auth.login.profilePhoto,
         user: auth.login,
         sendMail: mailApp.compose.sendMail,
-        sendResultSuccess: mailApp.compose.sendResultSuccess,
-        sendResultError: mailApp.compose.sendResultError
     }
 }
 
