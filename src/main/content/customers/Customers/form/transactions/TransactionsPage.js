@@ -376,6 +376,9 @@ class TransactionsPage extends React.Component {
 			expandedRowIds: [],
 			SearchText: '',
 
+			billing_month: new Date().getMonth() + 1,
+			billing_year: new Date().getFullYear(),
+
 		}
 
 		// this.fetchData = this.fetchData.bind(this);
