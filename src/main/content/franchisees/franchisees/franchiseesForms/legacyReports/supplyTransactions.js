@@ -49,7 +49,7 @@ const styles = theme => ({
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },
-        '& tr th:nth-child(2)': {
+        '& tr th:nth-child(1)': {
             width: '100%'
         }
     },

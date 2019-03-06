@@ -199,7 +199,7 @@ class Report extends Component {
                         <img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>
                     </Typography>
                 </td>
-                <td className="text-center" width='550'>
+                <td className="text-center" >
                     <Typography variant={"h2"} color="inherit">FRANCHISEE REPORT</Typography>
                     <Typography variant={"h2"} color="inherit">
                         {/*{region[0].regionname}*/}
@@ -209,7 +209,7 @@ class Report extends Component {
                     </Typography>
 
                 </td>
-                <td align="center">
+                <td align="center" width='200'>
                     <Typography color="inherit">Date: {moment().format('MM/DD/YYYY')} </Typography>
                     <Typography>Time: {moment().format("HH:mm:ss")}</Typography>
                     <Typography><br/></Typography>
