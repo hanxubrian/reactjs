@@ -177,7 +177,7 @@ const PhoneNumberTypeProvider = props => (
 //
 // table cell date formatter
 //
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(.*)/, '$2/$3/$1');
 const DateTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={DateFormatter}
@@ -355,7 +355,10 @@ class TransactionsPage extends React.Component {
 			phoneNumberColumns: [
 				'Phone'
 			],
-			dateColumns: ['saleDate'],
+			dateColumns: [
+				'date_inv',
+				'date_due',
+			],
 			// groupingColumns: [
 			// 	{ columnName: 'StateName', groupingEnabled: false },
 			// 	{ columnName: 'AccountTypeListName', groupingEnabled: false },
@@ -564,6 +567,7 @@ class TransactionsPage extends React.Component {
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
+			dateColumns,
 			phoneNumberColumns,
 			pageSize,
 			pageSizes,
@@ -731,9 +735,7 @@ class TransactionsPage extends React.Component {
 									// availableFilterOperations={amountFilterOperations}
 									// editorComponent={AmountEditor}
 									/>
-									{/* <DateTypeProvider
-									for={dateColumns}
-								/> */}
+									<DateTypeProvider for={dateColumns} />
 
 									{/* <VirtualTable height="auto" rowComponent={this.TableRow} /> */}
 									<VirtualTable rowComponent={this.TableRow} />
