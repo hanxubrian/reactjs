@@ -24,7 +24,8 @@ import _franchiseeReportService from './franchisees/franchiseeReportService';
 import _userService from './users/userService';
 import _adminImportNotificationService from  './admin/adminImportNotificationService';
 import _mailService from './mail/mailService'
-
+//please change api url on here 
+// export const BASE_MONGO_API_URL = 'https://api.gink.app/';
 export const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 export const authService = _authService;
 export const menuService = _menuService;
