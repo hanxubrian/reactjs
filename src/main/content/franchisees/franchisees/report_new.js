@@ -449,7 +449,7 @@ class Report extends Component {
                                         </tbody>
                                     </table>
                                 </div>
-                                <SupplyTransactons />
+                                <FindersFeeTransactions />
                                 <div className="flex flex-row justify-center pb-12 page">Page 4 of 8</div>
                             </div>
                         </CardContent>
@@ -502,7 +502,7 @@ class Report extends Component {
                                         </tbody>
                                     </table>
                                 </div>
-                                <FindersFeeTransactions />
+                                <SupplyTransactons />
                                 <div className="flex flex-row justify-center pb-12 page">Page 5 of 8</div>
                             </div>
                         </CardContent>
