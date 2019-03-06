@@ -511,7 +511,7 @@ class FranchieesOfferedListPage extends Component {
 
 	setRowsByRaw = (activeCustomer = this.props.activeCustomer) => {
 		this.setState({
-			rows: activeCustomer && activeCustomer.Data ? activeCustomer.Data.AccountOfferings : []
+			rows: activeCustomer && activeCustomer.Data && activeCustomer.Data.AccountOfferings ? activeCustomer.Data.AccountOfferings : []
 		})
 	}
 

@@ -351,7 +351,7 @@ class FranchiseeDistributionPage extends React.Component {
 		// }
 	}
 	updateFranchiseesToOffer(selectedFrans = this.props.franchieesesToOffer, activeCustomer = this.props.activeCustomer) {
-		const activeCustomerFranchisees = activeCustomer.Data.AssignedFranchisees
+		const activeCustomerFranchisees = activeCustomer.Data.AssignedFranchisees || []
 		// all selected numbers in grid
 		const selectedNumners = selectedFrans.map(x => x.Number)
 		// numbers to be remained

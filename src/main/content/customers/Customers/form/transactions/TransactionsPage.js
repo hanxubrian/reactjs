@@ -865,7 +865,7 @@ class TransactionsPage extends React.Component {
 
 						<Divider variant="middle" className='mt-12 mb-12' style={{ alignSelf: 'center', height: 2 }} />
 
-						<div xs={12} sm={12} md={12} className="flex flex-row">
+						<div xs={12} sm={12} md={12} className="flex flex-row mb-12">
 							<TextField
 								id="BP"
 								label="BP"
