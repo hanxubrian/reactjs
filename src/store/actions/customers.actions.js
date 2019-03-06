@@ -817,6 +817,7 @@ export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend
 	}
 }
 export function transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, reason, notes, transfer_fee, franchisee) {
+	console.log('transferAssignedFranchisee', franchisee)
 	return (dispatch) => {
 		dispatch({
 			type: TRANSFER_ASSIGNED_FRANCHISEE_START,

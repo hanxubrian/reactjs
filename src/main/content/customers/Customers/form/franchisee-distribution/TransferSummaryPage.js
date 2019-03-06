@@ -977,8 +977,8 @@ class TransferSummaryPage extends React.Component {
 			FranchiseeNumber: newFranchisee.Number,
 			FranchiseeName: newFranchisee.Name,
 
-			FinderFee: newFranchisee.FinderFee,
-			MonthlyBilling: newFranchisee.MonthlyBilling,
+			FinderFee: oldFranchisee.FinderFee,
+			MonthlyBilling: oldFranchisee.MonthlyBilling,
 
 			AssignedDate: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().substr(0, 10),
 			Status: "Assigned",
