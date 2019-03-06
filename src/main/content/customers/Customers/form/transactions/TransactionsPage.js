@@ -9,7 +9,10 @@ import connect from "react-redux/es/connect/connect";
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import * as Actions from 'store/actions';
+
+import * as Actions from 'store/actions/customers.actions';
+import * as FranchiseeActions from 'store/actions/franchise.actions';
+
 import {
 	Template, TemplateConnector
 } from '@devexpress/dx-react-core';
@@ -376,8 +379,8 @@ class TransactionsPage extends React.Component {
 			expandedRowIds: [],
 			SearchText: '',
 
-			billing_month: new Date().getMonth() + 1,
-			billing_year: new Date().getFullYear(),
+			billing_month: this.props.periodForReport.month+1,
+			billing_year: this.props.periodForReport.year,
 
 		}
 
@@ -553,18 +556,27 @@ class TransactionsPage extends React.Component {
 			this.changeSearchValue(value)
 		}
 		if (name === 'billing_month') {
+
+			this.props.updatePeriodForFranchiseeReport(
+				{year:parseInt('0' + this.state.billing_year), month:parseInt('0' + value)-1}
+			)
 			this.props.getCustomerBillingList(
 				this.props.regionId,
 				this.props.activeCustomer.Data.cust_no,
 				parseInt('0' + this.state.billing_year),
-				parseInt('0' + value))
+				parseInt('0' + value)
+				)
 		}
 		if (name === 'billing_year') {
+			this.props.updatePeriodForFranchiseeReport(
+				{year:parseInt('0' + value), month:parseInt('0' + this.state.billing_month)-1}
+			)
 			this.props.getCustomerBillingList(
 				this.props.regionId,
 				this.props.activeCustomer.Data.cust_no,
 				parseInt('0' + value),
-				parseInt('0' + this.state.billing_month))
+				parseInt('0' + this.state.billing_month)
+				)
 		}
 	};
 	clearSearch = () => {
@@ -995,23 +1007,12 @@ class TransactionsPage extends React.Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		toggleFilterPanel: Actions.toggleFilterPanel,
-		toggleMapView: Actions.toggleMapView,
-		toggleSummaryPanel: Actions.toggleSummaryPanel,
-		deleteCustomersAction: Actions.deleteCustomers,
-		removeCustomerAction: Actions.removeCustomer,
-		openEditCustomerForm: Actions.openEditCustomerForm,
-		closeEditCustomerForm: Actions.closeEditCustomerForm,
-
-		openNewCustomerForm: Actions.openNewCustomerForm,
-
-		getCustomer: Actions.getCustomer,
-
 		getCustomerBillingList: Actions.getCustomerBillingList,
+		updatePeriodForFranchiseeReport: FranchiseeActions.updatePeriodForFranchiseeReport,
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth }) {
+function mapStateToProps({ customers, auth,franchisees }) {
 	return {
 		customers: customers.customersDB,
 		bLoadedCustomers: customers.bLoadedCustomers,
@@ -1029,6 +1030,8 @@ function mapStateToProps({ customers, auth }) {
 		filterParam: customers.filterParam,
 		isExpandedGrouping: customers.isExpandedGrouping,
 		activeCustomer: customers.activeCustomer,
+
+		periodForReport: franchisees.periodForReport,
 	}
 }
 

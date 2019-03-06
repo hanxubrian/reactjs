@@ -724,7 +724,9 @@ class FranchiseesCreateForm extends Component {
         AllowAccountRebate: true,
         AllowGenerateReport: true,
         AgreementTerm: 0,
-        LegalLabel: "LLC"
+		LegalLabel: "LLC",
+		month: this.props.periodForReport.month,
+		year: this.props.periodForReport.year,
     };
 
     initCloseState = () => {
@@ -916,12 +918,12 @@ class FranchiseesCreateForm extends Component {
                 labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
             });
         }
-        let period = this.props.defaultPeriod.split('/');
-        // let month = parseInt(period[0]) - 1;
-        let month = -1;
-        let year = parseInt(period[1]);
-        this.setState({month, year});
-        this.props.updatePeriodForFranchiseeReport({year, month});
+        // let period = this.props.defaultPeriod.split('/');
+        // // let month = parseInt(period[0]) - 1;
+        // let month = -1;
+        // let year = parseInt(period[1]);
+        // this.setState({month, year});
+        // this.props.updatePeriodForFranchiseeReport({year, month});
     }
 
     handleSignDateChange = date => {
@@ -1215,6 +1217,7 @@ function mapStateToProps({ franchisees, auth, franchiseeReports }) {
         defaultPeriod: auth.login.defaultPeriod,
         franchiseeReport: franchiseeReports.franchiseeReport1,
         franchiseeLegacyReport: franchiseeReports.franchiseeReport,
+        periodForReport: franchisees.periodForReport,
     }
 }
 
