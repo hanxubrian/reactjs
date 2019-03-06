@@ -1190,7 +1190,6 @@ class ServiceAgreementPage extends React.Component {
 										<InputLabel shrink htmlFor="bill_state">State</InputLabel>
 										<Select
 											native
-											InputProps={{ readOnly: FuseUtils.parseBoolean(this.state.sameBillingAsMain) }}
 											value={this.state.bill_state || ''}
 											onChange={this.handleChangeCustomerInfoProps('bill_state')}
 											inputProps={{
