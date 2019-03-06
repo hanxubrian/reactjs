@@ -408,7 +408,7 @@ class PaymentLockBoxContentList extends Component {
                     align: 'center',
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
                 },
                 {
                     title: "LockBox Time",
@@ -417,7 +417,7 @@ class PaymentLockBoxContentList extends Component {
                     width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
                 },
                 {
                     title: "LockBox Number",
@@ -426,7 +426,7 @@ class PaymentLockBoxContentList extends Component {
                     width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
                 },
                 {
                     title: "Import Date",
@@ -435,7 +435,7 @@ class PaymentLockBoxContentList extends Component {
                     width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
                 },
                 {
                     title: "Credit Date",
@@ -444,7 +444,7 @@ class PaymentLockBoxContentList extends Component {
                     width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
                 },
                 {
                     title: "Invoice Number",
@@ -454,7 +454,7 @@ class PaymentLockBoxContentList extends Component {
                     align: 'center',
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
                 },
                 {
                     title: "Check Number",
@@ -465,7 +465,7 @@ class PaymentLockBoxContentList extends Component {
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
 
                 },
                 {
@@ -477,7 +477,7 @@ class PaymentLockBoxContentList extends Component {
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
 
                 },
                 {
@@ -489,7 +489,7 @@ class PaymentLockBoxContentList extends Component {
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
 
                 },
                 {
@@ -501,7 +501,7 @@ class PaymentLockBoxContentList extends Component {
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
-                    groupingEnabled: false,
+                    groupingEnabled: true,
 
                 }
             ],
@@ -516,13 +516,13 @@ class PaymentLockBoxContentList extends Component {
                 'Phone'
             ],
             dateColumns: ['saleDate'],
-           groupingColumns: [
-           //      // { columnName: 'CustomerName' },
-           //      // { columnName: 'CustomerNo' },
-                { columnName: 'CustomerNameNo' },
-           //
-            ],
-            expandedGroups: ['CustomerNameNo'],
+        //    groupingColumns: [
+        //    //      // { columnName: 'CustomerName' },
+        //    //      // { columnName: 'CustomerNo' },
+        //         { columnName: 'CustomerNameNo' },
+        //    //
+        //     ],
+            expandedGroups: ['ExceptionItems'],
             pageSize: 20,
             pageSizes: [10, 20, 30, 50, 100],
             amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
@@ -598,11 +598,13 @@ class PaymentLockBoxContentList extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.payments !== this.props.payments) {
+        if (nextProps.paymentlockbox !== this.props.paymentlockbox) {
+
             this.setState({
-                rows: this.getRowData(nextProps.payments),
-                expandedGroups: [...new Set(this.getRowData(nextProps.payments).map(x => x.CustomerNameNo))],
+                rows: this.getRowData(nextProps.paymentlockbox),
+                expandedGroups: [...new Set(this.getRowData(nextProps.paymentlockbox).map(x => x.CustomerNameNo))],
             })
+
         }
         if (nextProps.regionId != this.props.regionId) {
             this.props.getAccountReceivablePaymentsList(
@@ -649,7 +651,6 @@ class PaymentLockBoxContentList extends Component {
             x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
         })
         // console.log("getRowData", res);
-
         return res;
     }
     search(val) {
@@ -763,6 +764,7 @@ class PaymentLockBoxContentList extends Component {
 
     render() {
         const { classes } = this.props;
+        console.log(rows)
 
         const {
 
@@ -778,19 +780,13 @@ class PaymentLockBoxContentList extends Component {
             payments,
             groupingColumns,
             expandedGroups,
+            integratedGroupingColumnExtensions,
+            tableGroupColumnExtension,
         } = this.state;
-        let rows =[];
-        if(this.state.rows && this.state.rows!== null ){
-            if(this.state.rows.FoundItems && this.state.rows.FoundItems !== null){
-                let miditem =this.state.rows.FoundItems;
-                miditem.map((item)=>{
-                    let mitem ={};
-                    mitem = item;
-                    mitem.CustomerNameNo='FoundItems';
-                    rows.push(mitem);
-                });
 
-            }
+        let rows =[];
+        let result = [];
+
             if(this.state.rows.ExceptionItems && this.state.rows.ExceptionItems !== null){
                 let miditem =this.state.rows.ExceptionItems;
                 miditem.map((item)=>{
@@ -800,7 +796,23 @@ class PaymentLockBoxContentList extends Component {
                     rows.push(mitem);
                 });
                 // rows = this.state.rows.FoundItems;
+                let temp = rows.forEach(x => {
+                    result.push(x.CustomerNameNo)
+                })
+                console.log(result);
             }
+
+            if(this.state.rows && this.state.rows!== null ){
+                if(this.state.rows.FoundItems && this.state.rows.FoundItems !== null){
+                    let miditem =this.state.rows.FoundItems;
+                    miditem.map((item)=>{
+                        let mitem ={};
+                        mitem = item;
+                        mitem.CustomerNameNo='FoundItems';
+                        rows.push(mitem);
+                    });
+    
+                }
 
 
             // rows = this.state.rows;
@@ -877,13 +889,17 @@ class PaymentLockBoxContentList extends Component {
                             <GroupingState
                                 // grouping={grouping}
                                 // onGroupingChange={this.changeGrouping}
-                                grouping={groupingColumns}
-                                expandedGroups={expandedGroups}
+                                grouping={[
+									{columnName: 'CustomerNameNo'}
+								]}
+                                defaultExpandedGroups={result}
                                 onExpandedGroupsChange={this.expandedGroupsChange}
 
                                 // columnExtensions={tableColumnExtensions}
                             />
-                            <IntegratedGrouping />
+                            <IntegratedGrouping 
+                                columnExtensions={integratedGroupingColumnExtensions}
+                            />
 
                             <IntegratedPaging />
 
@@ -943,7 +959,11 @@ class PaymentLockBoxContentList extends Component {
                                 )}
                             </Template>
                             {/* <Toolbar />					 */}
-                            <TableGroupRow contentComponent={this.GroupCellContent} />
+                            <TableGroupRow 
+                             showColumnsWhenGrouped 
+                             columnExtensions={tableGroupColumnExtension}
+                             contentComponent={this.GroupCellContent}
+                            />
                             {/* <GroupingPanel showSortingControls showGroupingControls /> */}
                         </Grid>
                     </div>
