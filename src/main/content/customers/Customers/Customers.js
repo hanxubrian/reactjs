@@ -452,7 +452,8 @@ class Customers extends Component {
 			this.props.openSnackbar("Customer phone is invalid")
 			return false
 		}
-		if (!FuseUtils.validateEmail(this.props.activeCustomer.Data.email1)) {
+		// if (!FuseUtils.validateEmail(this.props.activeCustomer.Data.email1)) {
+		if (!this.props.activeCustomer.Data.email1) {
 			this.props.openSnackbar("Email is invalid")
 			return false
 		}
@@ -776,7 +777,7 @@ class Customers extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary':  customerForm.props.open ? false : summaryState }),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': customerForm.props.open ? false : summaryState }),
 						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': customerForm.props.open ? true : filterState }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
