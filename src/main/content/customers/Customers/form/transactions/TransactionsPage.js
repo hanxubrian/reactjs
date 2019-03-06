@@ -680,6 +680,9 @@ class TransactionsPage extends React.Component {
 								<Button variant="contained" color="primary" className="ml-6">
 									Credit<Icon font='small' className={classes.rightIcon}>add</Icon>
 								</Button>
+								<Button variant="contained" color="primary" className="ml-6">
+									Invoice<Icon font='small' className={classes.rightIcon}>add</Icon>
+								</Button>
 							</div>
 						</div>
 

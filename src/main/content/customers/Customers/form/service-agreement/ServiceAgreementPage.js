@@ -962,7 +962,7 @@ class ServiceAgreementPage extends React.Component {
 											id: 'contract_lenght',
 										}}
 									>
-										{["Recurring", "One-Time", "Variable"].map((x, index) => (
+										{["Recurring", "One-Time Clean", "Variable"].map((x, index) => (
 											<option key={index} value={index}>{x}</option>
 										))}
 									</Select>

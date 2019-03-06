@@ -410,15 +410,25 @@ class Customers extends Component {
 
 	trySubmitForApproval = () => {
 
-		if (this.props.activeCustomer &&
-			this.props.activeCustomer.Data &&
-			this.props.activeCustomer.Data.AssignedFranchisees &&
-			this.props.activeCustomer.Data.AssignedFranchisees.length > 0) {
+		if (!this.validation()) {
+			this.setState({
+				tryingToSubmitWithoutOffering: false,
+			})
+			return
+		}
+		if (this.props.activeCustomer.Data.contract_lenght === 1) {
 			this.submitForApproval()
 		} else {
-			this.setState({
-				tryingToSubmitWithoutOffering: true
-			})
+			if (this.props.activeCustomer &&
+				this.props.activeCustomer.Data &&
+				this.props.activeCustomer.Data.AssignedFranchisees &&
+				this.props.activeCustomer.Data.AssignedFranchisees.length > 0) {
+				this.submitForApproval()
+			} else {
+				this.setState({
+					tryingToSubmitWithoutOffering: true
+				})
+			}
 		}
 	}
 	tryClose = () => {
@@ -481,12 +491,12 @@ class Customers extends Component {
 			isSubmittingForApproval: false
 		})
 
-		if (!this.validation()) {
-			this.setState({
-				tryingToSubmitWithoutOffering: false,
-			})
-			return
-		}
+		// if (!this.validation()) {
+		// 	this.setState({
+		// 		tryingToSubmitWithoutOffering: false,
+		// 	})
+		// 	return
+		// }
 
 
 		let param = {
