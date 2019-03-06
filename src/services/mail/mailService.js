@@ -1,9 +1,4 @@
 import axios from 'axios';
-const axios_instance = axios.create({
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-    withCredentials: false
-});
-
 const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class mailService {
@@ -13,12 +8,13 @@ class mailService {
      * @param data
      * @returns {Promise<any>}https://apifmsplusplus_mongo.jkdev.com/v1/accountsreceivable/Invoice/5c509947a0cca6256c9f22be?regionId=2
      */
-    sendEmail = (Subject,ContentBody,Recipients) => {
-        const data = {
-            Subject: Subject,
-            ContentBody: ContentBody,
-            Recipients: Recipients
-        }
+    sendEmail = (data,userId) => {
+
+        const axios_instance = axios.create({
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' ,'JK-USER-ID': userId},
+            withCredentials: false
+        });
+
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/Email/Send`,data)
                 .then( res => {

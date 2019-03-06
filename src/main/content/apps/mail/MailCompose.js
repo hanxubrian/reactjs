@@ -59,14 +59,12 @@ const styles = theme => ({
 
 class MailCompose extends Component {
     state = {
-        composeDialog: false,
-        from         : 'johndoe@creapond.com',
-        to           : '',
-        cc           : '',
-        bcc          : '',
-        subject      : '',
-        message      : '',
-        content      : ''
+        from: '',
+        sendMail: {
+            Subject: '',
+            ContentBody: '',
+            Recipients: ''
+        },
     };
 
     componentWillMount() {
@@ -75,13 +73,45 @@ class MailCompose extends Component {
         })
     }
 
-    handleChange = (event) => {
-        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (JSON.stringify(this.state.sendMail) !== JSON.stringify(prevState.sendMail)){
+            this.props.updatePayload(this.state.sendMail);
+        }
+    }
+
+    handleChange = (name) => (event) => {
+        if(name !== 'ContentBody'){
+            this.setState({
+                ...this.state,
+                sendMail: {
+                    ...this.state.sendMail,
+                    [name]: event.target.value
+                }
+            })
+        }else{
+            this.setState({
+                ...this.state,
+                sendMail: {
+                    ...this.state.sendMail,
+                    [name]: event
+                }
+            })
+        }
     };
 
-    handleEditorChange = (content) => {
-        this.setState({ content });
+    sendMail = () =>{
+        this.props.sendMail(this.state.sendMail,this.props.user.UserId);
+        this.setState({
+            ...this.state,
+            sendMail: {
+                Subject: '',
+                ContentBody: '',
+                Recipients: ''
+            }
+        })
     }
+
+
 
     render()
     {
@@ -110,7 +140,7 @@ class MailCompose extends Component {
                     <Typography className="flex justify-start">&nbsp;&nbsp;{this.props.user.firstName}&nbsp;{this.props.user.lastName}</Typography>
                     <Typography className="flex bold justify-start">&nbsp;&nbsp;({this.props.user.email})</Typography>
                     <div className="flex justify-end w-full">
-                        <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
+                        <Button type="submit" color={"primary"} onClick={this.sendMail} variant="contained" size="small" className={classes.button}>
                             <SendIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Send
                         </Button>
@@ -126,7 +156,6 @@ class MailCompose extends Component {
                     name="from"
                     value={this.state.from}
                     margin={"dense"}
-                    onChange={this.handleChange}
                     fullWidth
                     disabled
                 />
@@ -138,34 +167,12 @@ class MailCompose extends Component {
                     autoFocus
                     id="to"
                     name="to"
-                    value={this.state.to}
+                    value={this.state.sendMail.Recipients}
                     margin={"dense"}
-                    onChange={this.handleChange}
+                    onChange={this.handleChange('Recipients')}
                     fullWidth
                     required
                 />
-
-                {/*<TextField*/}
-                    {/*className={classes.formControl}*/}
-                    {/*label="Cc"*/}
-                    {/*id="cc"*/}
-                    {/*name="cc"*/}
-                    {/*value={this.state.cc}*/}
-                    {/*margin={"dense"}*/}
-                    {/*onChange={this.handleChange}*/}
-                    {/*fullWidth*/}
-                {/*/>*/}
-
-                {/*<TextField*/}
-                    {/*className={classes.formControl}*/}
-                    {/*label="Bcc"*/}
-                    {/*id="bcc"*/}
-                    {/*name="bcc"*/}
-                    {/*value={this.state.bcc}*/}
-                    {/*margin={"dense"}*/}
-                    {/*onChange={this.handleChange}*/}
-                    {/*fullWidth*/}
-                {/*/>*/}
 
                 <TextField
                     className={classes.formControl}
@@ -173,24 +180,13 @@ class MailCompose extends Component {
                     label="Subject"
                     id="subject"
                     name="subject"
-                    value={this.state.subject}
-                    onChange={this.handleChange}
+                    value={this.state.sendMail.Subject}
+                    onChange={this.handleChange('Subject')}
                     fullWidth
                 />
 
-                {/*<TextField*/}
-                    {/*className={classes.formControl}*/}
-                    {/*id="message"*/}
-                    {/*name="message"*/}
-                    {/*onChange={this.handleChange}*/}
-                    {/*label="Message"*/}
-                    {/*type="text"*/}
-                    {/*multiline*/}
-                    {/*rows={10}*/}
-                    {/*fullWidth*/}
-                {/*/>*/}
                 <p className="mb-6" >Message</p>
-                <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" init={{ height: '100%' }} value={this.state.content} onEditorChange={this.handleEditorChange} textareaName="tinymce_textArea" />
+                <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" init={{ height: '100%' }} value={this.state.sendMail.ContentBody} onEditorChange={this.handleChange('ContentBody')} textareaName="tinymce_textArea" />
 
             </div>
         );
@@ -200,7 +196,9 @@ class MailCompose extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleCompose: Actions.toggleCompose
+        toggleCompose: Actions.toggleCompose,
+        updatePayload: Actions.updatePayload,
+        sendMail: Actions.sendMail
     }, dispatch);
 }
 
@@ -209,7 +207,8 @@ function mapStateToProps({auth,mailApp})
     return {
         toggleCompose: mailApp.compose.toggleCompose,
         profileUrl: auth.login.profilePhoto,
-        user: auth.login
+        user: auth.login,
+        sendMail: mailApp.compose.sendMail
     }
 }
 

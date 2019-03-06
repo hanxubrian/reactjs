@@ -1,8 +1,15 @@
 import * as Actions from '../actions';
 import * as UserActions from "../../../../../../auth/store/actions";
+import {UPDATE_MAIL_PAYLOAD} from "../actions";
 
 const initialState = {
-    toggleCompose: false
+    toggleCompose: false,
+    sendMail: {
+        Subject: '',
+        ContentBody: '',
+        Recipients: ''
+    },
+    res: ''
 };
 
 const compose = function (state = initialState, action) {
@@ -14,6 +21,20 @@ const compose = function (state = initialState, action) {
                 ...state,
                 toggleCompose: action.payload
             };
+        }
+        case Actions.SEND_MAIL:
+        {
+            return {
+                ...state,
+                res: action.payload
+            };
+        }
+        case Actions.UPDATE_MAIL_PAYLOAD:
+        {
+            return{
+                ...state,
+                sendMail: action.payload
+            }
         }
         case UserActions.USER_LOGGED_OUT:
         {
