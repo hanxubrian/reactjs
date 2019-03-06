@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from "moment"
+import {BASE_MONGO_API_URL} from './../../services'
 
 const axios_instance = axios.create({
 	headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -7,7 +8,7 @@ const axios_instance = axios.create({
 });
 
 const BASE_API_URL = 'https://apifmsplus.jkdev.com';
-const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
+// const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class CustomersService {
     /**

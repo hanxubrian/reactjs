@@ -437,18 +437,42 @@ class Customers extends Component {
 	validation() {
 		let msg = ""
 		if (!this.props.activeCustomer.Data.cus_name) {
-			msg = "Customer name is invalid"
-		}
-		if (!this.props.activeCustomer.Data.cus_addr) {
-			msg = "Customer address is invalid"
-		}
-		if ([0, 2].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
-			msg = "Monthly contract amount is invalid"
-		}
-		if (msg !== "") {
-			this.props.openSnackbar(msg)
+			this.props.openSnackbar("Customer name is invalid")
 			return false
 		}
+
+		if (!this.props.activeCustomer.Data.cus_addr ||
+			!this.props.activeCustomer.Data.cus_city ||
+			!this.props.activeCustomer.Data.cus_state ||
+			!this.props.activeCustomer.Data.cus_zip) {
+			this.props.openSnackbar("Customer address is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.cus_phone || this.props.activeCustomer.Data.cus_phone === "(∗∗∗) ∗∗∗-∗∗∗∗") {
+			this.props.openSnackbar("Customer phone is invalid")
+			return false
+		}
+		if (!FuseUtils.validateEmail(this.props.activeCustomer.Data.email1)) {
+			this.props.openSnackbar("Email is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.cont_1) {
+			this.props.openSnackbar("Contact(1) is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.bill_name) {
+			this.props.openSnackbar("Billing name is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.bill_phone || this.props.activeCustomer.Data.bill_phone === "(∗∗∗) ∗∗∗-∗∗∗∗") {
+			this.props.openSnackbar("Billing phone is invalid")
+			return false
+		}
+		if ([0, 2].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
+			this.props.openSnackbar("Monthly contract amount is invalid")
+			return false
+		}
+
 		return true
 	}
 	submitForApproval = () => {
