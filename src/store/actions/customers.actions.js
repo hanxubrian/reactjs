@@ -116,7 +116,7 @@ export const TRANSFER_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] TRANSFER_ASSIGNED_F
 export const TRANSFER_ASSIGNED_FRANCHISEE_START = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE_START";
 
 export const SET_TRANSFER_PARAM = "[CUSTOMERS APP] SET_TRANSFER_PARAM";
-
+export const SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING = "[CUSTOMERS APP] SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING";
 
 export const EXPAND_COLLAPSE_GROUPING = "[CUSTOMERS-service APP] EXPAND_COLLAPSE_GROUPING";
 
@@ -871,6 +871,12 @@ export function closeSnackbar() {
 export function expandCollapseGrouping(f) {
 	return {
 		type: EXPAND_COLLAPSE_GROUPING,
+		payload: f
+	}
+}
+export function showFranchiseeLocationFilterInAccountOffering(f) {
+	return {
+		type: SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING,
 		payload: f
 	}
 }

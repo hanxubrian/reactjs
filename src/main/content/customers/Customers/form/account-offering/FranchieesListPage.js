@@ -484,7 +484,7 @@ class FranchieesListPage extends Component {
 					width: 80,
 				},
 			],
-			openSideBar: false,
+			// openSideBar: false,
 			showMapView: false,
 
 			gmapVisible: false,
@@ -495,6 +495,7 @@ class FranchieesListPage extends Component {
 
 			temp: [],
 			rows: [],
+			originRows: [],
 			customers: [],
 
 			pageSizes: [5, 10, 20, 30, 50, 100],
@@ -596,7 +597,7 @@ class FranchieesListPage extends Component {
 		}
 
 		if (this.props.locationFilterValueForFranchiseeList !== nextProps.locationFilterValueForFranchiseeList) {
-			this.filterPins(this.state.rows, nextProps.locationFilterValueForFranchiseeList);
+			this.filterPins(nextProps.locationFilterValueForFranchiseeList);
 		}
 	}
 	initRowsFromRawJson = (rawData = this.props.franchisees, locationFilterValueForFranchiseeList = this.props.locationFilterValueForFranchiseeList) => {
@@ -627,13 +628,23 @@ class FranchieesListPage extends Component {
 			x.lng = x.Longitude || 0
 			x.text = x.Name
 		})
-		this.setState({ rows })
+		this.setState({
+			rows,
+			originRows: [...rows]
+		})
 
-		this.filterPins(rows, locationFilterValueForFranchiseeList)
+		this.filterPins(locationFilterValueForFranchiseeList, [...rows])
 
 		// this.setState({ temp: data });
 		// this.setState({ data: data });
 
+		//
+		// update selections per assignedFranchisees
+		//
+		// this.updateFranchiseeGridSelection(rows)
+	};
+
+	updateFranchiseeGridSelection(rows = this.state.rows) {
 		//
 		// update selections per assignedFranchisees
 		//
@@ -649,39 +660,50 @@ class FranchieesListPage extends Component {
 				selection: selectedRows.map(x => rows.indexOf(x))
 			})
 		}
-	};
+	}
 
-	filterPins(pins, locationFilterValueForFranchiseeList) {
+	filterPins(locationFilterValueForFranchiseeList, pins = this.state.originRows) {
 		// this.setState({ gmapVisible: !this.state.gmapVisible });
 		let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
 		let b = 12.5 - k / 5
+		let newPins = [...pins]
+		const gmapVisible = this.state.gmapVisible
 
 		switch (locationFilterValueForFranchiseeList.id) {
 			case "locationAll":
-				if (!this.state.gmapVisible) {
-					this.setState({
-						gmapVisible: !this.state.gmapVisible,
-						pins: pins === undefined ? [] : [...pins],
-						pins2: []
-					})
-				} else {
-					this.setState({
-						gmapVisible: !this.state.gmapVisible,
-						pins: [],
-						pins2: pins === undefined ? [] : [...pins]
-					})
-				}
+				// if (!this.state.gmapVisible) {
+				// 	this.setState({
+				// 		gmapVisible: !this.state.gmapVisible,
+				// 		pins: pins === undefined ? [] : [...pins],
+				// 		pins2: []
+				// 	})
+				// } else {
+				// 	this.setState({
+				// 		gmapVisible: !this.state.gmapVisible,
+				// 		pins: [],
+				// 		pins2: pins === undefined ? [] : [...pins]
+				// 	})
+				// }
+
+				newPins = pins === undefined ? [] : [...pins]
+				this.setState({
+					gmapVisible: !gmapVisible,
+					pins: !gmapVisible ? newPins : [],
+					pins2: gmapVisible ? newPins : [],
+					rows: newPins,
+				})
+				this.updateFranchiseeGridSelection(newPins)
+
 				map_zoom = DEFAULT_ZOOM
 				break;
 			case "locationNearResidingCustomer":
 			case "locationNearCleaningCustomer":
-				let _pins = []
-				this.setState({
-					addrLat: this.state.current_lat,
-					addrLng: this.state.current_long
-				})
+				// this.setState({
+				// 	addrLat: this.state.current_lat,
+				// 	addrLng: this.state.current_long
+				// })
 
-				_pins = this.nearbyLocations(
+				const _pins = this.nearbyLocations(
 					pins,
 					{
 						lat: this.state.current_lat,
@@ -689,19 +711,29 @@ class FranchieesListPage extends Component {
 					},
 					locationFilterValueForFranchiseeList.miles)
 
-				if (!this.state.gmapVisible) {
-					this.setState({
-						gmapVisible: !this.state.gmapVisible,
-						pins: [..._pins],
-						pins2: []
-					})
-				} else {
-					this.setState({
-						gmapVisible: !this.state.gmapVisible,
-						pins: [],
-						pins2: [..._pins]
-					})
-				}
+				// if (!this.state.gmapVisible) {
+				// 	this.setState({
+				// 		gmapVisible: !this.state.gmapVisible,
+				// 		pins: [..._pins],
+				// 		pins2: []
+				// 	})
+				// } else {
+				// 	this.setState({
+				// 		gmapVisible: !this.state.gmapVisible,
+				// 		pins: [],
+				// 		pins2: [..._pins]
+				// 	})
+				// }
+				newPins = [..._pins]
+				this.setState({
+					addrLat: this.state.current_lat,
+					addrLng: this.state.current_long,
+					gmapVisible: !gmapVisible,
+					pins: !gmapVisible ? newPins : [],
+					pins2: gmapVisible ? newPins : [],
+					rows: newPins,
+				})
+				this.updateFranchiseeGridSelection(newPins)
 
 				map_zoom = locationFilterValueForFranchiseeList.miles !== undefined ? k / locationFilterValueForFranchiseeList.miles + b : DEFAULT_ZOOM
 				break;
@@ -734,23 +766,35 @@ class FranchieesListPage extends Component {
 						locationFilterValueForFranchiseeList.miles)
 				}
 
-				if (!this.state.gmapVisible) {
-					this.setState({
-						gmapVisible: !this.state.gmapVisible,
-						pins: [..._],
-						pins2: []
-					})
-				} else {
-					this.setState({
-						gmapVisible: !this.state.gmapVisible,
-						pins: [],
-						pins2: [..._]
-					})
-				}
+				// if (!this.state.gmapVisible) {
+				// 	this.setState({
+				// 		gmapVisible: !this.state.gmapVisible,
+				// 		pins: [..._],
+				// 		pins2: []
+				// 	})
+				// } else {
+				// 	this.setState({
+				// 		gmapVisible: !this.state.gmapVisible,
+				// 		pins: [],
+				// 		pins2: [..._]
+				// 	})
+				// }
+				newPins = [..._]
+				this.setState({
+					gmapVisible: !gmapVisible,
+					pins: !gmapVisible ? newPins : [],
+					pins2: gmapVisible ? newPins : [],
+					rows: newPins,
+				})
+				this.updateFranchiseeGridSelection(newPins)
 				map_zoom = locationFilterValueForFranchiseeList.miles !== undefined ? k / locationFilterValueForFranchiseeList.miles + b : DEFAULT_ZOOM
 				break;
 			default:
-				this.setState({ pins: pins })
+				this.setState({
+					pins,
+					rows: newPins,
+				})
+				this.updateFranchiseeGridSelection(newPins)
 				break;
 		}
 
@@ -861,7 +905,6 @@ class FranchieesListPage extends Component {
 
 		switch (locationValue) {
 			case "locationAll":
-				miles = 0
 				break
 			case "locationNearResidingCustomer":
 				miles = this.state.locationNearResidingCustomerRadius
@@ -937,27 +980,27 @@ class FranchieesListPage extends Component {
 
 				return;
 			case "AddressZipcodeRadius":
-				// Geocode.fromAddress(addrZipcode).then(
-				// 	response => {
-				// 		const { lat, lng } = response.results[0].geometry.location;
-				// 		payload = {
-				// 			...payload,
-				// 			addrZipcode: { ...payload.addrZipcode, lat, lng }
-				// 		}
-				// 		this.props.selectLocationFilterForFranchiseeList(payload)
-				// 		return
-				// 	},
-				// 	error => {
-				// 		// console.error(error);
-				// 		payload = {
-				// 			...payload,
-				// 			addrZipcode: undefined
-				// 		}
-				// 		this.props.selectLocationFilterForFranchiseeList(payload)
-				// 		return
-				// 	}
-				// );
-				// return;
+			// Geocode.fromAddress(addrZipcode).then(
+			// 	response => {
+			// 		const { lat, lng } = response.results[0].geometry.location;
+			// 		payload = {
+			// 			...payload,
+			// 			addrZipcode: { ...payload.addrZipcode, lat, lng }
+			// 		}
+			// 		this.props.selectLocationFilterForFranchiseeList(payload)
+			// 		return
+			// 	},
+			// 	error => {
+			// 		// console.error(error);
+			// 		payload = {
+			// 			...payload,
+			// 			addrZipcode: undefined
+			// 		}
+			// 		this.props.selectLocationFilterForFranchiseeList(payload)
+			// 		return
+			// 	}
+			// );
+			// return;
 		}
 		console.log(payload)
 		this.props.selectLocationFilterForFranchiseeList(payload)
@@ -969,9 +1012,10 @@ class FranchieesListPage extends Component {
 	};
 
 	toggleSideBar = () => {
-		this.setState({
-			openSideBar: !this.state.openSideBar
-		})
+		// this.setState({
+		// 	openSideBar: !this.state.openSideBar
+		// })
+		this.props.showFranchiseeLocationFilterInAccountOffering(!this.props.showFranchiseeLocationFilterInAccountOffering)
 	}
 	toggleMapView = () => {
 		this.setState({
@@ -1036,10 +1080,11 @@ class FranchieesListPage extends Component {
 	}
 
 	onClickAssign = () => {
+		this.changeSelection(this.state.selection)
 		this.props.setStep(3)
 	}
 	rowSelectionEnabled = row => {
-		return this.props.activeCustomer.Data.AssignedFranchisees.filter(x => x.FranchiseeNumber === row.Number).length < 1
+		return this.props.activeCustomer.Data.AssignedFranchisees.filter(x => x.FranchiseeNumber === row.Number && !x.new).length < 1
 	};
 	render() {
 		const {
@@ -1109,12 +1154,13 @@ class FranchieesListPage extends Component {
 				} */}
 
 				<div className={classNames("flex justify-between items-center mt-12 mb-12")}>
-					<Typography variant="h6">Active Franchisees</Typography>
-					<div>
+					<div className="flex items-center">
 						<Tooltip title="Location Filter">
 							<IconButton onClick={this.toggleSideBar}><Icon>menu</Icon></IconButton>
 						</Tooltip>
-
+						<Typography variant="h6">Active Franchisees</Typography>
+					</div>
+					<div>
 						<Tooltip title={showMapView ? "Grid View" : "Map view"}>
 							<IconButton className={classNames(classes.button, "mr-12")}
 								onClick={this.toggleMapView}
@@ -1141,7 +1187,7 @@ class FranchieesListPage extends Component {
 
 
 				<Paper className={classNames("flex p-6 w-full h-full")}>
-					{this.state.openSideBar &&
+					{this.props.showFranchiseeLocationFilterInAccountOffering &&
 						<div className="flex flex-col p-12" style={{ minWidth: 200 }}>
 
 							<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
@@ -1283,6 +1329,7 @@ class FranchieesListPage extends Component {
 
 								{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
 								<PatchedTableSelection
+									showSelectAll
 									highlightRow
 									rowSelectionEnabled={this.rowSelectionEnabled}
 								/>
@@ -1469,6 +1516,7 @@ function mapDispatchToProps(dispatch) {
 
 		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 		selectLocationFilterForFranchiseeList: Actions.selectLocationFilterForFranchiseeList,
+		showFranchiseeLocationFilterInAccountOffering: Actions.showFranchiseeLocationFilterInAccountOffering,
 	}, dispatch);
 }
 
@@ -1489,6 +1537,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		bTransferFranchiseeFtate: customers.bTransferFranchiseeFtate,
 		activeCustomer: customers.activeCustomer,
 		locationFilterValueForFranchiseeList: customers.locationFilterValueForFranchiseeList,
+		showFranchiseeLocationFilterInAccountOffering: customers.showFranchiseeLocationFilterInAccountOffering,
 	}
 }
 

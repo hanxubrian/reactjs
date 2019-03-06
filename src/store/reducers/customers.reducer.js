@@ -1237,6 +1237,11 @@ const customers = function (state = initialState, action) {
 				...state,
 				isExpandedGrouping: action.payload,
 			};
+		case Actions.SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING:
+			return {
+				...state,
+				showFranchiseeLocationFilterInAccountOffering: action.payload,
+			};
 		default:
 			{
 				return state;
