@@ -378,8 +378,8 @@ class TransactionsPage extends React.Component {
 		console.log("constructor");
 
 		console.log("constructor", this.props.customerForm)
-		if (this.props.customerServiceForm.activeCustomer && this.props.customerServiceForm.activeCustomer.Data) {
-			this.props.getCustomerBillingList(this.props.regionId, this.props.customerServiceForm.activeCustomer.Data.cust_no)
+		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
+			this.props.getCustomerBillingList(this.props.regionId, this.props.activeCustomer.Data.cust_no)
 		}
 	}
 	//
@@ -410,7 +410,7 @@ class TransactionsPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getCustomerBillingList(nextProps.regionId, this.props.customerServiceForm.activeCustomer.Data.cus_no)
+			this.props.getCustomerBillingList(nextProps.regionId, this.props.activeCustomer.Data.cus_no)
 		}
 
 		if (nextProps.customerServiceForm.billingList.data, this.props.customerServiceForm.billingList.data) {
@@ -939,6 +939,7 @@ function mapStateToProps({ customers, auth }) {
 		customerServiceForm: customers.customerServiceForm,
 		filterParam: customers.filterParam,
 		isExpandedGrouping: customers.isExpandedGrouping,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 
