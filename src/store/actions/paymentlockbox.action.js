@@ -12,7 +12,7 @@ export const PAYMENT_LOCKBOX_GET_ALL_START         = "[PAYMENT LOCKBOX] GET ALL 
 export const PAYMENT_LOCKBOX_GET_ALL_SUCCESS       = "[PAYMENT LOCKBOX] GET ALL SUCCESS";
 export const PAYMENT_LOCKBOX_GET_ALL_FAILD         = "[PAYMENT LOCKBOX] GET ALL FAILD";
 
-
+export const PAYMENT_LOCKBOX_SHOW_MODAL_FORM       = "[PAYMENT LOCKBOX] SHOW MODAL FORM";
 
 export function paymentlockboxgetalldata() {
     return (dispatch,getState) => {
@@ -43,6 +43,12 @@ export function paymentlockboxgetalldata() {
             }
         })();
     };
+}
+export function showPaymentLockBoxModalForm(visible) {
+	return {
+		type: PAYMENT_LOCKBOX_SHOW_MODAL_FORM,
+		payload: visible
+	}
 }
 export function paymentlockboxfileupload(file) {
     return (dispatch,getState) => {

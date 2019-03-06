@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PaymentLockBoxList from './PaymentLockBoxList';
 import PaymentLockBoxContentList from './PaymentLockBoxContentList';
+import PaymentLockBoxModalForm from './PaymentLockBoxModalForm';
 // core components
 import {
     Hidden,
@@ -241,6 +242,7 @@ class PaymentLockBoxReport extends Component {
     };
     processlockbox=()=>{
         this.props.paymentlockboxgetalldata();
+        this.props.showPaymentLockBoxModalForm(true)
     }
     fileuploadstart=()=>{
         if(this.state.selectedFile && this.state.selectedFile !== null ){
@@ -495,6 +497,7 @@ class PaymentLockBoxReport extends Component {
                                     </div>
                                     {/*<PaymentLockBoxList/>*/}
                                     <PaymentLockBoxContentList/>
+                                    {/* {this.props.paymentLockBoxModalForm.open && <PaymentLockBoxModalForm/>} */}
                                 </div>
                             )}
 
@@ -556,6 +559,7 @@ function mapDispatchToProps(dispatch)
         fileupload                              : Actions.paymentlockboxfileupload,
         showMessage                             : Actions.showMessage,
         hideMessage                             : Actions.hideMessage,
+        showPaymentLockBoxModalForm             : Actions.showPaymentLockBoxModalForm,
     }, dispatch);
 }
 
@@ -566,6 +570,7 @@ function mapStateToProps({paymentlockbox, auth})
         regionId            : auth.login.defaultRegionId,
         auth                : auth.login,
         data                : paymentlockbox.data,
+        paymentLockBoxModalForm           : paymentlockbox.paymentLockBoxModalForm
     }
 }
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentLockBoxReport)));

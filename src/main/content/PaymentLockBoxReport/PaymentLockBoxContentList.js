@@ -826,6 +826,7 @@ class PaymentLockBoxContentList extends Component {
                                 <Card className={classes.card}>
                                     <CardHeader title="Lockbox payments" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent >
+                                    {this.props.bStart && (
                                         <div className="flex flex-row justify-between mb-4">
                                                 {/* <Icon fontSize={"small"} className="mr-4">account_circle</Icon> */}
                                                 <Typography variant="subtitle1" color="inherit">
@@ -843,7 +844,7 @@ class PaymentLockBoxContentList extends Component {
                                                 <Typography variant="subtitle1" color="inherit">
                                                     <strong>File Import Date: {this.props.data.ExceptionItems[0].importdate} </strong>
                                                 </Typography>
-                                        </div>
+                                        </div>)}
                                     </CardContent>
                                 </Card>
                                 </div>
@@ -972,6 +973,8 @@ function mapStateToProps({ accountReceivablePayments, auth,paymentlockbox }) {
         searchText: accountReceivablePayments.searchText,
         activePaymentRows: accountReceivablePayments.activePaymentRows,
         data                : paymentlockbox.data,
+        bStart              : paymentlockbox.bStart,
+        modalForm           : paymentlockbox.modalForm,
         paymentlockbox      : paymentlockbox,
     }
 }
