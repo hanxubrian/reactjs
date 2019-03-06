@@ -741,9 +741,23 @@ class InvoiceLineTable extends React.Component {
 
     removeLineData=(line)=>{
         const data = [...this.state.data];
+
+        let beforeLength = 0;
+        _.forEach(data, row=>{
+            if(row.id===line.id) return false;
+            beforeLength += row.franchisees.length;
+        });
+
         _.remove(data, function (row) {
             return row.id === line.id;
         });
+        if(beforeLength){
+            let franchiseeIndexes = _.range(beforeLength, line.franchisees.length+1);
+            franchiseeIndexes.forEach(f=>{
+                this.setState({['nameValue'+f]: ''});
+            })
+        }
+
         let id = 0;
         let newData = data.map(record=>{
             record.id = id++;

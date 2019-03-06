@@ -338,14 +338,6 @@ class FranchiseeReportTable extends React.Component {
     }
 
 
-    handleChangePage = (event, page) => {
-        this.setState({ page });
-    };
-
-    handleChangeRowsPerPage = event => {
-        this.setState({ rowsPerPage: event.target.value });
-    };
-
     showFranchiseeModal = (row)=>{
         if(row.period===this.props.defaultPeriod) {
             let period = this.props.defaultPeriod.split('/');
@@ -366,8 +358,8 @@ class FranchiseeReportTable extends React.Component {
     };
 
     render() {
-        const { classes,franchiseeReports } = this.props;
-        const { order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { classes } = this.props;
+        const { order, orderBy, selected} = this.state;
 
         if(!this.state.data.length)
             return <div/>;

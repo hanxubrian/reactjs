@@ -18,7 +18,7 @@
         "@progress/kendo-react-inputs": "^2.6.1",
         "@progress/kendo-react-intl": "^2.6.1",
         "@progress/kendo-react-pdf": "^2.6.1",
-        "@tinymce/tinymce-react": "^3.0.1",
+        "@tinymce/tinymce-react": "3.0.1",
         "auth0-lock": "11.12.1",
         "autosuggest-highlight": "^3.1.1",
         "axios": "0.18.0",
