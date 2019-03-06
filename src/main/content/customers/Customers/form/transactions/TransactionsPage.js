@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from "lodash";
 import TextField from '@material-ui/core/TextField';
-import { Divider, FormControl, InputLabel, Select, Chip, Input, MenuItem } from '@material-ui/core';
+import { Divider, FormControl, InputLabel, Select, Chip, Input, MenuItem, Icon, IconButton } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -372,6 +372,7 @@ class TransactionsPage extends React.Component {
 			// leftColumns: ['CustomerNo', 'CustomerName'],
 			// rightColumns: ['Amount'],
 			expandedRowIds: [],
+			SearchText: '',
 
 		}
 
@@ -539,9 +540,13 @@ class TransactionsPage extends React.Component {
 
 
 	handleChange = name => event => {
+		const value = event.target.value
 		this.setState({
-			[name]: event.target.value
+			[name]: value
 		});
+		if (name === 'SearchText') {
+			this.changeSearchValue(value)
+		}
 	};
 
 	render() {
@@ -577,18 +582,24 @@ class TransactionsPage extends React.Component {
 				<div className={classNames("flex flex-col")}>
 					<div className={classNames('items-center')}>
 						<div xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="Description"
-								label="Description"
-								className={classes.textField}
-								InputLabelProps={{ shrink: true }}
-								value={this.state.Description}
-								onChange={this.handleChange('Description')}
-								margin="dense"
-								// variant="outlined"
-								style={{ minWidth: '100px', width: '70%' }}
-							/>
-							<FormControl className={classNames(classes.formControl, 'ml-12')} style={{ marginTop: 5, minWidth: "100px", width: "30%" }}>
+							<div className="flex items-center mr-12" style={{ minWidth: '100px', width: '70%' }}>
+								<Icon color="action" className="ml-16">search</Icon>
+								<TextField
+									id="SearchText"
+									placeholder="Search..."
+									className={classes.textField}
+									value={this.state.SearchText}
+									onChange={this.handleChange('SearchText')}
+									margin="dense"
+									fullWidth
+								/>
+								<IconButton
+									className={classNames(classes.button, 'p-0 m-0')}
+									onClick={this.clearSearch}>
+									<Icon color="action">close</Icon>
+								</IconButton>
+							</div>
+							{/* <FormControl className={classNames(classes.formControl, 'ml-12')} style={{ marginTop: 5, minWidth: "100px", width: "30%" }}>
 								<InputLabel shrink htmlFor="contract_lenght">Type</InputLabel>
 								<Select
 									native
@@ -601,6 +612,38 @@ class TransactionsPage extends React.Component {
 								>
 									{["B"].map((x, index) => (
 										<option key={index} value={index}>{x}</option>
+									))}
+								</Select>
+							</FormControl> */}
+							<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, minWidth: 200, width: "15%" }}>
+								<InputLabel shrink htmlFor="slsmn_no">Billing Month</InputLabel>
+								<Select
+									native
+									value={this.state.billing_month || ''}
+									onChange={this.handleChange('billing_month')}
+									inputProps={{
+										name: 'billing_month',
+										id: 'billing_month',
+									}}
+								>
+									{['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((x, index) => (
+										<option key={index} value={x}>{x}</option>
+									))}
+								</Select>
+							</FormControl>
+							<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ marginTop: 5, minWidth: 200, width: "15%" }}>
+								<InputLabel shrink htmlFor="slsmn_no">Billing Year</InputLabel>
+								<Select
+									native
+									value={this.state.billing_year || ''}
+									onChange={this.handleChange('billing_year')}
+									inputProps={{
+										name: 'billing_year',
+										id: 'billing_year',
+									}}
+								>
+									{[2019].map((x, index) => (
+										<option key={index} value={x}>{x}</option>
 									))}
 								</Select>
 							</FormControl>
