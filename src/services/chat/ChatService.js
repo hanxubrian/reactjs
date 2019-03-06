@@ -1,13 +1,11 @@
 import axios from 'axios';
+import {BASE_MONGO_API_URL} from './../../services'
 
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
     withCredentials: false
 });
 
-const BASE_API_URL='https://apifmsplus.jkdev.com';
-const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
-const LOCALHOST_URL = "http://localhost:12217/";
 
 class chatService {
     getUserListforcontacts=(data)=>{
@@ -26,7 +24,7 @@ class chatService {
         });
     }
     getContactList =  (userId) => {
-        
+
              return new Promise((resolve, reject) => {
              axios_instance.get(`${BASE_MONGO_API_URL}/api/chat/contacts?id=${userId}`)
                 .then( res => {
@@ -40,7 +38,7 @@ class chatService {
                 })
                 .catch(error=>{
                 })
-        }); 
+        });
     }
 
     getUserData = (userId, name, avatar) =>{
@@ -61,7 +59,7 @@ class chatService {
                     }
                 })
                 .catch(error=>{
-                    
+
                 })
         });
     }
@@ -84,7 +82,7 @@ class chatService {
                     }
                 })
                 .catch(error=>{
-                    
+
                 })
         });
     }
@@ -101,7 +99,7 @@ class chatService {
                     }
                 })
                 .catch(error=>{
-                   
+
                 })
         });
     }

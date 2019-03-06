@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import {BASE_MONGO_API_URL} from './../../services'
 
 
 const axios_instance = axios.create({
@@ -11,9 +11,6 @@ const axios_instance_admin = axios.create({
     withCredentials: false,
     mode: 'cors',
 });
-
-const BASE_API_URL = 'https://apifmsplus.jkdev.com';
-const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 
 class NotificationService {
