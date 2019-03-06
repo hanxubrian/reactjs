@@ -211,6 +211,7 @@ class MailCompose extends Component {
                 <TextField
                     className={classes.formControl}
                     InputLabelProps={{ shrink: true }}
+                    margin={"dense"}
                     label="Subject"
                     id="subject"
                     name="subject"
