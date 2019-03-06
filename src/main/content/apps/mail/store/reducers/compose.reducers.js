@@ -1,6 +1,5 @@
 import * as Actions from '../actions';
 import * as UserActions from "../../../../../../auth/store/actions";
-import {UPDATE_MAIL_PAYLOAD} from "../actions";
 
 const initialState = {
     toggleCompose: false,
@@ -9,7 +8,8 @@ const initialState = {
         ContentBody: '',
         Recipients: ''
     },
-    res: ''
+    sendResultSuccess: false,
+    sendResultError: false
 };
 
 const compose = function (state = initialState, action) {
@@ -24,9 +24,17 @@ const compose = function (state = initialState, action) {
         }
         case Actions.SEND_MAIL:
         {
+            let tempSuccess = false;
+            let tempError = false;
+            if(action.payload.IsSuccess){
+                tempSuccess = true;
+            }else{
+                tempError = true;
+            }
             return {
                 ...state,
-                res: action.payload
+                sendResultSuccess: tempSuccess,
+                sendResultError: tempError
             };
         }
         case Actions.UPDATE_MAIL_PAYLOAD:

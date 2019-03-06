@@ -274,7 +274,7 @@ class PaymentLockBoxReport extends Component {
     successmesssage=()=>{
 
         this.props.showMessage({
-            message     : "File Upload Finished Successfully!!!",//text or html
+            message     : "File Upload Finished Successfully!",//text or html
             autoHideDuration: 6000,//ms
             anchorOrigin: {
                 vertical  : 'top',//top bottom

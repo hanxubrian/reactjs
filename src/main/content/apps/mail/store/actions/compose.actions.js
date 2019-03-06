@@ -23,13 +23,10 @@ export function sendMail(data,userId) {
    return(dispatch) => {
         (async () => {
             let res = await mailService.sendEmail(data,userId);
-            console.log(res);
-            if(res.IsSuccess){
-                dispatch({
-                    type: SEND_MAIL,
-                    payload: res
-                });
-            }
+            dispatch({
+               type: SEND_MAIL,
+               payload: res
+            });
 
         })();
    }

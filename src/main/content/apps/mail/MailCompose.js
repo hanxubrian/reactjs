@@ -4,6 +4,7 @@ import {withStyles} from '@material-ui/core/styles/index';
 import _ from '@lodash';
 import {bindActionCreators} from "redux";
 import * as Actions from "./store/actions";
+import * as MainActions from 'store/actions';
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
@@ -65,6 +66,8 @@ class MailCompose extends Component {
             ContentBody: '',
             Recipients: ''
         },
+        openSuccess: false,
+        openError: false
     };
 
     componentWillMount() {
@@ -77,6 +80,24 @@ class MailCompose extends Component {
         if (JSON.stringify(this.state.sendMail) !== JSON.stringify(prevState.sendMail)){
             this.props.updatePayload(this.state.sendMail);
         }
+        console.log("sendResultSuccess",this.props.sendResultSuccess);
+        console.log("sendResultError",this.props.sendResultError);
+        if(this.props.sendResultSuccess !== prevProps.sendResultSuccess){
+           if(this.props.sendResultSuccess){
+               this.successmesssage();
+               this.setState({
+                   ...this.state,
+                   sendMail: {
+                       Subject: '',
+                       ContentBody: '',
+                       Recipients: ''
+                   }
+               });
+           }
+       }
+       if(this.props.sendResultError !== prevProps.sendResultError){
+           this.errormessage();
+       }
     }
 
     handleChange = (name) => (event) => {
@@ -101,17 +122,30 @@ class MailCompose extends Component {
 
     sendMail = () =>{
         this.props.sendMail(this.state.sendMail,this.props.user.UserId);
-        this.setState({
-            ...this.state,
-            sendMail: {
-                Subject: '',
-                ContentBody: '',
-                Recipients: ''
-            }
-        })
     }
 
-
+    successmesssage=()=>{
+        this.props.showMessage({
+            message     : "Email Sent Successfully!!!",//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'success'//success error info warning null
+        });
+    }
+    errormessage=()=>{
+        this.props.showMessage({
+            message     : "File Upload Faild!!!",//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'error'//success error info warning null
+        });
+    }
 
     render()
     {
@@ -187,7 +221,6 @@ class MailCompose extends Component {
 
                 <p className="mb-6" >Message</p>
                 <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" init={{ height: '100%' }} value={this.state.sendMail.ContentBody} onEditorChange={this.handleChange('ContentBody')} textareaName="tinymce_textArea" />
-
             </div>
         );
     }
@@ -198,7 +231,8 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         toggleCompose: Actions.toggleCompose,
         updatePayload: Actions.updatePayload,
-        sendMail: Actions.sendMail
+        sendMail: Actions.sendMail,
+        showMessage : MainActions.showMessage,
     }, dispatch);
 }
 
@@ -208,7 +242,9 @@ function mapStateToProps({auth,mailApp})
         toggleCompose: mailApp.compose.toggleCompose,
         profileUrl: auth.login.profilePhoto,
         user: auth.login,
-        sendMail: mailApp.compose.sendMail
+        sendMail: mailApp.compose.sendMail,
+        sendResultSuccess: mailApp.compose.sendResultSuccess,
+        sendResultError: mailApp.compose.sendResultError
     }
 }
 
