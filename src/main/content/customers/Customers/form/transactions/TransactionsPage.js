@@ -379,7 +379,7 @@ class TransactionsPage extends React.Component {
 			expandedRowIds: [],
 			SearchText: '',
 
-			billing_month: this.props.periodForReport.month+1,
+			billing_month: this.props.periodForReport.month + 1,
 			billing_year: this.props.periodForReport.year,
 
 		}
@@ -399,7 +399,7 @@ class TransactionsPage extends React.Component {
 
 		console.log("constructor", this.props.customerForm)
 		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
-			this.props.getCustomerBillingList(this.props.regionId, this.props.activeCustomer.Data.cust_no)
+			this.props.getCustomerBillingList(this.props.regionId, this.props.activeCustomer.Data.cust_no, this.state.billing_year, this.state.billing_month)
 		}
 	}
 	//
@@ -430,7 +430,7 @@ class TransactionsPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getCustomerBillingList(nextProps.regionId, this.props.activeCustomer.Data.cust_no)
+			this.props.getCustomerBillingList(nextProps.regionId, this.props.activeCustomer.Data.cust_no, this.state.billing_year, this.state.billing_month)
 		}
 
 		if (nextProps.customerServiceForm.billingList, this.props.customerServiceForm.billingList) {
@@ -558,25 +558,25 @@ class TransactionsPage extends React.Component {
 		if (name === 'billing_month') {
 
 			this.props.updatePeriodForFranchiseeReport(
-				{year:parseInt('0' + this.state.billing_year), month:parseInt('0' + value)-1}
+				{ year: parseInt('0' + this.state.billing_year), month: parseInt('0' + value) - 1 }
 			)
 			this.props.getCustomerBillingList(
 				this.props.regionId,
 				this.props.activeCustomer.Data.cust_no,
 				parseInt('0' + this.state.billing_year),
 				parseInt('0' + value)
-				)
+			)
 		}
 		if (name === 'billing_year') {
 			this.props.updatePeriodForFranchiseeReport(
-				{year:parseInt('0' + value), month:parseInt('0' + this.state.billing_month)-1}
+				{ year: parseInt('0' + value), month: parseInt('0' + this.state.billing_month) - 1 }
 			)
 			this.props.getCustomerBillingList(
 				this.props.regionId,
 				this.props.activeCustomer.Data.cust_no,
 				parseInt('0' + value),
 				parseInt('0' + this.state.billing_month)
-				)
+			)
 		}
 	};
 	clearSearch = () => {
@@ -656,7 +656,7 @@ class TransactionsPage extends React.Component {
 								<InputLabel shrink htmlFor="slsmn_no">Billing Month</InputLabel>
 								<Select
 									native
-									value={this.state.billing_month || ''}
+									value={this.state.billing_month}
 									onChange={this.handleChange('billing_month')}
 									inputProps={{
 										name: 'billing_month',
@@ -723,11 +723,11 @@ class TransactionsPage extends React.Component {
 
 									<PagingPanel pageSizes={pageSizes} />
 
-									{/* <SelectionState
-							selection={selection}
-							onSelectionChange={this.changeSelection}
-						/>
-						<IntegratedSelection /> */}
+									<SelectionState
+										selection={selection}
+										onSelectionChange={this.changeSelection}
+									/>
+									<IntegratedSelection />
 
 									<SortingState
 										sorting={sorting}
@@ -799,7 +799,7 @@ class TransactionsPage extends React.Component {
 								/> */}
 
 									{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
-									{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
+									<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
 									<TableHeaderRow showSortingControls />
 
@@ -1012,7 +1012,7 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth,franchisees }) {
+function mapStateToProps({ customers, auth, franchisees }) {
 	return {
 		customers: customers.customersDB,
 		bLoadedCustomers: customers.bLoadedCustomers,
