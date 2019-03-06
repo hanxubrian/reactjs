@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
+import {BASE_MONGO_API_URL} from './../../services'
 
 class mailService {
     /**

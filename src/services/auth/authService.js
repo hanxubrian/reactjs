@@ -1,14 +1,14 @@
 import axios from 'axios';
+import {BASE_MONGO_API_URL} from './../../services'
+
 import {USER_LOGGED_OUT} from "../../auth/store/actions";
-// export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
+
 
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
     withCredentials: false
 });
 
-
-const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class authService {
 
