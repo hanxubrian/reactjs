@@ -696,17 +696,7 @@ class CustomerForm extends Component {
 				</AppBar>
 
 
-				<div
-					className={classNames(classes.layoutTable, "p-24")}
-					style={{
-						overflowY: 'scroll',
-						width: '100%',
-						// height: 'calc(100% - 110px)'
-						height: 'calc(100% - 50px)'
-						// flex: '1 1 auto'
-					}}
-				>
-
+				<div className={classNames(classes.layoutTable, "flex flex-col p-24 w-full h-full")} style={{ overflowY: 'auto' }}>
 					{activeStep === 3 ?
 						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 							<h2>{steps[activeStep]}</h2>
@@ -730,9 +720,7 @@ class CustomerForm extends Component {
 
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
-					{/* <div> */}
 					{this.getStepContent(activeStep)}
-					{/* </div> */}
 				</div>
 
 			</Fragment>

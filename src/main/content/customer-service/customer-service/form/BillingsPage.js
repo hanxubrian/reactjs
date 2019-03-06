@@ -217,7 +217,7 @@ export const TableComponent = withStyles(styles, { name: 'TableComponent' })(Tab
 //
 // table cell currency formatter
 //
-const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const CurrencyFormatter = ({ value }) => (<span>$ {value ? value.toLocaleString(undefined, { minimumFractionDigits: 2 }) : ''}</span>);
 const CurrencyTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={CurrencyFormatter}
@@ -539,6 +539,16 @@ class BillingsPage extends Component {
 					groupingEnabled: false,
 				},
 				{
+					title: "Description",
+					name: "descr",
+					columnName: 'descr',
+					width: 400,
+					align: 'center',
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+				},
+				{
 					title: "Invoice Date",
 					name: "date_inv",
 					columnName: "date_inv",
@@ -573,7 +583,17 @@ class BillingsPage extends Component {
 					title: "Tax",
 					name: "itm_tax",
 					columnName: "itm_tax",
-					width: 80,
+					width: 120,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Total",
+					name: "paymentTotal",
+					columnName: "paymentTotal",
+					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -592,7 +612,7 @@ class BillingsPage extends Component {
 
 			],
 			sorting: [
-				{ columnName: 'CustomerNo', direction: 'asc' }
+				{ columnName: 'date_inv', direction: 'desc' }
 			],
 			editingColumnExtensions: [
 				// {
@@ -602,7 +622,8 @@ class BillingsPage extends Component {
 			],
 			currencyColumns: [
 				'itm_amt',
-				'itm_tax'
+				'itm_tax',
+				'paymentTotal',
 			],
 			phoneNumberColumns: [
 				'Phone'
@@ -623,7 +644,7 @@ class BillingsPage extends Component {
 			searchValue: '',
 			// leftColumns: ['CustomerNo', 'CustomerName'],
 			// rightColumns: ['Amount'],
-			expandedRowIds: [2, 5],
+			expandedRowIds: [],
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -761,6 +782,10 @@ class BillingsPage extends Component {
 		if (nextProps.customerServiceForm.billingList.data, this.props.customerServiceForm.billingList.data) {
 			this.initRowsFromRawJson(nextProps.customerServiceForm.billingList.data)
 		}
+
+		if (nextProps.isExpandedGrouping !== this.props.isExpandedGrouping) {
+			this.expandCollapseGrouping(this.state.rows, nextProps.isExpandedGrouping)
+		}
 	} // deprecate 
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -854,16 +879,33 @@ class BillingsPage extends Component {
 
 		rawData.Data.forEach(x => {
 			x.DateTime = `${x.call_date} ${x.call_time}`
+
+			console.log(x.payments)
+			// console.log(x.payments.map(px => px.Amount).reduce((s, a) => s + a))
+			x.paymentTotal = Array.isArray(x.payments) && x.payments.length > 0 ? x.payments.map(px => px.Amount).reduce((s, a) => s + a) : 0
 		})
 		const rows = rawData.Data
 		console.log("initRowsFromRawJson=billingList", rows)
 
 		this.setState({
 			rows,
-			expandedRowIds: rows.map((x, index) => index)
 		})
+		this.expandCollapseGrouping(rows)
+		// this.setState({
+		// 	expandedRowIds: rows.map((x, index) => index)
+		// })
 	};
-
+	expandCollapseGrouping(rows = this.state.rows, grouping = this.props.isExpandedGrouping) {
+		if (grouping) {
+			this.setState({
+				expandedRowIds: rows.map((x, index) => index)
+			})
+		} else {
+			this.setState({
+				expandedRowIds: []
+			})
+		}
+	}
 
 	//
 	// row click
@@ -907,24 +949,24 @@ class BillingsPage extends Component {
 			return (
 				<div className="flex flex-col">
 					<div className="flex justify-start">
-						<span style={{ width: "20%", marginLeft: 220, textAlign: 'center' }}><strong>Payment Type</strong></span>
-						<span style={{ width: "15%" }}><strong>Ref. No.</strong></span>
-						<span style={{ width: "15%" }}><strong>Pay Date</strong></span>
-						<span style={{ width: "15%" }}><strong>Amount</strong></span>
+						<span style={{ width: "15%", marginLeft: 220, textAlign: 'center' }}><strong>Payment Type</strong></span>
+						<span style={{ width: "12%" }}><strong>Ref. No.</strong></span>
+						<span style={{ width: "12%" }}><strong>Pay Date</strong></span>
+						<span style={{ width: "12%" }}><strong>Payment Amount</strong></span>
 					</div>
 					{
 						row.payments.map((x, index) => (
 							<div key={index} className="flex justify-start">
-								<span style={{ width: "20%", color: "#15d400", marginLeft: 220, textAlign: 'center' }}>{x.PaymentType ? x.PaymentType : ""}</span>
-								<span style={{ width: "15%", color: "#15d400" }}>{x.ReferenceNumber}</span>
-								<span style={{ width: "15%", color: "#15d400" }}>{x.PayDate.replace(/(\d{4})-(\d{2})-(\d{2})(.+)/, '$2/$3/$1')}</span>
-								<span style={{ width: "15%", color: "#15d400" }}>$ {x.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+								<span style={{ width: "15%", marginLeft: 220, textAlign: 'center' }}>{x.PaymentType ? x.PaymentType : ""}</span>
+								<span style={{ width: "12%" }}>{x.ReferenceNumber}</span>
+								<span style={{ width: "12%" }}>{x.PayDate.replace(/(\d{4})-(\d{2})-(\d{2})(.+)/, '$2/$3/$1')}</span>
+								<span style={{ width: "12%" }}>$ {x.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
 							</div>
 						))
 					}
 				</div>
 			)
-		return (<div className="flex justify-end">No Payments Data</div>)
+		return (<div className="flex justify-start">No Payments Data</div>)
 	}
 
 
@@ -993,12 +1035,11 @@ class BillingsPage extends Component {
 
 						<PagingPanel pageSizes={pageSizes} />
 
-						<SelectionState
+						{/* <SelectionState
 							selection={selection}
 							onSelectionChange={this.changeSelection}
 						/>
-						{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
-						<IntegratedSelection />
+						<IntegratedSelection /> */}
 
 						<SortingState
 							sorting={sorting}
@@ -1071,7 +1112,7 @@ class BillingsPage extends Component {
 								/> */}
 
 						{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
-						<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+						{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
 
 						<TableHeaderRow showSortingControls />
 
@@ -1197,6 +1238,7 @@ function mapStateToProps({ customers, auth }) {
 
 		customerServiceForm: customers.customerServiceForm,
 		filterParam: customers.filterParam,
+		isExpandedGrouping: customers.isExpandedGrouping,
 	}
 }
 

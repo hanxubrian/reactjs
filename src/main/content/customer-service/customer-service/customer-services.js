@@ -456,9 +456,13 @@ class CustomerServices extends Component {
 			this.props.searchText);
 	}
 
+	toggleExpandCollapseGrouping = () => {
+		this.props.expandCollapseGrouping(!this.props.isExpandedGrouping)
+	}
+
 	render() {
 		const { classes, customerServiceForm } = this.props;
-		const {  anchorContactMenu } = this.state;
+		const { anchorContactMenu } = this.state;
 
 		console.log('props=', this.props);
 		return (
@@ -611,7 +615,7 @@ class CustomerServices extends Component {
 										</div>
 
 										<div className="flex">
-											<Tooltip title="Expand/Collapse">
+											<Tooltip title="Expand/Collapse" onClick={this.toggleExpandCollapseGrouping}>
 												<IconButton variant="contained">
 													<Icon>format_line_spacing</Icon>
 												</IconButton>
@@ -748,6 +752,8 @@ function mapDispatchToProps(dispatch) {
 		showSendPhoneCallModalForm: Actions.showSendPhoneCallModalForm,
 		showSendChatModalForm: Actions.showSendChatModalForm,
 
+		expandCollapseGrouping: Actions.expandCollapseGrouping,
+
 
 	}, dispatch);
 }
@@ -784,6 +790,7 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		filters: customers.filters,
 
 		contactForms: customers.contactForms,
+		isExpandedGrouping: customers.isExpandedGrouping,
 
 	}
 }

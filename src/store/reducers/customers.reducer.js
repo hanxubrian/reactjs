@@ -1234,6 +1234,11 @@ const customers = function (state = initialState, action) {
 					[action.payload.key]: action.payload.value,
 				},
 			};
+		case Actions.EXPAND_COLLAPSE_GROUPING:
+			return {
+				...state,
+				isExpandedGrouping: action.payload,
+			};
 		default:
 			{
 				return state;

@@ -117,6 +117,9 @@ export const TRANSFER_ASSIGNED_FRANCHISEE_START = "[CUSTOMERS APP] TRANSFER_ASSI
 
 export const SET_TRANSFER_PARAM = "[CUSTOMERS APP] SET_TRANSFER_PARAM";
 
+
+export const EXPAND_COLLAPSE_GROUPING = "[CUSTOMERS-service APP] EXPAND_COLLAPSE_GROUPING";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -863,5 +866,11 @@ export function openSnackbar(message = "", icon = "error", duration = 3000, open
 export function closeSnackbar() {
 	return {
 		type: CLOSE_SNACK_BAR,
+	}
+}
+export function expandCollapseGrouping(f) {
+	return {
+		type: EXPAND_COLLAPSE_GROUPING,
+		payload: f
 	}
 }

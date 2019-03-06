@@ -262,7 +262,7 @@ class LogCallModalForm extends React.Component {
 										fullWidth
 										InputProps={{ readOnly: false }}
 									>
-										{customerServiceTypes.map((x, index) => (
+										{customerServiceTypes && customerServiceTypes.map((x, index) => (
 											<MenuItem key={index} value={x.ReasonNumber}>{x.name}</MenuItem>
 										))}
 
