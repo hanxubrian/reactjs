@@ -427,10 +427,10 @@ class TransactionsPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getCustomerBillingList(nextProps.regionId, this.props.activeCustomer.Data.cus_no)
+			this.props.getCustomerBillingList(nextProps.regionId, this.props.activeCustomer.Data.cust_no)
 		}
 
-		if (nextProps.customerServiceForm.billingList.data, this.props.customerServiceForm.billingList.data) {
+		if (nextProps.customerServiceForm.billingList, this.props.customerServiceForm.billingList) {
 			this.initRowsFromRawJson(nextProps.customerServiceForm.billingList.data)
 		}
 
@@ -555,16 +555,16 @@ class TransactionsPage extends React.Component {
 		if (name === 'billing_month') {
 			this.props.getCustomerBillingList(
 				this.props.regionId,
-				this.props.activeCustomer.Data.cus_no,
-				this.state.billing_year,
-				value)
+				this.props.activeCustomer.Data.cust_no,
+				parseInt('0' + this.state.billing_year),
+				parseInt('0' + value))
 		}
 		if (name === 'billing_year') {
 			this.props.getCustomerBillingList(
 				this.props.regionId,
-				this.props.activeCustomer.Data.cus_no,
-				value,
-				this.state.billing_month)
+				this.props.activeCustomer.Data.cust_no,
+				parseInt('0' + value),
+				parseInt('0' + this.state.billing_month))
 		}
 	};
 	clearSearch = () => {

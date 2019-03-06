@@ -415,6 +415,8 @@ fullbill: 0
 			BillYear,
 			BillMonth
 		}
+		console.log('-----getCustomerBillingList------', data)
+		console.log('-----getCustomerBillingList------', `${BASE_MONGO_API_URL}/v1/${regionId}/Payment/BillingsByCustNo`)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Payment/BillingsByCustNo`, data)
 				.then(res => {
