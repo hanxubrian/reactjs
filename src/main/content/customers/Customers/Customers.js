@@ -435,28 +435,29 @@ class Customers extends Component {
 	}
 
 	validation() {
+		let msg = ""
 		if (!this.props.activeCustomer.Data.cus_name) {
-			return "Customer name is invalid"
+			msg = "Customer name is invalid"
 		}
 		if (!this.props.activeCustomer.Data.cus_addr) {
-			return "Customer address is invalid"
+			msg = "Customer address is invalid"
 		}
 		if ([0, 2].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
-			return "Monthly contract amount is invalid"
+			msg = "Monthly contract amount is invalid"
 		}
+		if (msg !== "") {
+			this.props.openSnackbar(msg)
+			return false
+		}
+		return true
 	}
 	submitForApproval = () => {
 		this.setState({
 			isSubmittingForApproval: false
 		})
 
-		const valid = this.validation()
-		if (valid) {
+		if (!this.validation()) {
 			this.setState({
-				openSnack: true,
-				snackMessage: valid,
-				snackIcon: 'error',
-
 				tryingToSubmitWithoutOffering: false,
 			})
 			return

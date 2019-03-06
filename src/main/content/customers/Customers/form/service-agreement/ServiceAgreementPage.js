@@ -734,9 +734,9 @@ class ServiceAgreementPage extends React.Component {
 
 				contract_lenght,
 				slsmn_no,
-				date_sign,
-				date_start,
-				exp_date,
+				date_sign: FuseUtils.getDateString(date_sign),
+				date_start: FuseUtils.getDateString(date_start),
+				exp_date: FuseUtils.getDateString(exp_date),
 
 				po_1,
 				cpiadj,
@@ -809,7 +809,8 @@ class ServiceAgreementPage extends React.Component {
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
 			this.initCustomerInfo(nextProps.activeCustomer)
 		}
-		if (nextProps.activeCustomer && nextProps.activeCustomer.Data && !_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
+		// if (nextProps.activeCustomer && nextProps.activeCustomer.Data && !_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
+		if (nextProps.activeCustomer && this.props.activeCustomer) {
 			const {
 				cont_bill,
 
@@ -859,9 +860,9 @@ class ServiceAgreementPage extends React.Component {
 
 				contract_lenght,
 				slsmn_no,
-				date_sign,
-				date_start,
-				exp_date,
+				date_sign: FuseUtils.getDateString(date_sign),
+				date_start: FuseUtils.getDateString(date_start),
+				exp_date: FuseUtils.getDateString(exp_date),
 
 				po_1,
 				cpiadj,

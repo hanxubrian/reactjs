@@ -302,6 +302,15 @@ class FuseUtils {
 				return false;
 		}
 	}
+	static getTodayDateString() {
+		return this.getDateString(new Date())
+	}
+	static getDateString(date) {
+		console.log('getDateString', date)
+		if (!date)
+			return ''
+		return new Date(new Date(new Date(date).toISOString()).getTime() - (new Date(date).getTimezoneOffset() * 60 * 1000)).toISOString().substr(0, 10)
+	}
 }
 
 

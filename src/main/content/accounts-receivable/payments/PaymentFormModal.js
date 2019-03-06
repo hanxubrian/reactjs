@@ -17,6 +17,7 @@ import * as Actions from 'store/actions';
 import classNames from 'classnames';
 import ReactDataGrid from "react-data-grid";
 import _ from "lodash";
+import FuseUtils from '../../../../@fuse/FuseUtils';
 
 const styles = theme => ({
 	root: {
@@ -255,7 +256,7 @@ class PaymentFormModal extends React.Component {
 
 			PaymentType: "Check",
 			ReferenceNo: "",
-			PaymentDate: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().substr(0, 10),
+			PaymentDate: FuseUtils.getTodayDateString(),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
@@ -313,7 +314,7 @@ class PaymentFormModal extends React.Component {
 		this.setState({
 			PaymentType: "Check",
 			ReferenceNo: "",
-			PaymentDate: new Date(new Date(new Date().toISOString()).getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().substr(0, 10),
+			PaymentDate: FuseUtils.getTodayDateString(),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
