@@ -1129,7 +1129,6 @@ const customers = function (state = initialState, action) {
 		case Actions.SAVE_CANCEL_CONTRACT:
 			return {
 				...state,
-				activeCustomer: action.payload,
 				loading: {
 					...state.loading,
 					bSaveCancelContract: "",
@@ -1147,7 +1146,6 @@ const customers = function (state = initialState, action) {
 		case Actions.SAVE_SUSPEND_CONTRACT:
 			return {
 				...state,
-				activeCustomer: action.payload,
 				loading: {
 					...state.loading,
 					bSaveSuspendContract: "",
