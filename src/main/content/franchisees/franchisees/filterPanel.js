@@ -26,48 +26,6 @@ import _ from "lodash";
 const styles = theme => ({
     root : {
     },
-    panel: {
-        position                      : 'absolute',
-        width                         : 300,
-        backgroundColor               : theme.palette.background.paper,
-        boxShadow                     : theme.shadows[3],
-        top                           : 0,
-        height                        : '100%',
-        minHeight                     : '100%',
-        bottom                        : 0,
-        left                         :  -300,
-        margin                        : 0,
-        zIndex                        : 1000,
-        transform                     : 'translate3d(50px,0,0)',
-        overflow                      : 'hidden',
-        [theme.breakpoints.down('md')]: {
-            transform : 'translate3d(360px,0,0)',
-            boxShadow : 'none',
-            '&.opened': {
-                boxShadow: theme.shadows[5]
-            }
-        },
-        transition  : theme.transitions.create(['transform'], {
-            easing  : theme.transitions.easing.easeInOut,
-            duration: theme.transitions.duration.standard
-        }),
-        '&.opened1'                    : {
-            transform: 'translateX(300px)'
-        }
-    },
-    dropdownMenu: {
-        '& li': {
-            fontSize: 12,
-            height: 12,
-        }
-    },
-    inputMenu: {
-        padding: '10px 16px'
-    },
-    inputMenu1: {
-        padding: '10px 16px',
-        width: 150
-    },
     card: {
         width: '90%',
         margin: 'auto'
@@ -93,9 +51,6 @@ const styles = theme => ({
     textField: {
         fontSize: '1.3rem'
     },
-    filterInput:{
-        fontSize: '1.3rem'
-    }
 });
 
 
@@ -123,12 +78,12 @@ class FilterPanel extends Component {
 
     state = {
         Active: true,
-        InActive: true,
-        Ceased: true,
-        Terminated: true,
-        Repurchased: true,
-        Transferred: true,
-        NonRenewed: true,
+        InActive: false,
+        Ceased: false,
+        Terminated: false,
+        Repurchased: false,
+        Transferred: false,
+        NonRenewed: false,
         State: '',
         contactState: '',
         Location: this.props.locationFilterValue.id,
@@ -726,6 +681,7 @@ class FilterPanel extends Component {
                                         </div>
                                     )}
                                 </FormControl>
+                               <h3 className="mt-12">Status</h3>
                                 <FormControl>
                                     <FormControlLabel
                                         control={
