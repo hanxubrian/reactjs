@@ -748,7 +748,7 @@ class UsersForm extends React.Component {
                                 id="userName"
                                 label="User Name"
                                 className={classes.textField}
-                                value={this.state.UserName === null ? this.state.UserName : ""}
+                                value={this.state.UserName !== null ? this.state.UserName : ""}
                                 onChange={this.handleChange("UserName")}
                                 style={{marginRight:'1%'}}
                                 margin="dense"

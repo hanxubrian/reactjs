@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from "lodash";
 import TextField from '@material-ui/core/TextField';
-import { Divider, FormControl, InputLabel, Select, Chip, Input, MenuItem } from '@material-ui/core';
+import { Divider, FormControl, InputLabel, Select, Chip, Input, MenuItem, Icon, IconButton, Button } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -9,8 +9,10 @@ import connect from "react-redux/es/connect/connect";
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import ReactDataGrid from "react-data-grid";
-import * as Actions from 'store/actions';
+
+import * as Actions from 'store/actions/customers.actions';
+import * as FranchiseeActions from 'store/actions/franchise.actions';
+
 import {
 	Template, TemplateConnector
 } from '@devexpress/dx-react-core';
@@ -177,7 +179,7 @@ const PhoneNumberTypeProvider = props => (
 //
 // table cell date formatter
 //
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(.*)/, '$2/$3/$1');
 const DateTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={DateFormatter}
@@ -355,7 +357,10 @@ class TransactionsPage extends React.Component {
 			phoneNumberColumns: [
 				'Phone'
 			],
-			dateColumns: ['saleDate'],
+			dateColumns: [
+				'date_inv',
+				'date_due',
+			],
 			// groupingColumns: [
 			// 	{ columnName: 'StateName', groupingEnabled: false },
 			// 	{ columnName: 'AccountTypeListName', groupingEnabled: false },
@@ -372,6 +377,10 @@ class TransactionsPage extends React.Component {
 			// leftColumns: ['CustomerNo', 'CustomerName'],
 			// rightColumns: ['Amount'],
 			expandedRowIds: [],
+			SearchText: '',
+
+			billing_month: this.props.periodForReport.month + 1,
+			billing_year: this.props.periodForReport.year,
 
 		}
 
@@ -390,7 +399,7 @@ class TransactionsPage extends React.Component {
 
 		console.log("constructor", this.props.customerForm)
 		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
-			this.props.getCustomerBillingList(this.props.regionId, this.props.activeCustomer.Data.cust_no)
+			this.props.getCustomerBillingList(this.props.regionId, this.props.activeCustomer.Data.cust_no, this.state.billing_year, this.state.billing_month)
 		}
 	}
 	//
@@ -421,10 +430,10 @@ class TransactionsPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getCustomerBillingList(nextProps.regionId, this.props.activeCustomer.Data.cus_no)
+			this.props.getCustomerBillingList(nextProps.regionId, this.props.activeCustomer.Data.cust_no, this.state.billing_year, this.state.billing_month)
 		}
 
-		if (nextProps.customerServiceForm.billingList.data, this.props.customerServiceForm.billingList.data) {
+		if (nextProps.customerServiceForm.billingList, this.props.customerServiceForm.billingList) {
 			this.initRowsFromRawJson(nextProps.customerServiceForm.billingList.data)
 		}
 
@@ -539,11 +548,43 @@ class TransactionsPage extends React.Component {
 
 
 	handleChange = name => event => {
+		const value = event.target.value
 		this.setState({
-			[name]: event.target.value
+			[name]: value
 		});
-	};
+		if (name === 'SearchText') {
+			this.changeSearchValue(value)
+		}
+		if (name === 'billing_month') {
 
+			this.props.updatePeriodForFranchiseeReport(
+				{ year: parseInt('0' + this.state.billing_year), month: parseInt('0' + value) - 1 }
+			)
+			this.props.getCustomerBillingList(
+				this.props.regionId,
+				this.props.activeCustomer.Data.cust_no,
+				parseInt('0' + this.state.billing_year),
+				parseInt('0' + value)
+			)
+		}
+		if (name === 'billing_year') {
+			this.props.updatePeriodForFranchiseeReport(
+				{ year: parseInt('0' + value), month: parseInt('0' + this.state.billing_month) - 1 }
+			)
+			this.props.getCustomerBillingList(
+				this.props.regionId,
+				this.props.activeCustomer.Data.cust_no,
+				parseInt('0' + value),
+				parseInt('0' + this.state.billing_month)
+			)
+		}
+	};
+	clearSearch = () => {
+		this.setState({
+			SearchText: ''
+		})
+		this.changeSearchValue('')
+	}
 	render() {
 		const { classes } = this.props;
 		const {
@@ -559,6 +600,7 @@ class TransactionsPage extends React.Component {
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
+			dateColumns,
 			phoneNumberColumns,
 			pageSize,
 			pageSizes,
@@ -577,18 +619,24 @@ class TransactionsPage extends React.Component {
 				<div className={classNames("flex flex-col")}>
 					<div className={classNames('items-center')}>
 						<div xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="Description"
-								label="Description"
-								className={classes.textField}
-								InputLabelProps={{ shrink: true }}
-								value={this.state.Description}
-								onChange={this.handleChange('Description')}
-								margin="dense"
-								// variant="outlined"
-								style={{ minWidth: '100px', width: '70%' }}
-							/>
-							<FormControl className={classNames(classes.formControl, 'ml-12')} style={{ marginTop: 5, minWidth: "100px", width: "30%" }}>
+							<div className="flex items-center mr-12" style={{ minWidth: '100px', width: '100%' }}>
+								<Icon color="action" className="ml-16">search</Icon>
+								<TextField
+									id="SearchText"
+									placeholder="Search..."
+									className={classes.textField}
+									value={this.state.SearchText}
+									onChange={this.handleChange('SearchText')}
+									margin="dense"
+									fullWidth
+								/>
+								<IconButton
+									className={classNames(classes.button, 'p-0 m-0')}
+									onClick={this.clearSearch}>
+									<Icon color="action">close</Icon>
+								</IconButton>
+							</div>
+							{/* <FormControl className={classNames(classes.formControl, 'ml-12')} style={{ marginTop: 5, minWidth: "100px", width: "30%" }}>
 								<InputLabel shrink htmlFor="contract_lenght">Type</InputLabel>
 								<Select
 									native
@@ -603,7 +651,51 @@ class TransactionsPage extends React.Component {
 										<option key={index} value={index}>{x}</option>
 									))}
 								</Select>
+							</FormControl> */}
+							<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, width: 100 }}>
+								<InputLabel shrink htmlFor="slsmn_no">Billing Month</InputLabel>
+								<Select
+									native
+									value={this.state.billing_month}
+									onChange={this.handleChange('billing_month')}
+									inputProps={{
+										name: 'billing_month',
+										id: 'billing_month',
+									}}
+								>
+									{['All', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, index) => (
+										<option key={index} value={index}>{x}</option>
+									))}
+								</Select>
 							</FormControl>
+							<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ marginTop: 5, width: 100 }}>
+								<InputLabel shrink htmlFor="slsmn_no">Billing Year</InputLabel>
+								<Select
+									native
+									value={this.state.billing_year || ''}
+									onChange={this.handleChange('billing_year')}
+									inputProps={{
+										name: 'billing_year',
+										id: 'billing_year',
+									}}
+								>
+									{Array.from(new Array(20), (val, index) => index + (new Date().getFullYear() - 19)).map((x, index) => (
+										<option key={index} value={x}>{x}</option>
+									))}
+								</Select>
+							</FormControl>
+
+							<div className='flex items-center ml-12'>
+								<Button variant="contained" color="primary">
+									Payment<Icon font='small' className={classes.rightIcon}>add</Icon>
+								</Button>
+								<Button variant="contained" color="primary" className="ml-6">
+									Credit<Icon font='small' className={classes.rightIcon}>add</Icon>
+								</Button>
+								<Button variant="contained" color="primary" className="ml-6">
+									Invoice<Icon font='small' className={classes.rightIcon}>add</Icon>
+								</Button>
+							</div>
 						</div>
 
 						<div xs={12} sm={12} md={12} className="flex flex-col flex-1 w-full">
@@ -631,11 +723,11 @@ class TransactionsPage extends React.Component {
 
 									<PagingPanel pageSizes={pageSizes} />
 
-									{/* <SelectionState
-							selection={selection}
-							onSelectionChange={this.changeSelection}
-						/>
-						<IntegratedSelection /> */}
+									<SelectionState
+										selection={selection}
+										onSelectionChange={this.changeSelection}
+									/>
+									<IntegratedSelection />
 
 									<SortingState
 										sorting={sorting}
@@ -688,9 +780,7 @@ class TransactionsPage extends React.Component {
 									// availableFilterOperations={amountFilterOperations}
 									// editorComponent={AmountEditor}
 									/>
-									{/* <DateTypeProvider
-									for={dateColumns}
-								/> */}
+									<DateTypeProvider for={dateColumns} />
 
 									{/* <VirtualTable height="auto" rowComponent={this.TableRow} /> */}
 									<VirtualTable rowComponent={this.TableRow} />
@@ -709,7 +799,7 @@ class TransactionsPage extends React.Component {
 								/> */}
 
 									{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
-									{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
+									<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
 									<TableHeaderRow showSortingControls />
 
@@ -865,7 +955,7 @@ class TransactionsPage extends React.Component {
 
 						<Divider variant="middle" className='mt-12 mb-12' style={{ alignSelf: 'center', height: 2 }} />
 
-						<div xs={12} sm={12} md={12} className="flex flex-row">
+						<div xs={12} sm={12} md={12} className="flex flex-row mb-12">
 							<TextField
 								id="BP"
 								label="BP"
@@ -917,23 +1007,12 @@ class TransactionsPage extends React.Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		toggleFilterPanel: Actions.toggleFilterPanel,
-		toggleMapView: Actions.toggleMapView,
-		toggleSummaryPanel: Actions.toggleSummaryPanel,
-		deleteCustomersAction: Actions.deleteCustomers,
-		removeCustomerAction: Actions.removeCustomer,
-		openEditCustomerForm: Actions.openEditCustomerForm,
-		closeEditCustomerForm: Actions.closeEditCustomerForm,
-
-		openNewCustomerForm: Actions.openNewCustomerForm,
-
-		getCustomer: Actions.getCustomer,
-
 		getCustomerBillingList: Actions.getCustomerBillingList,
+		updatePeriodForFranchiseeReport: FranchiseeActions.updatePeriodForFranchiseeReport,
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth }) {
+function mapStateToProps({ customers, auth, franchisees }) {
 	return {
 		customers: customers.customersDB,
 		bLoadedCustomers: customers.bLoadedCustomers,
@@ -951,6 +1030,8 @@ function mapStateToProps({ customers, auth }) {
 		filterParam: customers.filterParam,
 		isExpandedGrouping: customers.isExpandedGrouping,
 		activeCustomer: customers.activeCustomer,
+
+		periodForReport: franchisees.periodForReport,
 	}
 }
 

@@ -716,6 +716,36 @@ class FilterPanel extends Component {
 		const value = event.target.value
 		this.setState({ [name]: value })
 		this.props.updateNewCustomerParam(name, value)
+
+		if (FuseUtils.parseBoolean(this.props.activeCustomer.Data.sameBillingAsMain)) {
+			switch (name) {
+				case "cus_name":
+					this.props.updateNewCustomerParam('bill_name', value)
+					break
+				case "cus_phone":
+					this.props.updateNewCustomerParam('bill_phone', value)
+					break
+
+				case "cus_addr":
+					this.props.updateNewCustomerParam('bill_addr', value)
+					break
+				case "cus_addr2":
+					this.props.updateNewCustomerParam('bill_addr2', value)
+					break
+
+
+				case "cus_city":
+					this.props.updateNewCustomerParam('bill_city', value)
+					break
+				case "cus_state":
+					this.props.updateNewCustomerParam('bill_state', value)
+					break
+				case "cus_zip":
+					this.props.updateNewCustomerParam('bill_zip', value)
+					break
+			}
+		}
+
 	}
 	handleChangeCustomerInfoPropsChecked = name => event => {
 		const checked = event.target.checked
@@ -953,13 +983,14 @@ class FilterPanel extends Component {
 									<InputLabel shrink htmlFor="cus_state">State</InputLabel>
 									<Select
 										native
-										value={this.state.cus_state || ''}
+										value={this.state.cus_state}
 										onChange={this.handleChangeCustomerInfoProps('cus_state')}
 										inputProps={{
 											name: 'cus_state',
 											id: 'cus_state',
 										}}
 									>
+										<option value=''></option>
 										{stateNames.map((option, index) => (
 											<option key={index} value={option.Value}>
 												{option.Value}

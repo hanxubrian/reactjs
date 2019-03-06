@@ -31,8 +31,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import SettingsBackupRestore from '@material-ui/icons/SettingsBackupRestore';
 import CancelIcon from '@material-ui/icons/Cancel';
-import GridContainer from "../../../../Commons/Grid/GridContainer";
-import GridItem from "../../../../Commons/Grid/GridItem";
+import GridContainer from "../../../Commons/Grid/GridContainer";
+import GridItem from "../../../Commons/Grid/GridItem";
 import _ from "lodash";
 
 
@@ -111,7 +111,7 @@ const styles = theme => ({
 
 
 
-class ProcessModalForm extends React.Component {
+class PaymentLockBoxModalForm extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -127,7 +127,7 @@ class ProcessModalForm extends React.Component {
 	}
 
 	handleClose = () => {
-		this.props.showProcessModalForm(false)
+		this.props.showPaymentLockBoxModalForm(false)
 	};
 	handleChange = name => event => {
 		this.setState({
@@ -135,6 +135,9 @@ class ProcessModalForm extends React.Component {
 			errorMsg: ""
 		});
 	};
+
+
+
 
 
 
@@ -162,6 +165,10 @@ class ProcessModalForm extends React.Component {
 		})
 	}
 
+	processlockbox = () =>{
+        this.props.paymentlockboxgetalldata();
+        this.props.showPaymentLockBoxModalForm(false)
+    }
 
 	handleChangeEmailNotesTo = (event, value) => {
 		this.setState({ EmailNotesTo: value });
@@ -173,7 +180,7 @@ class ProcessModalForm extends React.Component {
 		return (
 			<div className={classes.root}>
 				<Dialog
-                    open={this.props.processModalForm.open}
+                    open={this.props.paymentLockBoxModalForm.open}
                     onClose={this.handleClose }
                     aria-labelledby="form-dialog-title"
                     maxWidth={"md"}
@@ -182,19 +189,20 @@ class ProcessModalForm extends React.Component {
                     <DialogTitle id="form-dialog-title" onClose={this.handleClose }>
                         <h2 className={classes.dialogH2}>
                             <SettingsBackupRestore  className={classNames(classes.leftIcon)} />
-                            Process Chargebacks
+                            Process LockBox
                         </h2>
                     </DialogTitle>
 					<DialogContent>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl,"mt-24")}>
-                            <GridItem xs={12} sm={6} md={6} className="flex flex-row ">
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row width:100%">
+                            {this.props.bStart && (
 								<TextField
 									margin="none"
-									label="Month"
-									name="Month"
-									type="date"
+									label="Date"
+									name="Date"
+									// type="date"
 									variant="outlined"
-									value={this.state.Month}
+									value={this.props.data.ExceptionItems[0].lboxdate}
 									onChange={this.handleChange}
 									fullWidth
 									required
@@ -208,9 +216,9 @@ class ProcessModalForm extends React.Component {
 										shrink: true,
 										classes: {outlined: classes.label}
 									}}
-								/>
+								/>)}
 							</GridItem>
-                            <GridItem xs={12} sm={6} md={6} className="flex flex-row ">
+                            {/* <GridItem xs={12} sm={6} md={6} className="flex flex-row ">
 								<TextField
 									margin="none"
 									label="Year"
@@ -238,12 +246,12 @@ class ProcessModalForm extends React.Component {
 									value={this.state.Notes || ''}
 									onChange={this.handleChange('Notes')}
 								/>
-							</GridItem>
+							</GridItem> */}
 						</GridContainer>
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={() => {this.processlockbox()}} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
+						<Button variant="contained" onClick={this.processlockbox} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Process Lockbox</Button>
 					</DialogActions>
 				</Dialog>
 			</div>
@@ -253,16 +261,20 @@ class ProcessModalForm extends React.Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		showProcessModalForm: Actions.showProcessModalForm
+        showPaymentLockBoxModalForm: Actions.showPaymentLockBoxModalForm,
+        paymentlockboxgetalldata: Actions.paymentlockboxgetalldata,
+        fileupload: Actions.paymentlockboxfileupload,
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, accountReceivablePayments, auth, chargebacks }) {
+function mapStateToProps({ paymentlockbox, accountReceivablePayments, auth, chargebacks }) {
 	return {
 		regionId: auth.login.defaultRegionId,
-        processModalForm: chargebacks.processModalForm,
+        paymentLockBoxModalForm: paymentlockbox.paymentLockBoxModalForm,
+        data: paymentlockbox.data,
+        bStart              : paymentlockbox.bStart,
 
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProcessModalForm)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentLockBoxModalForm)));

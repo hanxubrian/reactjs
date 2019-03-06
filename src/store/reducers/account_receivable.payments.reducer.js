@@ -110,7 +110,7 @@ const accountReceivablePayments = function (state = initialState, action) {
 				startPaymentHistory: true,
 				loading: {
 					...state.loading,
-					startPaymentHistory: "Fetching payments history data...",
+					startPaymentHistory: "Fetching all payments history data...",
 				},
 			}
 		case Actions.GET_PAYMENT_HISTORY_FAILED:

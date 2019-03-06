@@ -1,15 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import _ from "lodash";
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { NativeSelect, Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox, Switch } from '@material-ui/core';
+import { Icon, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Checkbox, Switch } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -20,57 +15,8 @@ import * as Actions from 'store/actions';
 
 import classNames from 'classnames';
 
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-import { Getter } from '@devexpress/dx-react-core';
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-
-import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-
-import ReactDataGrid from "react-data-grid";
-import IncreaseDecreaseContractModal from './IncreaseDecreaseContractModal'
 import IncreaseDecreaseContractPage from './IncreaseDecreaseContractPage'
 
-import GridContainer from "Commons/Grid/GridContainer";
-import GridItem from "Commons/Grid/GridItem";
 import CancelContractPage from './CancelContractPage';
 import SuspendContractPage from './SuspendContractPage';
 
@@ -81,6 +27,9 @@ import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
 
 import FuseUtils from '@fuse/FuseUtils';
 import { NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
+
+import PropTypes from 'prop-types';
+import MaskedInput from 'react-text-mask';
 
 const styles = theme => ({
 	root: {
@@ -192,149 +141,29 @@ const stateNames = [
 function Transition(props) {
 	return <Slide direction="up" {...props} />;
 }
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		{/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-		<IconButton onClick={onExecute} title="Add New">
-			<NewIcon />
-		</IconButton>
-	</div>
-);
 
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit">
-		<EditIcon />
-	</IconButton>
-);
+function TextMaskPhone(props) {
+	const { inputRef, ...other } = props;
 
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	add: AddButton,
-	edit: EditButton,
-	delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
 	return (
-		<CommandButton
-			onExecute={onExecute}
+		<MaskedInput
+			{...other}
+			ref={ref => {
+				inputRef(ref ? ref.inputElement : null);
+			}}
+			// mask={['+', '1', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+			mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+			// placeholderChar={'\u2000'}
+			placeholderChar={'∗'}
+			showMask
+			guide
 		/>
 	);
+}
+
+TextMaskPhone.propTypes = {
+	inputRef: PropTypes.func.isRequired,
 };
-const editing_cell_styles = theme => ({
-	cell: {
-		// background: "#989898",
-		// color: "white",
-		padding: 0,
-	}
-});
-const EditingHeaderCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}
-
-	/>);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingHeaderCellComponentBase
-);
-
-const EditingCellComponentBase = props => {
-	return (<TableEditColumn.Cell {...props}>
-		{/* {React.Children.toArray(props.children)
-			.filter((child) => {
-				if (child.props.id === 'delete') {
-					// if (props.tableRow.row.id < 2) {
-					// return true;
-					// }
-					return false;
-				}
-				return true;
-			})} */}
-	</TableEditColumn.Cell>)
-};
-
-//
-// header cell style
-//
-const header_cell_styles = theme => ({
-	cell: {
-		background: "#989898",
-		color: "white",
-	}
-});
-const tableHeaderCellComponentBase = props => {
-	return (<TableHeaderRow.Cell {...props}
-
-	/>);
-};
-const tableHeaderCellComponent = withStyles(header_cell_styles)(
-	tableHeaderCellComponentBase
-);
-
-
-const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-	EditingCellComponentBase
-);
-const getRowId = row => row.id;
-
-const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
-
-const BlueDialogTitle = withStyles(theme => ({
-	root: {
-		borderBottom: `1px solid ${theme.palette.divider}`,
-		backgroundColor: "#3c93ec",
-		margin: 0,
-		padding: theme.spacing.unit * 2,
-	},
-	closeButton: {
-		position: 'absolute',
-		right: theme.spacing.unit,
-		top: theme.spacing.unit,
-		color: "white",
-	},
-}))(props => {
-	const { children, classes, onClose } = props;
-	return (
-		<DialogTitle disableTypography className={classes.root}>
-			{children}
-			{onClose ? (
-				<IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-					<Icon>close</Icon>
-				</IconButton>
-			) : null}
-		</DialogTitle>
-	);
-});
 
 class ServiceAgreementPage extends React.Component {
 
@@ -491,15 +320,7 @@ class ServiceAgreementPage extends React.Component {
 
 				// }
 			],
-			columnsForReactDataGrid: [
-				{ key: "InvoiceNo", name: "Invoice No", editable: false },
-				{ key: "InvoiceDate", name: "Invoice Date", editable: false, formatter: DateFormatter },
-				{ key: "DueDate", name: "Due Date", editable: false, formatter: DateFormatter },
-				{ key: "DaysPastDue", name: "Days Past Due", editable: false, sortDescendingFirst: true },
-				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
-				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
-				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
-			],
+
 			rows: [],
 			currencyColumns: [
 				'InvoiceAmount', 'InvoiceBalance', 'PaymentAmount'
@@ -712,6 +533,8 @@ class ServiceAgreementPage extends React.Component {
 				bill_city,
 				bill_state,
 				bill_zip,
+				bill_phone,
+				sameBillingAsMain,
 
 				sqr_ft,
 				cleantimes,
@@ -759,6 +582,8 @@ class ServiceAgreementPage extends React.Component {
 				bill_city,
 				bill_state,
 				bill_zip,
+				bill_phone,
+				sameBillingAsMain,
 
 				sqr_ft,
 				cleantimes,
@@ -844,6 +669,8 @@ class ServiceAgreementPage extends React.Component {
 				bill_city,
 				bill_state,
 				bill_zip,
+				bill_phone,
+				sameBillingAsMain,
 
 				sqr_ft,
 				cleantimes,
@@ -885,6 +712,8 @@ class ServiceAgreementPage extends React.Component {
 				bill_city,
 				bill_state,
 				bill_zip,
+				bill_phone,
+				sameBillingAsMain,
 
 				sqr_ft,
 				cleantimes,
@@ -923,7 +752,32 @@ class ServiceAgreementPage extends React.Component {
 	}
 
 	handleChangeChecked = name => event => {
-		this.setState({ [name]: event.target.checked });
+		const checked = event.target.checked
+		this.setState({ [name]: checked });
+		if (name === "sameBillingAsMain") {
+			this.props.updateNewCustomerParam('sameBillingAsMain', checked)
+			if (checked) {
+				this.props.updateNewCustomerParam('bill_name', this.props.activeCustomer.Data.cus_name)
+				this.props.updateNewCustomerParam('bill_phone', this.props.activeCustomer.Data.cus_phone)
+				this.props.updateNewCustomerParam('bill_addr', this.props.activeCustomer.Data.cus_addr)
+				this.props.updateNewCustomerParam('bill_addr2', this.props.activeCustomer.Data.cus_addr2)
+				this.props.updateNewCustomerParam('bill_city', this.props.activeCustomer.Data.cus_city)
+				this.props.updateNewCustomerParam('bill_state', this.props.activeCustomer.Data.cus_state)
+				this.props.updateNewCustomerParam('bill_zip', this.props.activeCustomer.Data.cus_zip)
+
+				// this.setState({
+				// 	bill_name: this.props.activeCustomer.Data.cus_name,
+				// 	bill_phone: this.props.activeCustomer.Data.cus_phone,
+
+				// 	bill_addr: this.props.activeCustomer.Data.cus_addr,
+				// 	bill_addr2: this.props.activeCustomer.Data.cus_addr2,
+
+				// 	bill_city: this.props.activeCustomer.Data.cus_city,
+				// 	bill_state: this.props.activeCustomer.Data.cus_state,
+				// 	bill_zip: this.props.activeCustomer.Data.cus_zip,
+				// })
+			}
+		}
 	};
 
 	handleChange = name => event => {
@@ -1108,7 +962,7 @@ class ServiceAgreementPage extends React.Component {
 											id: 'contract_lenght',
 										}}
 									>
-										{["Recurring", "One-Time", "Variable"].map((x, index) => (
+										{["Recurring", "One-Time Clean", "Variable"].map((x, index) => (
 											<option key={index} value={index}>{x}</option>
 										))}
 									</Select>
@@ -1252,8 +1106,16 @@ class ServiceAgreementPage extends React.Component {
 						<div className={classNames('items-center')}>
 
 							<div xs={12} sm={12} md={12} className="flex flex-col">
-								<h3 className="mt-24 mb-12">Billing Address</h3>
-
+								<div className='flex w-full items-center'>
+									<h3 className="">Billing Address</h3>
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChangeChecked('sameBillingAsMain')} checked={this.state.sameBillingAsMain} />
+										}
+										label="Same as main"
+										className="ml-24"
+									/>
+								</div>
 								<div className='flex w-full'>
 									<TextField
 										id="bill_name"
@@ -1264,13 +1126,37 @@ class ServiceAgreementPage extends React.Component {
 										margin="dense"
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
+										InputProps={{ readOnly: FuseUtils.parseBoolean(this.state.sameBillingAsMain) }}
 										style={{ width: '50%' }} />
+									<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
+										<TextField
+											id="bill_phone"
+											label="Phone"
+											className={classes.textField}
+											// onChange={this.handleChange('customerPhone')}
+											margin="dense"
+											InputLabelProps={{
+												shrink: true
+											}}
+											InputProps={{
+												readOnly: FuseUtils.parseBoolean(this.state.sameBillingAsMain),
+												inputComponent: TextMaskPhone,
+												maxLength: 40,
+												value: this.state.bill_phone || '',
+												onChange: this.handleChangeCustomerInfoProps('bill_phone')
+											}}
+											// variant="outlined"
+											fullWidth
+											required
+										/>
+									</FormControl>
 								</div>
 								<div className='flex w-full'>
 									<TextField
 										id="bill_addr"
 										label="Address"
 										className={classNames(classes.textField, 'pr-12')}
+										InputProps={{ readOnly: FuseUtils.parseBoolean(this.state.sameBillingAsMain) }}
 										value={this.state.bill_addr || ''}
 										onChange={this.handleChangeCustomerInfoProps('bill_addr')}
 										margin="dense"
@@ -1281,6 +1167,7 @@ class ServiceAgreementPage extends React.Component {
 										id="bill_addr2"
 										label="Address2"
 										className={classNames(classes.textField, 'pr-12')}
+										InputProps={{ readOnly: FuseUtils.parseBoolean(this.state.sameBillingAsMain) }}
 										value={this.state.bill_addr2 || ''}
 										onChange={this.handleChangeCustomerInfoProps('bill_addr2')}
 										margin="dense"
@@ -1291,6 +1178,7 @@ class ServiceAgreementPage extends React.Component {
 										id="bill_city"
 										label="City"
 										className={classNames(classes.textField, 'pr-12')}
+										InputProps={{ readOnly: FuseUtils.parseBoolean(this.state.sameBillingAsMain) }}
 										value={this.state.bill_city || ''}
 										onChange={this.handleChangeCustomerInfoProps('bill_city')}
 										margin="dense"
@@ -1321,6 +1209,7 @@ class ServiceAgreementPage extends React.Component {
 										id="bill_zip"
 										label="Zip/Postal"
 										className={classes.textField}
+										InputProps={{ readOnly: FuseUtils.parseBoolean(this.state.sameBillingAsMain) }}
 										value={this.state.bill_zip || ''}
 										onChange={this.handleChangeCustomerInfoProps('bill_zip')}
 										margin="dense"
@@ -1329,7 +1218,6 @@ class ServiceAgreementPage extends React.Component {
 										style={{ width: '13%' }} />
 								</div>
 							</div>
-
 							<div xs={12} sm={12} md={12} className="flex flex-row justify-between">
 								<div className="flex flex-col justify-around">
 									<TextField
@@ -1382,7 +1270,7 @@ class ServiceAgreementPage extends React.Component {
 								<div className="flex flex-col justify-around">
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('cpiadj')} checked={this.state.cpiadj === "T"} />
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('cpiadj')} checked={FuseUtils.parseBoolean(this.state.cpiadj)} />
 										}
 										label="CPI Increase"
 										style={{ marginRight: "30px" }}
@@ -1394,7 +1282,7 @@ class ServiceAgreementPage extends React.Component {
 										<FormControlLabel
 											control={
 												<Switch
-													checked={this.state.ebill || false}
+													checked={FuseUtils.parseBoolean(this.state.ebill)}
 													onChange={this.handleChangeCustomerInfoPropsChecked('ebill')}
 													value="ebill"
 												/>
@@ -1540,7 +1428,7 @@ class ServiceAgreementPage extends React.Component {
 									<FormControlLabel
 										control={
 											<Checkbox
-												checked={this.state.natacct === true}
+												checked={FuseUtils.parseBoolean(this.state.natacct)}
 												onChange={this.handleChangeCustomerInfoPropsChecked('natacct')}
 												value="natacct"
 											/>
@@ -1550,7 +1438,7 @@ class ServiceAgreementPage extends React.Component {
 									<FormControlLabel
 										control={
 											<Checkbox
-												checked={this.state.parent === 1 || false}
+												checked={FuseUtils.parseBoolean(this.state.parent)}
 												onChange={this.handleChangeCustomerInfoPropsChecked('parent')}
 												value="parent"
 											/>

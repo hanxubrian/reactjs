@@ -410,15 +410,25 @@ class Customers extends Component {
 
 	trySubmitForApproval = () => {
 
-		if (this.props.activeCustomer &&
-			this.props.activeCustomer.Data &&
-			this.props.activeCustomer.Data.AssignedFranchisees &&
-			this.props.activeCustomer.Data.AssignedFranchisees.length > 0) {
+		if (!this.validation()) {
+			this.setState({
+				tryingToSubmitWithoutOffering: false,
+			})
+			return
+		}
+		if (this.props.activeCustomer.Data.contract_lenght === 1) {
 			this.submitForApproval()
 		} else {
-			this.setState({
-				tryingToSubmitWithoutOffering: true
-			})
+			if (this.props.activeCustomer &&
+				this.props.activeCustomer.Data &&
+				this.props.activeCustomer.Data.AssignedFranchisees &&
+				this.props.activeCustomer.Data.AssignedFranchisees.length > 0) {
+				this.submitForApproval()
+			} else {
+				this.setState({
+					tryingToSubmitWithoutOffering: true
+				})
+			}
 		}
 	}
 	tryClose = () => {
@@ -437,18 +447,43 @@ class Customers extends Component {
 	validation() {
 		let msg = ""
 		if (!this.props.activeCustomer.Data.cus_name) {
-			msg = "Customer name is invalid"
-		}
-		if (!this.props.activeCustomer.Data.cus_addr) {
-			msg = "Customer address is invalid"
-		}
-		if ([0, 2].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
-			msg = "Monthly contract amount is invalid"
-		}
-		if (msg !== "") {
-			this.props.openSnackbar(msg)
+			this.props.openSnackbar("Customer name is invalid")
 			return false
 		}
+
+		if (!this.props.activeCustomer.Data.cus_addr ||
+			!this.props.activeCustomer.Data.cus_city ||
+			!this.props.activeCustomer.Data.cus_state ||
+			!this.props.activeCustomer.Data.cus_zip) {
+			this.props.openSnackbar("Customer address is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.cus_phone || this.props.activeCustomer.Data.cus_phone === "(∗∗∗) ∗∗∗-∗∗∗∗") {
+			this.props.openSnackbar("Customer phone is invalid")
+			return false
+		}
+		// if (!FuseUtils.validateEmail(this.props.activeCustomer.Data.email1)) {
+		if (!this.props.activeCustomer.Data.email1) {
+			this.props.openSnackbar("Email is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.cont_1) {
+			this.props.openSnackbar("Contact(1) is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.bill_name) {
+			this.props.openSnackbar("Billing name is invalid")
+			return false
+		}
+		if (!this.props.activeCustomer.Data.bill_phone || this.props.activeCustomer.Data.bill_phone === "(∗∗∗) ∗∗∗-∗∗∗∗") {
+			this.props.openSnackbar("Billing phone is invalid")
+			return false
+		}
+		if ([0, 2].indexOf(this.props.activeCustomer.Data.contract_lenght) > -1 && this.props.activeCustomer.Data.cont_bill <= 0) {
+			this.props.openSnackbar("Monthly contract amount is invalid")
+			return false
+		}
+
 		return true
 	}
 	submitForApproval = () => {
@@ -456,12 +491,12 @@ class Customers extends Component {
 			isSubmittingForApproval: false
 		})
 
-		if (!this.validation()) {
-			this.setState({
-				tryingToSubmitWithoutOffering: false,
-			})
-			return
-		}
+		// if (!this.validation()) {
+		// 	this.setState({
+		// 		tryingToSubmitWithoutOffering: false,
+		// 	})
+		// 	return
+		// }
 
 
 		let param = {
@@ -752,8 +787,8 @@ class Customers extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
-						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': customerForm.props.open ? false : summaryState }),
+						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': customerForm.props.open ? true : filterState }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
 						content: classes.content
@@ -848,16 +883,8 @@ class Customers extends Component {
 											</Tooltip> */}
 										</div>
 										<div className="flex items-center">
-											{this.props.customerForm.props.open &&
-												<Tooltip title="Log (DEBUG)">
-													<IconButton
-														className={classNames(classes.button)}
-														onClick={this.debug}
-													><Icon>check</Icon></IconButton>
-												</Tooltip>
-											}
-											{
-												customerForm.type === "edit" && <Button variant="contained" color="primary"
+											{customerForm.type === "edit" &&
+												<Button variant="contained" color="primary"
 													aria-label="Add an alarm"
 													aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
 													aria-haspopup="true"
@@ -891,28 +918,15 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
-											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}
-												className="mr-12"
-											>
+											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval} className="mr-12">
 												{customerForm.type === "edit" ? 'Update' : 'Save'}
 												<Icon className={classNames(classes.rightIcon, 'ml-6')}>save</Icon>
 											</Button>
-											<Button variant="contained" color="primary" onClick={this.closeComposeForm}
-												className="mr-12"
-											>
-												Discard
-												<Icon className={classNames(classes.rightIcon, 'ml-6')}>delete</Icon>
+											<Button variant="contained" color="primary" onClick={this.tryClose} className="mr-12">
+												Close
+												<Icon className={classNames(classes.rightIcon, 'ml-6')}>close</Icon>
 											</Button>
-											{/* <Tooltip title="Discard">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-													<Icon>delete</Icon>
-												</IconButton>
-											</Tooltip> */}
-											<Tooltip title="Close">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.tryClose}>
-													<Icon>close</Icon>
-												</IconButton>
-											</Tooltip>
+
 										</div>
 									</div>
 								</div>

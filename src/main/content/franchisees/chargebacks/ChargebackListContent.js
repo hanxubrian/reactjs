@@ -662,7 +662,6 @@ class ChargebackListContent extends Component {
 			grouping,
 			expandedGroups,
 		} = this.state;
-
 		return (
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
