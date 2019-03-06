@@ -1,10 +1,13 @@
 import React, { Component, Fragment } from 'react';
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
+import { Card, CardHeader, CardContent, Typography, Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
 
 import { withStyles ,CircularProgress} from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
+//Custom components
+import GridContainer from "Commons/Grid/GridContainer";
+import GridItem from "Commons/Grid/GridItem";
 
 // for store
 import { bindActionCreators } from "redux";
@@ -120,7 +123,7 @@ const styles = theme => ({
             justifyContent: 'center'
         },
         '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width: 'inherit!important',
+            width: '100%',
             minWidth: 'inherit!important',
         },
         '& .ReactTable .rt-thead .rt-th:last-child': {
@@ -184,7 +187,30 @@ const styles = theme => ({
         justifyContent: 'center',
         display: 'flex',
         opacity: 0.5
-    }
+    },
+    cardHeader: {
+        backgroundColor: theme.palette.secondary.main,
+        padding: '8px 24px',
+        width: '100%',
+        '& span': {
+            color: 'white',
+            fontSize: 16,
+        }
+    },
+    cardContent: {
+        paddingTop: 12,
+        width: '100%',
+        paddingBottom: '70px!important',
+        '& h6':{
+            lineHeight: 1,
+            fontSize: 16
+        }
+    },
+    formControl: {
+        width: '100%',
+        marginBottom: 12,
+        minWidth: 600,
+    },
 });
 //
 // table content rows stle
@@ -787,15 +813,40 @@ class PaymentLockBoxContentList extends Component {
         // console.log('paymentlockbox------------', this.props.paymentlockbox);
         return (
             <Fragment>
-                <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+                <div className={classNames(classes.layoutTable, "flex flex-col h-full width:100%")}>
                     {this.props.paymentlockbox.getallstatus && (
                         <div className={classes.overlay}>
                             <CircularProgress className={classes.progress} color="secondary"/>
                         </div>
                     )}
 
-                    <div className={classNames("flex flex-col")}
+                    <div className={classNames("flex flex-col width:100%")}
                     >
+                            <div className="mb-8 ml-8 mr-8">
+                                <Card className={classes.card}>
+                                    <CardHeader title="Lockbox payments" className={classNames(classes.cardHeader, "flex-1")} />
+                                    <CardContent >
+                                        <div className="flex flex-row justify-between mb-4">
+                                                {/* <Icon fontSize={"small"} className="mr-4">account_circle</Icon> */}
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>Lockbox Date: {this.props.data.ExceptionItems[0].lboxdate} </strong>
+                                                </Typography>
+
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>Lockbox Time: {this.props.data.ExceptionItems[0].lboxtime} </strong >
+                                                </Typography>
+
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>Lockbox Number: {this.props.data.ExceptionItems[0].lboxnum} </strong>
+                                                </Typography>
+
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>File Import Date: {this.props.data.ExceptionItems[0].importdate} </strong>
+                                                </Typography>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                                </div>
                         <Grid
                             rows={rows}
                             columns={tableColumnExtensions}
