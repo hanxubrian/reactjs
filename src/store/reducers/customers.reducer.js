@@ -336,7 +336,9 @@ const initialState = {
 		reason: '',
 		notes: '',
 		transfer_fee: ''
-	}
+	},
+	bLeftSidebarCustomerService: false,
+	bRightSidebarCustomerService: false,
 };
 
 
@@ -580,8 +582,8 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					bOpenedFilterPanel: true,
-					bOpenedSummaryPanel: false,
+					// bOpenedFilterPanel: true,
+					// bOpenedSummaryPanel: false,
 					customerForm: {
 						type: 'new',
 						props: {
@@ -613,8 +615,8 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					bOpenedFilterPanel: true,
-					bOpenedSummaryPanel: false,
+					// bOpenedFilterPanel: true,
+					// bOpenedSummaryPanel: false,
 					bGetCustomerStart: false,
 					loading: {
 						...state.loading,
@@ -709,8 +711,8 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					bOpenedFilterPanel: true,
-					bOpenedSummaryPanel: false,
+					// bOpenedFilterPanel: true,
+					// bOpenedSummaryPanel: false,
 					bGetCustomerStart: false,
 					loading: {
 						...state.loading,
@@ -1249,6 +1251,17 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
 				showFranchiseeLocationFilterInAccountOffering: action.payload,
+			};
+
+		case Actions.TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE:
+			return {
+				...state,
+				bLeftSidebarCustomerService: !state.bLeftSidebarCustomerService
+			};
+		case Actions.TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE:
+			return {
+				...state,
+				bRightSidebarCustomerService: !state.bRightSidebarCustomerService
 			};
 		default:
 			{

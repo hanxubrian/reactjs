@@ -187,12 +187,13 @@ class CustomerSearchBar extends Component {
 			<div className="flex flex-row items-center">
 				<div className="flex items-center justify-start p-12">
 					<Button
-						onClick={this.props.toggleFilterPanel}
+						onClick={this.props.toggleLeftSidebarCustomerService}
 						aria-label="toggle filter panel"
 						color="secondary"
-						className={classNames(classes.filterPanelButton)}
+						className={classNames(classes.summaryPanelButton)}
 					>
-						<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
+						{/* <img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" /> */}
+						<Icon>details</Icon>
 					</Button>
 				</div>
 
@@ -231,13 +232,14 @@ class CustomerSearchBar extends Component {
 							<Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon>
 						</IconButton>
 					</Tooltip>
-					<Button
-						onClick={this.props.toggleSummaryPanel}
+					{/* <Button
+						onClick={this.props.toggleRightSidebarCustomerService}
 						aria-label="toggle summary panel"
 						className={classNames(classes.summaryPanelButton)}
 					>
 						<Icon>insert_chart</Icon>
-					</Button></div>
+					</Button> */}
+				</div>
 			</div>
 		)
 	}
@@ -245,9 +247,9 @@ class CustomerSearchBar extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		toggleFilterPanel: Actions.toggleFilterPanel,
+		toggleLeftSidebarCustomerService: Actions.toggleLeftSidebarCustomerService,
+		toggleRightSidebarCustomerService: Actions.toggleRightSidebarCustomerService,
 		toggleMapView: Actions.toggleMapView,
-		toggleSummaryPanel: Actions.toggleSummaryPanel,
 		applySearchText: Actions.applySearchText,
 	}, dispatch);
 }
@@ -255,6 +257,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ customers }) {
 	return {
 		mapViewState: customers.bOpenedMapView,
+
+		bLeftSidebarCustomerService: customers.bLeftSidebarCustomerService,
+		bRightSidebarCustomerService: customers.bRightSidebarCustomerService,
 	}
 }
 

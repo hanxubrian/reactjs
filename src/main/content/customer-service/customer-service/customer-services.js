@@ -470,8 +470,10 @@ class CustomerServices extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerServiceForm.open && customerServiceForm.isOpenSummaryPanel || customerServiceForm.open && this.state.showRightSidePanel }),
-						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': customerServiceForm.isOpenFilterPanel }),
+						// rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerServiceForm.open && customerServiceForm.isOpenSummaryPanel || customerServiceForm.open && this.state.showRightSidePanel }),
+						// leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': customerServiceForm.isOpenFilterPanel }),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': this.props.bRightSidebarCustomerService }),
+						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': customerServiceForm.open ? true : this.props.bLeftSidebarCustomerService }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
 						content: classes.content
@@ -727,9 +729,6 @@ class CustomerServices extends Component {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getCustomers: Actions.getCustomers,
-		toggleFilterPanel: Actions.toggleFilterPanel,
-		toggleSummaryPanel: Actions.toggleSummaryPanel,
-		toggleMapView: Actions.toggleMapView,
 		// deleteCustomersAction: Actions.deleteCustomers,
 		// removeCustomerAction: Actions.removeCustomer,
 		// openNewCustomerForm: Actions.openNewCustomerForm,
@@ -791,6 +790,9 @@ function mapStateToProps({ customers, auth, franchisees }) {
 
 		contactForms: customers.contactForms,
 		isExpandedGrouping: customers.isExpandedGrouping,
+
+		bLeftSidebarCustomerService: customers.bLeftSidebarCustomerService,
+		bRightSidebarCustomerService: customers.bRightSidebarCustomerService,
 
 	}
 }

@@ -121,6 +121,9 @@ export const SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING = "[CUSTOMERS A
 
 export const EXPAND_COLLAPSE_GROUPING = "[CUSTOMERS-service APP] EXPAND_COLLAPSE_GROUPING";
 
+export const TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE = "[CUSTOMERS-service APP] TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE";
+export const TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE = "[CUSTOMERS-service APP] TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -272,6 +275,16 @@ export function getDocuments() {
 export function toggleFilterPanel() {
 	return {
 		type: TOGGLE_FILTER_PANEL
+	}
+}
+export function toggleLeftSidebarCustomerService() {
+	return {
+		type: TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE
+	}
+}
+export function toggleRightSidebarCustomerService() {
+	return {
+		type: TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE
 	}
 }
 

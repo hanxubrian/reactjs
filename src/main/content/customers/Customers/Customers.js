@@ -776,8 +776,8 @@ class Customers extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
-						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary':  customerForm.props.open ? false : summaryState }),
+						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': customerForm.props.open ? true : filterState }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
 						content: classes.content
