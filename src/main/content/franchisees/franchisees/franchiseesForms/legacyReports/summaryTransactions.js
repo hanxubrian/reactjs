@@ -129,63 +129,62 @@ class SummaryTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SummaryPages[0].length===0))
+        if(franchiseeReport===null || (franchiseeReport!==null && franchiseeReport.Data.SUMMARY_PAGE[0].length===0))
             return (<div/>);
 
-        const {SummaryPages }  = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0];
+        const {SUMMARY_PAGE }  = franchiseeReport.Data;
 
         const aBillings = [
-            SummaryPages[0].ActualBilling,
-            SummaryPages[0].Adtl_Bill_Fran,
-            SummaryPages[0].ClientSupplies,
-            SummaryPages[0].Adtl_Bill_Office
+            SUMMARY_PAGE[0]['ACTUAL BILLING'],
+            SUMMARY_PAGE[0].ADTL_BILL_FRAN,
+            SUMMARY_PAGE[0].CLIENT_SUPPLIES,
+            SUMMARY_PAGE[0].ADDTL_BILL_OFFICE
         ];
 
         let aBillings3 = [];
-        let summaryRoyalty = null;
+        let summaryROYALTY = null;
         let summarytech = [];
         let summaryAcct = [];
         let summaryAddtl= [];
         let summaryFranNote = [];
 
-        if(SummaryPages[0].TotalMonthRev!== null && SummaryPages[0].TotalMonthRev.length>0){
-            aBillings3.push(SummaryPages[0].TotalMonthRev[0]);
+        if(SUMMARY_PAGE[0].TOTAL_MON_REV!== null && SUMMARY_PAGE[0].TOTAL_MON_REV.length>0){
+            aBillings3.push(SUMMARY_PAGE[0].TOTAL_MON_REV[0]);
         }
 
-        if(SummaryPages[0].ClientSalesTaxBot!== null && SummaryPages[0].ClientSalesTaxBot.length>0){
-            aBillings3.push(SummaryPages[0].ClientSalesTaxBot[0]);
+        if(SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT!== null && SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT.length>0){
+            aBillings3.push(SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]);
         }
 
-        if(SummaryPages[0].Royalty!== null && SummaryPages[0].Royalty.length>0){
-            summaryRoyalty = SummaryPages[0].Royalty[0];
+        if(SUMMARY_PAGE[0].ROYALTY!== null && SUMMARY_PAGE[0].ROYALTY.length>0){
+            summaryROYALTY = SUMMARY_PAGE[0].ROYALTY[0];
         }
 
-        if(SummaryPages[0].AccountFee!== null && SummaryPages[0].AccountFee.length>0){
-            summaryAcct = SummaryPages[0].AccountFee[0];
+        if(SUMMARY_PAGE[0].ACCT_FEE!== null && SUMMARY_PAGE[0].ACCT_FEE.length>0){
+            summaryAcct = SUMMARY_PAGE[0].ACCT_FEE[0];
         }
 
-        if(SummaryPages[0].TechFee!== null && SummaryPages[0].TechFee.length>0){
-            summarytech = SummaryPages[0].TechFee[0];
+        if(SUMMARY_PAGE[0].TECH_FEE!== null && SUMMARY_PAGE[0].TECH_FEE.length>0){
+            summarytech = SUMMARY_PAGE[0].TECH_FEE[0];
         }
 
-        if(SummaryPages[0].AddtlBillOfficeComm!== null && SummaryPages[0].AddtlBillOfficeComm.length>0){
-            summaryAddtl = SummaryPages[0].AddtlBillOfficeComm[0];
+        if(SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM!== null && SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM.length>0){
+            summaryAddtl = SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0];
         }
 
-        if(SummaryPages[0].FranNotePymt!== null && SummaryPages[0].FranNotePymt.length>0){
-            summaryFranNote = SummaryPages[0].FranNotePymt[0];
+        if(SUMMARY_PAGE[0].FRAN_NOTE_PYMT!== null && SUMMARY_PAGE[0].FRAN_NOTE_PYMT.length>0){
+            summaryFranNote = SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0];
         }
 
-        const aDeductions0 = [summaryRoyalty,summaryAcct,summarytech,summaryAddtl,summaryFranNote];
-        const aDeductions1 = [ "FinderFee"];
-        const aDeductions2 =["FRAN_NOTE_PYMT2", "AcctFeeRebCur", "AcctFeeRebBal"];
-        const aDeductions3 =["SubtotalReg"];
-        const aDeductions4 =["AdvertisingFee", "TotalLeases", "BusinessProt", "BppAdmin", "ClientSalesTaxBot",
-            "RegularMisc", "SpecialMisc"];
-        const aDeductions5 =["SubtotalSpec"];
-        const aDeductions6 =["TotalDeds"];
-        const aDeductions7 =["ChargeBacks", "ChildSupport"];
-        const aDeductions8 =["AcctFeeRebBal"];
+        const aDeductions0 = [summaryROYALTY,summaryAcct,summarytech,summaryAddtl,summaryFranNote];
+        const aDeductions1 = [ "FINDERS_FEES"];
+        const aDeductions2 =["FRAN_NOTE_PYMT2"];
+        const aDeductions3 =["SUBTOTAL_REG_DEDS"];
+        const aDeductions4 =["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT",
+            "REGULAR MISCELLANEOUS", "SPECIAL_MISC"];
+        const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
+        const aDeductions6 =["TOTAL_DEDS"];
+        const aDeductions7 =["CHARGEBACKS"];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12 w-full")}>
@@ -198,10 +197,10 @@ class SummaryTransactons extends Component {
                                 return (
                                     <tr key={index}>
                                         <td width="350">
-                                            <Typography variant="subtitle1">{b[0].Label}</Typography>
+                                            <Typography variant="subtitle1">{b[0].LABEL}</Typography>
                                         </td>
                                         <td width="" className="text-right">
-                                            ${parseFloat(b[0].Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                            ${parseFloat(b[0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                         </td>
                                     </tr>
                                 )
@@ -214,10 +213,10 @@ class SummaryTransactons extends Component {
                             return (
                                 <tr key={index}>
                                     <td width="350">
-                                        <Typography variant="subtitle1">{b.Label}</Typography>
+                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
                                     </td>
                                     <td width ="" className="text-right">
-                                        ${parseFloat(b.Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                     </td>
                                 </tr>
                             )
@@ -238,8 +237,8 @@ class SummaryTransactons extends Component {
                 </table>
 
                 <h2 className="pt-16" >FRANCHISEE DEDUCTIONS:</h2>
-                {summaryRoyalty && summaryRoyalty.BaseRoyaltyAmount>0 && summaryRoyalty.MinRoyaltyAmount (
-                    <table className="">
+                {summaryROYALTY && summaryROYALTY.BaseROYALTYAMOUNT>0 && summaryROYALTY.MinROYALTYAMOUNT (
+                    <table className="" style={{width:'63.5%'}}>
                         <thead>
                         <tr>
                             <th width="250"/>
@@ -250,14 +249,14 @@ class SummaryTransactons extends Component {
                         </thead>
                         <tbody>
                         <tr>
-                            <td> <Typography variant="subtitle1">{summaryRoyalty.BaseRoyaltyLabel}</Typography></td>
-                            <td className="text-right">${parseFloat(summaryRoyalty.BaseRoyaltyAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                            <td> <Typography variant="subtitle1">{summaryROYALTY.BaseROYALTYLabel}</Typography></td>
+                            <td className="text-right">${parseFloat(summaryROYALTY.BaseROYALTYAMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                             <td/>
                             <td/>
                         </tr>
                         <tr>
-                            <td> <Typography variant="subtitle1">{summaryRoyalty.MinRoyaltyLabel}</Typography></td>
-                            <td className="text-right">${parseFloat(summaryRoyalty.MinRoyaltyAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                            <td> <Typography variant="subtitle1">{summaryROYALTY.MinROYALTYLabel}</Typography></td>
+                            <td className="text-right">${parseFloat(summaryROYALTY.MinROYALTYAMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                             <td/>
                             <td/>
                         </tr>
@@ -265,14 +264,11 @@ class SummaryTransactons extends Component {
                     </table>
                 )}
 
-                <table className="">
+                <table className="" style={{width:'63.5%'}}>
                     <thead>
                     <tr>
                         <th width="250"/>
                         <th width="350">
-                        </th>
-                        <th className="text-right">
-                            {/* UNIT */}
                         </th>
                     </tr>
                     </thead>
@@ -281,10 +277,10 @@ class SummaryTransactons extends Component {
                             return (
                                 <tr key={index}>
                                     <td>
-                                        <Typography variant="subtitle1">{b.Label}</Typography>
+                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
                                     </td>
                                     <td className="text-right">
-                                        ${parseFloat(b.Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                     </td>
                                 </tr>
                             )
@@ -295,12 +291,12 @@ class SummaryTransactons extends Component {
                                 <tr key={index}>
                                     <td>
                                         <Typography variant="subtitle1">
-                                            {SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( SummaryPages[0][b][0].Label) }
+                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                         </Typography>
                                     </td>
                                     <td className="text-right">
-                                        {/*${parseFloat(SummaryPages[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                        ${ SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( parseFloat(SummaryPages[0][b][0].Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                     </td>
                                 </tr>
                             )
@@ -311,19 +307,19 @@ class SummaryTransactons extends Component {
                 <table style={{width:'80%'}}>
                     <tbody>
                     { aDeductions3.map((b, index)=>{
-                            if(SummaryPages[0][b]===null || (SummaryPages[0][b]!==null && SummaryPages[0][b].length===0) )
+                            if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
                                 return false;
                             else
                                 return (
                                     <tr key={index}>
                                         <td>
                                             <Typography variant="subtitle1">
-                                                {SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( SummaryPages[0][b][0].Label) }
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            {/*${parseFloat(SummaryPages[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                            ${ SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( parseFloat(SummaryPages[0][b][0].Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                         </td>
                                     </tr>
                                 )
@@ -334,16 +330,16 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions2 !=null && (aDeductions2.map((b, index)=>{
-                        if (SummaryPages[0][b])
+                        if (SUMMARY_PAGE[0][b])
                             return (
                                 <tr key={index}>
                                     <td>
                                         <Typography variant="subtitle1">
-                                            {SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( SummaryPages[0][b][0].Label) }
+                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                         </Typography>
                                     </td>
                                     <td className="text-right">
-                                        ${ SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( parseFloat(SummaryPages[0][b][0].Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                     </td>
                                 </tr>
                             )
@@ -354,18 +350,18 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions4.map((b, index)=>{
-                            if(SummaryPages[0][b]===null || (SummaryPages[0][b]!==null && SummaryPages[0][b].length===0) )
+                            if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
                                 return false;
                             else
                                 return (
                                     <tr key={index}>
                                         <td>
                                             <Typography variant="subtitle1">
-                                                {(SummaryPages[0][b] !=null && SummaryPages[0][b].length) && SummaryPages[0][b][0] !=null && ( SummaryPages[0][b][0].Label) }
+                                                {(SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b].length) && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            { SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( CurrencyFormatter({value: SummaryPages[0][b][0].Amount})) }
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0][b][0].AMOUNT})) }
                                         </td>
                                     </tr>
                                 )
@@ -376,18 +372,18 @@ class SummaryTransactons extends Component {
                 <table style={{width:'80%'}}>
                     <tbody>
                     { aDeductions5.map((b, index)=>{
-                            if(SummaryPages[0][b]===null)
+                            if(SUMMARY_PAGE[0][b]===null)
                                 return false;
                             else
                                 return (
                                     <tr key={index}>
                                         <td>
                                             <Typography variant="subtitle1">
-                                                {SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( SummaryPages[0][b][0].Label) }
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            { SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( CurrencyFormatter({value: SummaryPages[0][b][0].Amount})) }
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0][b][0].AMOUNT})) }
                                         </td>
                                     </tr>
                                 )
@@ -398,18 +394,18 @@ class SummaryTransactons extends Component {
                 <table>
                     <tbody>
                     { aDeductions6.map((b, index)=>{
-                            if(SummaryPages[0][b]===null)
+                            if(SUMMARY_PAGE[0][b]===null)
                                 return false;
                             else
                                 return (
                                     <tr key={index}>
                                         <td>
                                             <Typography variant="subtitle1">
-                                                {SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( SummaryPages[0][b][0].Label) }
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                             </Typography>
                                         </td>
                                         <td style={{width:'15.4%'}}>
-                                            { SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && ( CurrencyFormatter({value: SummaryPages[0][b][0].Amount}))}
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0][b][0].AMOUNT}))}
                                         </td>
                                     </tr>
                                 )
@@ -422,26 +418,26 @@ class SummaryTransactons extends Component {
                     <tbody>
                     <tr>
                         <td><h2 className="pt-16" >DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
-                        <td className="pt-16" style={{width:'16%'}}> { SummaryPages[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'] !=null && SummaryPages[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0] !=null && ( CurrencyFormatter({value: SummaryPages[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0].Amount}))} </td>
+                        <td className="pt-16" style={{width:'16%'}}> { SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0].AMOUNT}))} </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <table style={{width:'63%'}}>
+                <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions7.map((b, index)=>{
-                            if(SummaryPages[0][b]===null)
+                            if(SUMMARY_PAGE[0][b]===null)
                                 return false;
                             else
                                 return (
                                     <tr key={index}>
                                         <td>
                                             <Typography variant="subtitle1">
-                                                {SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && SummaryPages[0][b][0].Amount !== "0" && ( SummaryPages[0][b][0].Label) }
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && SUMMARY_PAGE[0][b][0].AMOUNT !== "0" && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            { SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && SummaryPages[0][b][0].Amount !== "0" && ( '$' + parseFloat(SummaryPages[0][b][0].Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && SUMMARY_PAGE[0][b][0].AMOUNT !== "0" && ( '$' + parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                         </td>
                                     </tr>
                                 )
@@ -449,7 +445,7 @@ class SummaryTransactons extends Component {
                     )}
                     </tbody>
                 </table>
-                <table style={{width:'63%'}}>
+                <table style={{width:'63.5%'}}>
                     <tbody>
                     <tr >
                         <td width="350">
@@ -461,7 +457,7 @@ class SummaryTransactons extends Component {
                     </tr>
                     </tbody>
                 </table>
-                <table style={{width:'63%'}}>
+                <table style={{width:'63.5%'}}>
                     <tbody>
                     <tr >
                         <td width="350">
@@ -478,35 +474,10 @@ class SummaryTransactons extends Component {
                     <tbody>
                     <tr>
                         <td><h2 className="pt-16" >DUE TO FRANCHISEE:</h2></td>
-                        <td className="pt-16" style={{width:'16%'}}> { SummaryPages[0]['DUE_TO_FRAN'] !=null && SummaryPages[0]['DUE_TO_FRAN'][0] !=null && ( CurrencyFormatter({value: SummaryPages[0]['DUE_TO_FRAN'][0].Amount}))} </td>
+                        <td className="pt-16" style={{width:'16%'}}> { SUMMARY_PAGE[0]['DUE_TO_FRAN'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN'][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0]['DUE_TO_FRAN'][0].AMOUNT}))} </td>
                     </tr>
                     </tbody>
                 </table>
-
-                <table style={{width:'63%'}}>
-                    <tbody>
-                    { aDeductions8.map((b, index)=>{
-                            if(SummaryPages[0][b]===null)
-                                return false;
-                            else
-                                return (
-                                    <tr key={index}>
-                                        <td>
-                                            <Typography variant="subtitle1">
-                                                {SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && SummaryPages[0][b][0].Amount !== "0" && ( SummaryPages[0][b][0].Label) }
-                                            </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            {/*${parseFloat(SummaryPages[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                            { SummaryPages[0][b] !=null && SummaryPages[0][b][0] !=null && SummaryPages[0][b][0].Amount !== "0" && ( '$' + parseFloat(SummaryPages[0][b][0].Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                        </td>
-                                    </tr>
-                                )
-                        }
-                    )}
-                    </tbody>
-                </table>
-
             </div>
         );
     }
@@ -524,7 +495,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeReport: franchiseeReports.franchiseeReport,
         transactionDetail: transactions.transactionDetail,
     }
 }

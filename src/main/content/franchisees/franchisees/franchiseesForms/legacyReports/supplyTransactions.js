@@ -65,7 +65,7 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(2)': {
+        '& tbody tr td:nth-child(1)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
@@ -77,8 +77,11 @@ const styles = theme => ({
         '& td': {
             paddingRight: 0,
             borderBottom: `1px solid ${theme.palette.text.primary}`,
+            '& div':{
+                color: theme.palette.text.primary
+            }
         },
-        '& td:nth-child(2)': {
+        '& td:nth-child(1)': {
             width: '100%',
         },
         '& td:nth-child(4)': {
@@ -185,25 +188,19 @@ class SupplyTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SupplyTransactions===undefined) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SupplyTransactions===null))
+        if((franchiseeReport===null) || (franchiseeReport.Data.SUPPLY_TRXS===undefined) || (franchiseeReport!==null && franchiseeReport.Data.SUPPLY_TRXS===null))
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].SupplyTransactions.map(d=>{
-            let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
-
+        let data = franchiseeReport.Data.SUPPLY_TRXS.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            // d.TRX_AMT = parseFloat(d.TRX_TOT)-parseFloat(d.TRX_TAX);
-            d.TRX_TAX = d.TRX_RESELL ? 0 : parseFloat(d.TRX_TAX);
+            d.TRX_AMT = parseFloat(d.EXTENDED);
+            d.TRX_TAX = parseFloat(d.TRX_TAX);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
-
-            if(type.length>0)
-                d.TYPE = type[0].Name;
 
             return d;
         });
 
         const columns = [
-            {name: "TYPE", title: "Type"},
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "SubTotal"},
             {name: "TRX_TAX", title: "Tax"},
@@ -211,7 +208,6 @@ class SupplyTransactons extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'TYPE', width: 140, },
             { columnName: 'DESCR', width: -1, },
             { columnName: 'TRX_AMT', width: 100,  align: 'right'},
             { columnName: 'TRX_TAX', width: 100,  align: 'right'},
@@ -275,7 +271,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeReport: franchiseeReports.franchiseeReport,
         transactionDetail: transactions.transactionDetail,
     }
 }

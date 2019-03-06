@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 // Material-UI core components
 import {
     TextField, Button, Typography, Divider, FormControlLabel, Checkbox, AppBar, Tabs, Tab, Radio, MenuItem, InputAdornment,
-    IconButton, Icon
+    IconButton, Icon, Fab
 } from '@material-ui/core';
 // theme components
 
@@ -68,6 +68,12 @@ const styles = theme => ({
     input1: {
         padding: '12px 6px',
         minWidth: 160
+    },
+    fab: {
+        margin: theme.spacing.unit,
+        marginTop: 0,
+        width: 100,
+        height: 42
     },
 });
 
@@ -1137,11 +1143,12 @@ class FranchiseesCreateForm extends Component {
                                            return (<MenuItem  className="text-right" key={index} value={year}>{year}</MenuItem>)
                                        })}
                                    </TextField>
-                                   {this.props.franchiseeReport!==null && (
-                                       <IconButton color="primary" onClick={()=>this.gotoFranchiseeReports()}
-                                                   className={classes.iconButton} aria-label="List">
+                                   {(this.props.franchiseeReport!==null || this.props.franchiseeLegacyReport!==null) && (
+                                       <Fab color="primary" aria-label="view" className={classes.fab}
+                                            onClick={()=>this.gotoFranchiseeReports()}
+                                       >
                                            <Icon>list</Icon>
-                                       </IconButton>
+                                       </Fab>
                                    )}
                             </div>
                         )}
@@ -1207,6 +1214,7 @@ function mapStateToProps({ franchisees, auth, franchiseeReports }) {
         findersFees: franchisees.findersFees,
         defaultPeriod: auth.login.defaultPeriod,
         franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeLegacyReport: franchiseeReports.franchiseeReport,
     }
 }
 

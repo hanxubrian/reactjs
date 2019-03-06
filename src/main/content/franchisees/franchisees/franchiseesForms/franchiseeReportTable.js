@@ -28,6 +28,7 @@ import FranchiseeReportBigModal from './FranchiseeReportBigModal';
 
 //Child components
 import Report from './../report_new'
+import LegacyReport from './legacyReport'
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -399,7 +400,7 @@ class FranchiseeReportTable extends React.Component {
 
         return (
             <Paper className={classes.root}>
-                {this.props.franchiseeReport===null ? (
+                {this.props.franchiseeReport===null && this.props.franchiseeLegacyReport===null ? (
                     <div className={classes.tableWrapper}>
                         <Table className={classes.table} aria-labelledby="tableTitle">
                             <FranchiseeReportTableHead
@@ -462,9 +463,10 @@ class FranchiseeReportTable extends React.Component {
                     </div>
 
                 ) : (
-                    <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                    <div>
                         <Report onRef={ref => (this.child = ref)}/>
-                    </FuseAnimate>
+                        <LegacyReport onRef={ref => (this.childLegacy = ref)}/>
+                    </div>
                 )}
 
                 {/*<FranchiseeReportBigModal onRef={component=>{this.franchiseeComponent = component}}/>*/}

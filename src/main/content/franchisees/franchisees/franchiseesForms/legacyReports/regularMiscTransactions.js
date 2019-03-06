@@ -44,7 +44,7 @@ const styles = theme => ({
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },
-        '& tr th:nth-child(2)': {
+        '& tr th:nth-child(1)': {
             width: '100%'
         }
     },
@@ -63,7 +63,7 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(2)': {
+        '& tbody tr td:nth-child(1)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
@@ -76,8 +76,11 @@ const styles = theme => ({
         '& td': {
             paddingRight: 0,
             borderBottom: `1px solid ${theme.palette.text.primary}`,
+            '& div':{
+                color: theme.palette.text.primary
+            }
         },
-        '& td:nth-child(2)': {
+        '& td:nth-child(1)': {
             width: '100%',
         },
         '& td:nth-child(5)': {
@@ -125,17 +128,7 @@ const TableSummaryComponentBase = ({ classes, ...restProps }) => (
 );
 
 const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
-    if(restProps.column.name==='type34214'){
-        return (
-            <Table.Cell
-                {...restProps}
-                colSpan={3}
-                className={classes.tableSummaryCell}>
-                <strong>Total Revenue for this Franchisee</strong>
-            </Table.Cell>
-        );
-    }
-    else if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
+    if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
         return (
             <Table.Cell
                 {...restProps}
@@ -187,23 +180,18 @@ class RegularMiscTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc===null))
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.REG_MISC===null))
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].RegMisc.map(d=>{
-            let type = this.props.transactionTypeList.filter(t=>t._id===d.Type);
-
-            d.DESCR = FuseUtils.capital_letter(d.Description);
-            d.TRX_AMT = parseFloat(d.TrxAmt);
-            d.TRX_TAX = parseFloat(d.TrxTax);
-            d.TRX_TOT = parseFloat(d.TrxTot);
-            if(type.length>0)
-                d.Type = type[0].Name;
+        let data = franchiseeReport.Data.REG_MISC.map(d=>{
+            d.DESCR = FuseUtils.capital_letter(d.DESCR);
+            d.TRX_AMT = parseFloat(d.TRX_AMT);
+            d.TRX_TAX = parseFloat(d.TRX_TAX);
+            d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
 
         const columns = [
-            {name: "Type", title: "Type"},
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "Amount"},
             {name: "TRX_TAX", title: "Tax"},
@@ -212,7 +200,6 @@ class RegularMiscTransactons extends Component {
 
         let  tableColumnExtensions = [
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'Type', width: 180},
             { columnName: 'TRX_AMT', width: 90,  align: 'right'},
             { columnName: 'TRX_TAX', width: 90,  align: 'right'},
             { columnName: 'TRX_TOT', width: 90,  align: 'right'},
@@ -273,7 +260,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeReport: franchiseeReports.franchiseeReport,
         transactionDetail: transactions.transactionDetail,
     }
 }

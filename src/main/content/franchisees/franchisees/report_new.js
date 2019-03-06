@@ -58,7 +58,6 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
     },
     card       : {
-        width         : 1020,
         '@media print': {
             width    : '100%!important',
             boxShadow: 'none'

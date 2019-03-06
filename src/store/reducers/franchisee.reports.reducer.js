@@ -1,7 +1,5 @@
 import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
-import {GET_FRANCHISEE_REPORTS_FETCH_START} from "../actions/";
-import {NULLIFY_FRANCHISEE_REPORT} from "../actions/";
 
 const initialState = {
     franchiseeReports: null,
@@ -37,6 +35,7 @@ const franchiseeReports = function(state = initialState, action) {
             return {
                 ...state,
                 franchiseeReport: action.payload,
+                bFetchingFranchiseeReport: false
             }
         }
         case Actions.GET_FRANCHISEE_REPORTS_FETCH_START:
@@ -50,7 +49,8 @@ const franchiseeReports = function(state = initialState, action) {
         {
             return {
                 ...state,
-                franchiseeReport1: null
+                franchiseeReport1: null,
+                franchiseeReport: null,
             }
         }
         case Actions.CREATE_FRANCHISEE_REPORT_DETAIL:
@@ -110,7 +110,6 @@ const franchiseeReports = function(state = initialState, action) {
         case Actions.CLOSE_EDIT_TRANSACTION_FORM:
         case Actions.CLOSE_NEW_TRANSACTION_FORM:
             return {...state, franchiseeReport1: null};
-        case Actions.NULLIFY_FRANCHISEE_REPORT:
         case Actions.NULLIFY_FRANCHISEE_NEW_REPORT:
             return {...state, franchiseeReport1: null};
         case UserActions.USER_LOGGED_OUT:

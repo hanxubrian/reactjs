@@ -43,6 +43,10 @@ export function getReports(regionId=2, year="2017", month="01") {
 
 export function getReport(params) {
     return (dispatch) => {
+        dispatch({
+            type: GET_FRANCHISEE_REPORTS_FETCH_START,
+            payload: true
+        });
         (async () => {
             let res = await franchiseesService.getFranchiseeReport(params);
             if (res.IsSuccess) {

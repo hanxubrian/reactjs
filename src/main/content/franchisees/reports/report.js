@@ -605,7 +605,7 @@ class Report extends Component {
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div style ={divline}></div>
+                                <div style ={divline}/>
 
                                 <table className="">
                                     <thead>
@@ -721,7 +721,7 @@ class Report extends Component {
                                     <tbody >
                                     <tr >
                                         <td width="65">Customer</td>
-                                        <td width ="227"></td>
+                                        <td width ="227"/>
                                         <td width ="25">I/C</td>
                                         <td width ="74">Invoice</td>
                                         <td className="text-left" width="345">Description</td>
@@ -736,14 +736,14 @@ class Report extends Component {
                                 <table className="" style={{width:'100%',fontSize:'11px'}}>
                                     <tbody>
                                     <tr >
-                                        <td width="65"><Typography ></Typography></td>
+                                        <td width="65"><Typography /></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td className="text-left"></td>
-                                        <td className="text-right"></td>
-                                        <td className="text-right"></td>
-                                        <td className="text-right"></td>
+                                        <td className="text-left"/>
+                                        <td className="text-right"/>
+                                        <td className="text-right"/>
+                                        <td className="text-right"/>
                                     </tr>
 
                                     {CUS_TRXS!=null && ( CUS_TRXS.map((ct, index)=>{
@@ -839,7 +839,7 @@ class Report extends Component {
 
                             <div className="" >
                                 <h2>Customer Account Totals</h2>
-                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}/>
                                 <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
                                     <table style={{width:'100%',fontSize:'11px'}}>
                                         <tbody>
@@ -905,7 +905,7 @@ class Report extends Component {
                                     }))}
                                     </tbody>
                                 </table>
-                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}/>
                                 <div style ={{ width:'100%'}}>
                                     <table style={{width:'100%'}}>
                                         <tbody>
@@ -916,7 +916,7 @@ class Report extends Component {
                                             <td className="text-right" width="70">${cat_addtl.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             <td className="text-right" width="70">${cat_cs.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             <td className="text-right" width="70">${cat_ofc.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            <td className="text-right" width="70"></td>
+                                            <td className="text-right" width="70"/>
                                             <td className="text-right" width="70">${cat_fee.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                         </tr>
                                         </tbody>
@@ -979,7 +979,7 @@ class Report extends Component {
 
                             <div className="">
                                 <h2>Supply Transactions</h2>
-                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}/>
                                 <div style ={{width:'100%'}}>
                                     <table style ={{width:'100%',fontSize:'11px'}}>
                                         <tbody>
@@ -1008,7 +1008,7 @@ class Report extends Component {
                                 </div>
 
                                 {SUPPLY_TRXS != null && (
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}/>
                                 )}
                                 <table className="" style={{width:'100%',fontSize:'11px'}}>
                                     <tbody>
@@ -1028,14 +1028,14 @@ class Report extends Component {
                                     }))}
                                     </tbody>
                                 </table>
-                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}/>
                                 <div style={{width:'100%'}}>
                                     <table style={{width:'100%'}}>
                                         <tbody>
                                         <tr >
                                             <td width="350"><Typography >Total Supplies</Typography></td>
-                                            <td width="70" className="text-right"></td>
-                                            <td width="70"  className="text-right"></td>
+                                            <td width="70" className="text-right"/>
+                                            <td width="70"  className="text-right"/>
                                             <td width="70"  className="text-right">${st_extended.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             <td  width="70" className="text-right">${st_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             <td  width="70" className="text-right">${st_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>

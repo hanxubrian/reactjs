@@ -84,6 +84,9 @@ const styles = theme => ({
         height: 42,
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
+            '& div':{
+                color: theme.palette.text.primary
+            }
         },
         '& td:nth-child(3)': {
             width: '100%',
@@ -205,15 +208,15 @@ class CustomerTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerTrx===null))
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.CUS_TRXS===null))
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerTrx.map(d=>{
-            d.DESCR = FuseUtils.capital_letter(d.Description);
-            d.CUS_NAME = FuseUtils.capital_letter(d.CustomerName);
-            d.TRX_AMT = parseFloat(d.Amount);
-            d.TRX_TAX = parseFloat(d.Tax);
-            d.TRX_TOT = parseFloat(d.Total);
+        let data = franchiseeReport.Data.CUS_TRXS.map(d=>{
+            d.DESCR = FuseUtils.capital_letter(d.DESCR);
+            d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
+            d.TRX_AMT = parseFloat(d.TRX_AMT);
+            d.TRX_TAX = parseFloat(d.TRX_TAX);
+            d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
 
@@ -221,7 +224,7 @@ class CustomerTransactions extends Component {
             {name: "CUST_NO", title: "Customer",},
             {name: "CUS_NAME", title: "Cus. Name"},
             {name: "DESCR", title: "Description"},
-            {name: "InvoiceNo", title: "Invoice #"},
+            {name: "INV_NO", title: "Invoice #"},
             // {name: "TRX_TYPE", title: "Type"},
             // {name: "TRX_AMT", title: "Amount"},
             // {name: "TRX_TAX", title: "Tax"},
@@ -229,10 +232,10 @@ class CustomerTransactions extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 70, },
+            { columnName: 'CUST_NO', width: 80, },
             { columnName: 'CUS_NAME', width: 220, },
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'InvoiceNo', width: 100},
+            { columnName: 'INV_NO', width: 100},
             // { columnName: 'TRX_TYPE', width: 50,  align: 'center'},
             { columnName: 'TRX_AMT', width: 100,  align: 'right'},
             { columnName: 'TRX_TAX', width: 100,  align: 'right'},
@@ -295,7 +298,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         transactions: transactions.transactionsDB,
         transactionForm: transactions.transactionForm,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeReport: franchiseeReports.franchiseeReport,
         transactionDetail: transactions.transactionDetail,
     }
 }

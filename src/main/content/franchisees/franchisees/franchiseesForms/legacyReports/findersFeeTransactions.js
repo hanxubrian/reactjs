@@ -201,10 +201,12 @@ class FindersFeeTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].FinderFeePayments===null)
+        if(franchiseeReport===null || (franchiseeReport!==null && franchiseeReport.Data.FinderFeePayments===undefined) ||
+            (franchiseeReport!==null && franchiseeReport.Data.FinderFeePayments===null)
+        )
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].FinderFeePayments.map(d=>{
+        let data = franchiseeReport.Data.FinderFeePayments.map(d=>{
             d.Description = FuseUtils.capital_letter(d.Description);
             d.PYMNT_TOT = parseFloat(d.PaymentTotal);
             return d;
@@ -274,7 +276,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeReport: franchiseeReports.franchiseeReport,
         transactionDetail: transactions.transactionDetail,
     }
 }

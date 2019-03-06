@@ -45,7 +45,7 @@ const styles = theme => ({
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },
-        '& tr th:nth-child(3)': {
+        '& tr th:nth-child(2)': {
             width: '100%'
         },
         // '& tr th:nth-child(2) span': {
@@ -68,7 +68,7 @@ const styles = theme => ({
             paddingRight: 4,
             borderBottom: `0px solid ${theme.palette.text.primary}`,
         },
-        '& tbody tr td:nth-child(3)': {
+        '& tbody tr td:nth-child(2)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
@@ -77,15 +77,6 @@ const styles = theme => ({
         '& tr.subHeading td:nth-child(1)': {
             fontWeight: 700,
             fontSize: 14
-        },
-        '& tr.subHeading td:nth-child(2)': {
-            display: 'none'
-        },
-        '& tr.subHeading td:nth-child(4)': {
-            display: 'none'
-        },
-        '& tr.subTotal td:nth-child(2), & tr.subTotal td:nth-child(3)':{
-            display: 'none'
         },
         '& tr.subTotal td:nth-child(4)':{
             display: 'flex',
@@ -97,8 +88,11 @@ const styles = theme => ({
         height: 42,
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
+            '& div':{
+                color: theme.palette.text.primary
+            }
         },
-        '& td:nth-child(1)': {
+        '& td:nth-child(2)': {
             width: '100%',
         },
         '& td:nth-child(4)': {
@@ -107,9 +101,6 @@ const styles = theme => ({
         '& td:nth-child(4)>div': {
             display: 'flex',
             justifyContent: 'flex-end'
-        },
-        '& td:nth-child(2), & td:nth-child(3)':{
-            display:'none'
         },
         '& td:nth-child(5)': {
             width: 0,
@@ -171,7 +162,7 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
             </Table.Cell>
         );
     }
-    else if(restProps.column.name==='CUS_TAX'){
+    else if(restProps.column.name==='CUR_MONTH'){
         return (
             <Table.Cell
                 {...restProps}
@@ -220,10 +211,6 @@ class CustomerAccountTotals extends Component {
 
     TableRow = ({ row, ...restProps }) => {
         let rowClass='';
-        if(row.SUB===0)
-            rowClass = 'subHeading';
-        else if(row.SUB===2)
-            rowClass = 'subTotal';
 
         return (
             <Table.Row className = {classNames(rowClass)}
@@ -233,33 +220,6 @@ class CustomerAccountTotals extends Component {
     };
 
     TableCell = ({classes, ...restProps })=>{
-        if(restProps.column.name==='type' && restProps.row.SUB===2){
-            return  (
-                <Table.Cell
-                    {...restProps}
-                    colSpan={3}
-                />
-            )
-        }
-        else if(restProps.column.name==='type' && restProps.row.SUB===0){
-            return  (
-                <Table.Cell
-                    {...restProps}
-                    colSpan={2}
-                />
-            )
-        }
-        else if(restProps.column.name==='CUS_TAX' && restProps.row.SUB===2){
-            return (
-            <Table.Cell
-                {...restProps}
-                colSpan={1}
-            >
-                <strong>Sub Total: </strong>{CurrencyFormatter({value: restProps.value})}
-            </Table.Cell>
-            )
-        }
-        else
         return (
             <Table.Cell
                 {...restProps}
@@ -269,58 +229,28 @@ class CustomerAccountTotals extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerAccountTotals===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.CUST_ACCT_TOTALS===null)
             return (<div/>);
 
-        let data = [];
-
-        franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].CustomerAccountTotals.forEach(type=>{
-            let billing = this.props.billingLists.filter(b=>b._id===type.Billing);
-            let line = {};
-            if(billing.length>0)
-                line.type = billing[0].Name;
-            line.CUS_NO = '';
-            line.CUS_NAME = '';
-            line.CUS_TAX = 0;
-            line.SUB = 0;//sub section
-            data.push(line);
-            if(type.Customer_Account_Totals_Detail !==null && type.Customer_Account_Totals_Detail.length){
-                type.Customer_Account_Totals_Detail.forEach(c=>{
-                    let line_c = {};
-                    line_c.type = '';
-                    line_c.CUS_NO = c.CustomerNumber;
-                    line_c.CUS_NAME = c.CustomerName;
-                    line_c.CUS_TAX = c.dtltrx_amt;
-                    line_c.SUB = 1;//item
-
-                    data.push(line_c);
-                })
-            }
-            let line_sub = {};
-            line_sub.type = '';
-            line_sub.CUS_NO = '';
-            line_sub.CUS_NAME = '';
-            line_sub.CUS_TAX = type.Amount;
-            line_sub.SUB = 2;  //Subtotal
-            data.push(line_sub);
+        let data = franchiseeReport.Data.CUST_ACCT_TOTALS.map(c=>{
+            c.CUR_MONTH = parseFloat(c.CUR_MONTH);
+            return c;
         });
 
         const columns = [
-            {name: "type", title: "Customer Transactions",},
-            {name: "CUS_NO", title: "Customer"},
-            {name: "CUS_NAME", title: " "},
-            {name: "CUS_TAX", title: "TOTAL Without Tax"},
+            {name: "CUST_NO", title: "Customer #"},
+            {name: "CUS_NAME", title: "Customer Name "},
+            {name: "CUR_MONTH", title: "Monthly Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'type', width: 160, },
-            { columnName: 'CUS_NO', width: 80, },
+            { columnName: 'CUST_NO', width: 120, },
             { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CUS_TAX', width: 140, align: 'right', wordWrapEnabled: true},
+            { columnName: 'CUR_MONTH', width: 200, align: 'right', wordWrapEnabled: true},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'CUS_TAX', type: 'sum'},
+            { columnName: 'CUR_MONTH', type: 'sum'},
         ];
 
         return (
@@ -334,14 +264,12 @@ class CustomerAccountTotals extends Component {
                         onPageSizeChange={this.changePageSize}
                     />
                     <CurrencyTypeProvider
-                        for={['CUS_TAX']}
+                        for={['CUR_MONTH']}
                     />
 
                     <IntegratedPaging/>
-                    {data.length>0 && (
-                        <SummaryState totalItems={totalSummaryItems} />
-                    )}
-                    {data.length>0 && (<IntegratedSummary /> )}
+                    <SummaryState totalItems={totalSummaryItems} />
+                    <IntegratedSummary />
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -351,11 +279,9 @@ class CustomerAccountTotals extends Component {
                                   cellComponent = {this.TableCell}
                     />
                     <TableHeaderRow />
-                    {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}
-                                          totalCellComponent = {TableSummaryCellComponent}
-                        />
-                    )}
+                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                      totalCellComponent = {TableSummaryCellComponent}
+                    />
                 </Grid>
             </div>
         );
@@ -375,7 +301,7 @@ function mapStateToProps({transactions, auth, franchiseeReports,invoices}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeReport: franchiseeReports.franchiseeReport,
         transactionDetail: transactions.transactionDetail,
         billingLists: invoices.billingLists,
     }
