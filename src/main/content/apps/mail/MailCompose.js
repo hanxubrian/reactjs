@@ -9,6 +9,7 @@ import {withRouter} from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 // es modules
 import { Editor } from '@tinymce/tinymce-react';
+import classNames from 'classnames';
 
 
 const styles = theme => ({
@@ -96,11 +97,19 @@ class MailCompose extends Component {
 
         return (
             <div className="p-24">
-                <div className="flex align-middle" style={{alignItems: 'center'}}>
-                    <Typography className="flex">From:&nbsp;&nbsp;</Typography>
-                    <Avatar alt="Remy Sharp" src={this.props.profileUrl} className={classes.avatar} />
-                    <Typography className="flex">&nbsp;&nbsp;{this.props.user.firstName}&nbsp;{this.props.user.lastName}</Typography>
-                    <Typography className="flex bold">&nbsp;&nbsp;({this.props.user.email})</Typography>
+                <div className="flex align-middle flex-row" style={{alignItems: 'center'}}>
+                    <Typography className="flex justify-start">From:&nbsp;&nbsp;</Typography>
+                    <Avatar alt="mail avatar" src={this.props.profileUrl} className={classNames(classes.avatar,"justify-start")} />
+                    <Typography className="flex justify-start">&nbsp;&nbsp;{this.props.user.firstName}&nbsp;{this.props.user.lastName}</Typography>
+                    <Typography className="flex bold justify-start">&nbsp;&nbsp;({this.props.user.email})</Typography>
+                    <div className="flex justify-end w-full">
+                        <Button variant="contained" color="primary" className={classes.button} onClick={()=>this.props.toggleCompose(false)}>
+                            Send
+                        </Button>
+                        <IconButton>
+                            <Icon>attach_file</Icon>
+                        </IconButton>
+                    </div>
                 </div>
                 <TextField
                     className={classes.formControl}
@@ -173,15 +182,8 @@ class MailCompose extends Component {
                     {/*fullWidth*/}
                 {/*/>*/}
                 <p className="mb-6" >Message</p>
-                <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" value={this.state.content} onEditorChange={this.handleEditorChange} />
-                <div className="flex justify-start mt-24">
-                    <Button variant="contained" color="primary" className={classes.button} onClick={()=>this.props.toggleCompose(false)}>
-                        Send
-                    </Button>
-                    <IconButton>
-                        <Icon>attach_file</Icon>
-                    </IconButton>
-                </div>
+                <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" init={{ height: '100%' }} value={this.state.content} onEditorChange={this.handleEditorChange} textareaName="tinymce_textArea" />
+
             </div>
         );
     }
