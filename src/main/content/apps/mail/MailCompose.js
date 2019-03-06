@@ -231,7 +231,6 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         toggleCompose: Actions.toggleCompose,
         updatePayload: Actions.updatePayload,
-        sendMail: Actions.sendMail,
         showMessage : MainActions.showMessage,
     }, dispatch);
 }
