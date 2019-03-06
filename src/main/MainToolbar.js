@@ -271,7 +271,7 @@ class MainToolbar extends Component {
         triggerF                    : false,
         checkloadingchatMSG         : true,
         period: -1,
-
+        rName:''
     };
 
     userMenuClick = event => {
@@ -280,11 +280,17 @@ class MainToolbar extends Component {
     userMenuClick1 = event => {
         this.setState({userMenu1: event.currentTarget});
     };
+    userMenuClick2 = event => {
+        this.setState({userMenu2: event.currentTarget});
+    };
     userMenuClose = () => {
         this.setState({userMenu: null});
     };
     userMenuClose1 = () => {
         this.setState({userMenu1: null});
+    };
+    userMenuClose2 = () => {
+        this.setState({userMenu2: null});
     };
     handleChange = event => {
         this.setState({[event.target.name]: event.target.value});
@@ -311,6 +317,12 @@ class MainToolbar extends Component {
     changeperiod=(p)=>{
         this.setState({period:p});
         this.setState({userMenu1: null});
+    };
+    changeRegion=(rid,rname)=>{
+        this.setState({region:rid});
+        this.setState({regionName:rname});
+        this.setState({userMenu2: null});
+        this.props.setRegionId(rid);
     };
     componentDidMount() {
         this.mainmsg();
@@ -512,9 +524,9 @@ class MainToolbar extends Component {
             }
             if(midcontact && midcontact !==null && midcontact.length){
                 midcontact.map((item)=>{
-                        if(item.unread && item.unread>0){
-                            num +=item.unread;
-                        }
+                    if(item.unread && item.unread>0){
+                        num +=item.unread;
+                    }
                 });
             }
             this.setState({unreadMSGnum: num});
@@ -561,6 +573,13 @@ class MainToolbar extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess && !nextProps.login.bLoadedMenu){
             this.setState({region: nextProps.login.defaultRegionId});
+            this.props.login.all_regions.map(x=>{
+                if(nextProps.login.defaultRegionId === x.regionid){
+                    this.setState({
+                        regionName:x.regionname
+                    })
+                }
+            });
         }
     }
     chatPanelshowbtn=()=>{
@@ -627,7 +646,7 @@ class MainToolbar extends Component {
     render()
     {
         const {classes, user, logout, openChatPanel} = this.props;
-        const {userMenu,userMenu1,value} = this.state;
+        const {userMenu,userMenu1,userMenu2,value} = this.state;
         return (
             <div className={classNames(classes.root, "flex flex-row")}>
                 {this.state.sysflage === true && (
@@ -666,28 +685,63 @@ class MainToolbar extends Component {
                     </FuseAnimate>
                     {this.props.login.IsSuccess && (
                         <form autoComplete="off">
-                            <FormControl className={classes.formControl}>
-                                <Select
-                                    className="region-select"
-                                    open={this.state.open}
-                                    onClose={this.handleClose}
-                                    onOpen={this.handleOpen}
-                                    name='region'
-                                    defaultValue={this.props.login.DefaultRegionId}
-                                    value={parseInt(this.state.region)}
-                                    onChange={this.handleChange}
-                                    inputProps={{
-                                        name: 'region',
-                                        id  : 'region-select'
-                                    }}
-                                >
-                                    {this.props.login.all_regions.map((region, index)=>{
-                                        return (
-                                            <MenuItem key={index} style={{paddingLeft: '10px'}} value={region.regionid}>{region.regionname}</MenuItem>
-                                        );
+                            {/*<FormControl className={classes.formControl}>*/}
+                            {/*<Select*/}
+                            {/*className="region-select"*/}
+                            {/*open={this.state.open}*/}
+                            {/*onClose={this.handleClose}*/}
+                            {/*onOpen={this.handleOpen}*/}
+                            {/*name='region'*/}
+                            {/*defaultValue={this.props.login.DefaultRegionId}*/}
+                            {/*value={parseInt(this.state.region)}*/}
+                            {/*onChange={this.handleChange}*/}
+                            {/*inputProps={{*/}
+                            {/*name: 'region',*/}
+                            {/*id  : 'region-select'*/}
+                            {/*}}*/}
+                            {/*>*/}
+                            {/*{this.props.login.all_regions.map((region, index)=>{*/}
+                            {/*return (*/}
+                            {/*<MenuItem key={index} style={{paddingLeft: '10px'}} value={region.regionid}>{region.regionname}</MenuItem>*/}
+                            {/*);*/}
+                            {/*})}*/}
+                            {/*</Select>*/}
+                            {/*</FormControl>*/}
+                            <FuseAnimate delay={300}>
+                                <Button className="h-64" onClick={this.userMenuClick2}>
+                                    <div className="hidden md:flex flex-col ml-12 items-start">
+                                        <Typography component="span" className="normal-case font-600 flex">
+                                            {this.state.regionName}
+                                        </Typography>
+                                        <Typography className="text-11 capitalize" color="textSecondary">
+                                            region
+                                        </Typography>
+                                    </div>
+                                    <Icon className="text-16 ml-12 hidden sm:flex" variant="action">keyboard_arrow_down</Icon>
+                                </Button>
+                            </FuseAnimate>
+                            <Popover
+                                open={Boolean(userMenu2)}
+                                anchorEl={userMenu2}
+                                onClose={this.userMenuClose2}
+                                anchorOrigin={{
+                                    vertical  : 'bottom',
+                                    horizontal: 'center'
+                                }}
+                                transformOrigin={{
+                                    vertical  : 'top',
+                                    horizontal: 'center'
+                                }}
+                                classes={{
+                                    paper: "py-8"
+                                }}
+                            >
+                                <React.Fragment>
+                                    {this.props.login.all_regions.map((r, index)=>{
+                                        return (<MenuItem key={index} value={r.regionid} onClick={()=>{this.changeRegion(r.regionid,r.regionname)}}>{r.regionname}</MenuItem>)
                                     })}
-                                </Select>
-                            </FormControl>
+                                </React.Fragment>
+                            </Popover>
                             <FuseAnimate delay={300}>
                                 <Button className="h-64" onClick={this.userMenuClick1}>
                                     <div className="hidden md:flex flex-col ml-12 items-start">
@@ -723,27 +777,27 @@ class MainToolbar extends Component {
                                     })}
                                 </React.Fragment>
                             </Popover>
-                            <FormControl className={classNames(classes.formControl1) } >
-                                <TextField
-                                    select
-                                    name="period"
-                                    value={this.state.period}
-                                    onChange={this.handleChange}
-                                    className="period-select"
-                                    InputProps={{
-                                        name: "period",
-                                        classes: {
-                                            input: classes.input2,
-                                        },
-                                    }}
-                                    fullWidth
-                                >
-                                    {this.props.all_periods.map((p, index)=>{
-                                        return (<MenuItem key={index} value={p}>{p}</MenuItem>)
-                                    })}
-                                </TextField>
-                                <FormHelperText>Period</FormHelperText>
-                            </FormControl>
+                            {/*<FormControl className={classNames(classes.formControl1) } >*/}
+                            {/*<TextField*/}
+                            {/*select*/}
+                            {/*name="period"*/}
+                            {/*value={this.state.period}*/}
+                            {/*onChange={this.handleChange}*/}
+                            {/*className="period-select"*/}
+                            {/*InputProps={{*/}
+                            {/*name: "period",*/}
+                            {/*classes: {*/}
+                            {/*input: classes.input2,*/}
+                            {/*},*/}
+                            {/*}}*/}
+                            {/*fullWidth*/}
+                            {/*>*/}
+                            {/*{this.props.all_periods.map((p, index)=>{*/}
+                            {/*return (<MenuItem key={index} value={p}>{p}</MenuItem>)*/}
+                            {/*})}*/}
+                            {/*</TextField>*/}
+                            {/*<FormHelperText>Period</FormHelperText>*/}
+                            {/*</FormControl>*/}
                         </form>
                     )}
                     <Popover
@@ -764,24 +818,24 @@ class MainToolbar extends Component {
                     >
                         {user.role === 'guest' ? (
                             <React.Fragment>
-                            <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
-                               <ListItemIcon>
-                                   <img src={this.props.login.profilePhoto} alt="user" style={{width: 32, height: 32, borderRadius: 30}}/>
-                               </ListItemIcon>
-                               <ListItemText className="pl-0" primary="My Profile"/>
-                            </MenuItem>
-                            <MenuItem
-                            onClick={() => {
-                            this.props.logout();
-                            this.userMenuClose();
-                            this.props.history.push('/auth/signin');
-                        }}
-                            >
-                            <ListItemIcon>
-                            <Icon>input</Icon>
-                            </ListItemIcon>
-                            <ListItemText className="pl-0" primary="SignOut"/>
-                            </MenuItem>
+                                <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
+                                    <ListItemIcon>
+                                        <img src={this.props.login.profilePhoto} alt="user" style={{width: 32, height: 32, borderRadius: 30}}/>
+                                    </ListItemIcon>
+                                    <ListItemText className="pl-0" primary="My Profile"/>
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => {
+                                        this.props.logout();
+                                        this.userMenuClose();
+                                        this.props.history.push('/auth/signin');
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <Icon>input</Icon>
+                                    </ListItemIcon>
+                                    <ListItemText className="pl-0" primary="SignOut"/>
+                                </MenuItem>
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
@@ -813,26 +867,26 @@ class MainToolbar extends Component {
                     </Popover>
 
                     <div className={classes.separator}/>
-                        <div onClick={this.shownotification}>
-                                <div className={classes.unreadBadge}>
-                                    {this.state.unreadMSGnum && this.state.unreadMSGnum !=="0" && (
-                                        this.state.unreadMSGnum
-                                    )}
-                                </div>
-                            <IconButton className="w-64 h-64" >
-                                <Icon>chat</Icon>
-                            </IconButton>
+                    <div onClick={this.shownotification}>
+                        <div className={classes.unreadBadge}>
+                            {this.state.unreadMSGnum && this.state.unreadMSGnum !=="0" && (
+                                this.state.unreadMSGnum
+                            )}
                         </div>
+                        <IconButton className="w-64 h-64" >
+                            <Icon>chat</Icon>
+                        </IconButton>
+                    </div>
                     {this.state.notification && (
                         <ClickAwayListener onClickAway={() => this.shownotification()}>
-                        <div className={classes.notificationbody}>
-                            <div className={classes.chatheader} style={{display:"none"}}>
-
+                            <div className={classes.notificationbody}>
                                 <div className={classes.chatheader} style={{display:"none"}}>
-                                    <Button className={classes.mainnotificationbtns} onClick={()=>{this.shownotification()}}>Close</Button>
+
+                                    <div className={classes.chatheader} style={{display:"none"}}>
+                                        <Button className={classes.mainnotificationbtns} onClick={()=>{this.shownotification()}}>Close</Button>
+                                    </div>
                                 </div>
-                            </div>
-                            <Paper style={{maxHeight: 350, overflow: 'auto',zIndex:99999,}}>
+                                <Paper style={{maxHeight: 350, overflow: 'auto',zIndex:99999,}}>
 
                                     <List component="nav" className={classes.notificationroot} >
 
@@ -940,22 +994,22 @@ class MainToolbar extends Component {
                                         {!1 && value === 1 && this.state.pusherMSG && this.state.pusherMSG != null &&  (
                                             this.state.pusherMSGList.map((item,index)=>{
                                                 return (
-                                                <div key={index} >
-                                                    <ListItem button key={item._id} onClick={()=>{this.setState({sysnotificationSeletedID:item.id});this.systemitemnotification(item.id)}} style ={{height:'55px'}} >
-                                                        <React.Fragment>
-                                                            <div style ={{height:'40px',textAlign: '-webkit-center'}}>
-                                                                <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
-                                                                <span style={{fontSize:'12px'}}>{item.subject}</span>
-                                                            </div>
-                                                        </React.Fragment>
-                                                        <span style={{
-                                                            fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
-                                                            whiteSpace: 'nowrap',
-                                                            overflow: 'hidden',
-                                                        }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
-                                                    </ListItem>
-                                                    <Divider className="my-0.5"/>
-                                                </div>
+                                                    <div key={index} >
+                                                        <ListItem button key={item._id} onClick={()=>{this.setState({sysnotificationSeletedID:item.id});this.systemitemnotification(item.id)}} style ={{height:'55px'}} >
+                                                            <React.Fragment>
+                                                                <div style ={{height:'40px',textAlign: '-webkit-center'}}>
+                                                                    <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
+                                                                    <span style={{fontSize:'12px'}}>{item.subject}</span>
+                                                                </div>
+                                                            </React.Fragment>
+                                                            <span style={{
+                                                                fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
+                                                                whiteSpace: 'nowrap',
+                                                                overflow: 'hidden',
+                                                            }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                        </ListItem>
+                                                        <Divider className="my-0.5"/>
+                                                    </div>
                                                 )
                                             })
 
@@ -965,18 +1019,18 @@ class MainToolbar extends Component {
 
 
 
-                            </Paper>
-                            {/*<div>*/}
+                                </Paper>
+                                {/*<div>*/}
                                 {/*<Button className={classes.morebtn} color="inherit" onClick={this.showchatPanel}>*/}
-                                    {/*{this.props.getchatnotification && (*/}
-                                        {/*<span>Hidden ChatPanel</span>*/}
-                                    {/*)}*/}
-                                    {/*{!this.props.getchatnotification && (*/}
-                                        {/*<span>More</span>*/}
-                                    {/*)}*/}
+                                {/*{this.props.getchatnotification && (*/}
+                                {/*<span>Hidden ChatPanel</span>*/}
+                                {/*)}*/}
+                                {/*{!this.props.getchatnotification && (*/}
+                                {/*<span>More</span>*/}
+                                {/*)}*/}
                                 {/*</Button>*/}
-                            {/*</div>*/}
-                        </div>
+                                {/*</div>*/}
+                            </div>
 
                         </ClickAwayListener>
 
@@ -984,11 +1038,11 @@ class MainToolbar extends Component {
                 </div>
                 { this.state.adminVersionStatus && this.state.adminMSG.version !== null && (
                     <div style={{position:"absolute"}}>
-                    <VersionUpgradeDialog
-                        show={this.state.adminVersionStatus}
-                        version={this.state.adminMSG.version}
-                        note ={this.state.adminMSG.note}
-                    />
+                        <VersionUpgradeDialog
+                            show={this.state.adminVersionStatus}
+                            version={this.state.adminMSG.version}
+                            note ={this.state.adminMSG.note}
+                        />
                     </div>
                 )}
 
