@@ -307,8 +307,18 @@ class TransactionsPage extends React.Component {
 				},
 				{
 					title: "Total",
-					name: "paymentTotal",
-					columnName: "paymentTotal",
+					name: "total",
+					columnName: "total",
+					width: 120,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Balance",
+					name: "balance",
+					columnName: "balance",
 					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -339,7 +349,8 @@ class TransactionsPage extends React.Component {
 			currencyColumns: [
 				'itm_amt',
 				'itm_tax',
-				'paymentTotal',
+				'total',
+				'balance',
 			],
 			phoneNumberColumns: [
 				'Phone'

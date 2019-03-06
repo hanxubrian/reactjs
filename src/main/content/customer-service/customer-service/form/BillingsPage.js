@@ -591,8 +591,18 @@ class BillingsPage extends Component {
 				},
 				{
 					title: "Total",
-					name: "paymentTotal",
-					columnName: "paymentTotal",
+					name: "total",
+					columnName: "total",
+					width: 120,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Balance",
+					name: "balance",
+					columnName: "balance",
 					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -624,6 +634,8 @@ class BillingsPage extends Component {
 				'itm_amt',
 				'itm_tax',
 				'paymentTotal',
+				'total',
+				'balance',
 			],
 			phoneNumberColumns: [
 				'Phone'
