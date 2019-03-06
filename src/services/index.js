@@ -23,6 +23,7 @@ import _territoriesService from './regions/territoriesService';
 import _franchiseeReportService from './franchisees/franchiseeReportService';
 import _userService from './users/userService';
 import _adminImportNotificationService from  './admin/adminImportNotificationService';
+import _mailService from './mail/mailService'
 
 export const authService = _authService;
 export const menuService = _menuService;
@@ -49,3 +50,4 @@ export const adminImportNotificationService = _adminImportNotificationService;
 export const verificationService = _verificationService;
 export const printChecksService = _printChecksService;
 export const negativeDueService = _negativeDueService;
+export const mailService = _mailService;
