@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from "lodash";
 import TextField from '@material-ui/core/TextField';
-import { Divider, FormControl, InputLabel, Select, Chip, Input, MenuItem, Icon, IconButton } from '@material-ui/core';
+import { Divider, FormControl, InputLabel, Select, Chip, Input, MenuItem, Icon, IconButton, Button } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -9,7 +9,6 @@ import connect from "react-redux/es/connect/connect";
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import ReactDataGrid from "react-data-grid";
 import * as Actions from 'store/actions';
 import {
 	Template, TemplateConnector
@@ -551,7 +550,12 @@ class TransactionsPage extends React.Component {
 			this.changeSearchValue(value)
 		}
 	};
-
+	clearSearch = () => {
+		this.setState({
+			SearchText: ''
+		})
+		this.changeSearchValue('')
+	}
 	render() {
 		const { classes } = this.props;
 		const {
@@ -586,7 +590,7 @@ class TransactionsPage extends React.Component {
 				<div className={classNames("flex flex-col")}>
 					<div className={classNames('items-center')}>
 						<div xs={12} sm={12} md={12} className="flex flex-row">
-							<div className="flex items-center mr-12" style={{ minWidth: '100px', width: '70%' }}>
+							<div className="flex items-center mr-12" style={{ minWidth: '100px', width: '100%' }}>
 								<Icon color="action" className="ml-16">search</Icon>
 								<TextField
 									id="SearchText"
@@ -619,7 +623,7 @@ class TransactionsPage extends React.Component {
 									))}
 								</Select>
 							</FormControl> */}
-							<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, minWidth: 200, width: "15%" }}>
+							<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, width: 100 }}>
 								<InputLabel shrink htmlFor="slsmn_no">Billing Month</InputLabel>
 								<Select
 									native
@@ -630,12 +634,12 @@ class TransactionsPage extends React.Component {
 										id: 'billing_month',
 									}}
 								>
-									{['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((x, index) => (
+									{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, index) => (
 										<option key={index} value={x}>{x}</option>
 									))}
 								</Select>
 							</FormControl>
-							<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ marginTop: 5, minWidth: 200, width: "15%" }}>
+							<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ marginTop: 5, width: 100 }}>
 								<InputLabel shrink htmlFor="slsmn_no">Billing Year</InputLabel>
 								<Select
 									native
@@ -646,11 +650,20 @@ class TransactionsPage extends React.Component {
 										id: 'billing_year',
 									}}
 								>
-									{[2019].map((x, index) => (
+									{Array.from(new Array(20), (val, index) => index + (new Date().getFullYear() - 19)).map((x, index) => (
 										<option key={index} value={x}>{x}</option>
 									))}
 								</Select>
 							</FormControl>
+
+							<div className='flex items-center ml-12'>
+								<Button variant="contained" color="primary">
+									Payment<Icon font='small' className={classes.rightIcon}>add</Icon>
+								</Button>
+								<Button variant="contained" color="primary" className="ml-6">
+									Credit<Icon font='small' className={classes.rightIcon}>add</Icon>
+								</Button>
+							</div>
 						</div>
 
 						<div xs={12} sm={12} md={12} className="flex flex-col flex-1 w-full">
