@@ -199,7 +199,12 @@ const styles = theme => ({
 		justifyContent: 'center',
 		display: 'flex',
 		opacity: 0.5
-	}
+	},
+	gridHoverRow: {
+		'&:hover': {
+			backgroundColor: 'rgba(27, 120, 216, 0.1)',
+		}
+	},
 });
 //
 // table content rows stle
@@ -1130,7 +1135,10 @@ class CustomerListContent extends Component {
 		let timer = 0;
 		let delay = 200;
 		let prevent = false;
+		const { classes } = this.props
+
 		delete restProps.selectByRowClick
+
 		const handleClick = () => {
 			timer = setTimeout(() => {
 				if (!prevent) {
@@ -1148,7 +1156,8 @@ class CustomerListContent extends Component {
 		return (
 			<Table.Row
 				{...restProps}
-				className={selected ? 'active' : ''}
+				// className={selected ? 'active' : ''}
+				className={classes.gridHoverRow}
 				style={{ color: 'green', cursor: 'pointer' }}
 				onClick={handleDoubleClick}
 				onDoubleClick={handleDoubleClick}
