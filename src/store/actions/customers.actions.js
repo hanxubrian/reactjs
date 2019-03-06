@@ -114,6 +114,7 @@ export const CLOSE_SNACK_BAR = "[CUSTOMERS APP] CLOSE_SNACK_BAR";
 
 export const TRANSFER_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE";
 export const TRANSFER_ASSIGNED_FRANCHISEE_START = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE_START";
+export const TRANSFER_ASSIGNED_FRANCHISEE_DONE = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE_DONE";
 
 export const SET_TRANSFER_PARAM = "[CUSTOMERS APP] SET_TRANSFER_PARAM";
 export const SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING = "[CUSTOMERS APP] SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING";
@@ -823,10 +824,36 @@ export function transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeN
 
 		(async () => {
 			let activeCustomer = await customersService.transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, reason, notes, transfer_fee, franchisee);
+			let message = "Transfered successfully!"
+			let icon = "success"
+			if (!activeCustomer.IsSuccess) {
+				message = `"Transfering failed. reason:${reason}, notes:${notes}, transfer_fee:${transfer_fee}`
+				icon = "error"
+			}
+			const param = {
+				open: true,
+				icon,
+				message,
+				vertical: "bottom",
+				horizontal: 'center',
+				duration: 3000,
+			}
+
 			dispatch({
-				type: TRANSFER_ASSIGNED_FRANCHISEE,
-				payload: activeCustomer
+				type: OPEN_SNACK_BAR,
+				payload: param
 			});
+			dispatch({
+				type: TRANSFER_ASSIGNED_FRANCHISEE_DONE,
+			});
+
+			if (activeCustomer.IsSuccess) {
+				dispatch({
+					type: TRANSFER_ASSIGNED_FRANCHISEE,
+					payload: activeCustomer
+				});
+			}
+
 		})();
 	}
 }

@@ -502,6 +502,8 @@ class TransferFranchieesListPage extends Component {
 
 			step: 0,
 
+			transferReason: 1,
+
 		};
 
 		console.log("props.bLoadedFranchisees", props.bLoadedFranchisees)
@@ -733,6 +735,10 @@ class TransferFranchieesListPage extends Component {
 			this.props.openSnackbar("Please select a franchisee to tranfer", "error")
 			return
 		}
+		if (!this.state.transferReason) {
+			this.props.openSnackbar("Transfering parameters are undefined", "error")
+			return
+		}
 
 		const fId = selection[selection.length - 1]
 		const newFranchisee = this.state.rows[fId]
@@ -743,8 +749,8 @@ class TransferFranchieesListPage extends Component {
 		}
 
 		this.props.setTransferParam('reason', this.state.transferReason)
-		this.props.setTransferParam('notes', this.state.transferNote)
-		this.props.setTransferParam('transfer_fee', this.state.transfer_fee)
+		this.props.setTransferParam('notes', this.state.transferNote || '')
+		this.props.setTransferParam('transfer_fee', parseFloat('0' + this.state.transfer_fee))
 
 		this.props.setFranchiseeToTransfer('new', newFranchisee)
 		this.props.handleStep(3)
@@ -803,7 +809,7 @@ class TransferFranchieesListPage extends Component {
 							<InputLabel shrink htmlFor="transferReason">Reason</InputLabel>
 							<Select
 								native
-								value={this.state.transferReason || ''}
+								value={this.state.transferReason}
 								onChange={this.handleChange('transferReason')}
 								inputProps={{
 									name: 'transferReason',

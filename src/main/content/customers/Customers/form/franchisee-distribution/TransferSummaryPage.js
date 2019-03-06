@@ -999,7 +999,7 @@ class TransferSummaryPage extends React.Component {
 
 		this.props.handleStep(0)
 
-		this.props.openSnackbar("Transfered successfully!", "success")
+		// this.props.openSnackbar("Transfered successfully!", "success")
 		if (this.props.activeStep === 1) {
 
 		} else {

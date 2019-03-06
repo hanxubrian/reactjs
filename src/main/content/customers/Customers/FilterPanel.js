@@ -1275,7 +1275,7 @@ class FilterPanel extends Component {
 										// variant="outlined"
 										fullWidth
 									>
-										{this.props.accountTypesGroups.Data.map((x, index) => (
+										{this.props.accountTypesGroups.Data && this.props.accountTypesGroups.Data.map((x, index) => (
 											<MenuItem key={index} value={x.GroupId}>{x.name}</MenuItem>
 										))}
 									</TextField>

@@ -1215,6 +1215,14 @@ const customers = function (state = initialState, action) {
 					bTransferAssignedFranchiseeStart: "Transfering franchisee...",
 				},
 			};
+		case Actions.TRANSFER_ASSIGNED_FRANCHISEE_DONE:
+			return {
+				...state,
+				loading: {
+					...state.loading,
+					bTransferAssignedFranchiseeStart: "",
+				},
+			};
 		case Actions.TRANSFER_ASSIGNED_FRANCHISEE:
 			return {
 				...state,
@@ -1222,7 +1230,7 @@ const customers = function (state = initialState, action) {
 					...state.loading,
 					bTransferAssignedFranchiseeStart: "",
 				},
-				activeCustomer: action.payload,
+				activeCustomer: action.payload || state.activeCustomer,
 			};
 		case Actions.SET_TRANSFER_PARAM:
 			return {
