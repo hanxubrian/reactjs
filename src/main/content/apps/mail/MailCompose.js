@@ -10,6 +10,7 @@ import Avatar from '@material-ui/core/Avatar';
 // es modules
 import { Editor } from '@tinymce/tinymce-react';
 import classNames from 'classnames';
+import SendIcon from '@material-ui/icons/Send';
 
 
 const styles = theme => ({
@@ -47,6 +48,12 @@ const styles = theme => ({
     avatar: {
         width: 25,
         height: 25
+    },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
+    iconSmall: {
+        fontSize: 20
     }
 });
 
@@ -103,7 +110,8 @@ class MailCompose extends Component {
                     <Typography className="flex justify-start">&nbsp;&nbsp;{this.props.user.firstName}&nbsp;{this.props.user.lastName}</Typography>
                     <Typography className="flex bold justify-start">&nbsp;&nbsp;({this.props.user.email})</Typography>
                     <div className="flex justify-end w-full">
-                        <Button variant="contained" color="primary" className={classes.button} onClick={()=>this.props.toggleCompose(false)}>
+                        <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
+                            <SendIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Send
                         </Button>
                         <IconButton>
