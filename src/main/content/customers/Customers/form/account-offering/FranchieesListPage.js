@@ -687,6 +687,8 @@ class FranchieesListPage extends Component {
 
 				newPins = pins === undefined ? [] : [...pins]
 				this.setState({
+					addrLat: this.state.current_lat,
+					addrLng: this.state.current_long,
 					gmapVisible: !gmapVisible,
 					pins: !gmapVisible ? newPins : [],
 					pins2: gmapVisible ? newPins : [],
@@ -941,16 +943,6 @@ class FranchieesListPage extends Component {
 
 		switch (name) {
 			case "Location":
-
-				payload = {
-					...payload,
-					addrZipcode: {
-						lat: 42.879593,
-						lng: -78.798299,
-					}
-				}
-				this.props.selectLocationFilterForFranchiseeList(payload)
-
 				break;
 			case "locationNearResidingCustomerRadius":
 			case "locationNearCleaningCustomerRadius":
@@ -1048,8 +1040,8 @@ class FranchieesListPage extends Component {
 						current_long: position.coords.longitude,
 						current_lat: 42.879593,
 						current_long: -78.798299,
-						current_lat: this.props.activeCustomer.Data.Latitude,
-						current_long: this.props.activeCustomer.Data.Longitude,
+						// current_lat: this.props.activeCustomer.Data.Latitude,
+						// current_long: this.props.activeCustomer.Data.Longitude,
 					})
 
 					// this.setState({
@@ -1063,8 +1055,8 @@ class FranchieesListPage extends Component {
 							addrLng: position.coords.longitude,
 							addrLat: 42.879593,
 							addrLng: -78.798299,
-							addrLat: this.props.activeCustomer.Data.Latitude,
-							addrLng: this.props.activeCustomer.Data.Longitude,
+							// addrLat: this.props.activeCustomer.Data.Latitude,
+							// addrLng: this.props.activeCustomer.Data.Longitude,
 						})
 						// this.setState({
 						// 	addrLat: 42.910772,
@@ -1259,7 +1251,8 @@ class FranchieesListPage extends Component {
 										id="SpecificAddress"
 										label="Address"
 										className={classes.textField}
-										value={this.props.locationFilterValueForFranchiseeList.addrZipcode && this.props.locationFilterValueForFranchiseeList.addrZipcode.addr || ''}
+										// value={this.props.locationFilterValueForFranchiseeList.addrZipcode && this.props.locationFilterValueForFranchiseeList.addrZipcode.addr || ''}
+										value={this.state.SpecificAddress || ''}
 										onChange={this.handleChange('SpecificAddress')}
 										margin="dense"
 										variant="outlined"
