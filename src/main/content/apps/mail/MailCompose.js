@@ -220,7 +220,7 @@ class MailCompose extends Component {
                 />
 
                 <p className="mb-6" >Message</p>
-                <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" init={{ height: '100%' }} value={this.state.sendMail.ContentBody} onEditorChange={this.handleChange('ContentBody')} textareaName="tinymce_textArea" />
+                <Editor apiKey="6rh4ia7bor4rum8cg0a0g4ij7g5sb8eohacbkt4nupdtc5nc" init={{ height: '400px',menubar:false}} value={this.state.sendMail.ContentBody} onEditorChange={this.handleChange('ContentBody')} textareaName="tinymce_textArea" />
             </div>
         );
     }
