@@ -785,7 +785,7 @@ class LeaseForm extends Component {
                             </GridContainer>
                         </MuiPickersUtilsProvider>
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
-                            <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col mt-8">
                                 <Card className={classes.card}>
                                     <CardHeader title="Franchisee" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent className={classNames(classes.cardContent)}>
