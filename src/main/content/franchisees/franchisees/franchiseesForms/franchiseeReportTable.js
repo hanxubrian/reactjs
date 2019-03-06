@@ -6,9 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, IconButton, Tooltip, TablePagination, Icon, CircularProgress
-} from '@material-ui/core'
+    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel, Button,Icon,
+    Toolbar, Typography, Paper, IconButton, Tooltip, TablePagination} from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -274,7 +273,7 @@ class FranchiseeReportTable extends React.Component {
         order: 'asc',
         selected: [],
         page: 0,
-        rowsPerPage: 10,
+        rowsPerPage: 13,
         labelWidth: 0,
         view: [],
         periodForReport: this.props.periodForReport,
@@ -309,7 +308,9 @@ class FranchiseeReportTable extends React.Component {
             return r;
         });
 
-        this.setState({data: filteredData});
+        let all_data = [{period: `${this.props.defaultPeriod}`}, ...filteredData];
+
+        this.setState({data: all_data});
     };
 
     componentDidMount() {
@@ -345,18 +346,23 @@ class FranchiseeReportTable extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
-    showFranchiseeModal = async (row)=>{
-        await this.props.createReport({
-            regionId: this.props.regionId,
-            // year: row.BillYear,
-            // month: row.BillMonth,
-            year: 2019,
-            month: 1,
-            franchiseenumber: this.props.insertPayload.dlr_code
-        });
-        // console.log('params=', this.props.periodForReport, this.props.insertPayload.dlr_code);
-
-        // await this.franchiseeComponent.onShowFranchiseeDialog();
+    showFranchiseeModal = (row)=>{
+        if(row.period===this.props.defaultPeriod) {
+            let period = this.props.defaultPeriod.split('/');
+            this.props.getCurrentReport({
+                regionId: this.props.regionId,
+                year: period[1],
+                month: period[0],
+                franchiseenumber: this.props.insertPayload.dlr_code
+            });
+        }
+        else
+            this.props.getLegacyReport({
+                regionId: this.props.regionId,
+                year: row.BillYear,
+                month: row.BillMonth,
+                franchiseenumber: this.props.insertPayload.dlr_code
+            });
     };
 
     render() {
@@ -416,52 +422,51 @@ class FranchiseeReportTable extends React.Component {
                                 <TableBody>
                                     {this.state.data.length > 0 && (
                                         stableSort(this.state.data, getSorting(order, orderBy))
-                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((n,index) => {
-                                                    return (
-                                                        <TableRow hover key={index} >
-                                                            <TableCell >
-                                                                {n.period}
-                                                            </TableCell>
-                                                            <TableCell style={{textAlign:'right'}}>
-                                                                {CurrencyFormatter({value: n.TotalRevenue})}
-                                                            </TableCell>
-                                                            <TableCell style={{textAlign:'right'}}>
-                                                                {CurrencyFormatter({value: n.TotalDeductions})}
-                                                            </TableCell>
-                                                            <TableCell style={{textAlign:'right'}}>
-                                                                {CurrencyFormatter({value: n.TotalPayment})}
-                                                            </TableCell>
-                                                            <TableCell style={{textAlign:'right'}}>
-                                                                <IconButton
-                                                                    onClick={()=>this.showFranchiseeModal(n)}
-                                                                    //component={Link}
-                                                                >
-                                                                    <Icon>visibility</Icon>
-                                                                </IconButton>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
+                                                return (
+                                                    <TableRow hover key={index} >
+                                                        <TableCell >
+                                                            {n.period===this.props.defaultPeriod ? (
+                                                                    <strong>{n.period} (Current)</strong>
+                                                                ):
+                                                                (
+                                                                    n.period
+                                                                )}
+                                                        </TableCell>
+                                                        <TableCell style={{textAlign:'right'}}>
+                                                            {CurrencyFormatter({value: n.TotalRevenue})}
+                                                        </TableCell>
+                                                        <TableCell style={{textAlign:'right'}}>
+                                                            {CurrencyFormatter({value: n.TotalDeductions})}
+                                                        </TableCell>
+                                                        <TableCell style={{textAlign:'right'}}>
+                                                            {CurrencyFormatter({value: n.TotalPayment})}
+                                                        </TableCell>
+                                                        <TableCell style={{textAlign:'right'}}>
+                                                            {n.period===this.props.defaultPeriod ? (
+                                                                    <Button color={"primary"} size={"small"} variant="contained"
+                                                                            style={{textTransform: 'none'}}
+                                                                            onClick={()=>this.showFranchiseeModal(n)}
+                                                                    >
+                                                                        Generate Report
+                                                                    </Button>
+                                                                )
+                                                                : (
+                                                                    <IconButton
+                                                                        onClick={()=>this.showFranchiseeModal(n)}
+                                                                        //component={Link}
+                                                                    >
+                                                                        <Icon>visibility</Icon>
+                                                                    </IconButton>
+                                                                )}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
                                                 }
                                             ))}
                                 </TableBody>
                             )}
                         </Table>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            component="div"
-                            count={franchiseeReports.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            backIconButtonProps={{
-                                'aria-label': 'Previous Page',
-                            }}
-                            nextIconButtonProps={{
-                                'aria-label': 'Next Page',
-                            }}
-                            onChangePage={this.handleChangePage}
-                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                        />
                     </div>
 
                 ) : (
@@ -477,7 +482,8 @@ class FranchiseeReportTable extends React.Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        createReport: Actions.createReport,
+        getCurrentReport: Actions.createReport,
+        getLegacyReport: Actions.getReport,
     }, dispatch);
 }
 
@@ -485,12 +491,12 @@ function mapStateToProps({ franchisees, auth, franchiseeReports }) {
     return {
         franchiseeReports: franchisees.franchiseeReports,
         franchiseeReport: franchiseeReports.franchiseeReport1,
+        franchiseeLegacyReport: franchiseeReports.franchiseeReport,
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         insertPayload: franchisees.insertPayload,
         periodForReport: franchisees.periodForReport,
         defaultPeriod: auth.login.defaultPeriod,
-
     }
 }
 
