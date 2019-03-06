@@ -1196,7 +1196,7 @@ class CustomerListContent extends Component {
 				{...restProps}
 				className={selected ? 'active' : ''}
 				style={{ color: 'green', cursor: 'pointer' }}
-				onClick={handleClick}
+				onClick={handleDoubleClick}
 				onDoubleClick={handleDoubleClick}
 			/>
 		);
