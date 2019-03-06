@@ -433,26 +433,26 @@ class PaymentLockBoxReport extends Component {
                                 <div className={classNames("flex flex-col h-full")}>
                                     <div className="flex flex-row items-center p-12">
                                         <div className="flex justify-start items-center">
-                                            <Hidden smDown>
-                                                <Button
-                                                    onClick={(ev) => this.OpenLeftPanel()}
-                                                    aria-label="toggle filter panel"
-                                                    color="secondary"
+                                            {/*<Hidden smDown>*/}
+                                                {/*<Button*/}
+                                                    {/*onClick={(ev) => this.OpenLeftPanel()}*/}
+                                                    {/*aria-label="toggle filter panel"*/}
+                                                    {/*color="secondary"*/}
 
-                                                    className={classNames(classes.filterPanelButton)}
-                                                >
-                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                                </Button>
-                                            </Hidden>
-                                            <Hidden smUp>
-                                                <Button
-                                                    onClick={(ev) => this.pageLayout.OpenLeftPanel()}
-                                                    aria-label="toggle filter panel"
-                                                    className={classNames(classes.filterPanelButton)}
-                                                >
-                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                                </Button>
-                                            </Hidden>
+                                                    {/*className={classNames(classes.filterPanelButton)}*/}
+                                                {/*>*/}
+                                                    {/*<img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>*/}
+                                                {/*</Button>*/}
+                                            {/*</Hidden>*/}
+                                            {/*<Hidden smUp>*/}
+                                                {/*<Button*/}
+                                                    {/*onClick={(ev) => this.pageLayout.OpenLeftPanel()}*/}
+                                                    {/*aria-label="toggle filter panel"*/}
+                                                    {/*className={classNames(classes.filterPanelButton)}*/}
+                                                {/*>*/}
+                                                    {/*<img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>*/}
+                                                {/*</Button>*/}
+                                            {/*</Hidden>*/}
                                         </div>
                                         <div className="flex items-center w-full h-44 mr-12 ml-12">
                                             <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
@@ -472,25 +472,25 @@ class PaymentLockBoxReport extends Component {
                                             </Paper>
                                         </div>
                                         <div className="flex items-center justify-end pr-12">
-                                            <Hidden smDown>
-                                                <Button
-                                                    onClick={(ev) => this.OpenRightPanel()}
-                                                    aria-label="toggle summary panel"
-                                                    // disabled={summaryState ? true : false}
-                                                    className={classNames(classes.summaryPanelButton)}
-                                                >
-                                                    <Icon>insert_chart</Icon>
-                                                </Button>
-                                            </Hidden>
-                                            <Hidden smUp>
-                                                <Button
-                                                    onClick={(ev) => this.pageLayout.OpenRightPanel()}
-                                                    aria-label="toggle summary panel"
-                                                    className={classNames(classes.summaryPanelButton)}
-                                                >
-                                                    <Icon>insert_chart</Icon>
-                                                </Button>
-                                            </Hidden>
+                                            {/*<Hidden smDown>*/}
+                                                {/*<Button*/}
+                                                    {/*onClick={(ev) => this.OpenRightPanel()}*/}
+                                                    {/*aria-label="toggle summary panel"*/}
+                                                    {/*// disabled={summaryState ? true : false}*/}
+                                                    {/*className={classNames(classes.summaryPanelButton)}*/}
+                                                {/*>*/}
+                                                    {/*<Icon>insert_chart</Icon>*/}
+                                                {/*</Button>*/}
+                                            {/*</Hidden>*/}
+                                            {/*<Hidden smUp>*/}
+                                                {/*<Button*/}
+                                                    {/*onClick={(ev) => this.pageLayout.OpenRightPanel()}*/}
+                                                    {/*aria-label="toggle summary panel"*/}
+                                                    {/*className={classNames(classes.summaryPanelButton)}*/}
+                                                {/*>*/}
+                                                    {/*<Icon>insert_chart</Icon>*/}
+                                                {/*</Button>*/}
+                                            {/*</Hidden>*/}
                                         </div>
                                     </div>
                                     {/*<PaymentLockBoxList/>*/}
