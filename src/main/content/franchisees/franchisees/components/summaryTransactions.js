@@ -194,7 +194,7 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63%'}}>
                     <tbody>
                     { aBillings.map((b, index)=> {
-                            if (b !== null && b.length > 0)
+                            if (b !== null && b.length > 0 && b[0].Amount)
                                 return (
                                     <tr key={index}>
                                         <td width="350">
@@ -223,17 +223,6 @@ class SummaryTransactons extends Component {
                             )
                         }
                     )}
-
-                    <tr >
-                        <td width="350">
-                            <Typography variant="subtitle1">Total Customer Invoice</Typography>
-                        </td>
-                        <td width ="" className="text-right">
-                            $0.00
-                        </td>
-                    </tr>
-
-
                     </tbody>
                 </table>
 
@@ -266,18 +255,9 @@ class SummaryTransactons extends Component {
                 )}
 
                 <table className="">
-                    <thead>
-                    <tr>
-                        <th width="250"/>
-                        <th width="350">
-                        </th>
-                        <th className="text-right">
-                            {/* UNIT */}
-                        </th>
-                    </tr>
-                    </thead>
                     <tbody>
                     { aDeductions0.map((b, index)=>{
+                        if(parseFloat(b.Amount))
                             return (
                                 <tr key={index}>
                                     <td>
@@ -334,7 +314,7 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions2 !=null && (aDeductions2.map((b, index)=>{
-                        if (SummaryPages[0][b])
+                        if (SummaryPages[0][b] && SummaryPages[0][b].Amount)
                             return (
                                 <tr key={index}>
                                     <td>
@@ -356,7 +336,7 @@ class SummaryTransactons extends Component {
                     { aDeductions4.map((b, index)=>{
                             if(SummaryPages[0][b]===null || (SummaryPages[0][b]!==null && SummaryPages[0][b].length===0) )
                                 return false;
-                            else
+                            else if(SummaryPages[0][b][0].Amount)
                                 return (
                                     <tr key={index}>
                                         <td>
@@ -449,31 +429,6 @@ class SummaryTransactons extends Component {
                     )}
                     </tbody>
                 </table>
-                <table style={{width:'63%'}}>
-                    <tbody>
-                    <tr >
-                        <td width="350">
-                            <Typography variant="subtitle1">Tax Levy</Typography>
-                        </td>
-                        <td width ="" className="text-right">
-                            $0.00
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table style={{width:'63%'}}>
-                    <tbody>
-                    <tr >
-                        <td width="350">
-                            <Typography variant="subtitle1">Garnishment</Typography>
-                        </td>
-                        <td width ="" className="text-right">
-                            $0.00
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
                 <table>
                     <tbody>
                     <tr>
@@ -488,7 +443,7 @@ class SummaryTransactons extends Component {
                     { aDeductions8.map((b, index)=>{
                             if(SummaryPages[0][b]===null)
                                 return false;
-                            else
+                            else if(SummaryPages[0][b][0].Amount)
                                 return (
                                     <tr key={index}>
                                         <td>

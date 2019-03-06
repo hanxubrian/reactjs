@@ -233,7 +233,7 @@ class Report extends Component {
         const {FranchiseeNumber, SummaryPages}  = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0];
 
         return (
-            <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
+            <div className={classNames(classes.root, "p-0 sm:p-24  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>

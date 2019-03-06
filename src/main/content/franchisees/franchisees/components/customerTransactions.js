@@ -37,7 +37,7 @@ import FuseUtils from '@fuse/FuseUtils';
 const styles = theme => ({
     layoutTable: {
      '& table th:nth-child(2) span': {
-            display: 'none'
+            // display: 'none'
      },
      '& th':{
          borderBottom: `2px solid ${theme.palette.text.primary}`,
@@ -218,8 +218,8 @@ class CustomerTransactions extends Component {
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Customer",},
-            {name: "CUS_NAME", title: "Cus. Name"},
+            {name: "CustomerNumber", title: "Customer #",},
+            {name: "CUS_NAME", title: "Customer Name"},
             {name: "DESCR", title: "Description"},
             {name: "InvoiceNo", title: "Invoice #"},
             // {name: "TRX_TYPE", title: "Type"},
@@ -229,7 +229,7 @@ class CustomerTransactions extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 70, },
+            { columnName: 'CustomerNumber', width: 90, },
             { columnName: 'CUS_NAME', width: 220, },
             { columnName: 'DESCR', width: -1, },
             { columnName: 'InvoiceNo', width: 100},

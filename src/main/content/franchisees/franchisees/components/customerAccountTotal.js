@@ -313,10 +313,10 @@ class CustomerAccountTotals extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'type', width: 160, },
-            { columnName: 'CUS_NO', width: 80, },
+            { columnName: 'type', width: 180, },
+            { columnName: 'CUS_NO', width: 100, },
             { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CUS_TAX', width: 140, align: 'right', wordWrapEnabled: true},
+            { columnName: 'CUS_TAX', width: 160, align: 'right', wordWrapEnabled: true},
         ];
 
         let totalSummaryItems = [
