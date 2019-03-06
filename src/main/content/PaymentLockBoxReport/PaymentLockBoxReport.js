@@ -240,8 +240,8 @@ class PaymentLockBoxReport extends Component {
             this.setState({completed: Math.min(completed + diff, 100)});
         }
     };
-    processlockbox=()=>{
-        this.props.paymentlockboxgetalldata();
+    openModal=()=>{
+        // this.props.paymentlockboxgetalldata();
         this.props.showPaymentLockBoxModalForm(true)
     }
     fileuploadstart=()=>{
@@ -382,7 +382,7 @@ class PaymentLockBoxReport extends Component {
                                                     {/*/>*/}
                                                 {/*</form>*/}
 
-                                                    <Button variant="contained" color="primary"  onClick={() => {this.processlockbox()}}>
+                                                    <Button variant="contained" color="primary"  onClick={() => {this.openModal()}}>
                                                         <Icon className={classes.rightIcon}>done_all</Icon>
                                                         Process Lockbox
                                                     </Button>
@@ -497,7 +497,7 @@ class PaymentLockBoxReport extends Component {
                                     </div>
                                     {/*<PaymentLockBoxList/>*/}
                                     <PaymentLockBoxContentList/>
-                                    {/* {this.props.paymentLockBoxModalForm.open && <PaymentLockBoxModalForm/>} */}
+                                    {this.props.paymentLockBoxModalForm.open && <PaymentLockBoxModalForm/>}
                                 </div>
                             )}
 

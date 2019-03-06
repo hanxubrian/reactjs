@@ -138,9 +138,6 @@ class ProcessModalForm extends React.Component {
 
 
 
-
-
-
 	autoDistribute = () => {
 		this.setState(state => {
 			const { PaymentAmount } = this.state
@@ -246,7 +243,7 @@ class ProcessModalForm extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleCreateCustomerCollection} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
+						<Button variant="contained" onClick={() => {this.processlockbox()}} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
 					</DialogActions>
 				</Dialog>
 			</div>
@@ -256,7 +253,7 @@ class ProcessModalForm extends React.Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		showProcessModalForm: Actions.showProcessModalForm,
+		showProcessModalForm: Actions.showProcessModalForm
 	}, dispatch);
 }
 

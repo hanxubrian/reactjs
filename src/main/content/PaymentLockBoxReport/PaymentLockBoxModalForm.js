@@ -165,6 +165,10 @@ class PaymentLockBoxModalForm extends React.Component {
 		})
 	}
 
+	processlockbox = () =>{
+        this.props.paymentlockboxgetalldata();
+        this.props.showPaymentLockBoxModalForm(false)
+    }
 
 	handleChangeEmailNotesTo = (event, value) => {
 		this.setState({ EmailNotesTo: value });
@@ -247,7 +251,7 @@ class PaymentLockBoxModalForm extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleCreateCustomerCollection} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
+						<Button variant="contained" onClick={this.processlockbox} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Process Lockbox</Button>
 					</DialogActions>
 				</Dialog>
 			</div>
@@ -257,7 +261,9 @@ class PaymentLockBoxModalForm extends React.Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		showPaymentLockBoxModalForm: Actions.showPaymentLockBoxModalForm,
+        showPaymentLockBoxModalForm: Actions.showPaymentLockBoxModalForm,
+        paymentlockboxgetalldata: Actions.paymentlockboxgetalldata,
+        fileupload: Actions.paymentlockboxfileupload,
 	}, dispatch);
 }
 
