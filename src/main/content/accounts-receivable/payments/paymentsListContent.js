@@ -50,6 +50,8 @@ import {
 	PagingPanel,
 	DragDropProvider,
 	TableColumnResizing,
+	SearchPanel,
+	Toolbar,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
@@ -612,7 +614,13 @@ class PaymentsListContent extends Component {
 		if (nextProps.searchText !== this.props.searchText) {
 			console.log("------search text changed-------", nextProps.searchText)
 			// this.search(nextProps.searchText);
-			this.changeSearchValue(nextProps.searchText)
+			// this.changeSearchValue(nextProps.searchText)
+			this.props.getAccountReceivablePaymentsList(
+				nextProps.regionId,
+				nextProps.filterParam.fromDate,
+				nextProps.filterParam.toDate,
+				nextProps.searchText,
+				nextProps.filterParam.paymentStatus);
 		}
 
 		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
@@ -1135,7 +1143,8 @@ class PaymentsListContent extends Component {
 									</TemplateConnector>
 								)}
 							</Template>
-							{/* <Toolbar />					 */}
+							<Toolbar />
+          					<SearchPanel />
 							{
 								isCustomerNameNoGrouping &&
 								<TableGroupRow contentComponent={this.GroupCellContent} />

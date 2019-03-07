@@ -191,7 +191,7 @@ class PaymentSearchBar extends Component {
 				<Paper className={"flex items-center w-full h-44 mr-0"} elevation={1}>
 					<Icon color="action" className="ml-16">search</Icon>
 					<Input
-						placeholder="Search..."
+						placeholder="Search in database..."
 						className={classNames(classes.search, 'pl-16')}
 						disableUnderline
 						fullWidth
