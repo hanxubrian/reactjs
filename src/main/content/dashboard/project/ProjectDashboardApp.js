@@ -174,15 +174,15 @@ class ProjectDashboardApp extends Component {
                                 <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
                                     <Widget4 widget={widgets.widget4}/>
                                 </div>
-                                <div className="widget flex w-full p-12">
+                                <div className="widget flex w-full sm:w-1/2 p-12">
                                     <Widget5 widget={widgets.widget5} widget7={widgets.widget7}/>
                                 </div>
                                 {/*<div className="widget flex w-full sm:w-1/2 p-12">*/}
                                     {/*<Widget6 widget={widgets.widget6}/>*/}
                                 {/*</div>*/}
-                                {/*<div className="widget flex w-full sm:w-1/2 p-12">*/}
-                                    {/*<Widget7 widget={widgets.widget7}/>*/}
-                                {/*</div>*/}
+                                <div className="widget flex w-full sm:w-1/2 p-12">
+                                    <Widget7 widget={widgets.widget7}/>
+                                </div>
                             </FuseAnimateGroup>
                         )}
                         {tabValue === 1 && (

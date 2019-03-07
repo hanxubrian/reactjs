@@ -41,8 +41,8 @@ class Widget5 extends Component {
                         })}
                     </div>
                 </div>
-                <div className="flex flex-row flex-wrap">
-                    <div className="w-full md:w-1/2 p-8 min-h-420 h-420">
+                <div className="flex flex-row flex-wrap ">
+                    <div className="w-full  p-8 min-h-420 h-420">
                         <Bar
                             data={{
                                 labels  : widget.mainChart[currentRange].labels,
@@ -51,8 +51,8 @@ class Widget5 extends Component {
                             options={widget.mainChart.options}
                         />
                     </div>
-                    <div className="widget flex w-full sm:w-1/2 p-12">
-                        <Widget7 widget={this.props.widget7}/>
+                    <div >
+                        <div style={{height:'500px'}}></div>
                     </div>
                     {/*<div className="flex w-full md:w-1/2 flex-wrap p-8">*/}
                         {/*{Object.entries(widget.supporting).map(([key, item]) => {*/}
