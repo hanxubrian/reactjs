@@ -30,6 +30,31 @@ const styles = theme => ({
             '& th:last-child, & td:last-child'  : {
                 paddingRight: 0 + '!important'
             }
+        },
+    },
+    borderTable:{
+        borderCollapse: 'collapse',
+        '@media print': {
+            borderCollapse: 'collapse',
+        },
+        '& tr td, & tr th':{
+            borderBottom: '1px solid black',
+            borderRight: '1px solid black',
+        },
+        '& tr td:first-child, & tr th:first-child': {
+            borderLeft: '1px solid black',
+        },
+        '& tr td.left, & tr th.left':{
+            borderLeft: '1px solid black',
+        },
+        '& tr td.top, & tr th.top':{
+            borderTop: '1px solid black',
+        },
+        '& tr td.topNoBorder':{
+            borderTop: '0px solid black',
+        },
+        '& tr td.bottomNoBorder':{
+            borderBottom: '0px solid black',
         }
     },
     paper: {
@@ -68,27 +93,6 @@ const styles = theme => ({
         backgroundColor: theme.palette.divider,
         height         : 144
     },
-    seller     : {
-        backgroundColor: theme.palette.primary.dark,
-        color          : theme.palette.getContrastText(theme.palette.primary.dark),
-        marginRight    : -88,
-        paddingRight   : 66,
-        width          : 480,
-        '& .divider'   : {
-            backgroundColor: theme.palette.getContrastText(theme.palette.primary.dark),
-            opacity        : .5
-        }
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200
-    },
-    longerTextField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 835
-    }
 });
 
 class InvoiceReport extends Component {
@@ -178,11 +182,10 @@ class InvoiceReport extends Component {
     };
 
     render() {
-        console.log('customer=', this.state.customer);
-
         if (!this.props.show) {
             return null;
         }
+        const {classes} = this.props;
         if (this.props.Detail.Data && this.props.Detail.Data !== null && this.state.RegionInfo && this.state.RegionInfo !== null ) {
             return (
 
@@ -212,7 +215,7 @@ class InvoiceReport extends Component {
                             ref={(component) => this.pdfInvoiceReportExportComponent = component}
                             scale={0.75}
                         >
-                            <div style={{width: '100%',color:'black'}}>
+                            <div className={classNames(classes.root)} style={{width: '100%',color:'black'}}>
                                 <table style={{width: '100%',color:'black'}}>
                                     <thead>
                                     <tr>
@@ -232,40 +235,40 @@ class InvoiceReport extends Component {
                                             <Typography >{`${this.state.RegionInfo.regionname}, ${this.state.RegionInfo.city}, ${this.state.RegionInfo.state} `}</Typography>
                                         </th>
                                         <th>
-                                            <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px',color:'black'}}>
+                                            <table className={classNames(classes.borderTable, "w-full")}>
                                                 <tbody>
                                                 <tr>
-                                                    <td style={{border: 'solid 1px',color:'black'}} colSpan="2">Invoice</td>
+                                                    <td className="top left" colSpan="2">Invoice</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style={{border: 'solid 1px'}}>
+                                                    <td className="left">
                                                         <Typography  style={{color:'black'}}> <strong>Date</strong> </Typography>
                                                         <Typography  style={{color:'black'}}>{moment(this.state.invoiceDetail.InvoiceDate).format('MM/DD/YYYY')}</Typography>
                                                     </td>
-                                                    <td style={{border: 'solid 1px'}}>
-                                                        <Typography  style={{color:'black'}}><strong>Number</strong></Typography>
+                                                    <td >
+                                                        <Typography  style={{color:'black'}}><strong>Invoice #</strong></Typography>
                                                         <Typography  style={{color:'black'}}>{this.state.invoiceDetail.Inv_no}</Typography>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style={{border: 'solid 1px'}}>
+                                                    <td className="left">
                                                         <Typography  style={{color:'black'}}><strong>Due Date</strong></Typography>
                                                         <Typography  style={{color:'black'}}>{moment(this.state.invoiceDetail.DueDate).format('MM/DD/YYYY')}</Typography>
                                                     </td>
-                                                    <td style={{border: 'solid 1px'}}>
-                                                        <Typography  style={{color:'black'}}><strong>Cust. #</strong></Typography>
+                                                    <td>
+                                                        <Typography  style={{color:'black'}}><strong>Customer #</strong></Typography>
                                                         <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerNo}</Typography>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style={{border: 'solid 1px',color:'black'}}>
+                                                    <td className="left">
                                                         <Typography  style={{color:'black'}}><strong style={{fontSize: '11px'}}>Invoice
                                                             Amount</strong></Typography>
                                                         <Typography  style={{color:'black'}}>
                                                             {'$'+parseFloat(this.state.invoiceDetail.GrandTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                                         </Typography>
                                                     </td>
-                                                    <td style={{border: 'solid 1px'}}>
+                                                    <td>
                                                         <Typography  style={{color:'black'}}><strong style={{fontSize: '11px'}}>Amount Remitted</strong></Typography>
                                                         <Typography  style={{color:'black'}}>
                                                             &nbsp;
@@ -328,7 +331,7 @@ class InvoiceReport extends Component {
                                     <tr>
                                         <td width="20%"/>
                                         <td width="60%" className="text-center">
-                                            <Typography><strong><span style={{fontSize: '18px',color:'black'}}>JANI-KING OF {this.state.RegionInfo.regionname} ,INC</span></strong></Typography>
+                                            <Typography><strong><span style={{fontSize: '18px',color:'black'}}>JANI-KING OF {this.state.RegionInfo.regionname}, INC</span></strong></Typography>
                                             <Typography><strong><span
                                                 style={{fontSize: '14px',color:'black'}}>Commercial Cleaning Services</span></strong></Typography>
                                             <Typography><span style={{color:'black'}}>{this.state.RegionInfo.fax}</span></Typography>
@@ -381,61 +384,52 @@ class InvoiceReport extends Component {
                                     </tbody>
 
                                 </table>
-                                <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px',color:'black'}}>
+                                <table className={classNames(classes.borderTable)}>
                                     <thead>
                                     <tr>
-                                        <th width="15%" style={{border: 'solid 1px',color:'black'}} className="text-center">Invoice No</th>
-                                        <th width="10%" style={{border: 'solid 1px',color:'black'}} className="text-center">Date</th>
-                                        <th width="10%" style={{border: 'solid 1px',color:'black'}} className="text-center">Cust No</th>
-                                        <th width="15%" style={{border: 'solid 1px',color:'black'}} className="text-center">Slsmn No</th>
-                                        <th width="15%" style={{border: 'solid 1px',color:'black'}} className="text-center">PO Number</th>
-                                        <th width="25%" style={{border: 'solid 1px',color:'black'}} className="text-center">Franchisee</th>
-                                        <th width="10%" style={{border: 'solid 1px',color:'black'}} className="text-center">Due Date</th>
+                                        <th width="15%" className="top let text-center">Invoice #</th>
+                                        <th width="15%" className="top text-center">Date</th>
+                                        <th width="15%" className="top text-center">Customer #</th>
+                                        <th width="25%" className="top text-center">Slsmn No</th>
+                                        <th width="15%" className="top text-center">PO Number</th>
+                                        <th width="15%" className="top text-center">Due Date</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <td width="15%" style={{border: 'solid 1px',color:'black'}}
-                                            className="text-center">{this.state.invoiceDetail.Inv_no}</td>
-                                        <td width="10%" style={{border: 'solid 1px',color:'black'}}
+                                        <td width="15%"
+                                            className="left text-center">{this.state.invoiceDetail.Inv_no}</td>
+                                        <td width="15%"
                                             className="text-center">{moment(this.state.invoiceDetail.InvoiceDate).format('MM/DD/YYYY') }</td>
-                                        <td width="10%" style={{border: 'solid 1px',color:'black'}}
+                                        <td width="15%"
                                             className="text-center">{this.state.invoiceDetail.CustomerNo}</td>
-                                        <td width="15%" style={{border: 'solid 1px',color:'black'}}
+                                        <td width="25%"
                                             className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
-                                        <td width="15%" style={{border: 'solid 1px',color:'black'}}
+                                        <td width="15%"
                                             className="text-center">{this.state.invoiceDetail.PONumber}</td>
-                                        <td width="25%" style={{border: 'solid 1px',color:'black'}}
-                                            className="text-center">{this.state.invoiceDetail.apply_fran}</td>
-                                        <td width="10%" style={{border: 'solid 1px',color:'black'}}
+                                        <td width="15%"
                                             className="text-center">{moment(this.state.invoiceDetail.DueDate).format('MM/DD/YYYY')}</td>
                                     </tr>
-                                    </tbody>
-                                </table>
-                                <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px'}}>
-                                    <tbody>
                                     <tr>
-                                        <td width="10%" style={{border: 'solid 1px',color:'black'}} className="text-center">
+                                        <td className="left text-center">
                                             <strong>Quantity</strong></td>
-                                        <td width="60%" style={{border: 'solid 1px',color:'black'}} className="text-center">
+                                        <td  colSpan={3} className="text-center">
                                             <strong>Description</strong></td>
-                                        <td width="15%" style={{border: 'solid 1px',color:'black'}} className="text-center"><strong>Unit
+                                        <td className="text-center"><strong>Unit
                                             Price</strong></td>
-                                        <td width="15%" style={{border: 'solid 1px',color:'black'}} className="text-center"><strong>Extended
+                                        <td className="text-center"><strong>Extended
                                             Price</strong></td>
                                     </tr>
                                     {this.state.Items != null && this.state.Items && this.state.Items.map((item, index) => {
                                         return (
                                             <tr key={index}>
-                                                <td width="10%" style={{border: 'solid 1px',color:'black'}}
-                                                    className="text-center">{item.LineNo}</td>
-                                                <td width="60%" style={{border: 'solid 1px',color:'black'}}
-                                                    className="text-center">{item.Description}</td>
-                                                <td width="15%" style={{border: 'solid 1px',color:'black'}} className="text-center">
+                                                <td
+                                                    className="left text-center">{item.LineNo}</td>
+                                                <td colSpan={3} className="text-center">{item.Description}</td>
+                                                <td className="text-center">
                                                     {'$'+parseFloat(item.UnitPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                                 </td>
-                                                <td rowSpan="1" width="15%" style={{border: 'solid 1px',color:'black'}}
-                                                    className="text-center">
+                                                <td rowSpan="1" width="15%" className="text-center">
                                                     {'$'+parseFloat(item.ExtendedPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                                 </td>
 
@@ -444,7 +438,7 @@ class InvoiceReport extends Component {
                                     })}
 
                                     <tr>
-                                        <td style={{borderRight: 'solid 1px'}}>
+                                        <td className="bottomNoBorder">
                                             <Typography><br/></Typography> <Typography><br/></Typography>
                                             <Typography><br/></Typography> <Typography><br/></Typography>
                                             <Typography><br/></Typography>
@@ -452,45 +446,44 @@ class InvoiceReport extends Component {
                                             <Typography><br/></Typography> <Typography><br/></Typography>
                                             <Typography><br/></Typography><Typography><br/></Typography>
                                         </td>
-                                        <td >
+                                        <td colSpan={3} className="bottomNoBorder">
                                             <Typography><br/></Typography>
-                                            <Typography style={{color:'black',textAlign: "center"}}>{this.state.invoiceDetail.InvoiceMessage}</Typography>
+                                            <Typography >{this.state.invoiceDetail.InvoiceMessage}</Typography>
                                         </td>
-                                        <td style={{border: 'solid 1px',color:'black'}}><Typography><br/></Typography></td>
-                                        <td style={{border: 'solid 1px',color:'black'}}><Typography><br/></Typography></td>
+                                        <td ><Typography><br/></Typography></td>
+                                        <td ><Typography><br/></Typography></td>
                                     </tr>
 
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
-                                        <td width="60%" className="text-center">  {this.state.invoiceDetail.InvMsg}</td>
-                                        <td width="15%" style={{border: 'solid 1px'}} className="text-center">
+                                        <td className="bottomNoBorder text-center"/>
+                                        <td colSpan={3} className="text-center bottomNoBorder">  {this.state.invoiceDetail.InvMsg}</td>
+                                        <td className="text-center">
                                             <strong>Amount of Sale</strong>
                                         </td>
-                                        <td width="15%" style={{border: 'solid 1px'}} className="text-center">
+                                        <td width="15%" className="text-center">
                                             {'$'+parseFloat(this.state.invoiceDetail.SubTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
-                                        <td width="60%" className="text-center"/>
-                                        <td width="15%" style={{border: 'solid 1px'}} className="text-center">
+                                        <td className="bottomNoBorder text-center"/>
+                                        <td colSpan={3} className="bottomNoBorder text-center"/>
+                                        <td className="text-center">
                                             <strong>Sales Tax</strong>
                                         </td>
-                                        <td width="15%" style={{border: 'solid 1px'}} className="text-center">
+                                        <td className="text-center">
                                             {'$'+parseFloat(this.state.invoiceDetail.TaxAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="10%" style={{borderRight: 'solid 1px'}} className="text-center"/>
-                                        <td width="60%" className="text-center">
+                                        <td className="text-center"/>
+                                        <td colSpan={3} className="text-center">
                                             <Typography><strong style={{fontSize: '11px'}}>Make All Checks Payable To:</strong></Typography>
-                                            <Typography><strong style={{fontSize: '11px'}}>JANI-KING OF
-                                                BUFFALO,INC:</strong></Typography>
+                                            <Typography><strong style={{fontSize: '11px'}}>JANI-KING OF {this.state.RegionInfo.regionname}, INC:</strong></Typography>
                                         </td>
-                                        <td width="15%" style={{border: 'solid 1px'}} className="text-center">
+                                        <td className="text-center">
                                             <strong>Total</strong>
                                         </td>
-                                        <td width="15%" style={{border: 'solid 1px'}} className="text-center">
+                                        <td className="text-center">
                                             {'$'+parseFloat(this.state.invoiceDetail.GrandTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                         </td>
                                     </tr>
