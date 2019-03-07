@@ -90,7 +90,7 @@ class SigninPage extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
-            this.props.history.push('/apps/dashboards/project');
+            this.props.history.push('/home');
         }
         if(nextProps.login.bAlertShown) {
             this.setState({alertOpen: true})

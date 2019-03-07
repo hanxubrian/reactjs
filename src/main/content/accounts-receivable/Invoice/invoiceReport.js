@@ -113,9 +113,10 @@ class InvoiceReport extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.Detail!==this.props.Detail){
+        if(nextProps.Detail!==null && nextProps.Detail!==this.props.Detail){
             let customers = this.props.customersDB.Data.Regions[0].CustomerList;
             let customer = customers.filter(c=>c.CustomerNo===nextProps.Detail.Data.CustomerNo);
+            console.log('customer=', customer);
             if(customer.length)
                 this.setState({customer: customer[0]});
         }
@@ -123,8 +124,18 @@ class InvoiceReport extends Component {
     }
     componentDidMount(){
         this.props.onRef(this);
-        if(this.props.Detail ==="Failed"){
-            alert("GET INVOICE DETAIL FAILD!!!");
+        this.props.Region.forEach((item)=>{
+            if(item.regionid === this.props.RegionId){
+                this.setState({RegionInfo:item});
+            }
+        });
+
+        if(this.props.Detail!==null){
+            let customers = this.props.customersDB.Data.Regions[0].CustomerList;
+            let customer = customers.filter(c=>c.CustomerNo===this.props.Detail.Data.CustomerNo);
+            console.log('customer=', customer);
+            if(customer.length)
+                this.setState({customer: customer[0]});
         }
     }
     componentWillUnmount(){
@@ -132,7 +143,7 @@ class InvoiceReport extends Component {
     }
 
     componentWillMount(){
-        if(this.props.Detail !=="Failed"){
+        if(this.props.Detail !==null){
             this.setState({
                 invoiceDetail:this.props.Detail.Data,
                 Items: this.props.Detail.Data.Items,
@@ -154,30 +165,17 @@ class InvoiceReport extends Component {
     }
 
     componentDidUpdate(prevProps, prevState,){
-        if(this.props.Detail !=="Faild" &&  this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
-            this.setState({
-                Region: this.props.Detail.Data.RegionId,
-            });
-        }
-        if(this.props.Detail !=="Faild" && this.props.Detail  && JSON.stringify(this.props.Detail) !== JSON.stringify(prevProps.Detail)){
+        if(this.props.Detail !==null && prevProps.Detail!==this.props.Detail){
+            console.log('fireed====');
             this.setState({
                 invoiceDetail:this.props.Detail.Data,
                 Items: this.props.Detail.Data.Items,
                 Region: this.props.Detail.Data.RegionId,
             });
         }
-        if(this.props.Detail !=="Faild" && this.props.Region && JSON.stringify(this.props.Region) !== JSON.stringify(prevProps.Region)){
-            if(this.props.RegionId &&  JSON.stringify(this.props.RegionId) !== JSON.stringify(prevProps.RegionId)){
-                this.props.Region.map((item)=>{
-                    if(item.regionid === this.props.RegionId){
-                        this.setState({RegionInfo:item});
-                    }
-                });
-            }
-        }
     }
 
-    onInvoicePrint = async ()=> {
+    onInvoiceLegacyReportPrint = async ()=> {
         await this.pdfInvoiceReportExportComponent.save();
     };
 

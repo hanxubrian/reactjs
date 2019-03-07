@@ -137,7 +137,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                invoiceDetail: action.payload.data,
+                invoiceDetail: _.cloneDeep(action.payload.data),
                 bLoadedInvoices: true,
                 bInvoiceStart: false,
                 invoiceDetailStatus: true,
@@ -153,7 +153,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                invoiceDetail: action.payload,invoiceDetailStatus:false,
+                invoiceDetail: null, invoiceDetailStatus:false,
             }
         }
         case Actions.GET_INVOICES_FETCH_START:

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 
 //Material-UI
-import {withStyles,Typography} from "@material-ui/core";
+import {withStyles, Typography, Icon, Fab} from "@material-ui/core";
 
 //Kendo
 import { PDFExport } from '@progress/kendo-react-pdf';
@@ -100,6 +100,12 @@ const styles = theme => ({
         backgroundColor: theme.palette.divider,
         height         : 144
     },
+    fab: {
+        margin: theme.spacing.unit,
+        marginTop: 0,
+        width: 42,
+        height: 42
+    },
 });
 
 class InvoiceNewReport extends Component {
@@ -120,7 +126,7 @@ class InvoiceNewReport extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.Detail!==this.props.Detail){
+        if(nextProps.Detail!==null && nextProps.Detail!==this.props.Detail){
             let customers = this.props.customersDB.Data.Regions[0].CustomerList;
             let customer = customers.filter(c=>c.CustomerNo===nextProps.Detail.Data.CustomerNo);
             if(customer.length)
@@ -129,17 +135,18 @@ class InvoiceNewReport extends Component {
 
     }
     componentDidMount(){
-        this.props.onRef(this);
-        if(this.props.Detail ==="Failed"){
-            alert("GET INVOICE DETAIL FAILD!!!");
-        }
+        this.props.Region.forEach((item)=>{
+            if(item.regionid === this.props.RegionId){
+                this.setState({RegionInfo:item});
+            }
+        });
     }
     componentWillUnmount(){
-        this.props.onRef(undefined);
+        // this.props.onRef(undefined);
     }
 
     componentWillMount(){
-        if(this.props.Detail !=="Failed"){
+        if(this.props.Detail !==null){
             this.setState({
                 invoiceDetail:this.props.Detail.Data,
                 Items: this.props.Detail.Data.Items,
@@ -161,26 +168,13 @@ class InvoiceNewReport extends Component {
     }
 
     componentDidUpdate(prevProps, prevState,){
-        if(this.props.Detail !=="Faild" &&  this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
-            this.setState({
-                Region: this.props.Detail.Data.RegionId,
-            });
-        }
-        if(this.props.Detail !=="Faild" && this.props.Detail  && JSON.stringify(this.props.Detail) !== JSON.stringify(prevProps.Detail)){
+        if(this.props.Detail !==null && prevProps.Detail!==this.props.Detail){
+            console.log('fireed====');
             this.setState({
                 invoiceDetail:this.props.Detail.Data,
                 Items: this.props.Detail.Data.Items,
                 Region: this.props.Detail.Data.RegionId,
             });
-        }
-        if(this.props.Detail !=="Faild" && this.props.Region && JSON.stringify(this.props.Region) !== JSON.stringify(prevProps.Region)){
-            if(this.props.RegionId &&  JSON.stringify(this.props.RegionId) !== JSON.stringify(prevProps.RegionId)){
-                this.props.Region.map((item)=>{
-                    if(item.regionid === this.props.RegionId){
-                        this.setState({RegionInfo:item});
-                    }
-                });
-            }
         }
     }
 
@@ -189,34 +183,19 @@ class InvoiceNewReport extends Component {
     };
 
     render() {
-        if (!this.props.show) {
+        if (this.props.Detail===null)
             return null;
-        }
-        console.log('items', this.state.Items);
+
         const {classes} = this.props;
         if (this.props.Detail.Data && this.props.Detail.Data !== null && this.state.RegionInfo && this.state.RegionInfo !== null ) {
             return (
 
-                <div onClick={this.props.onClose}   style={{
-                    position: 'absolute',
-                    top: -110,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    zIndex: 99999,
-                    height: 'fit-content',
-                    backgroundColor: 'rgba(0,0,0,0.3)',
-                    padding: 50
-                }}>
-
-                    <div onClick={this.props.onClose} id="divToPrint" className="modal" style={{
-                        backgroundColor: '#fff',
-                        borderRadius: 5,
-                        maxWidth: 800,
-                        minHeight: 300,
-                        margin: '0 auto',
-                        padding: 30
-                    }}>
+               <div>
+                        <Fab size={"small"} color="primary" aria-label="view" className={classNames( "absolute")}
+                             onClick={() => this.onInvoicePrint()}
+                        >
+                            <Icon>print</Icon>
+                        </Fab>
                         <PDFExport
                             paperSize="A4"
                             margin="1cm"
@@ -368,7 +347,7 @@ class InvoiceNewReport extends Component {
                                     </tbody>
 
                                 </table>
-                                <table className={classNames(classes.borderTable)}>
+                                <table className={classNames(classes.borderTable, "w-full")}>
                                     <thead>
                                     <tr>
                                         <th width="12.5%" className="top let text-center">Date</th>
@@ -478,7 +457,6 @@ class InvoiceNewReport extends Component {
                         </PDFExport>
 
                     </div>
-                </div>
             );
         }
         else {
@@ -490,8 +468,8 @@ class InvoiceNewReport extends Component {
 
 
 InvoiceNewReport.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    show: PropTypes.bool,
+    // onClose: PropTypes.func.isRequired,
+    // show: PropTypes.bool,
     children: PropTypes.node,
     Detail: PropTypes.object,
     Region: PropTypes.array,
