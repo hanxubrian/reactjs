@@ -315,7 +315,7 @@ class FranchiseeReportTable extends React.Component {
     };
 
     componentDidMount() {
-        if(this.props.franchiseeReports.length) {
+        if(this.props.franchiseeReports!==null) {
             let year = this.state.periodForReport.year;
             let month = this.state.periodForReport.month;
             this.onFilterByPeriod(month, year);
