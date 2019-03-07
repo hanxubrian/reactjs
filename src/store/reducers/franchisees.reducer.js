@@ -31,7 +31,7 @@ const initialState = {
     createPayload: null,
     deletePayload: null,
     Active: true,
-    InActive: true,
+    InActive: false,
     docSendModal: false,
     docViewModal: false,
     stopReasonModal: false,

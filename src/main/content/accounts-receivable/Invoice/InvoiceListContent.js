@@ -2,7 +2,17 @@ import React, {Component} from 'react';
 
 // Material-UI core components
 import {
-    Checkbox, Icon, IconButton, Button, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
+    Checkbox,
+    Icon,
+    IconButton,
+    Button,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Dialog,
+    Fab,
+    Paper,
 } from '@material-ui/core';
 
 //Janiking
@@ -24,6 +34,7 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import InvoiceLegacyReport from './invoiceReport';
 import InvoiceNewReport from './InvoiceNewReport';
+import InvoicePrintModal from './InvoicePrintModal';
 
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -121,7 +132,7 @@ const styles = theme => ({
                 textTransform: 'none'
             }
         }
-    }
+    },
 });
 
 class InvoiceListContent extends Component {
@@ -245,12 +256,14 @@ class InvoiceListContent extends Component {
         });
     }
 
-    invoiceReport =(ev,InvoiceId, RegionId)=>{
+    invoiceReport =(ev, source, InvoiceId, RegionId)=>{
         ev.stopPropagation();
         this.props.getInvoiceDetail(InvoiceId, RegionId);
-        this.setState({
-            isOpen: true
-        });
+
+        if(source.toLowerCase()!=='billrun')
+            this.setState({isOpen: true});
+        else
+            this.invoicePrintComponent.onShowFranchiseeDialog();
     };
 
     toggleModal = () => {
@@ -275,7 +288,7 @@ class InvoiceListContent extends Component {
     };
 
     printDocument=()=> {
-        this.newReport.onInvoicePrint();
+        this.child.onInvoiceLegacyReportPrint();
     };
 
     render()
@@ -377,7 +390,7 @@ class InvoiceListContent extends Component {
                                     filterAll: true,
                                     width: 120,
 
-                                    Cell: row => <Button onClick={(e)=>{this.invoiceReport(e,row.original.InvoiceId,this.props.regionId)}}>{row.original.InvoiceNo}</Button> ,
+                                    Cell: row => <Button onClick={(e)=>{this.invoiceReport(e,row.original.Source, row.original.InvoiceId,this.props.regionId)}}>{row.original.InvoiceNo}</Button> ,
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
@@ -512,9 +525,8 @@ class InvoiceListContent extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                {this.props.invoiceDetail!==null && this.props.invoiceDetail!==undefined && this.state.invoiceDetail !=="Faild" && this.state.isOpen && (
-                    /*<InvoiceLegacyReport onRef={ref => (this.child = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId}  />*/
-                    <InvoiceNewReport onRef={ref => (this.newReport = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId}  />
+                {this.props.invoiceDetail!==null && this.props.invoiceDetail!==undefined && this.state.invoiceDetail !==null && this.state.isOpen && (
+                    <InvoiceLegacyReport onRef={ref => (this.child = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId}  />
                 )}
                 {this.state.isOpen && this.state.invoiceDetail!==null &&(
                 <div className="mb5" style={{zIndex:999999}}>
@@ -532,6 +544,7 @@ class InvoiceListContent extends Component {
                     }}>Print</button>
                 </div>
                 )}
+                <InvoicePrintModal onRef={component=>{this.invoicePrintComponent = component}}/>
             </div>
 
         );
