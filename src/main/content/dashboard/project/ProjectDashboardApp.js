@@ -96,7 +96,7 @@ class ProjectDashboardApp extends Component {
                 header={
                     <div className="flex flex-col justify-between flex-1 px-24 pt-24">
                         <div className="flex justify-between items-start">
-                            <Typography className="py-0 sm:py-24" variant="h4">Welcome back, John!</Typography>
+                            <Typography className="py-0 sm:py-24" variant="h4">Welcome back,{this.props.login.firstName}</Typography>
                             <Hidden lgUp>
                                 <IconButton
                                     onClick={(ev) => this.pageLayout.toggleRightSidebar()}
@@ -109,7 +109,8 @@ class ProjectDashboardApp extends Component {
                         <div className="flex items-end">
                             <div className="flex items-center">
                                 <div className={classNames(classes.selectedProject, "flex items-center h-40 px-16 text-16")}>
-                                    {_.find(projects, ['id', selectedProjectId]).name}
+                                    {/*{_.find(projects, ['id', selectedProjectId]).name}*/}
+                                    Reginal Office Overall Status
                                 </div>
                                 <IconButton
                                     className={classNames(classes.projectMenuButton, "h-40 w-40 p-0")}
@@ -146,8 +147,9 @@ class ProjectDashboardApp extends Component {
                         className="w-full border-b-1 px-24"
                     >
                         <Tab className="text-14 font-600 normal-case" label="Home"/>
-                        <Tab className="text-14 font-600 normal-case" label="Budget Summary"/>
-                        <Tab className="text-14 font-600 normal-case" label="Team Members"/>
+                        <Tab className="text-14 font-600 normal-case" label="Jani-King News"/>
+                        <Tab className="text-14 font-600 normal-case" label="Sales"/>
+                        <Tab className="text-14 font-600 normal-case" label="Company Contacts"/>
                     </Tabs>
                 }
                 content={
@@ -173,14 +175,14 @@ class ProjectDashboardApp extends Component {
                                     <Widget4 widget={widgets.widget4}/>
                                 </div>
                                 <div className="widget flex w-full p-12">
-                                    <Widget5 widget={widgets.widget5}/>
+                                    <Widget5 widget={widgets.widget5} widget7={widgets.widget7}/>
                                 </div>
-                                <div className="widget flex w-full sm:w-1/2 p-12">
-                                    <Widget6 widget={widgets.widget6}/>
-                                </div>
-                                <div className="widget flex w-full sm:w-1/2 p-12">
-                                    <Widget7 widget={widgets.widget7}/>
-                                </div>
+                                {/*<div className="widget flex w-full sm:w-1/2 p-12">*/}
+                                    {/*<Widget6 widget={widgets.widget6}/>*/}
+                                {/*</div>*/}
+                                {/*<div className="widget flex w-full sm:w-1/2 p-12">*/}
+                                    {/*<Widget7 widget={widgets.widget7}/>*/}
+                                {/*</div>*/}
                             </FuseAnimateGroup>
                         )}
                         {tabValue === 1 && (
@@ -246,15 +248,14 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({projectDashboardApp})
+function mapStateToProps({projectDashboardApp,auth})
 {
     return {
         widgets : projectDashboardApp.widgets,
-        projects: projectDashboardApp.projects
+        projects: projectDashboardApp.projects,
+        login       : auth.login,
     }
 }
 
-// export default withReducer('projectDashboardApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectDashboardApp))));
-// export default withReducer('projectDashboardApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectDashboardApp))));
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectDashboardApp)));
-// export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ProjectDashboardApp)));
+
