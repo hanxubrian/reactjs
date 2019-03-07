@@ -610,7 +610,8 @@ class Customers extends Component {
 		// }
 
 		if (this.props.loading.bCreateCustomerStart === true && nextProps.loading.bCreateCustomerStart === false ||
-			this.props.loading.bUpdateCustomerStart === true && nextProps.loading.bUpdateCustomerStart === false) {
+			this.props.loading.bUpdateCustomerStart === true && nextProps.loading.bUpdateCustomerStart === false ||
+			this.props.loading.bTransferAssignedFranchiseeStart === true && nextProps.loading.bTransferAssignedFranchiseeStart === false) {
 			this.props.getSuggestCustomersList(
 				this.props.regionId,
 				this.props.statusId,
