@@ -860,6 +860,12 @@ class PaymentLockBoxContentList extends Component {
 	}
 
 	processLockbox = () => {
+		const { rows } = this.state
+		if (!rows || rows.length < 1) {
+			this.props.openSnackbar("Nothing to process")
+			return
+		}
+
 		this.setState({
 			rows: []
 		})
