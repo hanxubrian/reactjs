@@ -8,7 +8,7 @@ export const HomepageConfig = {
     },
     routes  : [
         {
-            path     : '/home',
+            path     : '/home1',
             component: FuseLoadable({
                 loader: () => import('./Homepage')
             })

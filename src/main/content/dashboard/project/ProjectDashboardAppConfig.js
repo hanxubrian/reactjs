@@ -8,7 +8,7 @@ export const ProjectDashboardAppConfig = {
     },
     routes  : [
         {
-            path     : '/apps/dashboards/project',
+            path     : '/home',
             component: FuseLoadable({
                 loader: () => import('./ProjectDashboardApp')
             })
