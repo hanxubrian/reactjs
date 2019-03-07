@@ -11,7 +11,7 @@ import keycode from 'keycode';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import NumberFormat from 'react-number-format';
 //Store
 import * as Actions from 'store/actions';
 import { bindActionCreators } from 'redux';
@@ -203,7 +203,16 @@ function TextMaskPhone(props) {
 		/>
 	);
 }
-
+function commafy(num) {
+    var str = num.toString().split('.');
+    if (str[0].length >= 5) {
+        str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+    }
+    if (str[1] && str[1].length >= 5) {
+        str[1] = str[1].replace(/(\d{3})/g, '$1 ');
+    }
+    return str.join('.');
+}
 TextMaskPhone.propTypes = {
 	inputRef: PropTypes.func.isRequired,
 };
@@ -777,12 +786,12 @@ class FilterPanel extends Component {
 		}
 
 		let execTitles = []
-		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
+		if (this.props.accountExecutiveList && this.props.accountExecutiveList.Data) {
 			execTitles = this.props.accountExecutiveList.Data.filter(x => {
-				if (x.Title === null) return false
+				if (x.FullName === null) return false
 				return true
 			}).map(x => {
-				return x.FirstName + " " + x.LastName
+				return { title: x.FullName, value: x.UserId }
 			}).sort();
 		}
 
@@ -1081,16 +1090,18 @@ class FilterPanel extends Component {
 															margin="dense"
 															style={{ flex: 3 }}
 														/>
+														
 														<TextField
 															id="MonthlyBilling"
 															label="Monthly Billing"
-															value={x.MonthlyBilling && x.MonthlyBilling.length > 0 ? x.MonthlyBilling.map(x => x.MonthlyBilling).reduce((a, b) => a + b, 0) : ''}
+															value={x.MonthlyBilling && x.MonthlyBilling.length > 0 ? '$' + commafy(x.MonthlyBilling.map(x => x.MonthlyBilling).reduce((a, b) => a + b, 0)) :  ''}
 															className="pl-6"
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
 															margin="dense"
 															style={{ flex: 3 }}
 														/>
+
 													</div>
 												))
 												}
@@ -1200,7 +1211,7 @@ class FilterPanel extends Component {
 													<TextField
 														id="AccountExecutive"
 														label="Account Executive"
-														value={this.state.AccountExecutive}
+														value={execTitles[this.props.customerServiceForm.activeCustomer.Data.add_pct].title || ''}
 														className="ml-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
@@ -1724,7 +1735,7 @@ class FilterPanel extends Component {
 										))} */}
 										{
 											execTitles.map((x, index) => {
-												return (<MenuItem key={index} value={index}>{x}</MenuItem>)
+												return (<MenuItem key={index} value={x.value}>{x.title}</MenuItem>)
 											})
 										}
 
