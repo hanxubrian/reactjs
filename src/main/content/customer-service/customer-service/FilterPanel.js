@@ -1580,43 +1580,43 @@ class FilterPanel extends Component {
 											</TextField>)}
 
 										<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-										{this.state.Location === "locationNearSpecificAddress" && (
-											<Fragment>
-												<TextField
-													id="SpecificAddress"
-													label="Address"
-													className={classes.textField}
-													onChange={this.handleChange('SpecificAddress')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												/>
-												<TextField
-													select
+										{this.state.Location === "locationNearSpecificAddress" &&
+											<TextField
+												id="SpecificAddress"
+												label="Address"
+												className={classes.textField}
+												onChange={this.handleChange('SpecificAddress')}
+												margin="dense"
+												variant="outlined"
+												fullWidth
+											/>
+										}
+										{this.state.Location === "locationNearSpecificAddress" &&
+											<TextField
+												select
 
-													id="AddressZipcodeRadius"
-													label="Radius"
-													className={classes.textField}
-													InputLabelProps={{
-														shrink: true
-													}}
-													value={this.props.locationFilterValue.miles}
-													onChange={this.handleChange('AddressZipcodeRadius')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												>
-													{
-														Array.from({ length: 15 })
-															.map((val, index) => (
-																<MenuItem key={index} value={(index + 1) * 5}>
-																	{(index + 1) * 5} Miles
+												id="AddressZipcodeRadius"
+												label="Radius"
+												className={classes.textField}
+												InputLabelProps={{
+													shrink: true
+												}}
+												value={this.props.locationFilterValue.miles}
+												onChange={this.handleChange('AddressZipcodeRadius')}
+												margin="dense"
+												variant="outlined"
+												fullWidth
+											>
+												{
+													Array.from({ length: 15 })
+														.map((val, index) => (
+															<MenuItem key={index} value={(index + 1) * 5}>
+																{(index + 1) * 5} Miles
 																</MenuItem>
-															))
-													}
-												</TextField>
-											</Fragment>
-										)}
+														))
+												}
+											</TextField>
+										}
 									</RadioGroup>
 
 
