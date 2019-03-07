@@ -207,7 +207,7 @@ class TransactionsDxGridLists extends Component {
         }
     }
 
-    processData(data) {
+    processData = (data) => {
         let temp = [...data];
         temp.forEach(x => {
             x.FranNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`

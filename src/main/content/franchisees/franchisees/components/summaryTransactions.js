@@ -148,9 +148,6 @@ class SummaryTransactons extends Component {
         let summaryAddtl= [];
         let summaryFranNote = [];
 
-        if(SummaryPages[0].TotalMonthRev!== null && SummaryPages[0].TotalMonthRev.length>0){
-            aBillings3.push(SummaryPages[0].TotalMonthRev[0]);
-        }
 
         if(SummaryPages[0].ClientSalesTaxBot!== null && SummaryPages[0].ClientSalesTaxBot.length>0){
             aBillings3.push(SummaryPages[0].ClientSalesTaxBot[0]);
@@ -185,7 +182,7 @@ class SummaryTransactons extends Component {
         const aDeductions5 =["SubtotalSpec"];
         const aDeductions6 =["TotalDeds"];
         const aDeductions7 =["ChargeBacks", "ChildSupport"];
-        const aDeductions8 =["AcctFeeRebBal"];
+        const aDeductions8 =["DueFran"];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12 w-full")}>
@@ -225,10 +222,24 @@ class SummaryTransactons extends Component {
                     )}
                     </tbody>
                 </table>
+                {SummaryPages[0].TotalMonthRev.length && SummaryPages[0].TotalMonthRev[0].Amount && (
+                    <table style={{width:'80%'}}>
+                        <tbody>
+                        <tr>
+                            <td width="350">
+                                <Typography variant="subtitle1">{SummaryPages[0].TotalMonthRev[0].Label}</Typography>
+                            </td>
+                            <td width ="" className="text-right">
+                                ${parseFloat(SummaryPages[0].TotalMonthRev[0].Amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                )}
 
                 <h2 className="pt-16" >FRANCHISEE DEDUCTIONS:</h2>
                 {summaryRoyalty && summaryRoyalty.BaseRoyaltyAmount>0 && summaryRoyalty.MinRoyaltyAmount (
-                    <table className="">
+                    <table className="" style={{width:'63%'}}>
                         <thead>
                         <tr>
                             <th width="250"/>
@@ -254,7 +265,7 @@ class SummaryTransactons extends Component {
                     </table>
                 )}
 
-                <table className="">
+                <table className="" style={{width:'63%'}}>
                     <tbody>
                     { aDeductions0.map((b, index)=>{
                         if(parseFloat(b.Amount))
@@ -397,11 +408,18 @@ class SummaryTransactons extends Component {
                     )}
                     </tbody>
                 </table>
-
                 <table>
                     <tbody>
                     <tr>
-                        <td><h2 className="pt-16" >DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
+                        <td><h2 className="pt-16" >TOTAL DEDUCTIONS</h2></td>
+                        <td/>
+                    </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td><h2 className="pt-16" >DUE BEFORE CHARGE BACK:</h2></td>
                         <td className="pt-16" style={{width:'16%'}}> { SummaryPages[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'] !=null && SummaryPages[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0] !=null && ( CurrencyFormatter({value: SummaryPages[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0].Amount}))} </td>
                     </tr>
                     </tbody>
@@ -432,13 +450,13 @@ class SummaryTransactons extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><h2 className="pt-16" >DUE TO FRANCHISEE:</h2></td>
+                        <td><h2 className="pt-16" >DUE FRANCHISEE AMOUNT:</h2></td>
                         <td className="pt-16" style={{width:'16%'}}> { SummaryPages[0]['DUE_TO_FRAN'] !=null && SummaryPages[0]['DUE_TO_FRAN'][0] !=null && ( CurrencyFormatter({value: SummaryPages[0]['DUE_TO_FRAN'][0].Amount}))} </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <table style={{width:'63%'}}>
+                <table style={{width:'80%'}}>
                     <tbody>
                     { aDeductions8.map((b, index)=>{
                             if(SummaryPages[0][b]===null)

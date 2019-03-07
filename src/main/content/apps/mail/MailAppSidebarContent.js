@@ -6,7 +6,8 @@ import {connect} from 'react-redux';
 import {FuseAnimate} from '@fuse';
 import {bindActionCreators} from "redux";
 import * as Actions from "./store/actions";
-import  { Redirect } from 'react-router-dom'
+import RateReviewIcon from '@material-ui/icons/RateReview';
+import classNames from 'classnames';
 
 const styles = theme => ({
     listWrapper  : {},
@@ -38,6 +39,12 @@ const styles = theme => ({
     },
     composeButton     : {
         width: '100%'
+    },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
+    iconSmall: {
+        fontSize: 20
     }
 });
 
@@ -60,7 +67,9 @@ class MailAppSidebarContent extends Component {
                             color="primary"
                             className={classes.composeButton}
                             onClick={this.clickCompose}
+                            size="large"
                         >
+                            <RateReviewIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
                             COMPOSE
                         </Button>
                     </div>

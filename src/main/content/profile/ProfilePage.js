@@ -71,7 +71,7 @@ class ProfilePage extends Component {
             let userdetail = null;
             userdetail =_.find(this.props.contacts,{id:parseInt(userdetail)});
             console.log("user detail from update",userdetail);
-            if(userdetail && userdetail !== null){
+            if(userdetail && userdetail){
                 this.setState({user: userdetail});
             }
         }
@@ -86,7 +86,7 @@ class ProfilePage extends Component {
             let userdetail = null;
             userdetail =_.find(this.props.contacts,{id:parseInt(this.state.id)});
             console.log("user detail from update",userdetail);
-            if(userdetail && userdetail !== null){
+            if(userdetail && userdetail){
                 this.setState({user: userdetail});
             }
         }
@@ -95,7 +95,7 @@ class ProfilePage extends Component {
 
             let userdetail = null;
             userdetail =_.find(this.props.contacts,{id:parseInt(this.state.id)});
-            if(userdetail && userdetail !== null){
+            if(userdetail && userdetail){
                 this.setState({user: userdetail});
             }
         }

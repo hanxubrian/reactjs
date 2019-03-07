@@ -9,7 +9,7 @@ class Widget4 extends Component {
         return (
             <Paper className="w-full rounded-8 shadow-none border-1">
                 <div className="flex items-center justify-between pr-4 pl-16 pt-4">
-                    <Typography className="text-16">{widget.title}</Typography>
+                    <Typography className="text-16">Leads</Typography>
                     <IconButton aria-label="more">
                         <Icon>more_vert</Icon>
                     </IconButton>
@@ -17,11 +17,11 @@ class Widget4 extends Component {
                 <div className="text-center pt-12 pb-28">
                     <Typography
                         className="text-72 leading-none text-green">{widget.data.count}</Typography>
-                    <Typography className="text-16" color="textSecondary">{widget.data.label}</Typography>
+                    <Typography className="text-16" color="textSecondary">POTENTIAL</Typography>
                 </div>
                 <div className="flex items-center px-16 h-52 border-t-1">
                     <Typography className="text-15 flex w-full" color="textSecondary">
-                        <span className="truncate">{widget.data.extra.label}</span>
+                        <span className="truncate">Sold This Month</span>
                         :
                         <b className="pl-8">{widget.data.extra.count}</b>
                     </Typography>

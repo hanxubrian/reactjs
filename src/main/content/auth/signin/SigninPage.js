@@ -90,14 +90,10 @@ class SigninPage extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
-            this.props.history.push('/profile');
+            this.props.history.push('/apps/dashboards/project');
         }
         if(nextProps.login.bAlertShown) {
             this.setState({alertOpen: true})
-        }
-
-        if((nextProps.mfLoginVerifyResult !== this.props.mfLoginVerifyResult)&& (nextProps.mfLoginVerifyResult !==null || nextProps.mfLoginVerifyResult !== [] )){
-            console.log("LoginVerifyResult=",nextProps.mfLoginVerifyResult);
         }
     }
 

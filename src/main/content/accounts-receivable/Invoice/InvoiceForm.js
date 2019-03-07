@@ -26,6 +26,7 @@ import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import InvoiceLineTable from "./InvoiceLine"
 import VendorSelectionDialog from "./components/vendorSelectionDialog";
+import InvoiceFeesGrid from './invoiceFees';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -46,9 +47,23 @@ import NumberFormat from 'react-number-format';
 //Utility
 import {escapeRegexCharacters} from 'services/utils'
 
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <span>{value}</span>}/>
+);
+
 const styles = theme => ({
     layoutForm: {
         flexDirection: 'row',
+    },
+    invoiceFormWrap:{
+        '& .red': {
+            color: 'red'
+        }
     },
     button: {
         '& span': {
@@ -183,6 +198,7 @@ const newInvoiceState = {
     "CreditId": "",
     "Service":"",
     "notes": "",
+    "fees": "",
 
 };
 
@@ -573,7 +589,7 @@ class InvoiceForm extends Component {
                 setTimeout(() => {this.input.focus()}, 500);
         }
 
-        if(this.props.invoices.invoiceDetail){
+        if(this.props.invoices.invoiceDetail && this.props.invoiceForm.props.open){
             let invoiceDetail = this.props.invoices.invoiceDetail.Data;
             let customer = this.props.customers.filter(customer => customer.CustomerName===invoiceDetail.CustomerName && customer.CustomerNo===invoiceDetail.CustomerNo);
             if(customer.length>0) {
@@ -962,7 +978,7 @@ class InvoiceForm extends Component {
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                <div className="h-full flex flex-col relative">
+                <div className={classNames(classes.invoiceFormWrap, "h-full flex flex-col relative")} >
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <Grid container className={classNames(classes.formControl)}>
                             <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16 items-center">
@@ -1167,6 +1183,9 @@ class InvoiceForm extends Component {
                                                     <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.BillingCustomerName: this.state.value}</strong>
                                                 </Typography>
                                             </div>
+                                            <div className="flex ">
+                                                OverPayment:&nbsp; {this.state.selectedCustomer ? CurrencyFormatter({value: this.state.selectedCustomer.OverPayment!==null?this.state.selectedCustomer.OverPayment:0}): ''}
+                                            </div>
                                         </div>
                                         {this.state.selectedCustomer && (
                                             <div className="flex flex-row justify-start mb-4">
@@ -1240,15 +1259,16 @@ class InvoiceForm extends Component {
                         <Divider variant="middle"/>
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
-                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                        <GridContainer className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={8} md={8} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full">
+                                    <InvoiceFeesGrid/>
                                     <TextField
-                                        id="notes"
-                                        name="notes"
-                                        label="Note"
-                                        className={classes.textField}
-                                        value={this.state.notes}
+                                        id="fees"
+                                        name="fees"
+                                        label="Fees"
+                                        className={classNames(classes.textField, "hidden")}
+                                        value={this.state.fees}
                                         onChange={this.handleChange}
                                         margin="dense"
                                         variant="outlined"
@@ -1279,6 +1299,11 @@ class InvoiceForm extends Component {
                                 <div className="w-full p-12 flex justify-end pt-6 pb-0">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
+                                {(this.props.invoiceDetail!==null && this.state.selectedCustomer!==null) && (
+                                    <div className="w-full p-12 flex justify-end pt-6 pb-0">
+                                        <span className={classNames(classes.summary,{'red':this.state.selectedCustomer.OverPayment!==null && this.state.selectedCustomer.OverPayment===0})}><strong>Balance: </strong>{CurrencyFormatter({value: this.props.invoiceDetail.Data.InvoiceBalance})}</span>
+                                    </div>
+                                )}
                                 <div className="w-full p-12 flex justify-end  pt-6 pb-0">
                                     <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
@@ -1504,6 +1529,7 @@ function mapStateToProps({invoices, auth, franchisees})
 {
     return {
         invoiceForm: invoices.invoiceForm,
+        invoiceDetail: invoices.invoiceDetail,
         invoices: invoices,
         newInvoice: invoices.newInvoice,
         bStartingSaveFormData: invoices.bStartingSaveFormData,

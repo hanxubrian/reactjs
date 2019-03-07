@@ -12,6 +12,8 @@ import Avatar from '@material-ui/core/Avatar';
 import { Editor } from '@tinymce/tinymce-react';
 import classNames from 'classnames';
 import SendIcon from '@material-ui/icons/Send';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import CloseIcon from '@material-ui/icons/Close';
 import {mailService} from "../../../../services";
 import {SEND_MAIL} from "./store/actions";
 
@@ -118,6 +120,7 @@ class MailCompose extends Component {
                     Recipients: ''
                 }
             });
+            this.props.history.push('inbox');
         }else{
             this.errormessage(res.Message);
         }
@@ -177,6 +180,14 @@ class MailCompose extends Component {
                         <Button type="submit" color={"primary"} onClick={this.sendMail} variant="contained" size="small" className={classes.button}>
                             <SendIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Send
+                        </Button>
+                        <Button type="button" color={"primary"} onClick={()=>this.props.history.push('inbox')} variant="contained" size="small" className={classes.button}>
+                            <DraftsIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                            Save Draft
+                        </Button>
+                        <Button type="button" color={"primary"} onClick={()=>this.props.history.push('inbox')} variant="contained" size="small" className={classes.button}>
+                            <CloseIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                            Discard
                         </Button>
                         <IconButton>
                             <Icon>attach_file</Icon>

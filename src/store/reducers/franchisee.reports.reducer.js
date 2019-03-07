@@ -118,6 +118,10 @@ const franchiseeReports = function(state = initialState, action) {
                 ...initialState
             }
         }
+        case Actions.OPEN_NEW_TRANSACTION_FORM:
+        {
+            return {...state, franchiseeReport1: null};
+        }
         default:
         {
             return state;

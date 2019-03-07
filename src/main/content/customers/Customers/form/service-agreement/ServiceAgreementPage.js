@@ -635,7 +635,7 @@ class ServiceAgreementPage extends React.Component {
 			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 		// if (nextProps.activeCustomer && nextProps.activeCustomer.Data && !_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
-		if (nextProps.activeCustomer && this.props.activeCustomer) {
+		if (nextProps.activeCustomer.Data && nextProps.activeCustomer && this.props.activeCustomer) {
 			const {
 				cont_bill,
 
