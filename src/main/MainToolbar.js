@@ -972,8 +972,6 @@ class MainToolbar extends Component {
                         )}
                     </Popover>
                     <div>
-                        <Button onClick={()=>{this.handleClick('message a')}}>Show message A</Button>
-                        <Button onClick={()=>{this.handleClick('message b')}}>Show message B</Button>
                         <Snackbar
                             key={this.state.messageInfo.key}
                             anchorOrigin={{
