@@ -447,8 +447,12 @@ class InvoiceReport extends Component {
                                             <Typography><br/></Typography><Typography><br/></Typography>
                                         </td>
                                         <td colSpan={3} className="bottomNoBorder">
-                                            <Typography><br/></Typography>
                                             <Typography >{this.state.invoiceDetail.InvoiceMessage}</Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
                                         </td>
                                         <td ><Typography><br/></Typography></td>
                                         <td ><Typography><br/></Typography></td>
