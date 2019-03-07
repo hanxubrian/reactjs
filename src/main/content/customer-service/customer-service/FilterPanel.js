@@ -1212,8 +1212,8 @@ class FilterPanel extends Component {
 													<TextField
 														id="AccountExecutive"
 														label="Account Executive"
-														// value={execTitles ? execTitles[this.props.customerServiceForm.activeCustomer.Data.add_pct].title : ''}
-														value={execTitles[this.props.customerServiceForm.activeCustomer.Data.add_pct].FullName}
+														value={activeCustomer ? activeCustomer.full_name : ''}
+														// value={'execTitles[this.props.customerServiceForm.activeCustomer.Data.add_pct].FullName'}
 														className="ml-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
