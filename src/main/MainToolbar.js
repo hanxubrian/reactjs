@@ -975,7 +975,7 @@ class MainToolbar extends Component {
                         <Snackbar
                             key={this.state.messageInfo.key}
                             anchorOrigin={{
-                                vertical: 'bottom',
+                                vertical: 'top',
                                 horizontal: 'right',
                             }}
                             open={this.state.open5}
