@@ -143,7 +143,7 @@ class CreditInvoiceFormModal extends React.Component {
 
             let payment =  {
                 PaymentType: 'Credit',
-                ReferenceNo: this.state.ReferenceNo,
+                ReferenceNo: `REF${this.props.invoiceDetail.Data.Inv_no}`,
                 PaymentDate:   this.state.PaymentDate,
                 Note: this.state.PaymentNote,
                 Amount:  this.props.invoiceDetail.Data.Items.Total,
@@ -175,12 +175,7 @@ class CreditInvoiceFormModal extends React.Component {
     }
 
     checkValidations() {
-        if (this.state.ReferenceNo==='') {
-            this.setState({
-                errorMsg: "Reference No is invalid",
-            })
-        }
-        else if (!this.state.Reason || !this.state.Reason.toString().trim()) {
+        if (!this.state.Reason || !this.state.Reason.toString().trim()) {
             this.setState({
                 errorMsg: "Reason is invalid",
                 overpayment: this.getOverpaymentAmount(),
@@ -261,7 +256,7 @@ class CreditInvoiceFormModal extends React.Component {
                                         {this.props.invoiceDetail && (
                                             <TextField type="text" value={this.props.invoiceDetail.Data.Inv_no} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="InvoiceNumber" label="Invoice #" />
                                         )}
-                                        <TextField type="text" value={this.state.ReferenceNo} required InputLabelProps={{ shrink: true }}  margin="dense" fullWidth className={classNames("pr-6")} id="ReferenceNo" label="ReferenceNo" />
+                                        {/*<TextField type="text" value={this.state.ReferenceNo} required InputLabelProps={{ shrink: true }}  margin="dense" fullWidth className={classNames("pr-6")} id="ReferenceNo" label="ReferenceNo" />*/}
                                     </div>
 
                                 )}
