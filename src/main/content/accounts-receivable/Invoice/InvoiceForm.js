@@ -589,7 +589,7 @@ class InvoiceForm extends Component {
                 setTimeout(() => {this.input.focus()}, 500);
         }
 
-        if(this.props.invoices.invoiceDetail){
+        if(this.props.invoices.invoiceDetail && this.props.invoiceForm.props.open){
             let invoiceDetail = this.props.invoices.invoiceDetail.Data;
             let customer = this.props.customers.filter(customer => customer.CustomerName===invoiceDetail.CustomerName && customer.CustomerNo===invoiceDetail.CustomerNo);
             if(customer.length>0) {

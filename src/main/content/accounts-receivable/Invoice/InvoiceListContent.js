@@ -22,8 +22,8 @@ import moment from 'moment'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import classNames from 'classnames';
-import InvoiceReport from './invoiceReport'
-import InvoiceReportLayout from './invoiceReportLayout'
+import InvoiceLegacyReport from './invoiceReport';
+import InvoiceNewReport from './InvoiceNewReport';
 
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -275,10 +275,7 @@ class InvoiceListContent extends Component {
     };
 
     printDocument=()=> {
-        // let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        // const input = document.getElementById('divToPrint');
-        // this.child.downloadPDF(input, imgUrl);
-        this.child.onInvoicePrint();
+        this.newReport.onInvoicePrint();
     };
 
     render()
@@ -516,7 +513,8 @@ class InvoiceListContent extends Component {
                     </DialogActions>
                 </Dialog>
                 {this.props.invoiceDetail!==null && this.props.invoiceDetail!==undefined && this.state.invoiceDetail !=="Faild" && this.state.isOpen && (
-                    <InvoiceReport childCall={this.printDocument.bind(this)} onRef={ref => (this.child = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId}  />
+                    /*<InvoiceLegacyReport onRef={ref => (this.child = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId}  />*/
+                    <InvoiceNewReport onRef={ref => (this.newReport = ref)}  show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId}  />
                 )}
                 {this.state.isOpen && this.state.invoiceDetail!==null &&(
                 <div className="mb5" style={{zIndex:999999}}>

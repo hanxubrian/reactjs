@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom';
 import {withStyles,Typography} from "@material-ui/core";
 
 //Kendo
-import { GridPDFExport, PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import { PDFExport } from '@progress/kendo-react-pdf';
 
 // for store
 import {bindActionCreators} from "redux";
