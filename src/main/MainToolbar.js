@@ -924,7 +924,7 @@ class MainToolbar extends Component {
                     >
                         {user.role === 'guest' ? (
                             <React.Fragment>
-                                <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
+                                <MenuItem component={Link} to="/profile" onClick={this.userMenuClose}>
                                     <ListItemIcon>
                                         <img src={this.props.login.profilePhoto} alt="user" style={{width: 32, height: 32, borderRadius: 30}}/>
                                     </ListItemIcon>
