@@ -453,6 +453,11 @@ class InvoiceReport extends Component {
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
+                                            <Typography><br/></Typography>
                                         </td>
                                         <td ><Typography><br/></Typography></td>
                                         <td ><Typography><br/></Typography></td>
