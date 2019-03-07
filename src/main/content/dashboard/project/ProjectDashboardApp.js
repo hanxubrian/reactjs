@@ -149,8 +149,9 @@ class ProjectDashboardApp extends Component {
                     >
                         <Tab className="text-14 font-600 normal-case" label="Home"/>
                         <Tab className="text-14 font-600 normal-case" label="Jani-King News"/>
-                        <Tab className="text-14 font-600 normal-case" label="Sales"/>
                         <Tab className="text-14 font-600 normal-case" label="Company Contacts"/>
+                        <Tab className="text-14 font-600 normal-case" label="Sales"/>
+
                     </Tabs>
                 }
                 content={

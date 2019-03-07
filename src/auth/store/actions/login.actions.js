@@ -33,6 +33,7 @@ export function microsoftLoginVerify(code,state,hostUrl,url){
     return(dispatch) =>{
         (async () => {
             let res = await authService.microsoftLoginVerify(code,state ,hostUrl);
+            console.log("response", res)
             if(res.IsSuccess){
                 let regions = await authService.getRegions(res.Data.UserId);
                 res.Data.Regions = regions;
