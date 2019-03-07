@@ -60,6 +60,11 @@ const styles = theme => ({
     layoutForm: {
         flexDirection: 'row',
     },
+    invoiceFormWrap:{
+        '& .red': {
+            color: 'red'
+        }
+    },
     button: {
         '& span': {
             textTransform: 'none'
@@ -973,7 +978,7 @@ class InvoiceForm extends Component {
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                <div className="h-full flex flex-col relative">
+                <div className={classNames(classes.invoiceFormWrap, "h-full flex flex-col relative")} >
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <Grid container className={classNames(classes.formControl)}>
                             <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16 items-center">
@@ -1294,9 +1299,9 @@ class InvoiceForm extends Component {
                                 <div className="w-full p-12 flex justify-end pt-6 pb-0">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                {this.props.invoiceDetail!==null && (
+                                {(this.props.invoiceDetail!==null && this.state.selectedCustomer!==null) && (
                                     <div className="w-full p-12 flex justify-end pt-6 pb-0">
-                                        <span className={classNames(classes.summary)}><strong>Balance: </strong>{CurrencyFormatter({value: this.props.invoiceDetail.Data.InvoiceBalance})}</span>
+                                        <span className={classNames(classes.summary,{'red':this.state.selectedCustomer.OverPayment!==null && this.state.selectedCustomer.OverPayment===0})}><strong>Balance: </strong>{CurrencyFormatter({value: this.props.invoiceDetail.Data.InvoiceBalance})}</span>
                                     </div>
                                 )}
                                 <div className="w-full p-12 flex justify-end  pt-6 pb-0">
