@@ -22,8 +22,11 @@ import {
     MenuItem,
     Typography,
     TextField,
-    FormHelperText
+    FormHelperText,
+    Snackbar,
+
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import * as quickPanelActions from 'main/quickPanel/store/actions';
 import * as authActions from '../auth/store/actions/login.actions';
 import * as chatPanelActions from 'main/chatPanel/store/actions';
@@ -33,6 +36,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Pusher from 'pusher-js';
 import moment from 'moment/moment';
+import _ from 'lodash';
+
 
 import * as Actions from "./chatPanel/store/actions";
 
@@ -244,6 +249,8 @@ const styles = theme => ({
 });
 
 class MainToolbar extends Component {
+    queue = [];
+
     state = {
         userMenu                    : null,
         userMenu1                   : null,
@@ -270,8 +277,46 @@ class MainToolbar extends Component {
         MSG                         : null,
         triggerF                    : false,
         checkloadingchatMSG         : true,
-        period: -1,
-        rName:''
+        period                      : -1,
+        rName                       : '',
+        open5                       : false,
+        messageInfo                 : {},
+        chatmessageavatar           : null,
+        senderwho                   : null,
+
+    };
+    handleClick = (message) => {
+
+        this.queue.push({
+            message,
+            key: new Date().getTime(),
+        });
+
+        if (this.state.open5) {
+            // immediately begin dismissing current message
+            // to start showing new one
+            this.setState({ open5: false });
+        } else {
+            this.processQueue();
+        }
+    };
+
+    processQueue = () => {
+        if (this.queue.length > 0) {
+            this.setState({
+                messageInfo: this.queue.shift(),
+                open5: true,
+            });
+        }
+    };
+    handleClose5 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({ open5: false });
+    };
+    handleExited = () => {
+        this.processQueue();
     };
 
     userMenuClick = event => {
@@ -410,11 +455,51 @@ class MainToolbar extends Component {
         }
         this.setState({MSG:allmsg});
     }
+
+    chatsnackbar=(chatmessage)=>{
+
+        let chatmsg = null;
+        if(chatmessage && chatmessage.length){
+            chatmsg = chatmessage[0];
+            if(chatmsg && chatmsg !== null){
+                console.log("chatmsgchatmsg",chatmsg);
+                let avatar ='https://res.cloudinary.com/janiking/image/upload/v1547085033/apps/users/generic.jpg';//chatmessageavatar
+                if(this.props.chatuser && this.props.chatuser !==null){
+                    let sender = _.find(this.props.chatuser,{name:chatmsg.who});
+                    if(sender && sender !== null && sender.avatar ){
+                        avatar = sender.avatar;
+                        this.setState({chatmessageavatar:avatar});
+                        this.setState({senderwho:chatmsg.who})
+                    }
+                }
+
+                this.handleClick(chatmsg.message);
+            }
+
+        }
+
+
+    }
     mainmsg=()=>{
+        console.log("new chat message",this.state.chatMSG);
 
         let chatmidmsg          = this.state.chatMSG;
         let pushermidmsg        = this.state.pusherMSGList;
         let allmsg              = [];
+
+        // add new snackbar
+        if(chatmidmsg && chatmidmsg !== null && chatmidmsg.length && chatmidmsg[0]){
+            let getchattime = chatmidmsg[0].time;
+            let mm = moment().valueOf()- moment(getchattime).valueOf();
+            // console.log("calculate time",mm);
+            // console.log("calculate now",moment().valueOf());
+            // console.log("calculate getchattime",moment(getchattime).valueOf());
+            if(mm<=5000 && mm >0){
+
+                this.chatsnackbar(chatmidmsg);
+            }
+
+        }
 
         if(chatmidmsg && chatmidmsg !== null && pushermidmsg === null ){
             allmsg =chatmidmsg;
@@ -617,6 +702,27 @@ class MainToolbar extends Component {
         }
 
     };
+    handleContactClick1 = () => {
+        let contactId = this.state.senderwho;
+        if(contactId && contactId != null){
+            this.setState({open5:false});
+            let contactid =contactId;
+            let chatid = null;
+            this.state.chatUser.chatList.map((item)=>{
+                if(item.contactId ===contactid){
+                    chatid = item.chatId;
+                }
+            });
+            if(chatid && chatid !=null){
+                this.props.openChatPanel();
+                this.props.getChat(chatid, contactid);
+            }
+        }
+        else{
+            return null;
+        }
+
+    };
     systemreadmake=()=>{
         this.setState({unreadMSGnum:0});
 
@@ -772,7 +878,7 @@ class MainToolbar extends Component {
                                 }}
                             >
                                 <React.Fragment>
-                                    {this.props.all_periods.map((p, index)=>{
+                                    {this.props.all_periods && this.props.all_periods !==null &&  this.props.all_periods.map((p, index)=>{
                                         return (<MenuItem key={index} value={p} onClick={()=>{this.changeperiod(p)}}>{p}</MenuItem>)
                                     })}
                                 </React.Fragment>
@@ -865,7 +971,45 @@ class MainToolbar extends Component {
                             </React.Fragment>
                         )}
                     </Popover>
+                    <div>
+                        <Snackbar
+                            key={this.state.messageInfo.key}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={this.state.open5}
+                            autoHideDuration={6000}
+                            onClose={this.handleClose5}
+                            onExited={this.handleExited}
 
+                            ContentProps={{
+                                'aria-describedby': 'message-id',
+                            }}
+                            message={
+                                <div style={{display:'flex'}} onClick={this.handleClose5}>
+                                    <img src={this.state.chatmessageavatar}  style={{width:30,height:30,borderRadius:15,alignSelf:'center'}} alt=""/>
+                                    <span id="message-id" style={{alignSelf:'center',paddingLeft:5}} >{this.state.messageInfo.message}</span>
+                                </div>
+
+
+                            }
+                            action={[
+                                <Button key="undo" color="secondary" size="small" onClick={()=>{this.handleContactClick1()}}>
+                                    View
+                                </Button>,
+                                <IconButton
+                                    key="close"
+                                    aria-label="Close"
+                                    color="inherit"
+                                    className={classes.close}
+                                    onClick={this.handleClose5}
+                                >
+                                    <CloseIcon />
+                                </IconButton>,
+                            ]}
+                        />
+                    </div>
                     <div className={classes.separator}/>
                     <div onClick={this.shownotification}>
                         <div className={classes.unreadBadge}>
@@ -1107,6 +1251,7 @@ function mapStateToProps({auth,chatPanel,contactsApp,notification,billruns})
         getpusherNotificationDB : notification.pusherMSGDB,
         billstatus              : billruns.billrunstatus,
         loading                 : billruns.loadingstatus,
+        chatuser                : contactsApp.contacts.entities,
     }
 }
 
