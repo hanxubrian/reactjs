@@ -150,7 +150,7 @@ const initialState = {
     reportPeriod: "01/2017" ,
     stateList: [],
     periodForReport:{
-        year: moment().year,
+        year: moment().year(),
         month: moment().month()
     }
 };

@@ -67,12 +67,12 @@ const styles = theme => ({
 	},
 	input1: {
 		padding: '12px 6px',
-		minWidth: 160
+		width: 160
 	},
 	fab: {
 		margin: theme.spacing.unit,
 		marginTop: 0,
-		width: 100,
+		width: 42,
 		height: 42
 	},
 });
@@ -918,12 +918,12 @@ class FranchiseesCreateForm extends Component {
 				labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
 			});
 		}
-		// let period = this.props.defaultPeriod.split('/');
-		// // let month = parseInt(period[0]) - 1;
-		// let month = -1;
-		// let year = parseInt(period[1]);
-		// this.setState({month, year});
-		// this.props.updatePeriodForFranchiseeReport({year, month});
+		let period = this.props.defaultPeriod.split('/');
+		// let month = parseInt(period[0]) - 1;
+		let month = -1;
+		let year = parseInt(period[1]);
+		this.setState({month, year});
+		this.props.updatePeriodForFranchiseeReport({year, month});
 	}
 
 	handleSignDateChange = date => {
@@ -1105,6 +1105,13 @@ class FranchiseesCreateForm extends Component {
 						<h2>{steps[activeStep]}</h2>
 						{activeStep === 5 && (
 							<div className="flex flex-row">
+								{(this.props.franchiseeReport !== null || this.props.franchiseeLegacyReport !== null) && (
+									<Fab color="primary" aria-label="view" className={classNames(classes.fab)}
+										 onClick={() => this.gotoFranchiseeReports()}
+									>
+										<Icon>list</Icon>
+									</Fab>
+								)}
 								<TextField
 									margin={"none"}
 									name="month"
@@ -1119,7 +1126,7 @@ class FranchiseesCreateForm extends Component {
 											input: classes.input1,
 										},
 									}}
-									fullWidth
+									// fullWidth
 								>
 									<MenuItem value={-1}>All</MenuItem>
 									{mL.map((month, index) => {
@@ -1139,19 +1146,12 @@ class FranchiseesCreateForm extends Component {
 											input: classes.input1,
 										},
 									}}
-									fullWidth
+									// fullWidth
 								>
 									{years.map((year, index) => {
 										return (<MenuItem className="text-right" key={index} value={year}>{year}</MenuItem>)
 									})}
 								</TextField>
-								{(this.props.franchiseeReport !== null || this.props.franchiseeLegacyReport !== null) && (
-									<Fab color="primary" aria-label="view" className={classes.fab}
-										onClick={() => this.gotoFranchiseeReports()}
-									>
-										<Icon>list</Icon>
-									</Fab>
-								)}
 							</div>
 						)}
 
