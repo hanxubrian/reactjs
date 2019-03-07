@@ -1195,7 +1195,7 @@ class MainToolbar extends Component {
 
                     <div className={classNames(classes.chattogglebtn,"chattogglebtnview")}>
                         <IconButton onClick={this.chatPanelshowbtn} style={{
-                            // visibility: 'hidden',
+                            visibility: 'hidden',
                             backgroundColor: '#3c93ec',
                             borderRadius: '50%',
                             color: 'white',

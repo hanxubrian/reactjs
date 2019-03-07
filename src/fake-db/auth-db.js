@@ -53,7 +53,7 @@ let authDB = {
                 shortcuts    : [
                     'calendar',
                     'mail',
-                    'contacts'
+                    // 'contacts'
                 ]
             }
         },

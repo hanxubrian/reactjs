@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Divider, Icon, IconButton, Input, ListItemIcon, ListItemText, Menu, MenuItem, Tooltip, Typography, withStyles} from '@material-ui/core';
 import * as UserActions from 'auth/store/actions';
+import * as chatPanelActions from '../../../main/chatPanel/store/actions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {FuseUtils, FuseAnimateGroup} from '@fuse';
@@ -75,13 +76,17 @@ class FuseShortcuts extends Component {
         shortcuts = shortcuts.includes(slug) ? shortcuts.filter(_id => slug !== _id) : [...shortcuts, slug];
         this.props.updateUserShortcuts(shortcuts);
     };
+    openchat=()=>{
 
+        this.props.openChatPanel();
+    }
     render()
     {
         const {classes, shortcuts, navigation} = this.props;
         const {addMenu, searchText, searchResults} = this.state;
         const shortcutItems = shortcuts ? shortcuts.map(id => FuseUtils.findById(navigation, id)) : [];
 
+        console.log("shortcutItems",shortcutItems);
         function ShortcutMenuItem({item, onToggle})
         {
             return (
@@ -121,7 +126,11 @@ class FuseShortcuts extends Component {
                     }}
                     className="hidden md:flex md-flex-1"
                 >
-                    {shortcutItems.map(item => item && (
+                    {shortcutItems.map((item,index)=>{
+
+                    })}
+                    {shortcutItems.map((item,index) => item && (
+
                         <Link to={item.url} key={item.MenuId} className={classes.Item}>
                             <Tooltip title={item.Title} placement="bottom">
                                 <IconButton className="w-40 h-40 p-0">
@@ -133,10 +142,19 @@ class FuseShortcuts extends Component {
                                             <span className="text-20 font-bold uppercase">{item.title[0]}</span>
                                         )
                                     }
+
                                 </IconButton>
                             </Tooltip>
                         </Link>
                     ))}
+                    <div  onClick={this.openchat} className={classes.Item}>
+                        <Tooltip title={"Chat"} placement="bottom">
+                            <IconButton className="w-40 h-40 p-0 pt-3">
+                                <Icon >forum</Icon>
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+
                     <Link to={"/notification/system"} className={classes.Item}>
                         <Tooltip title={"Notifications"} placement="bottom">
                             <IconButton className="w-40 h-40 p-0 pt-3">
@@ -214,7 +232,9 @@ class FuseShortcuts extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        updateUserShortcuts: UserActions.updateUserShortcuts
+        updateUserShortcuts: UserActions.updateUserShortcuts,
+        openChatPanel                   : chatPanelActions.openChatPanel,
+        closeChatPanel                  : chatPanelActions.closeChatPanel,
     }, dispatch);
 }
 
