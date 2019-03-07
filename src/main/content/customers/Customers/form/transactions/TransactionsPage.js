@@ -13,6 +13,7 @@ import classNames from 'classnames';
 import * as Actions from 'store/actions/customers.actions';
 import * as FranchiseeActions from 'store/actions/franchise.actions';
 import * as InvoiceActions from 'store/actions/invoice.actions';
+import * as PaymentActions from 'store/actions/account_receivable.payments.actions';
 
 import {
 	Template, TemplateConnector
@@ -32,7 +33,8 @@ import {
 	RowDetailState,
 } from '@devexpress/dx-react-grid';
 
-import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
+import { CustomizedDxGridSelectionPanel } from "main/content/common/CustomizedDxGridSelectionPanel";
+import PaymentFormModal from "main/content/accounts-receivable/payments/PaymentFormModal";
 
 import {
 	Grid,
@@ -589,6 +591,20 @@ class TransactionsPage extends React.Component {
 	createNewInvoice = () => {
 		this.props.openNewInvoiceForm()
 	}
+	showPaymentModal = () => {
+		this.props.openPaymentDialog({
+			open: true,
+			paymentType: 'Check',
+			paymentAmount: 0,
+		})
+	}
+	showCreditModal = () => {
+		this.props.openPaymentDialog({
+			open: true,
+			paymentType: 'Credit',
+			paymentAmount: 0,
+		})
+	}
 	render() {
 		const { classes } = this.props;
 		const {
@@ -690,10 +706,10 @@ class TransactionsPage extends React.Component {
 							</FormControl>
 
 							<div className='flex items-center ml-12'>
-								<Button variant="contained" color="primary">
+								<Button variant="contained" color="primary" onClick={this.showPaymentModal}>
 									Payment<Icon font='small' className={classes.rightIcon}>add</Icon>
 								</Button>
-								<Button variant="contained" color="primary" className="ml-6">
+								<Button variant="contained" color="primary" className="ml-6" onClick={this.showCreditModal}>
 									Credit<Icon font='small' className={classes.rightIcon}>add</Icon>
 								</Button>
 								<Button variant="contained" color="primary" className="ml-6" component={Link} to="/accounts-receivable/invoices" onClick={this.createNewInvoice}>
@@ -1004,6 +1020,7 @@ class TransactionsPage extends React.Component {
 
 					</div>
 				</div>
+				<PaymentFormModal />
 			</div>
 		);
 	}
@@ -1015,6 +1032,8 @@ function mapDispatchToProps(dispatch) {
 		updatePeriodForFranchiseeReport: FranchiseeActions.updatePeriodForFranchiseeReport,
 
 		openNewInvoiceForm: InvoiceActions.openNewInvoiceForm,
+		openPaymentDialog: PaymentActions.openPaymentDialog,
+
 	}, dispatch);
 }
 

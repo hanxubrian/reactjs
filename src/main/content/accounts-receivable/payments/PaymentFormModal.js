@@ -312,7 +312,7 @@ class PaymentFormModal extends React.Component {
 
 	handleClose = () => {
 		this.setState({
-			PaymentType: "Check",
+			PaymentType: this.state.paymentType,
 			ReferenceNo: "",
 			PaymentDate: FuseUtils.getTodayDateString(),
 			PaymentNote: "",
@@ -325,7 +325,7 @@ class PaymentFormModal extends React.Component {
 
 		this.props.openPaymentDialog({
 			open: false,
-			paymentType: "Check",
+			paymentType: this.state.paymentType,
 			paymentAmount: 0,
 		})
 
