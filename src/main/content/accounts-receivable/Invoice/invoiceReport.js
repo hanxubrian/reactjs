@@ -220,7 +220,7 @@ class InvoiceReport extends Component {
                                         <th className="text-center" width='20%' align="left" style={{color:'black'}}>
                                             <Typography color="inherit">
                                                 <img
-                                                    src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png"
+                                                    src="https://res.cloudinary.com/janiking/image/upload/v1551993622/apps/web/appid2/jklogo-legacy.gif"
                                                     alt=""/>
                                             </Typography>
                                         </th>
@@ -341,7 +341,7 @@ class InvoiceReport extends Component {
                                         <td width="20%">
                                             <Typography color="inherit">
                                                 <img
-                                                    src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png"
+                                                    src="https://res.cloudinary.com/janiking/image/upload/v1551993622/apps/web/appid2/jklogo-legacy.gif"
                                                     alt=""/>
                                             </Typography>
                                         </td>
@@ -445,7 +445,6 @@ class InvoiceReport extends Component {
                                             <Typography><br/></Typography><Typography><br/></Typography>
                                         </td>
                                         <td colSpan={3} className="bottomNoBorder">
-                                            <Typography >{this.state.invoiceDetail.InvoiceMessage}</Typography>
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
@@ -453,6 +452,7 @@ class InvoiceReport extends Component {
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
+                                            <Typography style={{textAlign: 'center'}}>{this.state.invoiceDetail.InvoiceMessage}</Typography>
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
                                             <Typography><br/></Typography>
