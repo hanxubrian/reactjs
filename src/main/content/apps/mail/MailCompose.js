@@ -120,7 +120,7 @@ class MailCompose extends Component {
                     Recipients: ''
                 }
             });
-            this.props.history.push('compose');
+            this.props.history.push('inbox');
         }else{
             this.errormessage(res.Message);
         }
