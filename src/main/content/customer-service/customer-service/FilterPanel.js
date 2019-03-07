@@ -787,14 +787,15 @@ class FilterPanel extends Component {
 
 		let execTitles = []
 		if (this.props.accountExecutiveList && this.props.accountExecutiveList.Data) {
-			execTitles = this.props.accountExecutiveList.Data.filter(x => {
-				if (x.FullName === null) return false
-				return true
-			}).map(x => {
-				return { title: x.FullName, value: x.UserId }
-			}).sort();
+			// execTitles = this.props.accountExecutiveList.Data.filter(x => {
+			// 	if (x.FullName === null) return false
+			// 	return true
+			// }).map(x => {
+			// 	return { title: x.FullName, value: x.UserId }
+			// }).sort();
+			execTitles = this.props.accountExecutiveList.Data;
 		}
-
+		console.log("account executive :" + this.props.accountExecutiveList.Data);
 		let accountTypesGroups = []
 		if (this.props.accountTypesGroups !== null && this.props.accountTypesGroups.Data !== undefined) {
 			accountTypesGroups = this.props.accountTypesGroups.Data.filter(x => {
@@ -1211,7 +1212,8 @@ class FilterPanel extends Component {
 													<TextField
 														id="AccountExecutive"
 														label="Account Executive"
-														value={execTitles[this.props.customerServiceForm.activeCustomer.Data.add_pct].title || ''}
+														// value={execTitles ? execTitles[this.props.customerServiceForm.activeCustomer.Data.add_pct].title : ''}
+														value={execTitles[this.props.customerServiceForm.activeCustomer.Data.add_pct].FullName}
 														className="ml-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
