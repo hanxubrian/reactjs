@@ -7,11 +7,12 @@ import { Divider, FormControl, InputLabel, Select, Chip, Input, MenuItem, Icon, 
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 import { withStyles } from "@material-ui/core";
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 import * as Actions from 'store/actions/customers.actions';
 import * as FranchiseeActions from 'store/actions/franchise.actions';
+import * as InvoiceActions from 'store/actions/invoice.actions';
 
 import {
 	Template, TemplateConnector
@@ -585,6 +586,9 @@ class TransactionsPage extends React.Component {
 		})
 		this.changeSearchValue('')
 	}
+	createNewInvoice = () => {
+		this.props.openNewInvoiceForm()
+	}
 	render() {
 		const { classes } = this.props;
 		const {
@@ -692,7 +696,7 @@ class TransactionsPage extends React.Component {
 								<Button variant="contained" color="primary" className="ml-6">
 									Credit<Icon font='small' className={classes.rightIcon}>add</Icon>
 								</Button>
-								<Button variant="contained" color="primary" className="ml-6">
+								<Button variant="contained" color="primary" className="ml-6" component={Link} to="/accounts-receivable/invoices" onClick={this.createNewInvoice}>
 									Invoice<Icon font='small' className={classes.rightIcon}>add</Icon>
 								</Button>
 							</div>
@@ -1009,6 +1013,8 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getCustomerBillingList: Actions.getCustomerBillingList,
 		updatePeriodForFranchiseeReport: FranchiseeActions.updatePeriodForFranchiseeReport,
+
+		openNewInvoiceForm: InvoiceActions.openNewInvoiceForm,
 	}, dispatch);
 }
 
