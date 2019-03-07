@@ -211,6 +211,7 @@ class InvoiceFeesGrid extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col h-full mt-12")}>
+                <h3>Invoice Fees</h3>
                 <Grid rows={this.state.data} columns={columns}>
                     <CurrencyTypeProvider
                         for={['Royalty', 'Advertising', 'Accounting', 'BusinessProtection']}

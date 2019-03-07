@@ -553,7 +553,10 @@ class InvoiceApp extends Component {
                                             <div>
                                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                                     <Button variant="contained" color="primary"
-                                                            className={classNames(classes.btntop) }
+                                                            className={classNames(classes.btntop,
+                                                                {"hidden":  this.props.invoiceForm.type === 'edit' &&  (this.props.invoiceDetail!==null &&
+                                                                        this.props.invoiceDetail.Data.InvoiceBalance===0)}
+                                                            ) }
                                                             onClick={()=>this.props.openPaymentInvoiceFormDialog()}
                                                     >
                                                         <Icon className={classes.leftIcon}>attach_money</Icon>

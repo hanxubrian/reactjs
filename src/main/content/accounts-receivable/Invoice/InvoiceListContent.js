@@ -260,7 +260,7 @@ class InvoiceListContent extends Component {
         ev.stopPropagation();
         this.props.getInvoiceDetail(InvoiceId, RegionId);
 
-        if(source.toLowerCase()!=='billrun')
+        if(source.toLowerCase()==='legacy')
             this.setState({isOpen: true});
         else
             this.invoicePrintComponent.onShowFranchiseeDialog();

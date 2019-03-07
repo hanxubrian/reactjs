@@ -371,7 +371,10 @@ class InvoiceForm extends Component {
                     classes: {
                         input: classes.input,
                     },
-                    readOnly: this.props.invoiceForm.type !== 'new' ? true : false
+                    readOnly: this.props.invoiceForm.type !== 'new',
+                    disabled: this.props.invoiceForm.type !== 'new' &&
+                        this.props.invoiceDetail!==null &&
+                        this.props.invoiceDetail.Data.InvoiceBalance===0
                 }}
                 InputLabelProps = {{
                     classes: {outlined: classes.label}
@@ -1320,7 +1323,8 @@ class InvoiceForm extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className={classNames(classes.button, "mr-12")}
+                                        className={classNames(classes.button, "mr-12", {"hidden":  this.props.invoiceForm.type === 'edit' &&  (this.props.invoiceDetail!==null &&
+                                                this.props.invoiceDetail.Data.InvoiceBalance===0)})}
                                         onClick={() => {
                                             this.onSaveAndAddMore();
                                         }}
@@ -1337,7 +1341,8 @@ class InvoiceForm extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className={classNames(classes.button, "mr-12")}
+                                        className={classNames(classes.button, "mr-12", {"hidden":  this.props.invoiceForm.type === 'edit' &&  (this.props.invoiceDetail!==null &&
+                                                this.props.invoiceDetail.Data.InvoiceBalance===0)})}
                                         onClick={() => {
                                             this.onSaveAndClose();
                                         }}
@@ -1345,7 +1350,7 @@ class InvoiceForm extends Component {
                                         { this.props.invoiceForm.type === 'new' && (
                                             <span>Save & Close</span>
                                         )}
-                                        { this.props.invoiceForm.type !== 'new' && (
+                                        { this.props.invoiceForm.type !== 'new' &&  (
                                             <span>Update & Close</span>
                                         )}
                                     </Button>

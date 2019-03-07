@@ -1341,20 +1341,26 @@ class InvoiceLineTable extends React.Component {
                                                 return (
                                                     <div className="flex flex-row items-center w-full justify-center">
                                                         <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-8")}
+                                                             className={classNames(classes.lineButton, "mr-8",
+                                                                 {"hidden":  this.props.invoiceForm.type === 'edit' &&  (this.props.invoiceDetail!==null &&
+                                                                         this.props.invoiceDetail.Data.InvoiceBalance===0)})}
                                                              onClick={()=>this.addFranchiseeLine(row.original)}
                                                         >
                                                             <Icon>call_merge</Icon>
                                                         </Fab>
                                                         <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-8")}
+                                                             className={classNames(classes.lineButton, "mr-8",
+                                                                 {"hidden":  this.props.invoiceForm.type === 'edit' &&  (this.props.invoiceDetail!==null &&
+                                                                         this.props.invoiceDetail.Data.InvoiceBalance===0)})}
                                                              onClick={()=>this.addLineData(row.original)}
                                                         >
                                                             <Icon>add</Icon>
                                                         </Fab>
                                                         {row.original.service.value==='5c4b8a3b651a9c5970514a68' && (
                                                             <Fab color="secondary" aria-label="show vendor box"
-                                                                 className={classNames(classes.lineButton, "mr-8")}
+                                                                 className={classNames(classes.lineButton, "mr-8",
+                                                                     {"hidden":  this.props.invoiceForm.type === 'edit' &&  (this.props.invoiceDetail!==null &&
+                                                                             this.props.invoiceDetail.Data.InvoiceBalance===0)})}
                                                                  onClick={()=>this.showVendorDialogBox(row.original)}
                                                             >
                                                                 <Icon>settings</Icon>
@@ -1363,7 +1369,9 @@ class InvoiceLineTable extends React.Component {
                                                         {this.state.data.length>1 && (
                                                             <Fab aria-label="remove"
                                                                  onClick={()=>this.removeLineData(row.original)}
-                                                                 className={classNames(classes.lineCancelButton, "mr-0")}>
+                                                                 className={classNames(classes.lineCancelButton, "mr-0",
+                                                                     {"hidden":  this.props.invoiceForm.type === 'edit' &&  (this.props.invoiceDetail!==null &&
+                                                                             this.props.invoiceDetail.Data.InvoiceBalance===0)})}>
                                                                 <Icon>close</Icon>
                                                             </Fab>
                                                         )}
