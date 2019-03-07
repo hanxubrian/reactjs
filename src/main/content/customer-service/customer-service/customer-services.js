@@ -3,8 +3,9 @@ import _ from "lodash";
 import { withStyles } from '@material-ui/core/styles/index';
 import { withRouter } from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
+import { CustomFusePageCustomSidebarScroll } from '@fuse';
+// import { FusePageCustomSidebarScroll } from '@fuse';
 
-import { FusePageCustomSidebarScroll } from '@fuse';
 import { Icon, IconButton, Typography, CircularProgress, Menu, MenuItem, Tooltip, Button, ListItemIcon } from '@material-ui/core';
 import classNames from 'classnames';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
@@ -467,7 +468,7 @@ class CustomerServices extends Component {
 		console.log('props=', this.props);
 		return (
 			<React.Fragment >
-				<FusePageCustomSidebarScroll
+				<CustomFusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
 						// rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerServiceForm.open && customerServiceForm.isOpenSummaryPanel || customerServiceForm.open && this.state.showRightSidePanel }),
@@ -701,7 +702,7 @@ class CustomerServices extends Component {
 				// 	this.pageLayout = instance;
 				// }}
 				>
-				</FusePageCustomSidebarScroll>
+				</CustomFusePageCustomSidebarScroll>
 				{(this.props.bCustomerFetchStart) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
