@@ -183,6 +183,7 @@ const newInvoiceState = {
     "CreditId": "",
     "Service":"",
     "notes": "",
+    "fees": "",
 
 };
 
@@ -1244,11 +1245,11 @@ class InvoiceForm extends Component {
                             <GridItem xs={12} sm={8} md={8} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full">
                                     <TextField
-                                        id="notes"
-                                        name="notes"
-                                        label="Note"
+                                        id="fees"
+                                        name="fees"
+                                        label="Fees"
                                         className={classes.textField}
-                                        value={this.state.notes}
+                                        value={this.state.fees}
                                         onChange={this.handleChange}
                                         margin="dense"
                                         variant="outlined"
