@@ -1179,7 +1179,7 @@ class InvoiceForm extends Component {
                                                 </Typography>
                                             </div>
                                             <div className="flex ">
-                                                OverPayment:&nbsp; {this.state.selectedCustomer ? CurrencyFormatter({value: this.state.selectedCustomer.OverPayment}): ''}
+                                                OverPayment:&nbsp; {this.state.selectedCustomer ? CurrencyFormatter({value: this.state.selectedCustomer.OverPayment!==null?this.state.selectedCustomer.OverPayment:0}): ''}
                                             </div>
                                         </div>
                                         {this.state.selectedCustomer && (
@@ -1296,7 +1296,7 @@ class InvoiceForm extends Component {
                                 </div>
                                 {this.props.invoiceDetail!==null && (
                                     <div className="w-full p-12 flex justify-end pt-6 pb-0">
-                                        <span className={classes.summary}><strong>Balance: </strong>{CurrencyFormatter({value: this.props.invoiceDetail.Data.InvoiceBalance})}</span>
+                                        <span className={classNames(classes.summary)}><strong>Balance: </strong>{CurrencyFormatter({value: this.props.invoiceDetail.Data.InvoiceBalance})}</span>
                                     </div>
                                 )}
                                 <div className="w-full p-12 flex justify-end  pt-6 pb-0">
