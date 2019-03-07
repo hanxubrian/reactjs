@@ -26,6 +26,7 @@ import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import InvoiceLineTable from "./InvoiceLine"
 import VendorSelectionDialog from "./components/vendorSelectionDialog";
+import InvoiceFeesGrid from './invoiceFees';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -1241,14 +1242,15 @@ class InvoiceForm extends Component {
                         <Divider variant="middle"/>
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
-                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                        <GridContainer className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={8} md={8} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full">
+                                    <InvoiceFeesGrid/>
                                     <TextField
                                         id="fees"
                                         name="fees"
                                         label="Fees"
-                                        className={classes.textField}
+                                        className={classNames(classes.textField, "hidden")}
                                         value={this.state.fees}
                                         onChange={this.handleChange}
                                         margin="dense"

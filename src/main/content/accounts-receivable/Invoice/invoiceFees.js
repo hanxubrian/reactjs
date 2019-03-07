@@ -47,19 +47,6 @@ const styles = theme => ({
         '& .z-9999': {
             height: 64
         },
-        '& .-pageSizeOptions': {
-            display: 'none'
-        },
-        '& .openFilter': {
-            width: 'inherit'
-        },
-        '& .openSummary': {
-            width: 300
-        },
-        '& .p-12-impor': {
-            paddingLeft: '1.2rem!important',
-            paddingRight: '1.2rem!important',
-        },
         '& .deduction':{
             '& td': {
                 fontWeight: 700
@@ -68,6 +55,15 @@ const styles = theme => ({
         '& .credit':{
             '& td': {
             }
+        },
+        '& table colgroup col':{
+            width: '20%!important'
+        },
+        '& table colgroup col:last-child':{
+            width: '0!important'
+        },
+        '& div>div':{
+            maxHeight: 96,
         }
     },
     content: {
@@ -76,10 +72,15 @@ const styles = theme => ({
     tableTheadRow: {
         backgroundColor: theme.palette.primary.main,
         '& tr': {
-            height: 48
+            height: 28
         },
         '& tr th': {
-            color: 'white'
+            color: 'white',
+            width: '20%!important'
+        },
+        '& tr th:last-child': {
+            color: 'white',
+            width: '0!important'
         }
     },
     tableThEven: {
@@ -88,9 +89,16 @@ const styles = theme => ({
     tableTdEven: {
     },
     tableStriped: {
+        marginBottom: '0!important',
+        '& tr': {
+            height: 28
+        },
         '& tbody tr:nth-of-type(odd)': {
         },
     },
+    TableContainer: {
+
+    }
 });
 
 const TableComponentBase = ({ classes, ...restProps }) => (
@@ -137,8 +145,9 @@ class InvoiceFeesGrid extends Component {
 
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.data !== prevProps.data)
-            this.processData(this.props.data)
+        if(this.props.invoiceDetail!==prevProps.invoiceDetail){
+            console.log('updated=', this.props.invoiceDetail)
+        }
     }
 
     componentDidMount() {
@@ -146,22 +155,28 @@ class InvoiceFeesGrid extends Component {
     }
 
     componentWillMount() {
-        this.processData(this.props.data);
+        this.processData();
     }
 
     componentWillUnmount() {
     }
 
 
-    processData= data => {
-        let temp = [...data];
-        temp.forEach(x => {
-            x.FranNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`
-        });
-    };
-
-    handleClose = () => {
-        this.setState({alertOpen: false})
+    processData = () => {
+       if(this.props.invoiceDetail!==null) {
+           let items = this.props.invoiceDetail.Data.Items;
+           if(items.length) {
+               let fees = [];
+               items.forEach(item=>{
+                   if(item.Distribution!==null && item.Distribution.length &&
+                       item.Distribution[0].Fees!==null && item.Distribution[0].Fees)
+                       fees.push({FranchiseeNumber: item.Distribution[0].FranchiseeNumber, ...item.Distribution[0].Fees[0]});
+               });
+               if(fees.length){
+                   this.setState({data: fees});
+               }
+           }
+       }
     };
 
     TableRow = ({ row, ...restProps }) => {
@@ -179,6 +194,7 @@ class InvoiceFeesGrid extends Component {
         const {classes} = this.props;
 
         const columns = [
+            {name: "FranchiseeNumber", title: "Franchisee #"},
             {name: "Royalty", title: "Royalty"},
             {name: "Advertising", title: "Advertising Fee"},
             {name: "Accounting", title: "Administration Fee"},
@@ -186,14 +202,15 @@ class InvoiceFeesGrid extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'Royalty', width: 100, },
-            { columnName: 'Advertising', width: -1},
-            { columnName: 'Accounting', width: 100,  align: 'right'},
-            { columnName: 'BusinessProtection', width: 80,  align: 'right'},
+            { columnName: 'FranchiseeNumber', width: 100, },
+            { columnName: 'Royalty', width: 100,  align: 'center' },
+            { columnName: 'Advertising', width: 100,  align: 'center'},
+            { columnName: 'Accounting', width: 100,  align: 'center'},
+            { columnName: 'BusinessProtection', width: 100,  align: 'center'},
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col h-full mt-12")}>
                 <Grid rows={this.state.data} columns={columns}>
                     <CurrencyTypeProvider
                         for={['Royalty', 'Advertising', 'Accounting', 'BusinessProtection']}
