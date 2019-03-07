@@ -855,8 +855,6 @@ class PaymentLockBoxContentList extends Component {
 		}
 
 		this.props.paymentlockboxgetalldata(lockboxDate, true);
-
-		this.props.openSnackbar("Lockbox file fetched", "success")
 	}
 
 	processLockbox = () => {
