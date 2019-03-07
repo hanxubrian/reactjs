@@ -22,6 +22,7 @@ import Widget10 from './widgets/Widget10';
 import Widget11 from './widgets/Widget11';
 import WidgetNow from './widgets/WidgetNow';
 import WidgetWeather from './widgets/WidgetWeather';
+import News from './tabs/janiking-news';
 
 const styles = theme => ({
         content          : {
@@ -186,22 +187,25 @@ class ProjectDashboardApp extends Component {
                             </FuseAnimateGroup>
                         )}
                         {tabValue === 1 && (
-                            <FuseAnimateGroup
-                                className="flex flex-wrap"
-                                enter={{
-                                    animation: "transition.slideUpBigIn"
-                                }}
-                            >
-                                <div className="widget flex w-full sm:w-1/2 p-12">
-                                    <Widget8 widget={widgets.widget8}/>
-                                </div>
-                                <div className="widget flex w-full sm:w-1/2 p-12">
-                                    <Widget9 widget={widgets.widget9}/>
-                                </div>
-                                <div className="widget flex w-full p-12">
-                                    <Widget10 widget={widgets.widget10}/>
-                                </div>
-                            </FuseAnimateGroup>
+                            <div>
+                            <News/>
+                            {/*<FuseAnimateGroup*/}
+                                {/*className="flex flex-wrap"*/}
+                                {/*enter={{*/}
+                                    {/*animation: "transition.slideUpBigIn"*/}
+                                {/*}}*/}
+                            {/*>*/}
+                                {/*<div className="widget flex w-full sm:w-1/2 p-12">*/}
+                                    {/*<Widget8 widget={widgets.widget8}/>*/}
+                                {/*</div>*/}
+                                {/*<div className="widget flex w-full sm:w-1/2 p-12">*/}
+                                    {/*<Widget9 widget={widgets.widget9}/>*/}
+                                {/*</div>*/}
+                                {/*<div className="widget flex w-full p-12">*/}
+                                    {/*<Widget10 widget={widgets.widget10}/>*/}
+                                {/*</div>*/}
+                            {/*</FuseAnimateGroup>*/}
+                            </div>
                         )}
                         {tabValue === 2 && (
                             <FuseAnimateGroup
