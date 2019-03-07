@@ -47,6 +47,15 @@ import NumberFormat from 'react-number-format';
 //Utility
 import {escapeRegexCharacters} from 'services/utils'
 
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <span>{value}</span>}/>
+);
+
 const styles = theme => ({
     layoutForm: {
         flexDirection: 'row',
@@ -1169,6 +1178,9 @@ class InvoiceForm extends Component {
                                                     <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.BillingCustomerName: this.state.value}</strong>
                                                 </Typography>
                                             </div>
+                                            <div className="flex ">
+                                                OverPayment:&nbsp; {this.state.selectedCustomer ? CurrencyFormatter({value: this.state.selectedCustomer.OverPayment}): ''}
+                                            </div>
                                         </div>
                                         {this.state.selectedCustomer && (
                                             <div className="flex flex-row justify-start mb-4">
@@ -1282,6 +1294,11 @@ class InvoiceForm extends Component {
                                 <div className="w-full p-12 flex justify-end pt-6 pb-0">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
+                                {this.props.invoiceDetail!==null && (
+                                    <div className="w-full p-12 flex justify-end pt-6 pb-0">
+                                        <span className={classes.summary}><strong>Balance: </strong>{CurrencyFormatter({value: this.props.invoiceDetail.Data.InvoiceBalance})}</span>
+                                    </div>
+                                )}
                                 <div className="w-full p-12 flex justify-end  pt-6 pb-0">
                                     <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
@@ -1507,6 +1524,7 @@ function mapStateToProps({invoices, auth, franchisees})
 {
     return {
         invoiceForm: invoices.invoiceForm,
+        invoiceDetail: invoices.invoiceDetail,
         invoices: invoices,
         newInvoice: invoices.newInvoice,
         bStartingSaveFormData: invoices.bStartingSaveFormData,
