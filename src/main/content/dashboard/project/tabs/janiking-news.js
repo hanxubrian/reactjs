@@ -24,7 +24,9 @@ class News extends Component {
     {
         axios.get('/api/profile/timeline').then(res => {
             this.setState(res.data);
+            console.log("POST===",res.data);
         });
+
     }
 
     render()
@@ -55,7 +57,7 @@ class News extends Component {
                                 />
                                 <AppBar className="card-footer flex flex-row border-t-1" position="static" color="default" elevation={0}>
                                     <div className="flex-1 items-center">
-                                        <IconButton aria-label="Add photo">
+                                        <IconButton  aria-label="Add photo">
                                             <Icon>photo</Icon>
                                         </IconButton>
                                         <IconButton aria-label="Mention somebody">

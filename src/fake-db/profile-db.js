@@ -80,17 +80,17 @@ const profileDB = {
             {
                 'id'      : '1',
                 'user'    : {
-                    'name'  : 'Garry Newman',
+                    'name'  : 'Jani-King International',
                     'avatar': 'assets/images/avatars/garry.jpg'
                 },
-                'message' : 'Remember the place we were talking about the other night? Found it!',
-                'time'    : '32 minutes ago',
+                'message' : 'IFA Welcomes Jerry Crawford to New Position',
+                'time'    : 'Feb 11, 2019',
                 'type'    : 'post',
                 'like'    : 5,
                 'share'   : 21,
                 'media'   : {
                     'type'   : 'image',
-                    'preview': 'assets/images/profile/morain-lake.jpg'
+                    'preview': 'https://www.janiking.com/wp-content/uploads/2019/02/jerry-craford-jani-king-ceo-president.jpg'
                 },
                 'comments': [
                     {
@@ -99,8 +99,8 @@ const profileDB = {
                             'name'  : 'Alice Freeman',
                             'avatar': 'assets/images/avatars/alice.jpg'
                         },
-                        'time'   : 'June 10, 2015',
-                        'message': 'That’s a wonderful place. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat.'
+                        'time'   : 'Feb 12, 2019',
+                        'message': 'I am grateful for the opportunity to serve as Secretary on the IFA Board of Directors and to continue to represent Jani-King and the franchise industry in Washington, DCJerry Crawford President & CEO, Jani-King International, Inc.'
                     }
                 ]
             },
