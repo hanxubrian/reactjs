@@ -1558,7 +1558,7 @@ class FilterPanel extends Component {
 						(
 							<div>
 								{/* <RadioGroup */}
-								<div className="mt-0 flex flex-col" style={{ width: '380px' }}>
+								<div className="mt-0 flex flex-col" style={{ width: '420px' }}>
 									<h3 className="mb-12">Location</h3>
 									<RadioGroup
 										aria-label="Location"
@@ -1636,7 +1636,7 @@ class FilterPanel extends Component {
 
 								</div>
 
-								<div className="mt-36 flex flex-col" style={{ width: '380px' }}>
+								<div className="mt-36 flex flex-col" style={{ width: '420px' }}>
 									<h3 className="mb-12">Billing Amount</h3>
 									<div className="flex flex-row" >
 										<TextField
@@ -1672,7 +1672,7 @@ class FilterPanel extends Component {
 								</div>
 
 
-								<div className="mt-0 flex flex-col" style={{ width: '380px' }}>
+								<div className="mt-0 flex flex-col" style={{ width: '420px' }}>
 									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 									<TextField
 										select
@@ -1742,7 +1742,7 @@ class FilterPanel extends Component {
 
 								</div>
 
-								<div className="mt-36 flex flex-col" style={{ width: '380px' }}>
+								<div className="mt-36 flex flex-col" style={{ width: '420px' }}>
 									<h3 className="mb-12">Customer Status</h3>
 									<FormControlLabel
 										control={
