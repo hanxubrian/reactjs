@@ -633,7 +633,7 @@ const customers = function (state = initialState, action) {
 					},
 					activeCustomer: action.payload.customer,
 					findersFees: action.payload.findersFees,
-					activeStep: 0,
+					// activeStep: 0,
 					franchieesesToOffer: [],
 					bTransferFranchiseeFtate: false,
 				};
