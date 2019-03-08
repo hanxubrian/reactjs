@@ -24,10 +24,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import ContactHistoryPage from './form/ContactHistoryPage.js';
+import CallLog from './form/CallLog.js';
+import CustomerCallback from './form/customerCallback.js'
 import CollectionsPage from './form/CollectionsPage.js';
 import BillingsPage from './form/BillingsPage';
-
+// import CustomerCallback from './from/customerCallback.js';
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -210,7 +211,7 @@ function escapeRegexCharacters(str) {
 
 function getSteps() {
 	// return ['Service Agreement', 'Billing', 'Service Settings', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History"];
-	return ['Contact History', 'Billing', 'Inspections', 'Collections'];
+	return ['CallLog', 'Billing', 'Inspections', 'Collections','CallBack'];
 }
 
 const Upload_Document_headers = [
@@ -373,7 +374,7 @@ class CustomerForm extends Component {
 		switch (step) {
 			case 0:
 				return (
-					<ContactHistoryPage />
+					<CallLog />
 				);
 			case 1:
 				return (
@@ -387,6 +388,10 @@ class CustomerForm extends Component {
 				return (
 					<CollectionsPage />
 				);
+			case 4:
+				return(
+					<CustomerCallback/>
+				)
 
 			default:
 				return 'Unknown step';

@@ -11,7 +11,6 @@ import keycode from 'keycode';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import NumberFormat from 'react-number-format';
 //Store
 import * as Actions from 'store/actions';
 import { bindActionCreators } from 'redux';
@@ -814,7 +813,7 @@ class FilterPanel extends Component {
 					{customerServiceForm && customerServiceForm.open
 						? (
 							<div>
-								<GridContainer style={{ alignItems: 'center', width: 380 }} className={classNames(classes.formControl, "mb-0")}>
+								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl, "mb-0")}>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
 										<Card className={classes.card}>
 											<CardHeader title={"Customer Information" + (activeCustomer ? " (" + activeCustomer.cust_no + ")" : "")} className={classNames(classes.cardHeader, "flex-1")} />
@@ -1558,7 +1557,7 @@ class FilterPanel extends Component {
 						(
 							<div>
 								{/* <RadioGroup */}
-								<div className="mt-0 flex flex-col" style={{ width: '420px' }}>
+								<div className="mt-0 flex flex-col" style={{ width: '250px' }}>
 									<h3 className="mb-12">Location</h3>
 									<RadioGroup
 										aria-label="Location"
@@ -1636,7 +1635,7 @@ class FilterPanel extends Component {
 
 								</div>
 
-								<div className="mt-36 flex flex-col" style={{ width: '420px' }}>
+								<div className="mt-36 flex flex-col" style={{ width: '250px' }}>
 									<h3 className="mb-12">Billing Amount</h3>
 									<div className="flex flex-row" >
 										<TextField
@@ -1672,7 +1671,7 @@ class FilterPanel extends Component {
 								</div>
 
 
-								<div className="mt-0 flex flex-col" style={{ width: '420px' }}>
+								<div className="mt-0 flex flex-col" style={{ width: '250px' }}>
 									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 									<TextField
 										select
@@ -1742,7 +1741,7 @@ class FilterPanel extends Component {
 
 								</div>
 
-								<div className="mt-36 flex flex-col" style={{ width: '420px' }}>
+								<div className="mt-36 flex flex-col" style={{ width: '250px' }}>
 									<h3 className="mb-12">Customer Status</h3>
 									<FormControlLabel
 										control={

@@ -487,7 +487,7 @@ const MapWithAMarkerClusterer2 = compose(
 	</GoogleMap>
 );
 
-class ContactHistoryPage extends Component {
+class CallLog extends Component {
 
 	constructor(props) {
 		super(props);
@@ -986,7 +986,7 @@ class ContactHistoryPage extends Component {
 										selection={selection}
 										onSelectionChange={this.changeSelection}
 									/> */}
-						{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+						{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging pluginâ€™s order. */}
 						{/* <IntegratedSelection /> */}
 
 						<SortingState
@@ -1187,5 +1187,5 @@ function mapStateToProps({ customers, auth }) {
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactHistoryPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(CallLog)));
 
