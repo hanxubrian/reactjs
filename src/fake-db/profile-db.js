@@ -80,8 +80,8 @@ const profileDB = {
             {
                 'id'      : '1',
                 'user'    : {
-                    'name'  : 'Jani-King International',
-                    'avatar': 'assets/images/avatars/garry.jpg'
+                    'name'  : 'German Sosa',
+                    'avatar': 'assets/images/avatars/german.png'
                 },
                 'message' : 'IFA Welcomes Jerry Crawford to New Position',
                 'time'    : 'Feb 11, 2019',
@@ -96,8 +96,8 @@ const profileDB = {
                     {
                         'id'     : '1',
                         'user'   : {
-                            'name'  : 'Alice Freeman',
-                            'avatar': 'assets/images/avatars/alice.jpg'
+                            'name'  : 'Monica',
+                            'avatar': 'assets/images/avatars/monica.png'
                         },
                         'time'   : 'Feb 12, 2019',
                         'message': 'I am grateful for the opportunity to serve as Secretary on the IFA Board of Directors and to continue to represent Jani-King and the franchise industry in Washington, DCJerry Crawford President & CEO, Jani-King International, Inc.'
@@ -107,47 +107,47 @@ const profileDB = {
             {
                 'id'      : '2',
                 'user'    : {
-                    'name'  : 'Andrew Green',
-                    'avatar': 'assets/images/avatars/andrew.jpg'
+                    'name'  : 'Lizhu Lu',
+                    'avatar': 'http://res.cloudinary.com/janiking/image/upload/v1551675994/apps/users/profile_logo__waybla.jpg'
                 },
-                'message' : 'Hey, man! Check this, it’s pretty awesome!',
-                'time'    : 'June 12, 2015',
+                'message' : 'How to Become a Good Leader',
+                'time'    : 'Feb 4, 2019',
                 'type'    : 'article',
                 'like'    : 98,
                 'share'   : 6,
                 'article' : {
-                    'title'   : 'Never stop changing!',
-                    'subtitle': 'John Westrock',
-                    'excerpt' : 'John Westrock\'s new photo album called \'Never stop changing\' is published! It features more than 200 photos that will take you right in.',
+                    'title'   : 'Get your hands dirty.',
+                    'subtitle': 'Lizhu Lu',
+                    'excerpt' : 'Do the work and know your trade. You don’t have to be the most advanced technician on the team, but you must have an in-depth understanding of your industry and your business. Leaders have many responsibilities, but it is important to work alongside your team. This is a great way to build trust and continue to develop your own knowledge and skills.',
                     'media'   : {
                         'type'   : 'image',
-                        'preview': 'assets/images/profile/never-stop-changing.jpg'
+                        'preview': 'assets/images/profile/leader.jpg'
                     }
                 },
                 'comments': [
                     {
                         'id'     : '1',
                         'user'   : {
-                            'name'  : 'Alice Freeman',
-                            'avatar': 'assets/images/avatars/alice.jpg'
+                            'name'  : 'Elena',
+                            'avatar': 'assets/images/avatars/elena.png'
                         },
-                        'time'   : 'June 10, 2015',
+                        'time'   : 'June 10, 2019',
                         'message': 'That’s a wonderful place. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat.'
                     }
                 ]
             },
-            {
-                'id'     : '3',
-                'user'   : {
-                    'name'  : 'Carl Henderson',
-                    'avatar': 'assets/images/avatars/carl.jpg'
-                },
-                'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat. Aenean lorem ex, ultrices sit amet ligula sed...',
-                'time'   : 'June 10, 2015',
-                'type'   : 'something',
-                'like'   : 4,
-                'share'  : 1
-            }
+            // {
+            //     'id'     : '3',
+            //     'user'   : {
+            //         'name'  : 'Carl Henderson',
+            //         'avatar': 'assets/images/avatars/carl.jpg'
+            //     },
+            //     'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat. Aenean lorem ex, ultrices sit amet ligula sed...',
+            //     'time'   : 'June 10, 2015',
+            //     'type'   : 'something',
+            //     'like'   : 4,
+            //     'share'  : 1
+            // }
         ]
     },
     photosVideos: [
