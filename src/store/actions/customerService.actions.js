@@ -15,10 +15,11 @@ export const OPEN_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN NEW CUSTOMER FORM';
 export const CLOSE_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE NEW CUSTOMER FORM';
 export const OPEN_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN EDIT CUSTOMER FORM';
 export const CLOSE_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE EDIT CUSTOMER FORM';
-export const ADD_CUSTOMER = '[CUSTOMERS APP] ADD CUSTOMER';
-export const UPDATE_CUSTOMER = '[CUSTOMERS APP] UPDATE CUSTOMER';
+export const ADD_CUSTOMER_CONTACT = '[CUSTOMERS APP] ADD CUSTOMER_CONTACT';
+export const UPDATE_CUSTOMER_CONTACT = '[CUSTOMERS APP] UPDATE CUSTOMER_CONTACT';
 
 export const SELECT_LOCATION_FILTER = '[CUSTOMERS APP] SELECT LOCATION FILTER';
+export const SELECT_LOCATION_FILTER_FRANCHISEE_LIST = '[CUSTOMERS APP] SELECT_LOCATION_FILTER_FRANCHISEE_LIST';
 export const APPLY_SEARCH_TEXT = '[CUSTOMERS APP] APPLY SEARCH TEXT';
 
 export const GET_CUSTOMERS_FETCH_START = "[CUSTOMERS APP] GET CUSTOMERS FETCH START";
@@ -32,6 +33,8 @@ export const OPEN_EMAIL_TO_CUSTOMER_DIALOG = "[CUSTOMERS APP] OPEN_EMAIL_TO_CUST
 
 export const CREATE_CUSTOMER = "[CUSTOMERS APP] CREATE_CUSTOMER";
 export const CREATE_CUSTOMER_START = "[CUSTOMERS APP] CREATE_CUSTOMER_START";
+export const UPDATE_CUSTOMER = "[CUSTOMERS APP] UPDATE_CUSTOMER";
+export const UPDATE_CUSTOMER_START = "[CUSTOMERS APP] UPDATE_CUSTOMER_START";
 
 export const GET_CUSTOMER = "[CUSTOMERS APP] GET_CUSTOMER";
 export const GET_CUSTOMER_START = "[CUSTOMERS APP] GET_CUSTOMER_START";
@@ -85,6 +88,42 @@ export const UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES = "[CUSTOMERS APP] UPDA
 
 export const UPDATE_NEW_CUSTOMER_PARAM = "[CUSTOMERS APP] UPDATE_NEW_CUSTOMER_PARAM";
 
+export const SAVE_CANCEL_CONTRACT = "[CUSTOMERS APP] SAVE_CANCEL_CONTRACT";
+export const SAVE_SUSPEND_CONTRACT = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT";
+export const SAVE_CANCEL_CONTRACT_START = "[CUSTOMERS APP] SAVE_CANCEL_CONTRACT_START";
+export const SAVE_SUSPEND_CONTRACT_START = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT_START";
+
+export const STOP_FINDERS_FEES = "[CUSTOMERS APP] STOP_FINDERS_FEES";
+export const STOP_FINDERS_FEES_START = "[CUSTOMERS APP] STOP_FINDERS_FEES_START";
+
+export const GET_COMPUTED_FINDER_FEE = "[CUSTOMERS APP] GET_COMPUTED_FINDER_FEE";
+export const GET_FINDER_FEE = "[CUSTOMERS APP] GET_FINDER_FEE";
+
+export const SET_ACTIVE_FINDERS_FEE = "[CUSTOMERS APP] SET_ACTIVE_FINDERS_FEE";
+export const SET_ACTIVE_FRANCHISEE = "[CUSTOMERS APP] SET_ACTIVE_FRANCHISEE";
+
+export const SET_TRANSFER_FRANCHISEE_STATE = "[CUSTOMERS APP] SET_TRANSFER_FRANCHISEE_STATE";
+
+export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
+export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
+
+export const SET_FRANCHISEE_TO_TRANSFER = "[CUSTOMERS APP] SET_FRANCHISEE_TO_TRANSFER";
+
+export const OPEN_SNACK_BAR = "[CUSTOMERS APP] OPEN_SNACK_BAR";
+export const CLOSE_SNACK_BAR = "[CUSTOMERS APP] CLOSE_SNACK_BAR";
+
+export const TRANSFER_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE";
+export const TRANSFER_ASSIGNED_FRANCHISEE_START = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE_START";
+export const TRANSFER_ASSIGNED_FRANCHISEE_DONE = "[CUSTOMERS APP] TRANSFER_ASSIGNED_FRANCHISEE_DONE";
+
+export const SET_TRANSFER_PARAM = "[CUSTOMERS APP] SET_TRANSFER_PARAM";
+export const SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING = "[CUSTOMERS APP] SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING";
+
+export const EXPAND_COLLAPSE_GROUPING = "[CUSTOMERS-service APP] EXPAND_COLLAPSE_GROUPING";
+
+export const TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE = "[CUSTOMERS-service APP] TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE";
+export const TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE = "[CUSTOMERS-service APP] TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -97,10 +136,13 @@ export function getCustomers(regionId, statusId, StatusNames, AccountTypeListNam
 			regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
 			statusId = statusId === 0 ? Array.from({ length: 10 }).map((item, index) => (index + 1)) : [statusId]
 			console.log(regionId, statusId)
-			let response = await customersService.getCustomersList(regionId, statusId, StatusNames, AccountTypeListName, location, latitude, longitude, searchText);
+			let allCustomers = await customersService.getCustomersList(regionId, statusId, StatusNames, AccountTypeListName, location, latitude, longitude, searchText);
+			const cancelReasons = await customersService.getCancelReason();
+			const suspendReasons = await customersService.getSuspendReason();
+			const transferReasons = await customersService.getReasonList('account_transfer')
 			dispatch({
 				type: GET_ALL_CUSTOMERS,
-				payload: response
+				payload: { allCustomers, cancelReasons, suspendReasons, transferReasons }
 			});
 		})();
 	}
@@ -177,10 +219,26 @@ export function createCustomer(regionId, param) {
 		});
 
 		(async () => {
-			let response = await customersService.createCustomer(regionId, param);
+			let newCustomer = await customersService.createCustomer(regionId, param);
 			dispatch({
 				type: CREATE_CUSTOMER,
-				payload: response
+				payload: { regionId, newCustomer }
+			});
+		})();
+	}
+}
+export function updateCustomer(regionId, param) {
+	return (dispatch) => {
+		dispatch({
+			type: UPDATE_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let activeCustomer = await customersService.updateCustomer(regionId, param);
+			dispatch({
+				type: UPDATE_CUSTOMER,
+				payload: activeCustomer
 			});
 		})();
 	}
@@ -219,6 +277,16 @@ export function toggleFilterPanel() {
 		type: TOGGLE_FILTER_PANEL
 	}
 }
+export function toggleLeftSidebarCustomerService() {
+	return {
+		type: TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE
+	}
+}
+export function toggleRightSidebarCustomerService() {
+	return {
+		type: TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE
+	}
+}
 
 export function toggleSummaryPanel() {
 	return {
@@ -241,6 +309,12 @@ export function toggleStatus(key, status) {
 export function selectLocationFilter(filter_value) {
 	return {
 		type: SELECT_LOCATION_FILTER,
+		payload: filter_value
+	}
+}
+export function selectLocationFilterForFranchiseeList(filter_value) {
+	return {
+		type: SELECT_LOCATION_FILTER_FRANCHISEE_LIST,
 		payload: filter_value
 	}
 }
@@ -328,6 +402,47 @@ export function openEditCustomerForm(regionId, customerId, customerNo) {
 		})();
 	}
 }
+export function stopFindersfees(regionId, customerId, customerNo) {
+	return (dispatch) => {
+		dispatch({
+			type: STOP_FINDERS_FEES_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.stopFindersfees(regionId, customerId);
+			let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
+			dispatch({
+				type: STOP_FINDERS_FEES,
+				payload: findersFees
+			});
+		})();
+	}
+}
+export function openEditCustomerServiceForm(regionId, customerId, customerNo) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let customer = await customersService.getCustomer(regionId, customerId);
+			// let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
+			// let findersFeesConfig = await customersService.findersfeeConfigs();
+			dispatch({
+				type: OPEN_EDIT_CUSTOMER_SERVICE_FORM,
+				// payload: { customer, findersFees, findersFeesConfig }
+				payload: { customer }
+			});
+		})();
+	}
+}
+export function closeCustomerServiceForm() {
+	return {
+		type: CLOSE_CUSTOMER_SERVICE_FORM
+	}
+}
 export function findersfeeConfigs() {
 	return (dispatch) => {
 		dispatch({
@@ -381,7 +496,7 @@ export function getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate
 		})();
 	}
 }
-export function getCustomerBillingList(regionId, CustomerNo) {
+export function getCustomerBillingList(regionId, CustomerNo, BillYear = new Date().getFullYear(), BillMonth = new Date().getMonth() + 1) {
 	return (dispatch) => {
 		dispatch({
 			type: GET_CUSTOMER_BILLING_LIST_START,
@@ -389,7 +504,7 @@ export function getCustomerBillingList(regionId, CustomerNo) {
 		});
 
 		(async () => {
-			let res = await customersService.getCustomerBillingList(regionId, CustomerNo);
+			let res = await customersService.getCustomerBillingList(regionId, CustomerNo, BillYear, BillMonth);
 			dispatch({
 				type: GET_CUSTOMER_BILLING_LIST,
 				payload: res
@@ -432,7 +547,7 @@ export function setCustomerFormFindersFeesDialogPayload(payload) {
 	}
 }
 
-export function addCustomer(newCustomer) {
+export function addCustomerContact(newCustomer) {
 	return (dispatch, getState) => {
 
 		console.log('state', getState());
@@ -446,14 +561,14 @@ export function addCustomer(newCustomer) {
 		return request.then((response) =>
 			Promise.all([
 				dispatch({
-					type: ADD_CUSTOMER
+					type: ADD_CUSTOMER_CONTACT
 				})
 			]).then(() => dispatch(getCustomers()))
 		);
 	};
 }
 
-export function updateCustomer(customer) {
+export function updateCustomerContact(customer) {
 	return (dispatch, getState) => {
 
 		// const {routeParams} = getState().contactsApp.contacts;
@@ -465,7 +580,7 @@ export function updateCustomer(customer) {
 		return request.then((response) =>
 			Promise.all([
 				dispatch({
-					type: UPDATE_CUSTOMER
+					type: UPDATE_CUSTOMER_CONTACT
 				})
 			]).then(() => dispatch(getCustomers()))
 		);
@@ -570,10 +685,10 @@ export function getFranchiseeBillingTypes(regionId) {
 }
 
 export function updateCustomersParameter(name, value) {
-    return {
-        type: UPDATE_CUSTOMERS_PARAMETERS,
-        payload: {name, value}
-    }
+	return {
+		type: UPDATE_CUSTOMERS_PARAMETERS,
+		payload: { name, value }
+	}
 }
 
 /**
@@ -582,65 +697,81 @@ export function updateCustomersParameter(name, value) {
  * @returns {{type: string, payload: *}}
  */
 export function updateFindersFeeParams(params) {
-    return {
-        type: UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED,
-        payload: params
-    }
+	return {
+		type: UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED,
+		payload: params
+	}
 }
 
 
 export function getIncreaseDecrease(regionId, params) {
-    return (dispatch) => {
-        (async () => {
-            let res = await customersService.getIncreaseDecrease(regionId, params);
-            dispatch({
-                type: GET_INCREASE_DECREASE,
-                payload: res.Data
-            });
-        })();
-    }
-}
-
-/**
- * get computed finders fee
- * @param params, JSON object
- * @returns {Function}
- * @constructor
- */
-export function getComputedFinderFee(params) {
-    return (dispatch) => {
-        (async () => {
-            let res = await customersService.getComputedFinderFee(params);
-            dispatch({
-                type: GET_COMPUTED_FINDERS_FEE,
-                payload: res.Data
-            });
-        })();
-    }
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getIncreaseDecrease(regionId, params);
+			dispatch({
+				type: GET_INCREASE_DECREASE,
+				payload: res.Data
+			});
+		})();
+	}
 }
 
 export function getFinderFeeTypes() {
-    return (dispatch) => {
-        (async () => {
-            let res = await customersService.getFinderFeeTypes();
-            dispatch({
-                type: GET_FINDERS_FEE_TYPES,
-                payload: res.Data
-            });
-        })();
-    }
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getFinderFeeTypes();
+			dispatch({
+				type: GET_FINDERS_FEE_TYPES,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function getComputedFinderFee(data) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getComputedFinderFee(data);
+			dispatch({
+				type: GET_COMPUTED_FINDER_FEE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function getFinderFee(RegionId, Id) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getFinderFee(RegionId, Id);
+			dispatch({
+				type: GET_FINDER_FEE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function setActiveFindersFee(activeFindersFee) {
+	return {
+		type: SET_ACTIVE_FINDERS_FEE,
+		payload: activeFindersFee
+	}
+}
+export function setActiveFranchisee(activeFranchisee) {
+	return {
+		type: SET_ACTIVE_FRANCHISEE,
+		payload: activeFranchisee
+	}
 }
 
 export function updateAssignedFranchisee(regionId, customerNo, params) {
-    return (dispatch) => {
-        (async () => {
-            let res = await customersService.updateAssignedFranchisee(regionId, customerNo, params);
-            dispatch({
-                type: UPDATE_ASSIGNED_FRANCHISEE,
-                payload: res.Data
-            });
-        })();
-    }
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.updateAssignedFranchisee(regionId, customerNo, params);
+			dispatch({
+				type: UPDATE_ASSIGNED_FRANCHISEE,
+				payload: res.Data
+			});
+		})();
+	}
 }
 
 /**
@@ -649,17 +780,144 @@ export function updateAssignedFranchisee(regionId, customerNo, params) {
  * @returns {Function}
  */
 export function updateActiveCustomerAssignedFranchisees(params) {
-    return (dispatch) => {
-        dispatch({
-            type: UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES,
-            payload: params
-        });
-    }
+	return (dispatch) => {
+		dispatch({
+			type: UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES,
+			payload: params
+		});
+	}
 }
 
 export function updateNewCustomerParam(name, value) {
 	return {
 		type: UPDATE_NEW_CUSTOMER_PARAM,
 		payload: { name, value }
+	}
+}
+
+export function saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee, customerId) {
+	return (dispatch) => {
+		dispatch({
+			type: SAVE_CANCEL_CONTRACT_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee);
+			const activeCustomer = await customersService.getCustomer(regionId, customerId);
+			dispatch({
+				type: SAVE_CANCEL_CONTRACT,
+				payload: activeCustomer
+			});
+		})();
+	}
+}
+export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date, customerId) {
+	return (dispatch) => {
+		dispatch({
+			type: SAVE_SUSPEND_CONTRACT_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date);
+			const activeCustomer = await customersService.getCustomer(regionId, customerId);
+			dispatch({
+				type: SAVE_SUSPEND_CONTRACT,
+				payload: activeCustomer
+			});
+		})();
+	}
+}
+export function transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, reason, notes, transfer_fee, franchisee) {
+	console.log('transferAssignedFranchisee', franchisee)
+	return (dispatch) => {
+		dispatch({
+			type: TRANSFER_ASSIGNED_FRANCHISEE_START,
+		});
+
+		(async () => {
+			let activeCustomer = await customersService.transferAssignedFranchisee(regionId, CustomerNo, FromFranchiseeNo, reason, notes, transfer_fee, franchisee);
+			let message = "Transfered successfully!"
+			let icon = "success"
+			if (!activeCustomer.IsSuccess) {
+				message = `"Transfering failed. reason:${reason}, notes:${notes}, transfer_fee:${transfer_fee}`
+				icon = "error"
+			}
+			const param = {
+				open: true,
+				icon,
+				message,
+				vertical: "bottom",
+				horizontal: 'center',
+				duration: 3000,
+			}
+
+			dispatch({
+				type: OPEN_SNACK_BAR,
+				payload: param
+			});
+			dispatch({
+				type: TRANSFER_ASSIGNED_FRANCHISEE_DONE,
+			});
+
+			if (activeCustomer.IsSuccess) {
+				dispatch({
+					type: TRANSFER_ASSIGNED_FRANCHISEE,
+					payload: activeCustomer
+				});
+			}
+
+		})();
+	}
+}
+
+export function setTransferFranchiseeState(f) {
+	return {
+		type: SET_TRANSFER_FRANCHISEE_STATE,
+		payload: f
+	}
+}
+export function setFranchiseeToTransfer(key, value) {
+	return {
+		type: SET_FRANCHISEE_TO_TRANSFER,
+		payload: { key, value }
+	}
+}
+export function setTransferParam(key, value) {
+	return {
+		type: SET_TRANSFER_PARAM,
+		payload: { key, value }
+	}
+}
+export function openSnackbar(message = "", icon = "error", duration = 3000, open = true, vertical = "bottom", horizontal = 'center') {
+	const param = {
+		open,
+		icon,
+		message,
+		vertical,
+		horizontal,
+		duration,
+	}
+	return {
+		type: OPEN_SNACK_BAR,
+		payload: param
+	}
+}
+export function closeSnackbar() {
+	return {
+		type: CLOSE_SNACK_BAR,
+	}
+}
+export function expandCollapseGrouping(f) {
+	return {
+		type: EXPAND_COLLAPSE_GROUPING,
+		payload: f
+	}
+}
+export function showFranchiseeLocationFilterInAccountOffering(f) {
+	return {
+		type: SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING,
+		payload: f
 	}
 }
