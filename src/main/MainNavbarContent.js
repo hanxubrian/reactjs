@@ -75,6 +75,10 @@ class MainNavbar extends Component{
         );
     }
 
+    goHome=()=>{
+        this.props.history.push('/home');
+    }
+
     RegionHeader(){
         const {classes} = this.props;
         let region_name = '';
@@ -89,8 +93,12 @@ class MainNavbar extends Component{
 
         return (
             <div className={classNames(classes.logofull, "flex items-center")}>
-                <img className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src={this.props.app.navSideBarIcon} alt="logo"/>
-                <img className={classNames(classes.logoIconText, "logo-icon-large")} src={this.props.app.navSideBarLogo} alt="logo"/>
+                <button onClick={()=>this.goHome()}>
+                    <img  className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src={this.props.app.navSideBarIcon} alt="logo"/>
+                </button>
+                <button onClick={()=>this.goHome()}>
+                  <img className={classNames(classes.logoIconText, "logo-icon-large")} src={this.props.app.navSideBarLogo} alt="logo"/>
+                </button>
                 <Typography className="logo-icon-large">{region_name}</Typography>
             </div>
         )
