@@ -179,8 +179,7 @@ class Courses extends Component {
 
                         {data.map((course) => {
                             const category = categories.find(_cat => _cat.value === course.category);
-                            console.log("caterogry",category);
-                            console.log("course",course);
+
                             return (
                                 <div className="w-full pb-24 sm:w-1/2 lg:w-1/3 sm:p-16" key={course.id}>
                                     <Card elevation={1} className="flex flex-col h-256">
@@ -204,7 +203,7 @@ class Courses extends Component {
                                         <Divider/>
                                         <CardActions className="justify-center">
                                             <Button
-                                                to={`/apps/academy/courses/${course.id}/${course.slug}`}
+                                                to={`/franchisee/end-of-month/${course.id}/${course.slug}`}
                                                 component={Link}
                                                 className="justify-start px-32"
                                                 color="secondary"

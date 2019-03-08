@@ -78,7 +78,7 @@ class Course extends Component {
                         </Hidden>
                         <IconButton
                             className="mr-16"
-                            to="/apps/academy/courses"
+                            to="/franchisee/end-of-month"
                             component={Link}
                         >
                             <Icon>arrow_back</Icon>
@@ -126,7 +126,7 @@ class Course extends Component {
                                             (
                                                 <Fab
                                                     className={classes.successFab}
-                                                    to="/apps/academy/courses"
+                                                    to="/franchisee/end-of-month"
                                                     component={Link}
                                                 >
                                                     <Icon>check</Icon>
