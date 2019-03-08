@@ -96,7 +96,7 @@ class ContactList extends Component {
     componentDidMount(){
         this.props.initChat();
         this.props.getContacts();
-        setInterval(this.tick, 5000);
+        setInterval(this.tick, 10000);
     }
     componentDidUpdate(prevProps){
         if(this.props.contacts !== prevProps.contacts){
