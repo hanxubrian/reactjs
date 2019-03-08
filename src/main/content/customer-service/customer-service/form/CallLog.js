@@ -118,6 +118,7 @@ const styles = theme => ({
 		'& .ReactTable .rt-tbody': {
 			overflowY: 'scroll',
 			overflowX: 'hidden'
+	
 		},
 		'& .ReactTable .rt-tr-group': {
 			flex: '0 0 auto'
@@ -522,10 +523,19 @@ class CallLog extends Component {
 			// ],
 			tableColumnExtensions: [
 				{
+					title: "Cust No",
+					name: "cust_no",
+					columnName: "cust_no",
+					width: 100,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
 					title: "Date/Time",
 					name: "DateTime",
 					columnName: "DateTime",
-					width: 180,
+					width: 100,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -572,7 +582,7 @@ class CallLog extends Component {
 					groupingEnabled: true,
 				},
 				{
-					title: "Action",
+					title: "Call Back",
 					name: "action_otr",
 					columnName: "action_otr",
 					width: 180,
