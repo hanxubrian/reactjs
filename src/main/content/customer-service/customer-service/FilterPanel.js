@@ -829,7 +829,10 @@ class FilterPanel extends Component {
 															value={activeCustomer ? activeCustomer.cus_name : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
-															InputProps={{ readOnly: true }}
+															InputProps={{ 
+																readOnly: true,
+																inputComponent: TextMaskPhone,
+															 }}
 															margin="dense"
 															fullWidth
 														/>
@@ -1599,8 +1602,7 @@ class FilterPanel extends Component {
 												label="Address"
 												className={classes.textField}
 												onChange={this.handleChange('SpecificAddress')}
-												margin="dense"
-												variant="outlined"
+												margin="normal"
 												fullWidth
 											/>
 										}
@@ -1616,8 +1618,7 @@ class FilterPanel extends Component {
 												}}
 												value={this.props.locationFilterValue.miles}
 												onChange={this.handleChange('AddressZipcodeRadius')}
-												margin="dense"
-												variant="outlined"
+												margin="normal"
 												fullWidth
 											>
 												{
@@ -1643,10 +1644,9 @@ class FilterPanel extends Component {
 											id="BillingAmountFrom"
 											label="From"
 											value={this.state.BillingAmountFrom}
-											className={classNames(classes.textField, "mr-6")}
+											className={classes.textField}
 											onChange={this.handleChange('BillingAmountFrom')}
-											margin="dense"
-											variant="outlined"
+											margin="normal"
 											InputProps={{
 												startAdornment: <InputAdornment position="start">$</InputAdornment>,
 											}}
@@ -1658,10 +1658,9 @@ class FilterPanel extends Component {
 											id="BillingAmountTo"
 											value={this.state.BillingAmountTo}
 											label="To"
-											className={classNames(classes.textField, "ml-6")}
+											className={classes.textField}
 											onChange={this.handleChange('BillingAmountTo')}
-											margin="dense"
-											variant="outlined"
+											margin="normal"
 											InputProps={{
 												startAdornment: <InputAdornment position="start">$</InputAdornment>,
 												min: "0",
@@ -1686,8 +1685,7 @@ class FilterPanel extends Component {
 										}}
 										value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
 										onChange={this.handleChange('AccountType')}
-										margin="dense"
-										variant="outlined"
+										margin="normal"
 										fullWidth
 									>
 
@@ -1720,10 +1718,9 @@ class FilterPanel extends Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
+										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive.Data}
 										onChange={this.handleChange('AccountExecutive')}
-										margin="dense"
-										variant="outlined"
+										margin="normal"
 										fullWidth
 									>
 										{/* {[{

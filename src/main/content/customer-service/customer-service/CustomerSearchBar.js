@@ -193,7 +193,7 @@ class CustomerSearchBar extends Component {
 						className={classNames(classes.summaryPanelButton)}
 					>
 						{/* <img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" /> */}
-						<Icon>details</Icon>
+						<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
 					</Button>
 				</div>
 
