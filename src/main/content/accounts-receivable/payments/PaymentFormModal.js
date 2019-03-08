@@ -358,7 +358,8 @@ class PaymentFormModal extends React.Component {
 				this.props.filterParam.fromDate,
 				this.props.filterParam.toDate,
 				this.props.searchText,
-				this.props.filterParam.paymentStatus
+				this.props.filterParam.paymentStatus,
+				this.props.UserId
 			)
 
 			this.handleClose();
@@ -867,6 +868,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ accountReceivablePayments, auth }) {
 	return {
 		regionId: auth.login.defaultRegionId,
+		UserId: auth.login.UserId,
 		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 

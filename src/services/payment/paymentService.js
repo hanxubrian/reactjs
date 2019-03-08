@@ -42,7 +42,7 @@ class PaymentListService {
 		});
 	};
 
-	createAccountReceivablePayment = (RegionId, customerNumber, PaymentType, ReferenceNo, PaymentDate, PaymentNote, overpayment, PaymentAmount, PaymentAmountApplied, PayItems, ) => {
+	createAccountReceivablePayment = (RegionId, customerNumber, PaymentType, ReferenceNo, PaymentDate, PaymentNote, overpayment, PaymentAmount, PaymentAmountApplied, PayItems, UserId = 27) => {
 		const data = {
 			"RegionId": RegionId,
 			"CustomerNo": customerNumber,
@@ -59,7 +59,14 @@ class PaymentListService {
 		};
 
 		return new Promise((resolve, reject) => {
-			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/create`, data)
+			const axios_instance2 = axios.create({
+				// headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+				headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'JK-USER-ID': UserId },
+				withCredentials: false
+			});
+
+
+			axios_instance2.post(`${BASE_MONGO_API_URL}/v1/payment/create`, data)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
