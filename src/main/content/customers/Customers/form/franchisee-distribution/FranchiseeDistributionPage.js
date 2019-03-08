@@ -351,6 +351,7 @@ class FranchiseeDistributionPage extends React.Component {
 		// }
 	}
 	updateFranchiseesToOffer(selectedFrans = this.props.franchieesesToOffer, activeCustomer = this.props.activeCustomer) {
+		if (!activeCustomer.Data) return
 		const activeCustomerFranchisees = activeCustomer.Data.AssignedFranchisees || []
 		// all selected numbers in grid
 		const selectedNumners = selectedFrans.map(x => x.Number)
@@ -369,6 +370,7 @@ class FranchiseeDistributionPage extends React.Component {
 	}
 
 	initCustomerInfo = (activeCustomer = this.props.activeCustomer) => {
+		if (!activeCustomer.Data) return
 		this.setState({
 			SA_Amount: activeCustomer.Data.cont_bill,
 		});
@@ -930,7 +932,7 @@ class FranchiseeDistributionPage extends React.Component {
 						}}
 						// value={this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ""}
 						// onChange={this.handleChange("NewAmount")}
-						value={this.props.activeCustomer.Data.cont_bill}
+						value={this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ''}
 					/>
 
 					{this.props.activeStep === 1 &&
