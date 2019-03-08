@@ -22,6 +22,7 @@ import {bindActionCreators} from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import classNames from 'classnames';
 import _ from '@lodash';
+import moment from 'moment';
 import {Link, withRouter} from 'react-router-dom';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
@@ -107,13 +108,13 @@ class Courses extends Component {
 
                     <FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
                         <Typography color="inherit" className="text-24 sm:text-40 font-light">
-                            End of Month Process
+                            MONTH END PROCESS
                         </Typography>
                     </FuseAnimate>
 
                     <FuseAnimate duration={400} delay={600}>
                         <Typography variant="subtitle1" color="inherit" className="mt-8 sm:mt-16 mx-auto max-w-512">
-                            <span className="opacity-75">
+                            <span className="opacity-75" style={{fontSize:25}}>
                                 Period : {this.props.defaultPeriod}
                             </span>
                         </Typography>
@@ -191,9 +192,9 @@ class Courses extends Component {
                                             }}
                                         >
                                             <Typography className="font-medium truncate" color="inherit">{category.label}</Typography>
-                                            <div className="flex items-center justify-center opacity-75" style={{display:'none'}}>
+                                            <div className="flex items-center justify-center opacity-75" >
                                                 <Icon className="text-20 mr-8" color="inherit">access_time</Icon>
-                                                <div className="text-16 whitespace-no-wrap">{course.length} min</div>
+                                                <div className="text-16 whitespace-no-wrap" style={{fontSize:12}}>{moment().format('DD/MM/YYYY')}</div>
                                             </div>
                                         </div>
                                         <CardContent className="flex flex-col flex-auto items-center justify-center">

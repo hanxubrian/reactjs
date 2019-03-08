@@ -1,6 +1,6 @@
 import mock from './mock';
 import _ from '@lodash';
-import {amber, blue, blueGrey, green} from '@material-ui/core/colors';
+import {amber, blue, blueGrey, green,indigo,brown,pink,lightGreen} from '@material-ui/core/colors';
 
 const demoSteps = [
     {
@@ -418,7 +418,7 @@ const academyDB = {
             'id'   : 0,
             'value': 'finalchargebacks',
             'label': 'Final Charge Backs',
-            'color': blue[500]
+            'color': lightGreen[500]
         },
         {
             'id'   : 1,
@@ -448,7 +448,7 @@ const academyDB = {
             'id'   : 5,
             'value': 'franchiseereport',
             'label': 'Generagte Franchisee Reports',
-            'color': blue[500]
+            'color': indigo[500]
         }
     ],
     courses   : [
@@ -472,7 +472,7 @@ const academyDB = {
             'category'   : 'franchiseereport',
             'length'     : 60,
             'totalSteps' : 11,
-            'activeStep' : 3,
+            'activeStep' : 0,
             'updated'    : 'Nov 01, 2017',
             'steps'      : demoSteps
         },
@@ -484,7 +484,7 @@ const academyDB = {
             'category'   : 'billrunnextmonth',
             'length'     : 120,
             'totalSteps' : 11,
-            'activeStep' : 11,
+            'activeStep' : 0,
             'updated'    : 'Jun 28, 2017',
             'steps'      : demoSteps
         },
@@ -496,7 +496,7 @@ const academyDB = {
             'category'   : 'finalchargebacks',
             'length'     : 45,
             'totalSteps' : 11,
-            'activeStep' : 2,
+            'activeStep' : 0,
             'updated'    : 'Jun 28, 2017',
             'steps'      : demoSteps
         },
@@ -508,7 +508,7 @@ const academyDB = {
             'category'   : 'printfranchiseecheck',
             'length'     : 30,
             'totalSteps' : 11,
-            'activeStep' : 11,
+            'activeStep' : 0,
             'updated'    : 'Jun 28, 2017',
             'steps'      : demoSteps
         },
@@ -520,7 +520,7 @@ const academyDB = {
             'category'   : 'drocrop',
             'length'     : 120,
             'totalSteps' : 11,
-            'activeStep' : 8,
+            'activeStep' : 0,
             'updated'    : 'Jun 28, 2017',
             'steps'      : demoSteps
         },
