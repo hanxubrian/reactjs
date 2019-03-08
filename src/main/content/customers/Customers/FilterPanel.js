@@ -1086,7 +1086,7 @@ class FilterPanel extends Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row mt-24">
-								{this.props.accountTypesGroups &&
+								{this.props.accountTypesGroups && this.props.accountTypesGroups.Data &&
 									<FormControl className={classNames(classes.formControl, 'pr-12')} style={{ marginTop: 5 }} fullWidth>
 										<InputLabel shrink htmlFor="accounttype_groupid">Account Type Group</InputLabel>
 										<Select

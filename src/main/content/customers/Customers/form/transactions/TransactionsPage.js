@@ -333,8 +333,8 @@ class TransactionsPage extends React.Component {
 				},
 				{
 					title: "Days Past Due",
-					name: "DaysPastDue",
-					columnName: 'DaysPastDue',
+					name: "days_pastdue",
+					columnName: 'days_pastdue',
 					width: 150,
 					align: 'center',
 					sortingEnabled: true,
@@ -383,8 +383,8 @@ class TransactionsPage extends React.Component {
 			expandedRowIds: [],
 			SearchText: '',
 
-			billing_month: this.props.periodForReport.month + 1,
-			billing_year: this.props.periodForReport.year,
+			billing_month: 0,
+			billing_year: this.props.login.all_regions[this.props.regionId].OpenPeriods.current.year,
 
 		}
 
@@ -673,6 +673,7 @@ class TransactionsPage extends React.Component {
 									value={this.state.SearchText}
 									onChange={this.handleChange('SearchText')}
 									margin="dense"
+									autoFocus
 									fullWidth
 								/>
 								<IconButton
@@ -935,7 +936,7 @@ class TransactionsPage extends React.Component {
 								</Grid>
 							</div>
 						</div>
-						<div xs={12} sm={12} md={12} className="flex flex-row">
+						{/* <div xs={12} sm={12} md={12} className="flex flex-row">
 							<TextField
 								id="InvoiceMessge"
 								label="Invoice Messge"
@@ -946,9 +947,9 @@ class TransactionsPage extends React.Component {
 								margin="dense"
 								fullWidth
 							/>
-						</div>
+						</div> */}
 
-						<div xs={12} sm={12} md={12} className="flex flex-row">
+						{/* <div xs={12} sm={12} md={12} className="flex flex-row">
 							<TextField
 								id="TotalItems"
 								label="Total Items"
@@ -999,11 +1000,21 @@ class TransactionsPage extends React.Component {
 								margin="dense"
 								fullWidth
 							/>
-						</div>
+						</div> */}
 
 						<Divider variant="middle" className='mt-12 mb-12' style={{ alignSelf: 'center', height: 2 }} />
 
 						<div xs={12} sm={12} md={12} className="flex flex-row mb-12">
+							<TextField
+								id="Royalty"
+								label="Royalty"
+								className={classNames(classes.textField, 'ml-12')}
+								InputLabelProps={{ shrink: true }}
+								value={this.state.Royalty}
+								onChange={this.handleChange('Royalty')}
+								margin="dense"
+								fullWidth
+							/>
 							<TextField
 								id="BP"
 								label="BP"
@@ -1079,6 +1090,7 @@ function mapStateToProps({ customers, auth, franchisees, invoices }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
+		login: auth.login,
 		// customerForm: customers.customerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
@@ -1090,7 +1102,6 @@ function mapStateToProps({ customers, auth, franchisees, invoices }) {
 		isExpandedGrouping: customers.isExpandedGrouping,
 		activeCustomer: customers.activeCustomer,
 
-		periodForReport: franchisees.periodForReport,
 		invoiceBillingLists: invoices.billingLists,
 		invoiceServiceLists: invoices.serviceLists,
 		invoiceForm: invoices.invoiceForm,
