@@ -248,10 +248,10 @@ export function addLease(data)
     };
 }
 
-export function updateLease(data) {
+export function updateLease(regionId, id, data) {
     return (dispatch) => {
         (async () => {
-            let res = await leaseService.updateLease(data);
+            let res = await leaseService.updateLease(regionId, id, data);
             if (res.IsSuccess) {
                 dispatch({
                     type: UPDATE_A_LEASE,

@@ -384,15 +384,29 @@ class LeaseForm extends Component {
 
     }
 
-    componentWillReceiveProps(nextProps) {
-    //     if(nextProps.leaseForm.lease!==null){
-    //         if(nextProps.leaseForm.type==='edit')
-    //             this.setState({LeaseNo: nextProps.leaseForm.lease.LeaseNo});
-    //         this.setState({value: nextProps.leaseForm.lease.FranchiseeName});
-    //         this.setState({FranchiseeNo: nextProps.leaseForm.lease.FranchiseeNo});
-    //         this.setState({LeaseDate: moment(nextProps.leaseForm.lease.LeaseDate).format('MM/DD/YYYY')});
-    //         this.setState({DueDate: moment(nextProps.leaseForm.lease.DueDate).format('MM/DD/YYYY')});
-    // }
+    componentWillReceiveProps = async (nextProps) => {
+        if(nextProps.leaseForm.franchisee!==null){
+            if(nextProps.leaseForm.type==='edit') {
+            this.setState({LeaseNo: nextProps.leases.leaseDetail.Data.lease_no});
+            this.setState({value: nextProps.leases.leaseForm.franchisee.FranchiseeName});
+            this.setState({FranchiseeNo: nextProps.leases.leaseForm.franchisee.FranchiseeNo});
+            this.setState({DateSigned: moment(nextProps.leases.leaseDetail.Data.date_sign).format('MM/DD/YYYY')});
+            this.setState({PaymentStart: moment(nextProps.leases.leaseDetail.Data.pymnt_begn).format('MM/DD/YYYY')});
+            this.setState({make: nextProps.leases.leaseDetail.Data.make});
+            this.setState({model: nextProps.leases.leaseDetail.Data.model});
+            this.setState({taxRate: nextProps.leases.leaseDetail.Data.paymnt_tax});
+            this.setState({advancePayments: nextProps.leases.leaseDetail.Data.pymnt_adv});
+            this.setState({serialNo: nextProps.leases.leaseDetail.Data.serial});
+            this.setState({month: nextProps.leases.leaseDetail.Data.month});
+            this.setState({year: nextProps.leases.leaseDetail.Data.year});
+            this.setState({originalCost: nextProps.leases.leaseDetail.Data.orig_cost});
+            this.setState({LeaseDescription: nextProps.leases.leaseDetail.Data.description});
+            this.setState({fromFran: nextProps.leases.leaseDetail.Data.fromfran});
+            this.setState({toFran: nextProps.leases.leaseDetail.Data.tofran});
+            this.setState({hold: nextProps.leases.leaseDetail.Data.stop});
+            this.setState({paymentsBilled: nextProps.leases.leaseDetail.Data.NumberOfPaymentsMadeSummary});
+            }
+    }
 
         //in time of Saving
         if(nextProps.newLease!==null && nextProps.newLease!==this.props.newLease){
@@ -431,7 +445,7 @@ class LeaseForm extends Component {
             let leaseDetail = this.props.leases.leaseDetail.Data;
             let lease = this.props.leases.leasesDB.Data[0].LeaseList.filter(lease => lease.Id === leaseDetail._id);
             if(lease.length>0) {
-                this.setState({selectedLease: lease[0]});
+                this.setState({selectedFranchisee: lease[0]});
             }
         }
 
@@ -564,8 +578,8 @@ class LeaseForm extends Component {
                 "tofran": "",
                 "fromfran": ""
             };
-
-            this.props.updateLease(this.props.leases.leaseDetail.Data._id, this.props.regionId, result);
+            debugger
+            this.props.updateLease(this.props.regionId, this.props.leases.leaseDetail.Data._id, result);
         }
         console.log(this.state.selectedFranchisee.FranchiseeId)
         console.log('result', JSON.stringify(result));
@@ -766,7 +780,7 @@ class LeaseForm extends Component {
                                         }}
                                         name="LeaseNo"
                                         variant="outlined"
-                                        value={this.state.LeaseNo}
+                                        value= {this.state.LeaseNo}
                                         onChange={this.handleChange}
                                         required
                                         fullWidth
@@ -793,11 +807,11 @@ class LeaseForm extends Component {
                                             <div className="flex flex-row">
                                                 <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
                                                 <Typography variant="subtitle1" color="inherit">
-                                                    <strong>{this.state.selectedFranchisee ? this.state.selectedFranchisee.Name: this.state.value}</strong>
+                                                    <strong>{this.state.selectedFranchisee ? this.state.selectedFranchisee.Name || this.state.selectedFranchisee.FranchiseeName: this.state.value}</strong>
                                                 </Typography>
                                             </div>
                                             <Typography variant="subtitle1" color="inherit">
-                                                <strong>Franchisee #: {this.state.selectedFranchisee? this.state.selectedFranchisee.Number: this.state.franchiseeNo}</strong>
+                                                <strong>Franchisee #: {this.state.selectedFranchisee? this.state.selectedFranchisee.Number || this.state.selectedFranchisee.FranchiseeNo: this.state.franchiseeNo}</strong>
                                             </Typography>
                                         </div>
                                         {this.state.selectedFranchisee && (
@@ -815,7 +829,7 @@ class LeaseForm extends Component {
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedFranchisee.Phone}
+                                                        {this.state.selectedFranchisee.Phone || this.state.selectedFranchisee.FranchiseePhone}
                                                     </Typography>
                                                 </div>
                                             </div>

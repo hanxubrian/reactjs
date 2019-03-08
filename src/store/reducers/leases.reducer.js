@@ -135,7 +135,7 @@ const leases = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					invoiceForm: {...state.invoiceForm, lease: action.payload}
+					leaseForm: {...state.leaseForm, lease: action.payload}
 				}
 			}
 		case Actions.OPEN_NEW_LEASE_FORM:

@@ -148,9 +148,9 @@ class leaseService {
      * @param data
      * @returns {Promise<any>}
      */
-    updateInvoice = (data) => {
+    updateLease = (regionId, id, data) => {
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/Lease/Create`,data)
+            axios_instance.put(`${BASE_MONGO_API_URL}/v1/Lease/update/update?id=${id}&regionId=${regionId}`, data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
