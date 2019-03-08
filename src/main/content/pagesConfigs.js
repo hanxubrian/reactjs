@@ -41,6 +41,8 @@ import {SystemNotificationConfig} from "./notifications/SystemNotificationConfig
 import {AdminConfig} from "./admin/adminConfig";
 import {AdminImportConfig} from "./admin/imports/adminImportConfig";
 import {ProjectDashboardAppConfig} from "./dashboard/project/ProjectDashboardAppConfig";
+import {AcademyAppConfig} from "../content/apps/academy/AcademyAppConfig";
+
 
 export const pagesConfigs = [
     VerificationsAppConfig,
@@ -87,4 +89,5 @@ export const pagesConfigs = [
     AdminImportConfig,
     NegativeDueConfig,
     ProjectDashboardAppConfig,
+    AcademyAppConfig,
 ];

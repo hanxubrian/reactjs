@@ -33,7 +33,7 @@ import franchiseeReportDatalist from './franchiseeReport.reducer';
 import negativeDue from './negativeDue.reducer';
 import admin from './admin.reducer';
 import projectDashboardApp from '../../main/content/dashboard/project/store/reducers';
-
+import academyApp from '../../main/content/apps/academy/store/reducers';
 
 import * as Actions from "../actions/";
 import * as AuthAction from "../../auth/store/actions";
@@ -80,6 +80,7 @@ const createReducer =
 				negativeDue,
 				admin,
                 projectDashboardApp,
+                academyApp,
 				...asyncReducers
 			})
 				(action.type === 'ADMIN_CLEAN_CACHE_FOR_UPGRADE' ? undefined : state, action)
