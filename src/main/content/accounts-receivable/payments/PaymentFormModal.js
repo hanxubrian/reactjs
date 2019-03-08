@@ -529,49 +529,49 @@ class PaymentFormModal extends React.Component {
 		return ""
 	}
 
-	checkLiveValidations(name = "", value = "", rows = this.state.rows, ) {
+	// checkLiveValidations(name = "", value = "", rows = this.state.rows, ) {
 
-		if (name === "PaymentType" && !value || name !== "PaymentType" && !this.state.PaymentType) {
-			this.setState({ errorMsg: "Payment type not selected" })
-		} else if (name === "ReferenceNo" && !value || name !== "ReferenceNo" && !this.state.ReferenceNo.toString().trim()) {
-			this.setState({ errorMsg: "ReferenceNo is invalid" })
-		} else if (name === "PaymentDate" && !value || name !== "PaymentDate" && !this.state.PaymentDate) {
-			this.setState({ errorMsg: "Payment date not selected" })
-		} else if (name === "PaymentAmount" && value <= 0) {
-			this.setState({ errorMsg: "Amount is invalid" })
-		} else {
+	// 	if (name === "PaymentType" && !value || name !== "PaymentType" && !this.state.PaymentType) {
+	// 		this.setState({ errorMsg: "Payment type not selected" })
+	// 	} else if (name === "ReferenceNo" && !value || name !== "ReferenceNo" && !this.state.ReferenceNo.toString().trim()) {
+	// 		this.setState({ errorMsg: "ReferenceNo is invalid" })
+	// 	} else if (name === "PaymentDate" && !value || name !== "PaymentDate" && !this.state.PaymentDate) {
+	// 		this.setState({ errorMsg: "Payment date not selected" })
+	// 	} else if (name === "PaymentAmount" && value <= 0) {
+	// 		this.setState({ errorMsg: "Amount is invalid" })
+	// 	} else {
 
-			let totalPaymentAmount = 0
-			let floatPaymentAmount = parseFloat(`0${name === "PaymentAmount" ? value : this.state.PaymentAmount}`)
+	// 		let totalPaymentAmount = 0
+	// 		let floatPaymentAmount = parseFloat(`0${name === "PaymentAmount" ? value : this.state.PaymentAmount}`)
 
-			this.state.rows.forEach(x => {
-				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
-			})
-			console.log("floatPaymentAmount", "totalPaymentAmount", floatPaymentAmount, totalPaymentAmount)
-			if (floatPaymentAmount < totalPaymentAmount) {
-				this.setState({
-					errorMsg: "Total payment is greater than payment to apply",
-					overpayment: 0,
-				})
-			} else {
-				this.setState({
-					overpayment: floatPaymentAmount - totalPaymentAmount
-				})
-			}
+	// 		this.state.rows.forEach(x => {
+	// 			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+	// 		})
+	// 		console.log("floatPaymentAmount", "totalPaymentAmount", floatPaymentAmount, totalPaymentAmount)
+	// 		if (floatPaymentAmount < totalPaymentAmount) {
+	// 			this.setState({
+	// 				errorMsg: "Total payment is greater than payment to apply",
+	// 				overpayment: 0,
+	// 			})
+	// 		} else {
+	// 			this.setState({
+	// 				overpayment: floatPaymentAmount - totalPaymentAmount
+	// 			})
+	// 		}
 
-			const isNonEmptyPayment = this.isNonEmptyPayment(rows)
-			console.log("isNonEmptyPayment", isNonEmptyPayment)
-			if (isNonEmptyPayment) {
-				this.setState({ errorMsg: isNonEmptyPayment })
-			}
-			else {
-				this.setState({ errorMsg: "" })
-				return true
-			}
+	// 		const isNonEmptyPayment = this.isNonEmptyPayment(rows)
+	// 		console.log("isNonEmptyPayment", isNonEmptyPayment)
+	// 		if (isNonEmptyPayment) {
+	// 			this.setState({ errorMsg: isNonEmptyPayment })
+	// 		}
+	// 		else {
+	// 			this.setState({ errorMsg: "" })
+	// 			return true
+	// 		}
 
-		}
-		return false
-	}
+	// 	}
+	// 	return false
+	// }
 
 	getOverpaymentAmount(rows = this.state.rows, paymentAmount = this.state.PaymentAmount) {
 		let totalPaymentAmount = 0
