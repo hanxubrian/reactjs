@@ -35,6 +35,7 @@ import {
 
 import { CustomizedDxGridSelectionPanel } from "main/content/common/CustomizedDxGridSelectionPanel";
 import PaymentFormModal from "main/content/accounts-receivable/payments/PaymentFormModal";
+import CreditInvoiceForm from "main/content/accounts-receivable/Invoice/components/creditInvoice";
 
 import {
 	Grid,
@@ -622,11 +623,12 @@ class TransactionsPage extends React.Component {
 		})
 	}
 	showCreditModal = () => {
-		this.props.openPaymentDialog({
-			open: true,
-			paymentType: 'Credit',
-			paymentAmount: 0,
-		})
+		// this.props.openPaymentDialog({
+		// 	open: true,
+		// 	paymentType: 'Credit',
+		// 	paymentAmount: 0,
+		// })
+		this.props.openCreditInvoiceFormDialog()
 	}
 	render() {
 		const { classes } = this.props;
@@ -1047,6 +1049,7 @@ class TransactionsPage extends React.Component {
 					</div>
 				</div>
 				<PaymentFormModal />
+				<CreditInvoiceForm />
 			</div>
 		);
 	}
@@ -1055,11 +1058,14 @@ class TransactionsPage extends React.Component {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getCustomerBillingList: Actions.getCustomerBillingList,
+
 		updatePeriodForFranchiseeReport: FranchiseeActions.updatePeriodForFranchiseeReport,
 
 		openNewInvoiceForm: InvoiceActions.openNewInvoiceForm,
 		getBillingLists: InvoiceActions.getBillingLists,
 		getServiceLists: InvoiceActions.getServiceLists,
+		openCreditInvoiceFormDialog: InvoiceActions.openCreditInvoiceFormDialog,
+
 		openPaymentDialog: PaymentActions.openPaymentDialog,
 
 	}, dispatch);
