@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
 import { Paper, withStyles, Checkbox, TextField, Divider, Card, CardHeader, CardContent } from '@material-ui/core';
-
+import {TimePicker, DatePicker } from 'material-ui-pickers';
 import keycode from 'keycode';
 
 //Material UI core
@@ -239,7 +239,7 @@ class CustomerCallBack extends Component {
 			Location: this.props.locationFilterValue.id,
 			NearbyRadius: this.props.locationFilterValue.miles,
 			AddressZipcodeRadius: this.props.locationFilterValue.miles,
-
+			selectedDate: new Date('2014-08-18T21:11:54'),
 			childCustomerName: "",
 			suggestions: [],
 
@@ -335,8 +335,14 @@ class CustomerCallBack extends Component {
 
 
 	}
+	datestate = {
+		// The first commit of Material-UI
+		selectedDate: new Date('2014-08-18T21:11:54'),
+	};
 
-
+	handleDateChange = date => {
+		this.setState({ selectedDate: date });
+	  };
 
 
 	componentDidMount() {
@@ -754,7 +760,7 @@ class CustomerCallBack extends Component {
 	render() {
 		const { classes, customerServiceForm } = this.props;
 
-		const { childCustomerName, suggestions, activeCustomer } = this.state;
+		const { selectedDate,childCustomerName, suggestions, activeCustomer } = this.state;
 		// Autosuggest will pass through all these props to the input.
 		const inputProps = {
 			classes,
@@ -841,7 +847,8 @@ class CustomerCallBack extends Component {
                 label : 'This is forth call '
             }, 
                                    
-        ]
+		]
+		
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
 				<Paper className="flex flex-1 flex-col min-h-px p-20">
@@ -875,48 +882,27 @@ class CustomerCallBack extends Component {
                                                 <div className="flex mr-4" style={{ flex: 2 }}></div>
                                                 <div className="flex mr-4" style={{ flex: 2 }}>                
 													<TextField
-														id="AccountType"
+														id="date"
 														label="Call Date"
-														select
-														className={classNames(classes.textField, 'ml-4')}
-														// value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
-														onChange={this.handleChange('AccountType')}
-														margin="dense"
-														variant="outlined"
+														type="date"
+														defaultValue="2017-05-24"
+														className={classes.textField}
+														InputLabelProps={{
+														shrink: true,
+														}}
+													/>
+													{/* <DatePicker
+														id = "calldate"
+														margin="normal"
+														label="Date picker"
+														value={selectedDate}
+														onChange={this.handleDateChange}
 														fullWidth
-													// style={{ minWidth: "100px", width: "30%" }}
-													>
-														{
-															accountTypeTexts.map((x, index) => (
-																<MenuItem key={index} value={index}>{x}</MenuItem>
-															))
-														}
-
-													</TextField>
+													/>													 */}
                                                 </div>
 											</div>                                            
 											<div className="flex flex-row mb-4">
 												<div className="flex mr-4" style={{ flex: 2 }}>
-														{/* <Icon fontSize={"small"} className="mr-4">person_outline</Icon> */}
-														{/* <Typography variant="subtitle1" color="inherit"><strong>{this.state.customerName}</strong></Typography> */}
-                                                        {/* <TextField
-														id="AccountType"
-														label="Initiated By DropDown"
-														select
-														className={classNames(classes.textField, 'ml-4')}
-														onChange={}
-														margin="normal"
-														// variant="outlined"
-														fullWidth
-													// style={{ minWidth: "100px", width: "30%" }}
-													>
-														{
-															accountTypeTexts.map((x, index) => (
-																<MenuItem key={index} value={index}>{x}</MenuItem>
-															))
-														}
-
-													</TextField> */}
 													<TextField
 														id="AccountTypeGroup"
 														label="Initiated By DropDown"
@@ -939,26 +925,41 @@ class CustomerCallBack extends Component {
 												</div>
                                                 <div className="flex mr-4" style={{ flex: 2 }}></div>
                                                 <div className="flex mr-4" style={{ flex: 2 }}>
-                                                    <TextField
-														id="AccountType"
-														label='Spoke to DropDown with option to type "other"'
-														select
-														className={classNames(classes.textField, 'ml-4')}
-														value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
-														onChange={this.handleChange('AccountType')}
-														margin="normal"
-														fullWidth
-														variant="outlined"
-													>
-														{
-															accountTypeTexts.map((x, index) => (
-																<MenuItem key={index} value={index}>{x}</MenuItem>
-															))
-														}
-
-													</TextField>                                               
-                                                </div>
+													<TextField
+															id="date"
+															label="Call Date"
+															type="date"
+															defaultValue="2017-05-24"
+															className={classes.textField}
+															InputLabelProps={{
+															shrink: true,
+															}}
+													/>	
+											</div>
                                             </div>
+											<div className="flex flex-row mb-4">
+												<div className="flex mr-12" style={{ flex: 2 }}>
+													<TextField
+																id="AccountType"
+																label='Spoke to select other option'
+																select
+																className={classNames(classes.textField, 'ml-4')}
+																value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
+																onChange={this.handleChange('AccountType')}
+																margin="normal"
+																fullWidth
+																variant="outlined"
+															>
+																{
+																	accountTypeTexts.map((x, index) => (
+																		<MenuItem key={index} value={index}>{x}</MenuItem>
+																	))
+																}
+
+													</TextField>    
+												</div>
+												<div className="flex mr-12" style={{ flex: 1 }}></div>
+											</div>
                                             <div className="flex flex-row mb-4">
                                                 <div className="flex mr-12" style={{ flex: 2 }}>
                                                     <TextField
@@ -973,50 +974,61 @@ class CustomerCallBack extends Component {
                                                                 fullWidth
                                                             />                                                
                                                 </div>
-												<div className="flex mr-4" style={{ flex: 1 }}></div>
-                                                <div className="flex mr-4" style={{ flex: 1 }}></div>
 											</div>
                                             <div className="flex flex-row justify-between mb-4">
-												<div className="flex mr-4" style={{ flex: 1 }}>
+												<div className="flex mr-6" style={{ flex: 1 }}>
 														{/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
 														{/* <Typography variant="subtitle1" color="inherit">{FuseUtils.capital_letter(this.state.customerAddress)}</Typography> */}
 														<TextField
-															id="customerAddress"
+															id="callbackdate"
                                                             label="Call Back Date"
                                                             value={''}
 															className={classes.textField}
 															margin="normal"
 															variant="outlined"
-															
+															fullWidth
 														/>
 												</div>
-												<div className="flex ml-8" style={{ flex: 1 }}></div>
+												<div className="flex mr-6" style={{ flex: 2 }}></div>
 											</div>
                                             <div className="flex flex-row justify-between mb-6">
 												<div className="flex mr-6" style={{ flex: 1 }}>
-                                                <TextField
-															id="customerAddress"
-															label="Assinged To/Follow Up By Dropdown"
-															value={''}
-															className={classes.textField}
-															margin="dense"
-															
-															variant="outlined"
-														/>
-													</div>
+												<TextField
+														id="AccountTypeGroup"
+														label="Assing and following up"
+														select
+														className={classNames(classes.textField, 'mr-4')}
+														value={calltype}
+														onChange={this.handleChange('AccountTypeGroup')}
+														margin="dense"
+														variant="outlined"
+														fullWidth
+													// style={{ minWidth: "100px", width: "30%" }}
+													>
+														{
+															accountTypesGroups.map((x, index) => (
+																<MenuItem key={index} value={index}>{x}</MenuItem>
+															))
+														}
+
+												</TextField>										
 												</div>
-												<div className="flex flex-row justify-start mb-6">
-													{/* <Icon fontSize={"small"} className="mr-4">email</Icon> */}
-													{/* <Typography variant="subtitle1" color="inherit">{this.state.customerEmail}</Typography> */}
+												<div className="flex mr-6" style={{ flex: 2}}></div>
+											</div>
+											<div className="flex flex-row justify-start mb-6">
+												<div className="flex mr-6" style={{ flex: 1}}>
 													<TextField
-														id="customerEmail"
+														id="autoreassign"
 														label="Auto Reassign if not handled "
 														value={''}
-														className={classes.textField}
+														className={classNames(classes.margin, classes.textField)}
 														margin="normal"
 														variant="outlined"
+														fullWidth
 													/>
 												</div>
+												<div className="flex mr-6" style={{ flex: 2}}></div>
+											</div>
 											</CardContent>
 										</Card>
 									</GridItem>
