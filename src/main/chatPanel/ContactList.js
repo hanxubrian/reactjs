@@ -154,15 +154,13 @@ class ContactList extends Component {
     {
 
         const {classes, chat, contacts, user, selectedContactId,contactuserList} = this.props;
-        // console.log("user.contacts",contacts);
-        // console.log("user.contacts.length",contacts.length);
-        // console.log("user.contactuserList",contactuserList);
+
         let midcontacts = [];//avatar: "assets/images/avatars/1Velazquez.jpg"
         if(contacts && contacts !== null && contacts.length && contactuserList && contactuserList !== null && contactuserList.length>0){
             contacts.map((item)=>{
                 let miditem = item;
 
-                if(item.avatar ==="assets/images/avatars/1Velazquez.jpg"){
+                if(item.avatar ==="assets/images/avatars/Velazquez.jpg"){
                     let mcontact = contactuserList.find((_item) => _item.name === item.id);
                     miditem.avatar =mcontact.avatar;
                 }

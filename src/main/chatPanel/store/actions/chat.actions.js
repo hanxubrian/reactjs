@@ -88,7 +88,7 @@ export function assignRooms(currentUser)
 
                         },
                         onUserStoppedTyping:user=>{
-                            console.log("onUserStoppedTyping user",user);
+
                             return dispatch(reupdateStarttyping(user));
                         },
                          onPresenceChanged: (state, user) => {
@@ -117,8 +117,7 @@ export function reupdateStarttyping(user) {
         let check = true;
         if(currentroom && currentroom !== null){
             let ids = currentroom.userIds;
-            console.log("ids",ids);
-            console.log("user",user);
+
 
             if(ids &&  ids.length){
                 ids.map((item)=>{
@@ -132,12 +131,11 @@ export function reupdateStarttyping(user) {
             type: CHANGE_TYPING_STATUS,
             payload: false,
         });
-        console.log("check untyping ",check);
-        console.log('typing start user',check);
+
     }
 }
 export function updateStarttyping(user) {
-    console.log('stop typing start user',user);
+
     return(dispatch,getState)=>{
         let currentroom = getState().chatPanel.chat.currentRoom;
         let typingstatus = getState().chatPanel.chat.usertypingstatus;
@@ -148,7 +146,7 @@ export function updateStarttyping(user) {
             midtypingstatus = typingstatus;
         }
 
-        console.log("get typing status",typingstatus);
+
         if(currentroom && currentroom !== null){
             let ids = currentroom.userIds;
             // console.log("ids",ids);
@@ -170,7 +168,7 @@ export function updateStarttyping(user) {
             payload: check,
 
         });
-        console.log('stop typing start user',user);
+
     }
 }
 export function checkChat()
@@ -418,7 +416,7 @@ export function chatstarting() {
         if(currentuser && roomid){
             currentuser.isTypingIn({ roomId: roomid })
                 .then(() => {
-                    console.log('typing Success!')
+
                 })
                 .catch(err => {
                     console.log(`Error sending typing indicator: ${err}`)

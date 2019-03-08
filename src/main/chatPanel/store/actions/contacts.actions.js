@@ -64,7 +64,7 @@ export function updateContactsPresense(user, state)
 
 export function addUnread(userId)
 {
-    console.log("addUnread");
+
     return (dispatch, getState) => {
         const contacts = getState().chatPanel.contacts.entities;
 

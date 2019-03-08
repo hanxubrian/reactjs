@@ -155,7 +155,7 @@ class Chat extends Component {
     }
     componentDidUpdate(prevProps)
     {
-        console.log("starttyping",this.props.starttyping);
+
         if(this.props.chatstatus !== prevProps.chatstatus && this.props.chatstatus){
             // this.focus();
 
