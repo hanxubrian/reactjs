@@ -526,7 +526,7 @@ class CallLog extends Component {
 					title: "Cust No",
 					name: "cust_no",
 					columnName: "cust_no",
-					width: 100,
+					width: 120,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -535,7 +535,7 @@ class CallLog extends Component {
 					title: "Date/Time",
 					name: "DateTime",
 					columnName: "DateTime",
-					width: 100,
+					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -544,7 +544,7 @@ class CallLog extends Component {
 					title: "Status",
 					name: "stat_otr",
 					columnName: "stat_otr",
-					width: 120,
+					width: 80,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -555,7 +555,7 @@ class CallLog extends Component {
 					title: "Spoke With",
 					name: "spoke_with",
 					columnName: "spoke_with",
-					width: 140,
+					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -565,7 +565,7 @@ class CallLog extends Component {
 					title: "Area",
 					name: "area",
 					columnName: "area",
-					width: 150,
+					width: 80,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -575,39 +575,49 @@ class CallLog extends Component {
 					title: "Initiated",
 					name: "init_call",
 					columnName: 'init_call',
-					width: 100,
+					width: 120,
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
 				},
 				{
+					title: "Action",
+					name: "action",
+					columnName: 'action',
+					width: 80,
+					align: 'center',
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+				},				
+				{
 					title: "Call Back",
-					name: "action_otr",
-					columnName: "action_otr",
-					width: 180,
+					name: "call_back",
+					columnName: "call_back",
+					width: 120,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},	
+				// {
+				// 	title: "type",
+				// 	name: "call_back",
+				// 	columnName: "call_back",
+				// 	width: 70,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },								
+				{
+					title: "Commit",
+					name: "call_com",
+					columnName: "call_com",
+					width: 400,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				// {
-				// 	title: "Call Back Type",
-				// 	name: "call_back",
-				// 	columnName: "call_back",
-				// 	width: 140,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
-				// {
-				// 	title: "Comment",
-				// 	name: "Comment",
-				// 	columnName: "Comment",
-				// 	width: 200,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// }
 			],
 			sorting: [
 				{ columnName: 'CustomerNo', direction: 'asc' }
@@ -1020,10 +1030,10 @@ class CallLog extends Component {
 						/>
 						<IntegratedFiltering />
 
-						<EditingState
+						{/* <EditingState
 							columnExtensions={editingColumnExtensions}
 							onCommitChanges={this.commitChanges}
-						/>
+						/> */}
 
 
 
@@ -1073,9 +1083,9 @@ class CallLog extends Component {
 						{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
 
 						<TableHeaderRow showSortingControls />
-						<TableRowDetail
+						{/* <TableRowDetail
 							contentComponent={this.RowDetail}
-						/>
+						/> */}
 						{/* <TableEditRow /> */}
 						{/* <TableEditColumn
 										// showAddCommand
