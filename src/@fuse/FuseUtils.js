@@ -293,7 +293,6 @@ class FuseUtils {
 			case "Y":
 			case "y":
 			case "T":
-			case "F":
 			case 1:
 			case "1":
 			case "yes":

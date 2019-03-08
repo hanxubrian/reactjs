@@ -14,10 +14,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import {
-	Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider, Snackbar, SnackbarContent,
-	ListItemLink, Checkbox, Switch
-} from '@material-ui/core';
+import { Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider, Snackbar, SnackbarContent, Checkbox, Switch } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -76,6 +73,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import ReactDataGrid from "react-data-grid";
 import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
+import FuseUtils from '@fuse/FuseUtils';
 
 //Snackbar
 const variantIcon = {
@@ -551,18 +549,23 @@ class CancelContractPage extends React.Component {
 	};
 
 	handleChange = name => event => {
+		const value = event.target.value
 		this.setState({
-			[name]: event.target.value,
-			errorMsg: ""
+			[name]: value,
 		});
-
-		console.log(event.target.value);
-		if (name === "PaymentAmount") {
-			// this.setState({
-			// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
-			// })
+		if (name === "reason") {
+			if ([4, 5, 7].indexOf(value) > -1) {
+				this.setState({
+					enabled_cancelation_fee: true,
+					canc_fee: 50
+				})
+			} else {
+				this.setState({
+					enabled_cancelation_fee: false,
+					canc_fee: ''
+				})
+			}
 		}
-		// this.checkValidations(name, event.target.value)
 	};
 
 	handleUpdateParameter = (name) => {
@@ -572,10 +575,6 @@ class CancelContractPage extends React.Component {
 		else
 			this.setState({ bReasonForHigh: false });
 
-	};
-
-	handleChange1 = (event) => {
-		this.setState(_.set({ ...this.state }, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
 	};
 
 	commitChanges = ({ added, changed, deleted }) => {
@@ -1139,6 +1138,13 @@ class CancelContractPage extends React.Component {
 						value={this.state.client_credit_amount || ''}
 						onChange={this.handleChange('client_credit_amount')}
 						InputLabelProps={{ shrink: true }}
+						InputProps={{
+							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+							classes: {
+								input: classNames('text-right')
+							},
+							inputComponent: NumberFormatCustomNoPrefix
+						}}
 					/>
 
 					<Checkbox
@@ -1155,8 +1161,15 @@ class CancelContractPage extends React.Component {
 						value={this.state.enabled_cancelation_fee ? (this.state.canc_fee || '') : ''}
 						onChange={this.handleChange('canc_fee')}
 						className={classNames(classes.textField, '')}
-						InputLabelProps={{ shrink: this.state.enabled_cancelation_fee }}
+						InputLabelProps={{ shrink: true }}
 						margin="dense"
+						InputProps={{
+							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+							classes: {
+								input: classNames('text-right')
+							},
+							inputComponent: NumberFormatCustomNoPrefix
+						}}
 					/>
 					<Checkbox
 						checked={this.state.continue_findersfee || false}
@@ -1177,16 +1190,38 @@ class CancelContractPage extends React.Component {
 							style={{ minWidth: "180px" }}
 						/>
 					}
-					{/*<TextField*/}
-					{/*id="cancelfindersfee"*/}
-					{/*label="Stop Finders Fee"*/}
-					{/*placeholder="Stop Finders Fee Amount"*/}
-					{/*type="number"*/}
-					{/*onChange={this.handleChange('cancelfindersfee')}*/}
-					{/*className={classNames(classes.textField, 'mr-24')}*/}
-					{/*margin="dense"*/}
-					{/*/>*/}
-
+				</div>
+				<div className={classNames("flex mt-12 justify-start w-full")}>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={FuseUtils.parseBoolean(this.state.jk_obligation)}
+								onChange={this.handleChangeChecked('jk_obligation')}
+								value="jk_obligation"
+							/>
+						}
+						label="JK obligation to replace this business?"
+					/>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={FuseUtils.parseBoolean(this.state.ff_credit_due_franchisee)}
+								onChange={this.handleChangeChecked('ff_credit_due_franchisee')}
+								value="ff_credit_due_franchisee"
+							/>
+						}
+						label="F.F. credit due Franchisee?"
+					/>
+					<TextField
+						id="ff_credit_applied_as"
+						label="F.F. Credit Applied as"
+						type="number"
+						className={classNames(classes.textField, 'ml-12 flex-1')}
+						margin="dense"
+						value={this.state.ff_credit_applied_as || ''}
+						onChange={this.handleChange('ff_credit_applied_as')}
+						InputLabelProps={{ shrink: true }}
+					/>
 				</div>
 				<div className={classNames("flex mt-12 justify-start w-full")}>
 					<TextField

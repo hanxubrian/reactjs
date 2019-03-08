@@ -1122,6 +1122,7 @@ function mapStateToProps({ customers, auth, franchisees, invoices }) {
 		bSuggestCustomersFetchStart: invoices.bSuggestCustomersFetchStart,
 
 		loading: customers.loading,
+		warning: customers.warning,
 	}
 }
 

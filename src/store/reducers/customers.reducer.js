@@ -339,6 +339,9 @@ const initialState = {
 	},
 	bLeftSidebarCustomerService: false,
 	bRightSidebarCustomerService: false,
+	warning: {
+		message: '',
+	},
 };
 
 
@@ -1262,6 +1265,14 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
 				bRightSidebarCustomerService: !state.bRightSidebarCustomerService
+			};
+		case Actions.SHOW_WARNING_MODAL:
+			return {
+				...state,
+				warning: {
+					...state.warning,
+					message: action.payload,
+				}
 			};
 		default:
 			{
