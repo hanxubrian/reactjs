@@ -611,7 +611,13 @@ class PaymentFormModal extends React.Component {
 				errorMsg: "Amount is invalid",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
 			})
-
+		} else if (new Date(this.state.PaymentDate).getFullYear() !== this.props.login.all_regions[this.props.regionId].OpenPeriods.current.year ||
+			new Date(this.state.PaymentDate).getMonth() !== this.props.login.all_regions[this.props.regionId].OpenPeriods.current.month
+		) {
+			this.setState({
+				errorMsg: "Payment date is out of current period",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
 		} else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
 			this.setState({ errorMsg: "Neither of payments amount is settled" })
 		} else if (this.props.paymentDlgPayloads.paymentType !== 'Credit' && !this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
@@ -868,6 +874,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ accountReceivablePayments, auth }) {
 	return {
 		regionId: auth.login.defaultRegionId,
+		login: auth.login,
 		UserId: auth.login.UserId,
 		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
