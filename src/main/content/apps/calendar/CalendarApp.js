@@ -38,7 +38,7 @@ const styles = theme => ({
         },
         '& .rbc-header.rbc-today, & .rbc-month-view .rbc-day-bg.rbc-today'  : {
             borderBottom: '2px solid ' + theme.palette.secondary.main + '!important',
-            background: theme.palette.secondary.main
+            background: 'lightgray'
         },
         // '& .rbc-month-view, & .rbc-time-view, & .rbc-agenda-view'   : {
         //     padding: 24,
