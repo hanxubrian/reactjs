@@ -665,10 +665,10 @@ class CallLog extends Component {
 		this.changeGrouping = grouping => this.setState({ grouping });
 		this.changeExpandedDetails = expandedRowIds => this.setState({ expandedRowIds });
 		console.log("constructor");
-
 		console.log("constructor", this.props.customerForm)
 		if (this.props.customerServiceForm.activeCustomer && this.props.customerServiceForm.activeCustomer.Data) {
 			this.props.getCustomerServiceList(this.props.regionId, this.props.customerServiceForm.activeCustomer.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
+			this.props.specifiedgetCustomerBillinglist(this.props.regionId,this.props.agingArray,this.props.customerServiceForm.activeCustomer.Data.cust_no)
 		}
 	}
 	//
@@ -1083,9 +1083,9 @@ class CallLog extends Component {
 						{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
 
 						<TableHeaderRow showSortingControls />
-						{/* <TableRowDetail
+						<TableRowDetail
 							contentComponent={this.RowDetail}
-						/> */}
+						/>
 						{/* <TableEditRow /> */}
 						{/* <TableEditColumn
 										// showAddCommand
@@ -1183,12 +1183,12 @@ function mapDispatchToProps(dispatch) {
 		openNewCustomerForm: Actions.openNewCustomerForm,
 
 		getCustomer: Actions.getCustomer,
-
+		specifiedgetCustomerBillinglist:Actions.specifiedgetCustomerBillinglist,
 		getCustomerServiceList: Actions.getCustomerServiceList,
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth }) {
+function mapStateToProps({ customers, auth ,agings}) {
 	return {
 		customers: customers.customersDB,
 		bLoadedCustomers: customers.bLoadedCustomers,
@@ -1204,6 +1204,7 @@ function mapStateToProps({ customers, auth }) {
 
 		customerServiceForm: customers.customerServiceForm,
 		filterParam: customers.filterParam,
+		agingArray : agings.agingParams,
 	}
 }
 

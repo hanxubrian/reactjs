@@ -1,5 +1,6 @@
 import axios from "axios";
 import { customersService } from "../../services";
+import { SortingState } from "@devexpress/dx-react-grid";
 
 export const GET_ALL_CUSTOMERS = "[CUSTOMERS] GETS ALL";
 export const GET_ALL_DOCUMENTS = "[CUSTOMERS] DOCUMENTS GETS ALL";
@@ -123,7 +124,8 @@ export const EXPAND_COLLAPSE_GROUPING = "[CUSTOMERS-service APP] EXPAND_COLLAPSE
 
 export const TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE = "[CUSTOMERS-service APP] TOGGLE_LEFT_SIDEBAR_CUSTOMER_SERVICE";
 export const TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE = "[CUSTOMERS-service APP] TOGGLE_RIGHT_SIDEBAR_CUSTOMER_SERVICE";
-
+export const SPECIFIED_GET_CUSTOMER_BILLING_LIST = "[CUSTOMERS-service APP] SPECIFIED_GET_CUSTOMER_BILLING_LIST";
+export const SPECIFIED_GET_CUSTOMER_BILLING_LIST_START= "[CUSTOMERS-service APP] SPECIFIED_GET_CUSTOMER_BILLING_LIST_START";
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -919,5 +921,21 @@ export function showFranchiseeLocationFilterInAccountOffering(f) {
 	return {
 		type: SHOW_FRANCHISEE_LOCATION_FILTER_IN_ACCOUNT_OFFERING,
 		payload: f
+	}
+}
+export function specifiedgetCustomerBillinglist(regionId ,param) {
+	return (dispatch) => {
+		dispatch({
+			type: SPECIFIED_GET_CUSTOMER_BILLING_LIST_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.specifiedgetCustomerBillinglist(regionId,param);
+			dispatch({
+				type: SPECIFIED_GET_CUSTOMER_BILLING_LIST,
+				payload: res
+			});
+		})();
 	}
 }
