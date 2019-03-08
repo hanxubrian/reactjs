@@ -36,9 +36,10 @@ const styles = theme => ({
         '& .rbc-today' : {
             backgroundColor: 'transparent'
         },
-        // '& .rbc-header.rbc-today, & .rbc-month-view .rbc-day-bg.rbc-today'  : {
-        //     borderBottom: '2px solid ' + theme.palette.secondary.main + '!important'
-        // },
+        '& .rbc-header.rbc-today, & .rbc-month-view .rbc-day-bg.rbc-today'  : {
+            borderBottom: '2px solid ' + theme.palette.secondary.main + '!important',
+            background: theme.palette.secondary.main
+        },
         // '& .rbc-month-view, & .rbc-time-view, & .rbc-agenda-view'   : {
         //     padding: 24,
         //     [theme.breakpoints.down('sm')]: {
@@ -202,7 +203,7 @@ class CalendarApp extends Component {
                     resizable
                     onEventResize={this.resizeEvent}
                     defaultView={BigCalendar.Views.MONTH}
-                    defaultDate={new Date(2018, 3, 1)}
+                    defaultDate={new Date()}
                     startAccessor="start"
                     endAccessor="end"
                     views={allViews}
@@ -211,7 +212,7 @@ class CalendarApp extends Component {
                     components={{
                         toolbar: CalendarHeader
                     }}
-                    // onNavigate={this.handleNavigate}
+                    onNavigate={this.handleNavigate}
                     onSelectEvent={event => {
                         openEditEventDialog(event);
                     }}
