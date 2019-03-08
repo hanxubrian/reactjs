@@ -90,7 +90,7 @@ const profileDB = {
                 'share'   : 21,
                 'media'   : {
                     'type'   : 'image',
-                    'preview': 'https://www.janiking.com/wp-content/uploads/2019/02/jerry-craford-jani-king-ceo-president.jpg'
+                    'preview': 'assets/images/profile/ceo.jpg'
                 },
                 'comments': [
                     {
