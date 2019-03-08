@@ -138,7 +138,11 @@ class PaymentSearchBar extends Component {
 	componentDidMount() {
 		document.addEventListener("keydown", this.handleKeyDown, false);
 	}
-
+	componentWillMount() {
+		this.setState({
+			s: this.props.searchText
+		})
+	}
 	handleKeyDown = (event) => {
 		if (!this.props.paymentDlgPayloads.open) {
 			if (event.keyCode === ENTER_KEY) {
@@ -243,6 +247,7 @@ function mapStateToProps({ accountReceivablePayments }) {
 
 		searchText: accountReceivablePayments.searchText,
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		searchText: accountReceivablePayments.searchText,
 
 	}
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BASE_MONGO_API_URL} from './../../services'
+import { BASE_MONGO_API_URL } from './../../services'
 
 const axios_instance = axios.create({
 	headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -25,7 +25,7 @@ class PaymentListService {
 			"SearchText": SearchText,
 			"Status": Status
 		};
-
+		console.log('getAccountReceivablePaymentsList', data)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Payment/PaymentList`, data)
 				.then(res => {

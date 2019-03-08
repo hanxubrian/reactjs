@@ -443,6 +443,16 @@ class TransactionsPage extends React.Component {
 		if (nextProps.isExpandedGrouping !== this.props.isExpandedGrouping) {
 			this.expandCollapseGrouping(this.state.rows, nextProps.isExpandedGrouping)
 		}
+		if (nextProps.invoiceBillingLists !== this.props.invoiceBillingLists && this.props.invoiceBillingLists === null && nextProps.invoiceServiceLists !== null) {
+			this.props.openNewInvoiceForm()
+		}
+		if (nextProps.invoiceServiceLists !== this.props.invoiceServiceLists && this.props.invoiceServiceLists === null && nextProps.invoiceBillingLists !== null) {
+			this.props.openNewInvoiceForm()
+		}
+
+		if (nextProps.invoiceForm !== this.props.invoiceForm && nextProps.invoiceForm.type === 'new' && nextProps.invoiceForm.props.open === true) {
+			nextProps.history.push('/accounts-receivable/invoices')
+		}
 	} // deprecate 
 
 	componentWillMount() {
@@ -589,7 +599,20 @@ class TransactionsPage extends React.Component {
 		this.changeSearchValue('')
 	}
 	createNewInvoice = () => {
-		this.props.openNewInvoiceForm()
+		//
+		// init billinh list before navigating new invoice form
+		//
+		if (!this.props.invoiceBillingLists || !this.props.invoiceServiceLists) {
+			if (!this.props.invoiceBillingLists) this.props.getBillingLists(this.props.regionId)
+			if (!this.props.invoiceServiceLists) this.props.getServiceLists(this.props.regionId)
+			return
+		}
+
+		if (this.props.invoiceForm && this.props.invoiceForm.type === 'new' && this.props.invoiceForm.props.open) {
+			this.props.history.push('/accounts-receivable/invoices')
+		} else {
+			this.props.openNewInvoiceForm()
+		}
 	}
 	showPaymentModal = () => {
 		this.props.openPaymentDialog({
@@ -712,7 +735,10 @@ class TransactionsPage extends React.Component {
 								<Button variant="contained" color="primary" className="ml-6" onClick={this.showCreditModal}>
 									Credit<Icon font='small' className={classes.rightIcon}>add</Icon>
 								</Button>
-								<Button variant="contained" color="primary" className="ml-6" component={Link} to="/accounts-receivable/invoices" onClick={this.createNewInvoice}>
+								{/* <Button variant="contained" color="primary" className="ml-6" component={Link} to="/accounts-receivable/invoices" onClick={this.createNewInvoice}>
+									Invoice<Icon font='small' className={classes.rightIcon}>add</Icon>
+								</Button> */}
+								<Button variant="contained" color="primary" className="ml-6" onClick={this.createNewInvoice}>
 									Invoice<Icon font='small' className={classes.rightIcon}>add</Icon>
 								</Button>
 							</div>
@@ -1032,12 +1058,14 @@ function mapDispatchToProps(dispatch) {
 		updatePeriodForFranchiseeReport: FranchiseeActions.updatePeriodForFranchiseeReport,
 
 		openNewInvoiceForm: InvoiceActions.openNewInvoiceForm,
+		getBillingLists: InvoiceActions.getBillingLists,
+		getServiceLists: InvoiceActions.getServiceLists,
 		openPaymentDialog: PaymentActions.openPaymentDialog,
 
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth, franchisees }) {
+function mapStateToProps({ customers, auth, franchisees, invoices }) {
 	return {
 		customers: customers.customersDB,
 		bLoadedCustomers: customers.bLoadedCustomers,
@@ -1057,6 +1085,9 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		activeCustomer: customers.activeCustomer,
 
 		periodForReport: franchisees.periodForReport,
+		invoiceBillingLists: invoices.billingLists,
+		invoiceServiceLists: invoices.serviceLists,
+		invoiceForm: invoices.invoiceForm,
 	}
 }
 
