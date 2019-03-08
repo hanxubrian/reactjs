@@ -390,8 +390,8 @@ class LeaseForm extends Component {
             this.setState({LeaseNo: nextProps.leases.leaseDetail.Data.lease_no});
             this.setState({value: nextProps.leases.leaseForm.franchisee.FranchiseeName});
             this.setState({FranchiseeNo: nextProps.leases.leaseForm.franchisee.FranchiseeNo});
-            this.setState({DateSigned: moment(nextProps.leases.leaseDetail.Data.date_sign).format('MM/DD/YYYY')});
-            this.setState({PaymentStart: moment(nextProps.leases.leaseDetail.Data.pymnt_begn).format('MM/DD/YYYY')});
+            this.setState({DateSigned: moment(nextProps.leases.leaseDetail.Data.date_sign).format('YYYY-MM-DD')});
+            this.setState({PaymentStart: moment(nextProps.leases.leaseDetail.Data.pymnt_begn).format('YYYY-MM-DD')});
             this.setState({make: nextProps.leases.leaseDetail.Data.make});
             this.setState({model: nextProps.leases.leaseDetail.Data.model});
             this.setState({taxRate: nextProps.leases.leaseDetail.Data.paymnt_tax});
@@ -543,11 +543,13 @@ class LeaseForm extends Component {
                 "fromfran": ""
             };
             this.props.addLease(result);
+            this.closeComposeForm();
         }
         else {
             result = {
                 ...this.props.leases.leaseDetail.Data,
-                "_id": "",
+                // "_id": "",
+                "_id": this.state.selectedFranchisee.Id,
                 "RegionId": 2,
                 "CreatedBy": 0,
                 "company_no": "BUF701",
@@ -578,8 +580,8 @@ class LeaseForm extends Component {
                 "tofran": "",
                 "fromfran": ""
             };
-            debugger
             this.props.updateLease(this.props.regionId, this.props.leases.leaseDetail.Data._id, result);
+            this.closeComposeForm();
         }
         console.log(this.state.selectedFranchisee.FranchiseeId)
         console.log('result', JSON.stringify(result));

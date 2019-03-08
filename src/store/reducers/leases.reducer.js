@@ -165,7 +165,8 @@ const leases = function (state = initialState, action) {
 						franchisee: null
 					},
 					newLease: null,
-                	leaseDetail: null
+					leaseDetail: null,
+					bLeasesUpdated: true, bLeaseStart: true
 				};
 			}
 		case Actions.OPEN_EDIT_LEASE_FORM:
@@ -196,7 +197,8 @@ const leases = function (state = initialState, action) {
 						franchisee: null
 					},
 					newLease: null,
-					leaseDetail: null
+					leaseDetail: null,
+					bLeasesUpdated: true, bLeaseStart: true
 				};
 			}
 		case Actions.STARTING_SAVE_LEASE_FORM_DATA:

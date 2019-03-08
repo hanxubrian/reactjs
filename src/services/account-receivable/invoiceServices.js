@@ -30,12 +30,15 @@ class invoiceService {
 			"ToDate": ToDate,
 			"PeriodId": PeriodId,
 			"OpenOrClosed": OpenOrClosed,
+			"ToPrint":true,
+		   	"ToEbill":false,
 			"InvoiceTypeId": InvoiceTypeId,
 			"ToPrintOrToEmail": ToPrintOrToEmail,
 			"SearchText": SearchText,
 			"Month": moment().month(),
 			"Year": moment().year()
 		};
+
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`, data)
 				.then(res => {
@@ -47,6 +50,7 @@ class invoiceService {
 					}
 				})
 				.catch(error => {
+					debugger
 					resolve(error);
 				})
 		});

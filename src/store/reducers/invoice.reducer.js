@@ -33,7 +33,7 @@ const initialState = {
     ToDate: moment().subtract(1, 'months').endOf('month').format("MM/DD/YYYY"),
     StatusId: [],
     PeriodId: [220],
-    InvoiceTypeId: 1,
+    InvoiceTypeId: ["I"],
     ToPrintOrToEmail: "print",
     SearchText: "",
     invoiceStatus: [],
