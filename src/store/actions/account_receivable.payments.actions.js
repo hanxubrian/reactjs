@@ -29,7 +29,7 @@ export const FILTER_PAYMENT_END_DATE = "[A.R.Payments] FILTER_PAYMENT_END_DATE";
 
 export const GET_PAYMENT_TYPES = "[A.R.Payments] GET_PAYMENT_TYPES";
 
-export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status) {
+export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status, PeriodMonth = 1, PeriodYear = 2019) {
 
 	RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
 
@@ -40,7 +40,7 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 		});
 
 		(async () => {
-			let paymentsList = await paymentService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
+			let paymentsList = await paymentService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status, PeriodMonth, PeriodYear);
 			dispatch({
 				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
 				payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message

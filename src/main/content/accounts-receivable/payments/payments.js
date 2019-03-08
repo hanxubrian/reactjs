@@ -458,7 +458,9 @@ class Payments extends Component {
 			this.props.filterParam.fromDate,
 			this.props.filterParam.toDate,
 			this.props.searchText,
-			this.props.filterParam.paymentStatus
+			this.props.filterParam.paymentStatus,
+			this.props.login.all_regions[this.props.regionId].OpenPeriods.current.month,
+			this.props.login.all_regions[this.props.regionId].OpenPeriods.current.year,
 		);
 
 		this.props.getPaymentHistory(
@@ -828,6 +830,7 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 		removedId: invoices.removedId,
 
 		regionId: auth.login.defaultRegionId,
+		login: auth.login,
 
 		franchisees: franchisees.franchiseesDB,
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,

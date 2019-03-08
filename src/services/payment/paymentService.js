@@ -17,13 +17,15 @@ class PaymentListService {
      * @param SearchText
      * @returns {Promise<any>}
      */
-	getAccountReceivablePaymentsList = (RegionId, FromDate, ToDate, SearchText, Status) => {
+	getAccountReceivablePaymentsList = (RegionId, FromDate, ToDate, SearchText, Status, PeriodMonth, PeriodYear) => {
 		const data = {
 			"RegionId": RegionId,
-			"FromDate": FromDate, //"01/31/2017",
-			"ToDate": ToDate, //"12/31/2019",
+			"FromDate": FromDate,
+			"ToDate": ToDate,
 			"SearchText": SearchText,
-			"Status": Status
+			"Status": Status,
+			PeriodMonth,
+			PeriodYear,
 		};
 		console.log('getAccountReceivablePaymentsList', data)
 		return new Promise((resolve, reject) => {

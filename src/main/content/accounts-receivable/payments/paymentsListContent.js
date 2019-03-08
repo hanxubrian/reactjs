@@ -496,7 +496,9 @@ class PaymentsListContent extends Component {
 				this.props.filterParam.fromDate,
 				this.props.filterParam.toDate,
 				this.props.searchText,
-				this.props.filterParam.paymentStatus
+				this.props.filterParam.paymentStatus,
+				this.props.login.all_regions[this.props.regionId].OpenPeriods.current.month,
+				this.props.login.all_regions[this.props.regionId].OpenPeriods.current.year,
 			);
 		}
 	}
@@ -588,7 +590,10 @@ class PaymentsListContent extends Component {
 				nextProps.filterParam.fromDate,
 				nextProps.filterParam.toDate,
 				nextProps.searchText,
-				nextProps.filterParam.paymentStatus);
+				nextProps.filterParam.paymentStatus,
+				this.props.login.all_regions[this.props.regionId].OpenPeriods.current.month,
+				this.props.login.all_regions[this.props.regionId].OpenPeriods.current.year,
+			);
 			// }
 			// if (nextProps.filterParam.paymentStatus !== this.props.filterParam.paymentStatus) {
 			// 	console.log("componentWillReceiveProps", "nextProps.status", nextProps.filterParam.paymentStatus)
@@ -620,7 +625,10 @@ class PaymentsListContent extends Component {
 				nextProps.filterParam.fromDate,
 				nextProps.filterParam.toDate,
 				nextProps.searchText,
-				nextProps.filterParam.paymentStatus);
+				nextProps.filterParam.paymentStatus,
+				this.props.login.all_regions[this.props.regionId].OpenPeriods.current.month,
+				this.props.login.all_regions[this.props.regionId].OpenPeriods.current.year,
+			);
 		}
 
 		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
@@ -1144,7 +1152,7 @@ class PaymentsListContent extends Component {
 								)}
 							</Template>
 							<Toolbar />
-          					<SearchPanel />
+							<SearchPanel />
 							{
 								isCustomerNameNoGrouping &&
 								<TableGroupRow contentComponent={this.GroupCellContent} />
@@ -1188,6 +1196,7 @@ function mapStateToProps({ accountReceivablePayments, auth, invoices }) {
 		bLoadedPayments: accountReceivablePayments.bLoadedPayments,
 		payments: accountReceivablePayments.ACC_payments,
 		regionId: auth.login.defaultRegionId,
+		login: auth.login,
 		searchText: accountReceivablePayments.searchText,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 		NoDataString: accountReceivablePayments.NoDataString,
@@ -1198,7 +1207,6 @@ function mapStateToProps({ accountReceivablePayments, auth, invoices }) {
 
 		allRegion: auth.login.all_regions,
 		invoiceDetail: invoices.invoiceDetail,
-
 	}
 }
 
