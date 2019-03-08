@@ -1311,23 +1311,24 @@ class FilterPanel extends Component {
 										))}
 									</TextField>
 								)}
-								<TextField
-									select
+								{accountTypeTexts && accountTypeTexts.length > 0 &&
+									<TextField
+										select
 
-									id="AccountType"
-									label="Account Type"
-									className={classes.textField}
-									InputLabelProps={{ shrink: true }}
-									value={this.state.account_typeid || 0}
-									onChange={this.handleChange('account_typeid')}
-									margin="dense"
-									// variant="outlined"
-									fullWidth
-								>
-									{accountTypeTexts.map((x, index) => (
-										<MenuItem key={index} value={x.AccountTypeId}>{x.name}</MenuItem>
-									))}
-								</TextField>
+										id="AccountType"
+										label="Account Type"
+										className={classes.textField}
+										InputLabelProps={{ shrink: true }}
+										value={this.state.account_typeid || 0}
+										onChange={this.handleChange('account_typeid')}
+										margin="dense"
+										// variant="outlined"
+										fullWidth
+									>
+										{accountTypeTexts.map((x, index) => (
+											<MenuItem key={index} value={x.AccountTypeId}>{x.name}</MenuItem>
+										))}
+									</TextField>}
 
 								<TextField
 									select
