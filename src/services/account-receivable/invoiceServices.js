@@ -23,21 +23,34 @@ class invoiceService {
      * @returns {Promise<any>}
      */
 	getInvoiceList = (RegionId, StatusId, FromDate, ToDate, PeriodId, OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText) => {
+		// const data = {
+		// 	"RegionId": RegionId,
+		// 	"TransactionStatusId": StatusId,
+		// 	"FromDate": FromDate,
+		// 	"ToDate": ToDate,
+		// 	"PeriodId": PeriodId,
+		// 	"OpenOrClosed": OpenOrClosed,
+		// 	"ToPrint":true,
+		//    	"ToEbill":false,
+		// 	"InvoiceTypeId": InvoiceTypeId,
+		// 	"ToPrintOrToEmail": ToPrintOrToEmail,
+		// 	"SearchText": SearchText,
+		// 	"Month": moment().month(),
+		// 	"Year": moment().year()
+		// };
+
 		const data = {
-			"RegionId": RegionId,
-			"TransactionStatusId": StatusId,
-			"FromDate": FromDate,
-			"ToDate": ToDate,
-			"PeriodId": PeriodId,
-			"OpenOrClosed": OpenOrClosed,
-			"ToPrint":true,
-		   	"ToEbill":false,
-			"InvoiceTypeId": InvoiceTypeId,
-			"ToPrintOrToEmail": ToPrintOrToEmail,
-			"SearchText": SearchText,
-			"Month": moment().month(),
-			"Year": moment().year()
-		};
+			"RegionId":[2], 
+			"FromDate":"01/01/2019", 
+			"ToDate":"01/31/2019", 
+			"Month":1 ,
+			"Year":2019, 
+			"InvoiceTypeId":["I"], 
+			"ToPrint":true, 
+			"ToEbill":false, 
+			"DateSearchBy":"period", 
+			"SearchText":""
+		}
 
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`, data)
@@ -50,7 +63,6 @@ class invoiceService {
 					}
 				})
 				.catch(error => {
-					debugger
 					resolve(error);
 				})
 		});
