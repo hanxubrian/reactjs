@@ -33,7 +33,7 @@ class News extends Component {
         const {activities, posts} = this.state;
 
         return (
-            <div className={classNames(classes.root, "md:flex max-w-2xl")}>
+            <div className={classNames(classes.root, "flex w-full")}>
 
                 <div className="flex flex-col flex-1 md:pr-32">
 
