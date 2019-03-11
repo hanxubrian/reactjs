@@ -39,7 +39,7 @@ const initialState = {
     invoiceStatus: [],
     bInvoiceStart: false,
     customerTaxAmountLine: [],
-    invoiceDateOption: 14,//PERIOD
+    invoiceDateOption: 13,//CUSTOM DATE
     newInvoice: null,
 
     customersDB: null,

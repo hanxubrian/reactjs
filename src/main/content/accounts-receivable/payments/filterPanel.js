@@ -168,7 +168,6 @@ class FilterPanel extends Component {
 			filterParam: { ...this.props.filterParam },
 		})
 
-
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -413,7 +412,6 @@ class FilterPanel extends Component {
 		let region = all_regions.filter(r=>r.regionid===this.props.regionId);
 
 		let period = region[0].OpenPeriods.current;
-
 
 		return (
 			<div className={classNames(classes.root, "flex flex-col p-24")}>
